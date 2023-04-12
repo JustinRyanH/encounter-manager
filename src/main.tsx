@@ -6,7 +6,7 @@ import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: 'dark' }}>
         <App />
     </MantineProvider>
   </React.StrictMode>

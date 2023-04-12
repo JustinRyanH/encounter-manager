@@ -2,7 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
-import { Button } from "@mantine/core";
+import { AppShell, Button } from "@mantine/core";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -13,7 +13,7 @@ function App() {
     setGreetMsg(await invoke("greet", { name }));
   }
 
-  return (<Button>Click Me!</Button>);
+  return (<AppShell> <h1> Tauri APP</ h1> </AppShell>);
 }
 
 export default App;
