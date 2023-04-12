@@ -17,9 +17,6 @@ function App() {
     <Navbar.Section>
       <Title order={3}>Enounter Manager</Title>
     </Navbar.Section>
-    <Navbar.Section grow mt="md">
-      
-    </Navbar.Section>
   </Navbar>);
 
   return (<AppShell navbar={navbar}> <h1> Tauri APP</ h1> </AppShell>);
