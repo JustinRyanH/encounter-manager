@@ -1,8 +1,22 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { AppShell, Navbar, Title } from "@mantine/core";
+import { AppShell, Box, Container, Flex, Navbar, Paper, Skeleton, Stack, Title } from "@mantine/core";
 
 import "./App.css";
+
+function CharacterInInitative() {
+  return (
+    <Paper p="xl" shadow="md" withBorder>
+      <Flex gap="lg" align="center">
+        <Skeleton height={50} width={30} animate={false} />
+        <Skeleton height={50} circle animate={false} />
+        <Skeleton height={50} width={100} animate={false} />
+        <Skeleton height={50} width={100} animate={false} />
+        <Skeleton height={50} width={100} animate={false} />
+      </Flex>
+    </Paper>
+  );
+}
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -19,7 +33,17 @@ function App() {
     </Navbar.Section>
   </Navbar>);
 
-  return (<AppShell navbar={navbar}> <h1> Tauri APP</ h1> </AppShell>);
+  return (<AppShell navbar={navbar}>
+    <h1>Encounters</ h1>
+    <Stack align="flex-start">
+      <CharacterInInitative />
+      <CharacterInInitative />
+      <CharacterInInitative />
+      <CharacterInInitative />
+      <CharacterInInitative />
+      <CharacterInInitative />
+    </Stack>
+  </AppShell>);
 }
 
 export default App;
