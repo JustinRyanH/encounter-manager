@@ -1,22 +1,9 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { AppShell, Box, Container, Flex, Navbar, Paper, Skeleton, Stack, Title } from "@mantine/core";
+import { AppShell, Box, Container, Navbar, Stack, Title } from "@mantine/core";
 
 import "./App.css";
-
-function CharacterInInitative() {
-  return (
-    <Paper p="xl" shadow="md" withBorder>
-      <Flex gap="lg" align="center">
-        <Skeleton height={50} width={30} animate={false} />
-        <Skeleton height={50} circle animate={false} />
-        <Skeleton height={50} width={100} animate={false} />
-        <Skeleton height={50} width={100} animate={false} />
-        <Skeleton height={50} width={100} animate={false} />
-      </Flex>
-    </Paper>
-  );
-}
+import { CharacterInInitative } from "./components/CharacterInInitative";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
