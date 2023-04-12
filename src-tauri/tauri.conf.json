@@ -38,6 +38,7 @@
     },
     "windows": [
       {
+        "theme": "Dark",
         "fullscreen": false,
         "resizable": true,
         "title": "encounter-manager",
