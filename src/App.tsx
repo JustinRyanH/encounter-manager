@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { AppShell, Box, Container, Navbar, Stack, Title } from "@mantine/core";
+import { AppShell, Navbar, Stack, Title } from "@mantine/core";
 
 import "./App.css";
 import { CharacterInInitative } from "./components/CharacterInInitative";
