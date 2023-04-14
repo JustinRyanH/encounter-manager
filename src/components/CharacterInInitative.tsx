@@ -1,4 +1,4 @@
-import { Flex, Group, Paper, Skeleton } from "@mantine/core";
+import { Group, Paper, Skeleton } from "@mantine/core";
 
 export function CharacterInInitative() {
     return (
