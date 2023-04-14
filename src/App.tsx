@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { AppShell, Navbar, Stack, Title } from "@mantine/core";
+import { AppShell, Divider, Navbar, Stack, Title } from "@mantine/core";
 
 import "./App.css";
 import { CharacterInInitative } from "./components/CharacterInInitative";
@@ -21,7 +21,8 @@ function App() {
   </Navbar>);
 
   return (<AppShell navbar={navbar}>
-    <h1>Encounters</ h1>
+    <Title order={1} size="h2" transform="uppercase" align="center">Encounters</Title>
+    <Divider my="md" />
     <Stack align="flex-start">
       <CharacterInInitative />
       <CharacterInInitative />
