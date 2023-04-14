@@ -1,6 +1,6 @@
 import { Center, Container, Divider, Paper, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 
-function Attribute(): JSX.Element {
+function AttributeSkeleton(): JSX.Element {
     return (<Stack spacing="sm">
         <Skeleton height={20} animate={false} />
         <Divider />
@@ -16,10 +16,10 @@ export function CharacterInInitative(): JSX.Element {
                     <Center>
                         <Skeleton height={50} circle animate={false} />
                     </Center>
-                    <Attribute />
-                    <Attribute />
-                    <Attribute />
-                    <Attribute />
+                    <AttributeSkeleton />
+                    <AttributeSkeleton />
+                    <AttributeSkeleton />
+                    <AttributeSkeleton />
                 </SimpleGrid>
             </Container>
         </Paper>
