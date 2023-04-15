@@ -23,6 +23,9 @@ function SimpleStringAttribute({ title, value = "", setValue = () => { } }: Name
             value={value}
             onChange={(e) => setValue(e.currentTarget.value)}
             placeholder={title}
+            radius="md"
+            styles={{ input: { textAlign: "center" } }}
+            disabled
         />
     </Stack>)
 }
