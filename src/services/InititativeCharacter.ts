@@ -5,6 +5,9 @@ interface InitiativeCharacterProps {
     initiative: number;
 }
 
+/**
+ * A Tracked Character
+ */
 export class InitiativeCharacter {
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
@@ -21,6 +24,15 @@ export class InitiativeCharacter {
         return this.#name.value;
     }
 
+
+    /**
+     * Update name of the character, and notify observers
+     * @param name
+     */
+    set name(name: string) {
+        this.#name.value = name;
+    }
+
     /**
      * Observer for the name of the character
      */
@@ -28,19 +40,25 @@ export class InitiativeCharacter {
         return this.#name;
     }
 
+    /**
+     * The initiative of the character
+     */
     get initiative(): number {
         return this.#initiative.value;
     }
 
-    get initiativeObserver(): ValueObserver<number> {
-        return this.#initiative;
-    }
-
-    set name(name: string) {
-        this.#name.value = name;
-    }
-
+    /**
+     * Update initiative of the character, and notify observers
+     * @param initiative
+     */
     set initiative(initiative: number) {
         this.#initiative.value = initiative;
+    }
+
+    /**
+     * Observer for the initiative of the character
+     */
+    get initiativeObserver(): ValueObserver<number> {
+        return this.#initiative;
     }
 }

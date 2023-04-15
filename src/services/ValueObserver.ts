@@ -13,7 +13,7 @@ export class ValueObserver<T> {
     #value: T;
     #subscribers: Array<ValueChangeMessage<T>> = [];
 
-    constructor(value: any) {
+    constructor(value: T) {
         this.#value = value;
     }
 
