@@ -14,19 +14,25 @@ export class InitiativeCharacter {
         this.#name = new ValueObserver(name);
     }
 
-    get name() {
+    /**
+     * The name of the character
+     */
+    get name(): string {
         return this.#name.value;
     }
 
-    get nameObserver() {
+    /**
+     * Observer for the name of the character
+     */
+    get nameObserver(): ValueObserver<string> {
         return this.#name;
     }
 
-    get initiative() {
+    get initiative(): number {
         return this.#initiative.value;
     }
 
-    get initiativeObserver() {
+    get initiativeObserver(): ValueObserver<number> {
         return this.#initiative;
     }
 
