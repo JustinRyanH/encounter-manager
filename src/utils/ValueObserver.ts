@@ -1,17 +1,17 @@
-interface PublishedMessageProps<T> {
-    publisher: SingleValuePublisher<T>;
+interface ValueChangeMessageProps<T> {
+    observer: ValueObserver<T>;
     newValue: T;
     oldValue: T;
 }
 
-type SingleValueMessage<T> = (props: PublishedMessageProps<T>) => void;
+type ValueChangeMessage<T> = (props: ValueChangeMessageProps<T>) => void;
 
 /**
  * A class that can be used to publish a single value to multiple subscribers.
  */
-export class SingleValuePublisher<T> {
+export class ValueObserver<T> {
     #value: T;
-    #subscribers: Array<SingleValueMessage<T>> = [];
+    #subscribers: Array<ValueChangeMessage<T>> = [];
 
     constructor(value: any) {
         this.#value = value;
@@ -30,7 +30,7 @@ export class SingleValuePublisher<T> {
     set value(value: T) {
         const oldValue = this.#value;
         this.#value = value;
-        this.#subscribers.forEach((subscriber) => subscriber({ publisher: this, newValue: value, oldValue }));
+        this.#subscribers.forEach((subscriber) => subscriber({ observer: this, newValue: value, oldValue }));
     }
 
     /**
@@ -46,17 +46,17 @@ export class SingleValuePublisher<T> {
 
     /**
      * Adds a subscriber to the publisher.
-     * @param {SingleValueMessage<T>} subscriber 
+     * @param {ValueChangeMessage<T>} subscriber 
      */
-    subscribe(subscriber: SingleValueMessage<T>): void {
+    add(subscriber: ValueChangeMessage<T>): void {
         this.#subscribers.push(subscriber);
     }
 
     /**
      * Removes a subscriber from the publisher.
-     * @param {SingleValueMessage<T>} subscriber 
+     * @param {ValueChangeMessage<T>} subscriber 
      */
-    unscribe(subscriber: SingleValueMessage<T>): void {
+    remove(subscriber: ValueChangeMessage<T>): void {
         this.#subscribers = this.#subscribers.filter((s) => s !== subscriber);
     }
 }
