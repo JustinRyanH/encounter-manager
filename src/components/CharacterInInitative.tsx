@@ -1,4 +1,4 @@
-import { Center, Container, Divider, Paper, SimpleGrid, Skeleton, Stack, Title } from "@mantine/core";
+import { Center, Container, Divider, Paper, SimpleGrid, Skeleton, Stack, TextInput, Title } from "@mantine/core";
 
 function AttributeSkeleton(): JSX.Element {
     return (<Stack spacing="sm">
@@ -11,13 +11,14 @@ function AttributeSkeleton(): JSX.Element {
 interface NameAttributeProps {
     title: string;
     value?: string;
+    setValue?: (value: string) => void;
 }
 
-function SimpleStringAttribute({ title }: NameAttributeProps): JSX.Element {
+function SimpleStringAttribute({ title, value = "", setValue = () => { } }: NameAttributeProps): JSX.Element {
     return (<Stack spacing="sm">
         <Title order={3} align="center" transform="uppercase">{title}</Title>
         <Divider />
-        <Skeleton height={20} animate={false} />
+        <TextInput aria-label={title} value={value} onChange={(e) => setValue(e.currentTarget.value)} />
     </Stack>)
 }
 
