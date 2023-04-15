@@ -38,7 +38,7 @@ describe('InitiativeCharacter', () => {
             const observer = vi.fn();
             character.nameObserver.add(observer);
             character.name = 'Test2';
-            expect(observer).toBeCalledWith({
+            expect(observer).toHaveBeenCalledWith({
                 observer: character.nameObserver,
                 newValue: 'Test2',
                 oldValue: 'Test',
@@ -72,7 +72,7 @@ describe('InitiativeCharacter', () => {
             const observer = vi.fn();
             character.initiativeObserver.add(observer);
             character.initiative = 20;
-            expect(observer).toBeCalledWith({
+            expect(observer).toHaveBeenCalledWith({
                 observer: character.initiativeObserver,
                 newValue: 20,
                 oldValue: 10,
