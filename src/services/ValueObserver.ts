@@ -1,10 +1,10 @@
-interface ValueChangeMessageProps<T> {
+export interface ValueChangeMessageProps<T> {
     observer: ValueObserver<T>;
     newValue: T;
     oldValue: T;
 }
 
-type ValueChangeMessage<T> = (props: ValueChangeMessageProps<T>) => void;
+export type ValueChangeMessage<T> = (props: ValueChangeMessageProps<T>) => void;
 
 /**
  * A class that can be used to publish a single value to multiple subscribers.

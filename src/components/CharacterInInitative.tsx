@@ -1,15 +1,17 @@
 import { Center, Container, Divider, Paper, SimpleGrid, Skeleton, Stack, TextInput, Title } from "@mantine/core";
 import React from "react";
+import { InitiativeCharacter } from "../services/InititativeCharacter";
+import { ValueObserver } from "../services/ValueObserver";
+import { useWatchValueObserver } from "../hooks/watchValueObserver";
 
-
-interface NameAttributeProps {
+interface SimpleStringAttributeProps {
     title: string;
-    value?: string;
-    setValue?: (value: string) => void;
+    observer: ValueObserver<string>
 }
 
-function SimpleStringAttribute({ title, value = "", setValue = () => { } }: NameAttributeProps): JSX.Element {
+function SimpleStringAttribute({ title, observer }: SimpleStringAttributeProps): JSX.Element {
     const [isEditing, setIsEditng] = React.useState(false);
+    const [value, setValue] = useWatchValueObserver(observer);
     return (<Stack spacing="sm">
         <Title order={3} align="center" transform="uppercase">{title}</Title>
         <Divider />
@@ -28,6 +30,7 @@ function SimpleStringAttribute({ title, value = "", setValue = () => { } }: Name
 }
 
 export function CharacterInInitative(): JSX.Element {
+    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Name', initiative: 10 }), []);
     return (
         <Paper p="xl" shadow="md" withBorder>
             <Container>
@@ -35,9 +38,7 @@ export function CharacterInInitative(): JSX.Element {
                     <Center>
                         <Skeleton height={50} circle animate={false} />
                     </Center>
-                    <SimpleStringAttribute title="Name" />
-                    <SimpleStringAttribute title="Initiative" />
-                    <SimpleStringAttribute title="HP" />
+                    <SimpleStringAttribute title="Name" observer={character.nameObserver} />
                 </SimpleGrid>
             </Container>
         </Paper>
