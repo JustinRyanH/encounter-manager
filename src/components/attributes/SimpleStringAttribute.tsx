@@ -1,7 +1,7 @@
 import { Divider, Stack, TextInput, Title } from "@mantine/core";
 import React from "react";
-import { useWatchValueObserver } from "../hooks/watchValueObserver";
-import { SimpleStringAttributeProps } from "./CharacterInInitative";
+import { useWatchValueObserver } from "../../hooks/watchValueObserver";
+import { SimpleStringAttributeProps } from "../CharacterInInitative";
 
 export function SimpleStringAttribute({ title, observer }: SimpleStringAttributeProps): JSX.Element {
     const [isEditing, setIsEditng] = React.useState(false);
