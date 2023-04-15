@@ -2,13 +2,7 @@ import { Divider, NumberInput, Stack, Title } from "@mantine/core";
 import React from "react";
 
 import { useWatchValueObserver } from "../../hooks/watchValueObserver";
-import { ValueObserver } from "../../services/ValueObserver";
-
-export interface SimpleAttributeProps<T> {
-    title: string;
-    observer: ValueObserver<T>;
-    cannotEdit?: boolean;
-}
+import { SimpleAttributeProps } from "./SimpleAttributeProps";
 
 export function SimpleNumberAttribute({ title, observer, cannotEdit = false }: SimpleAttributeProps<number>): JSX.Element {
     const [isEditing, setIsEditng] = React.useState(false);
