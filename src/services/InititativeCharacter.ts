@@ -1,4 +1,4 @@
-import { ValueObserver } from "./ValueObserver";
+import {ValueObserver} from "./ValueObserver";
 
 interface InitiativeCharacterProps {
     name: string;
