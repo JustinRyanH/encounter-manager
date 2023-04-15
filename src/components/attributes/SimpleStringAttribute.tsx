@@ -1,7 +1,6 @@
 import { Divider, Stack, TextInput, Title } from "@mantine/core";
 import React from "react";
 import { useWatchValueObserver } from "../../hooks/watchValueObserver";
-import { ValueObserver } from "../../services/ValueObserver";
 import { SimpleAttributeProps } from "./SimpleAttributeProps";
 
 
