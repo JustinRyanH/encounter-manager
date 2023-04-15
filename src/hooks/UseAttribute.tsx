@@ -7,23 +7,41 @@ interface UserAttributeProps<T> {
     cannotEdit?: boolean;
 }
 
-interface UserAttributeReturn<T> {
+interface EditableAttributeReturn {
     handleOnBlur: FocusEventHandler<HTMLElement>;
     handleOnDoubleClick: MouseEventHandler<HTMLElement>;
     isEditing: boolean;
-    setIsEditing: (value: boolean) => void;
+}
+
+interface UserAttributeReturn<T> extends  EditableAttributeReturn{
     setValue: (v: T) => void;
     value: T;
 }
 
-export function useAttribute<T>({observer, cannotEdit}: UserAttributeProps<T>): UserAttributeReturn<T> {
+
+
+export function useEditableAttribute(cannotEdit = false): EditableAttributeReturn {
     const [isEditing, setIsEditing] = React.useState(false);
-    const [value, setValue] = useWatchValueObserver<T>(observer);
     const handleOnDoubleClick = () => {
         if (cannotEdit) return;
         setIsEditing(true);
     };
     const handleOnBlur = () => setIsEditing(false);
 
-    return {isEditing, setIsEditing: setIsEditing, value, setValue, handleOnDoubleClick, handleOnBlur};
+    return {
+        isEditing,
+        handleOnDoubleClick,
+        handleOnBlur
+    };
+}
+
+export function useAttribute<T>({observer, cannotEdit}: UserAttributeProps<T>): UserAttributeReturn<T> {
+    const {
+        isEditing,
+        handleOnDoubleClick,
+        handleOnBlur
+    } = useEditableAttribute(cannotEdit);
+    const [value, setValue] = useWatchValueObserver<T>(observer);
+
+    return {isEditing, value, setValue, handleOnDoubleClick, handleOnBlur};
 }
