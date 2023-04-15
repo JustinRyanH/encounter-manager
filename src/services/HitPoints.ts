@@ -10,9 +10,9 @@ interface HitPointsProps {
  * A class that represents a character's hit points.
  */
 export class HitPoints {
-    #total: ValueObserver<number> = new ValueObserver<number>(0);
-    #current: ValueObserver<number> = new ValueObserver<number>(0);
-    #temp: ValueObserver<number> = new ValueObserver<number>(0);
+    #total: ValueObserver<number> = new ValueObserver(0);
+    #current: ValueObserver<number> = new ValueObserver(0);
+    #temp: ValueObserver<number | null> = new ValueObserver<number | null>(null);
 
     constructor({total, current, temp}: HitPointsProps) {
         this.#total.value = total;
@@ -68,7 +68,7 @@ export class HitPoints {
     /**
      * Temporary hit points.
      */
-    get temp(): number {
+    get temp(): number | null {
         return this.#temp.value;
     }
 
@@ -76,14 +76,14 @@ export class HitPoints {
      * Update temporary hit points, and notify observers
      * @param temp
      */
-    set temp(temp: number) {
+    set temp(temp: number | null) {
         this.#temp.value = temp;
     }
 
     /**
      * Observer for temporary hit points.
      */
-    get tempObserver(): ValueObserver<number> {
+    get tempObserver(): ValueObserver<number | null> {
         return this.#temp;
     }
 }
