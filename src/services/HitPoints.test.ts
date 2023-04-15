@@ -59,6 +59,16 @@ describe('HitPoints', () => {
             expect(hitPoints.current).toEqual(20);
         });
 
+        test('current does not go over total', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+            hitPoints.current = 20;
+            expect(hitPoints.current).toEqual(10);
+        });
+
         test('can subscribe to current changes', () => {
             const hitPoints = new HitPoints({
                 total: 10,

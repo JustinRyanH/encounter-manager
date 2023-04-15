@@ -55,7 +55,7 @@ export class HitPoints {
      * @param current
      */
     set current(current: number) {
-        this.#current.value = current;
+        this.#current.value = Math.min(current, this.total);
     }
 
     /**
