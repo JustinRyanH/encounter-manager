@@ -1,41 +1,44 @@
 import { Divider, NumberInput, Stack, Title } from "@mantine/core";
-import React from "react";
+import React, {FocusEventHandler, MouseEventHandler} from "react";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import {ValueObserver} from "~/services/ValueObserver";
+import { ValueObserver } from "~/services/ValueObserver";
 
 import { SimpleAttributeProps } from "./SimpleAttributeProps";
 
-interface UserAttributeProps {
-    observer: ValueObserver<number>;
-    cannotEdit: boolean | undefined;
+interface UserAttributeProps<T> {
+    observer: ValueObserver<T>;
+    cannotEdit?: boolean;
 }
 
-interface UserAttributeReturn {
+interface UserAttributeReturn<T> {
+    handleOnBlur: FocusEventHandler<HTMLElement>;
+    handleOnDoubleClick: MouseEventHandler<HTMLElement>;
     isEditing: boolean;
-    setIsEditing: (value: (((prevState: boolean) => boolean) | boolean)) => void;
-    value: number;
-    setValue: (v: number) => void;
-    handleOnDoubleClick: () => void;
+    setIsEditing: (value: boolean) => void;
+    setValue: (v: T) => void;
+    value: T;
 }
 
-function useAttribute({ observer, cannotEdit }: UserAttributeProps): UserAttributeReturn {
-    const [isEditing, setIsEditng] = React.useState(false);
-    const [value, setValue] = useWatchValueObserver(observer);
+function useAttribute<T>({ observer, cannotEdit }: UserAttributeProps<T>): UserAttributeReturn<T> {
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [value, setValue] = useWatchValueObserver<T>(observer);
     const handleOnDoubleClick = () => {
         if (cannotEdit) return;
-        setIsEditng(true);
+        setIsEditing(true);
     };
-    return {isEditing, setIsEditing: setIsEditng, value, setValue, handleOnDoubleClick};
+    const handleOnBlur = () => setIsEditing(false);
+
+    return {isEditing, setIsEditing: setIsEditing, value, setValue, handleOnDoubleClick, handleOnBlur};
 }
 
 export function SimpleNumberAttribute({ title, observer, cannotEdit = false }: SimpleAttributeProps<number>): JSX.Element {
     const {
+        handleOnBlur,
+        handleOnDoubleClick,
         isEditing,
-        setIsEditing,
-        value,
         setValue,
-        handleOnDoubleClick
+        value,
     } = useAttribute({ observer, cannotEdit });
 
     return (<Stack spacing="sm">
@@ -43,10 +46,10 @@ export function SimpleNumberAttribute({ title, observer, cannotEdit = false }: S
         <Divider />
         <NumberInput
             onDoubleClick={handleOnDoubleClick}
-            onBlur={() => setIsEditing(false)}
+            onBlur={handleOnBlur}
             aria-label={title}
             value={value}
-            onChange={setValue}
+            onChange={(v) => setValue(v || -1)}
             placeholder={title}
             radius="md"
             styles={{ input: { textAlign: "center" } }}
