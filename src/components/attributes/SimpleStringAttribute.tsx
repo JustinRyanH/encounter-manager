@@ -18,14 +18,15 @@ export function SimpleStringAttribute({ title, observer, cannotEdit }: SimpleAtt
         <Title order={3} align="center" transform="uppercase">{title}</Title>
         <Divider />
         <TextInput
-            onDoubleClick={handleOnDoubleClick}
-            onBlur={handleOnBlur}
             aria-label={title}
-            value={value}
+            onBlur={handleOnBlur}
             onChange={(e) => setValue(e.currentTarget.value)}
+            onDoubleClick={handleOnDoubleClick}
             placeholder={title}
             radius="md"
+            readOnly={!isEditing}
             styles={{ input: { textAlign: "center" } }}
-            readOnly={!isEditing} />
+            value={value}
+        />
     </Stack>);
 }
