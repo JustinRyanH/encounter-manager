@@ -18,7 +18,12 @@ function SimpleStringAttribute({ title, value = "", setValue = () => { } }: Name
     return (<Stack spacing="sm">
         <Title order={3} align="center" transform="uppercase">{title}</Title>
         <Divider />
-        <TextInput aria-label={title} value={value} onChange={(e) => setValue(e.currentTarget.value)} />
+        <TextInput
+            aria-label={title}
+            value={value}
+            onChange={(e) => setValue(e.currentTarget.value)}
+            placeholder={title}
+        />
     </Stack>)
 }
 
