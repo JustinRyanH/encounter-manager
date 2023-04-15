@@ -1,13 +1,6 @@
 import { Center, Container, Divider, Paper, SimpleGrid, Skeleton, Stack, TextInput, Title } from "@mantine/core";
 import React from "react";
 
-function AttributeSkeleton(): JSX.Element {
-    return (<Stack spacing="sm">
-        <Skeleton height={20} animate={false} />
-        <Divider />
-        <Skeleton height={20} animate={false} />
-    </Stack>)
-}
 
 interface NameAttributeProps {
     title: string;
