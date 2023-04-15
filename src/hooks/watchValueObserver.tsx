@@ -1,5 +1,6 @@
 import React from "react";
-import { ValueChangeMessageProps, ValueObserver } from "../services/ValueObserver";
+
+import { ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
 
 export function useWatchValueObserver<T>(observer: ValueObserver<T>): [T, (v: T) => void] {
     const [value, setValue] = React.useState(observer.value);

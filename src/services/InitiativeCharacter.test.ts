@@ -1,4 +1,5 @@
 import { describe, test, vi } from 'vitest';
+
 import { InitiativeCharacter } from './InititativeCharacter';
 
 describe('InitiativeCharacter', () => {

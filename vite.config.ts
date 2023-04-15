@@ -32,4 +32,9 @@ export default defineConfig(async () => ({
     // since parsing CSS is slow
     css: false,
   },
+  resolve: {
+    alias: {
+      '~': '/src',
+    },
+  },
 }));

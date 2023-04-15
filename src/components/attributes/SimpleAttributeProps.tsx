@@ -1,4 +1,4 @@
-import { ValueObserver } from "../../services/ValueObserver";
+import { ValueObserver } from "~/services/ValueObserver";
 
 
 export interface SimpleAttributeProps<T> {

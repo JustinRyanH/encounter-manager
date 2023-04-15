@@ -1,8 +1,9 @@
 import React from "react";
 import { Center, Container, Paper, SimpleGrid, Skeleton } from "@mantine/core";
 
-import { InitiativeCharacter } from "../services/InititativeCharacter";
-import { ValueObserver } from "../services/ValueObserver";
+import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { ValueObserver } from "~/services/ValueObserver";
+
 import { SimpleStringAttribute, SimpleNumberAttribute } from "./attributes";
 
 export interface SimpleStringAttributeProps {

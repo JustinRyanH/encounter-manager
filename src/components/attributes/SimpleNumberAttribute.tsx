@@ -1,7 +1,8 @@
 import { Divider, NumberInput, Stack, Title } from "@mantine/core";
 import React from "react";
 
-import { useWatchValueObserver } from "../../hooks/watchValueObserver";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+
 import { SimpleAttributeProps } from "./SimpleAttributeProps";
 
 export function SimpleNumberAttribute({ title, observer, cannotEdit = false }: SimpleAttributeProps<number>): JSX.Element {
