@@ -18,8 +18,6 @@ interface UserAttributeReturn<T> extends  EditableAttributeReturn{
     value: T;
 }
 
-
-
 export function useEditableAttribute(cannotEdit = false): EditableAttributeReturn {
     const [isEditing, setIsEditing] = React.useState(false);
     const handleOnDoubleClick = () => {
