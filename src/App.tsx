@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { AppShell, Divider, Navbar, Stack, Title } from "@mantine/core";
 
 import "./App.css";
-import { CharacterInInitative } from "./components/CharacterInInitative";
+import { CharacterInInitiative } from "./components/CharacterInInitiative";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -24,12 +24,12 @@ function App() {
     <Title order={1} size="h2" transform="uppercase" align="center">Encounters</Title>
     <Divider my="md" />
     <Stack align="flex-start">
-      <CharacterInInitative />
-      <CharacterInInitative />
-      <CharacterInInitative />
-      <CharacterInInitative />
-      <CharacterInInitative />
-      <CharacterInInitative />
+      <CharacterInInitiative />
+      <CharacterInInitiative />
+      <CharacterInInitiative />
+      <CharacterInInitiative />
+      <CharacterInInitiative />
+      <CharacterInInitiative />
     </Stack>
   </AppShell>);
 }

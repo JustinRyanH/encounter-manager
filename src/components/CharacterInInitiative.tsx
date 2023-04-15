@@ -11,7 +11,7 @@ export interface SimpleStringAttributeProps {
     observer: ValueObserver<string>
 }
 
-export function CharacterInInitative(): JSX.Element {
+export function CharacterInInitiative(): JSX.Element {
     const character = React.useMemo(() => new InitiativeCharacter({ name: 'Name', initiative: 10 }), []);
     return (
         <Paper p="xl" shadow="md" withBorder>
