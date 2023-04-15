@@ -4,6 +4,7 @@ import { Center, Container, Paper, SimpleGrid, Skeleton } from "@mantine/core";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 import { SimpleStringAttribute, SimpleNumberAttribute } from "./attributes";
+
 export function CharacterInInitiative(): JSX.Element {
     const character = React.useMemo(() => new InitiativeCharacter({ name: 'Name', initiative: 10 }), []);
     return (
