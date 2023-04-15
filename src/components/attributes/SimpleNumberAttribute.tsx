@@ -4,13 +4,13 @@ import React from "react";
 import { useWatchValueObserver } from "../../hooks/watchValueObserver";
 import { ValueObserver } from "../../services/ValueObserver";
 
-export interface SimpleNumberAttributeProps {
+export interface SimpleAttributeProps<T> {
     title: string;
-    observer: ValueObserver<number>;
+    observer: ValueObserver<T>;
     cannotEdit?: boolean;
 }
 
-export function SimpleNumberAttribute({ title, observer, cannotEdit = false }: SimpleNumberAttributeProps): JSX.Element {
+export function SimpleNumberAttribute({ title, observer, cannotEdit = false }: SimpleAttributeProps<number>): JSX.Element {
     const [isEditing, setIsEditng] = React.useState(false);
     const [value, setValue] = useWatchValueObserver(observer);
     const handleOnDoubleClick = () => {
