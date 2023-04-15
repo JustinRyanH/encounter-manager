@@ -9,7 +9,7 @@ type SingleValueMessage<T> = (props: PublishedMessageProps<T>) => void;
 /**
  * A class that can be used to publish a single value to multiple subscribers.
  */
-class SingleValuePublisher<T> {
+export class SingleValuePublisher<T> {
     #value: T;
     #subscribers: Array<SingleValueMessage<T>> = [];
 
