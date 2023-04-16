@@ -1,28 +1,26 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
-import { AppShell, Divider, Navbar, Stack, Title } from "@mantine/core";
+import React from "react";
+import { AppShell, Burger, Header, MediaQuery, Navbar, Stack, Title, rem } from "@mantine/core";
 
 import "./App.css";
 import { CharacterInInitiative } from "./components/CharacterInInitiative";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [opened, setOpened] = React.useState(false);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
-  const navbar = (<Navbar width={{ base: 250 }} p="xs">
+  const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
     <Navbar.Section>
       <Title order={3}>Enounter Manager</Title>
     </Navbar.Section>
   </Navbar>);
 
-  return (<AppShell navbar={navbar}>
-    <Title order={1} size="h2" transform="uppercase" align="center">Encounters</Title>
-    <Divider my="md" />
+  const header = (<Header p="xs" height={{ base: rem(50), md: rem(70) }}>
+    <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+      <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" mr="xl" />
+
+    </MediaQuery>
+  </Header>)
+
+  return (<AppShell navbar={navbar} header={header}>
     <Stack align="flex-start">
       <CharacterInInitiative />
       <CharacterInInitiative />
