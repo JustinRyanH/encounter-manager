@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
+import { Divider, Flex, NumberInput, Paper, Skeleton, Stack, Text, Title, rem } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { HitPoints } from "~/services/HitPoints";
@@ -37,9 +37,9 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
 
     return (
         <Attribute title="HIT POINTS">
-            <Text>{current + temporary}</Text>
-            <Text>/</Text>
-            <Text>{max}</Text>
+            <NumberInput size="xs" value={current + temporary} styles={{ input: { width: rem(50), textAlign: 'right' } }} hideControls />
+            <Text size="lg">/</Text>
+            <NumberInput size="xs" value={max} styles={{ input: { width: rem(50), textAlign: 'left' } }} readOnly hideControls />
         </Attribute>
     );
 }
@@ -65,7 +65,7 @@ function InitiativeAttribute({ observer }: { observer: ValueObserver<number> }) 
 
 
 export function CharacterInInitiative(): JSX.Element {
-    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25, hp: randomRange(7, 15) }), []);
+    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25, hp: 1000 }), []);
     return (
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">
