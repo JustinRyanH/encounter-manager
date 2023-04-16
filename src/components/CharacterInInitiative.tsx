@@ -4,6 +4,7 @@ import { Center, Container, Paper, SimpleGrid, Skeleton } from "@mantine/core";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 import { SimpleStringAttribute, SimpleNumberAttribute } from "./attributes";
+import {HitPointsAttribute} from "~/components/attributes/HitPointsAttribute";
 
 export function CharacterInInitiative(): JSX.Element {
     const character = React.useMemo(() => new InitiativeCharacter({ name: 'Name', initiative: 10 }), []);
@@ -16,6 +17,7 @@ export function CharacterInInitiative(): JSX.Element {
                     </Center>
                     <SimpleStringAttribute title="Name" observer={character.nameObserver} />
                     <SimpleNumberAttribute title="Initiative" observer={character.initiativeObserver} cannotEdit />
+                    <HitPointsAttribute />
                 </SimpleGrid>
             </Container>
         </Paper>
