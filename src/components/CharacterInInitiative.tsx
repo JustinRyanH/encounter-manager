@@ -3,8 +3,17 @@ import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/cor
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { HitPoints } from "~/services/HitPoints";
-import { useResizeObserver } from "@mantine/hooks";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive). 
+ * @param min 
+ * @param max 
+ * @returns 
+ */
+function randomRange(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 function Attribute({ title, children }: { title: string, children: React.ReactNode }) {
     return (
@@ -52,7 +61,7 @@ function InitiativeAttribute({ initiative }: { initiative: number }) {
 
 
 export function CharacterInInitiative(): JSX.Element {
-    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25 }), []);
+    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25, hp: randomRange(7, 15) }), []);
     return (
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">

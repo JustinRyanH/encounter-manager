@@ -4,7 +4,7 @@ import { ValueObserver } from "./ValueObserver";
 interface InitiativeCharacterProps {
     name: string;
     initiative: number;
-    max?: number;
+    hp?: number;
 }
 
 /**
@@ -15,11 +15,11 @@ export class InitiativeCharacter {
     #initiative: ValueObserver<number>;
     #hp: HitPoints = new HitPoints();
 
-    constructor({ name, initiative, max = 10 }: InitiativeCharacterProps) {
+    constructor({ name, initiative, hp = 10 }: InitiativeCharacterProps) {
         this.#initiative = new ValueObserver(initiative);
         this.#name = new ValueObserver(name);
-        this.#hp.total = max;
-        this.#hp.current = max;
+        this.#hp.total = hp;
+        this.#hp.current = hp;
     }
 
     /**
