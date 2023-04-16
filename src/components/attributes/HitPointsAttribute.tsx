@@ -8,31 +8,25 @@ export function HitPointsAttribute(): JSX.Element {
     return (<Stack spacing="sm">
         <Title order={3} align="center" transform="uppercase">Hitpoints</Title>
         <Divider />
-        <Grid gutter="xs">
-            <Grid.Col span={4}>
-                <NumberInput
-                    aria-label="Current"
-                    placeholder="Current"
-                    radius="md"
-                    styles={{ input: { textAlign: "center" } }}
-                    readOnly />
-            </Grid.Col>
-            <Grid.Col span={4}>
-                <NumberInput
-                    aria-label="Total"
-                    placeholder="Total"
-                    radius="md"
-                    styles={{ input: { textAlign: "center" } }}
-                    readOnly />
-            </Grid.Col>
-            <Grid.Col span={4}>
-                <NumberInput
-                    aria-label="Temp"
-                    placeholder="Temp"
-                    radius="md"
-                    styles={{ input: { textAlign: "center" } }}
-                    readOnly />
-            </Grid.Col>
-        </Grid>
+        <Flex gap="xs">
+            <NumberInput
+                aria-label="Current"
+                placeholder="Current"
+                radius="md"
+                styles={{ input: { textAlign: "center" } }}
+                readOnly />
+            <NumberInput
+                aria-label="Total"
+                placeholder="Total"
+                radius="md"
+                styles={{ input: { textAlign: "center" } }}
+                readOnly />
+            <NumberInput
+                aria-label="Temp"
+                placeholder="Temp"
+                radius="md"
+                styles={{ input: { textAlign: "center" } }}
+                readOnly />
+        </Flex>
     </Stack>);
 }
