@@ -109,4 +109,14 @@ export class HitPoints {
     setTemp = (value: number) => {
         this.temp = value;
     }
+    damage = (amount: number) => {
+        const leftOver = this.temp - amount;
+        if (leftOver >= 0) {
+            this.temp -= amount;
+            return;
+        }
+
+        this.temp = 0;
+        this.current = Math.max(this.current - Math.abs(leftOver), 0);
+    }
 }

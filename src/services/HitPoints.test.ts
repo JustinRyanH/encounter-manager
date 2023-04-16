@@ -32,7 +32,6 @@ describe('HitPoints', () => {
             hitPoints.totalObserver.add(observer);
             hitPoints.total = 20;
             expect(observer).toHaveBeenCalledWith({
-                observer: hitPoints.totalObserver,
                 newValue: 20,
                 oldValue: 10,
             });
@@ -79,7 +78,6 @@ describe('HitPoints', () => {
             hitPoints.currentObserver.add(observer);
             hitPoints.current = 20;
             expect(observer).toHaveBeenCalledWith({
-                observer: hitPoints.currentObserver,
                 newValue: 20,
                 oldValue: 10,
             });
@@ -116,10 +114,43 @@ describe('HitPoints', () => {
             hitPoints.tempObserver.add(observer);
             hitPoints.temp = 20;
             expect(observer).toHaveBeenCalledWith({
-                observer: hitPoints.tempObserver,
                 newValue: 20,
                 oldValue: 0,
             });
+        });
+    });
+
+    describe('damage', () => {
+        test('can damage current', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+            hitPoints.damage(5);
+            expect(hitPoints.current).toEqual(5);
+        });
+
+        test('if temp is available, damage temp first', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 5,
+            });
+            hitPoints.damage(6);
+            expect(hitPoints.current).toEqual(9);
+            expect(hitPoints.temp).toEqual(0);
+        });
+
+        test('if damage is less than temp, only damage temp', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 5,
+            });
+            hitPoints.damage(3);
+            expect(hitPoints.current).toEqual(10);
+            expect(hitPoints.temp).toEqual(2);
         });
     });
 });
