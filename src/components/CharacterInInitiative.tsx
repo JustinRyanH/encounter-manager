@@ -11,16 +11,21 @@ export function CharacterInInitiative(): JSX.Element {
     return (
         <Paper p="xl" shadow="md" withBorder>
             <Grid align="flex-end">
-                <Grid.Col span={1}>
+                <Grid.Col span="content">
                     <Skeleton height={50} circle animate={false}/>
                 </Grid.Col>
                 <Grid.Col span={2}>
                     <SimpleStringAttribute title="Name" observer={character.nameObserver}/>
                 </Grid.Col>
-                <Grid.Col span={2}>
-                    <SimpleNumberAttribute title="Initiative" observer={character.initiativeObserver} cannotEdit/>
+                <Grid.Col span="content">
+                    <SimpleNumberAttribute
+                        width={50}
+                        title="Initiative"
+                        observer={character.initiativeObserver}
+                        cannotEdit
+                    />
                 </Grid.Col>
-                <Grid.Col span={5}>
+                <Grid.Col span="auto">
                     <HitPointsAttribute/>
                 </Grid.Col>
             </Grid>

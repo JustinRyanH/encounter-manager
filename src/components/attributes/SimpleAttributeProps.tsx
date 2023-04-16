@@ -5,4 +5,5 @@ export interface SimpleAttributeProps<T> {
     title: string;
     observer: ValueObserver<T>;
     cannotEdit?: boolean;
+    width?: number;
 }

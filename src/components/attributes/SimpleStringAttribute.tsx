@@ -16,7 +16,6 @@ export function SimpleStringAttribute({ title, observer, cannotEdit }: SimpleAtt
 
     return (<Stack spacing="sm">
         <Title order={3} align="center" transform="uppercase">{title}</Title>
-        <Divider />
         <TextInput
             aria-label={title}
             onBlur={handleOnBlur}

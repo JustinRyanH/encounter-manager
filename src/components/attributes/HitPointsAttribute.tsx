@@ -7,7 +7,6 @@ import {useAttribute, useEditableAttribute} from "~/hooks/UseAttribute";
 export function HitPointsAttribute(): JSX.Element {
     return (<Stack spacing="sm">
         <Title order={3} align="center" transform="uppercase">Hitpoints</Title>
-        <Divider />
         <Flex gap="xs">
             <NumberInput
                 aria-label="Current"
