@@ -17,7 +17,7 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
     );
 }
 
-function HpAttribute({ current, max, temporary }: { current: number, max: number, temporary: number }) {
+function HpAttribute({ current, max, temporary }: { current: number, max: number, temporary: number }): JSX.Element {
     return (
         <Attribute title="HIT POINTS">
             <Text>{current + temporary}</Text>
@@ -27,7 +27,7 @@ function HpAttribute({ current, max, temporary }: { current: number, max: number
     );
 }
 
-function NameAttribute({ name }: { name: string }) {
+function NameAttribute({ name }: { name: string }): JSX.Element {
     return (
         <Paper withBorder p="xs">
             <Stack>
