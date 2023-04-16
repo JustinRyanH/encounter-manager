@@ -19,6 +19,20 @@ function HitPoints({ current, max, temporary }: { current: number, max: number, 
     );
 }
 
+function Name({ name }: { name: string }) {
+    return (
+        <Paper withBorder p="xs">
+            <Stack>
+                <Title size="sm">NAME</Title>
+                <Divider />
+                <Flex justify="center" gap="sm">
+                    <Text>{name}</Text>
+                </Flex>
+            </Stack>
+        </Paper>
+    );
+}
+
 function Initiative({ initiative }: { initiative: number }) {
     return (
         <Paper withBorder p="xs">
@@ -40,7 +54,7 @@ export function CharacterInInitiative(): JSX.Element {
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
-                <TextInput styles={{ input: { textAlign: "center" } }} value={character.name} readOnly />
+                <Name name={character.name} />
                 <Initiative initiative={character.initiative} />
                 <HitPoints current={4} max={10} temporary={4} />
             </Flex>
