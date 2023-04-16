@@ -44,7 +44,8 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     );
 }
 
-function NameAttribute({ name }: { name: string }): JSX.Element {
+function NameAttribute({ observer }: { name: string, observer: ValueObserver<string> }): JSX.Element {
+    const [name] = useWatchValueObserver(observer);
     return (
         <Attribute title="NAME">
             <Text>{name}</Text>
@@ -69,7 +70,7 @@ export function CharacterInInitiative(): JSX.Element {
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
-                <NameAttribute name={character.name} />
+                <NameAttribute observer={character.nameObserver} name={character.name} />
                 <InitiativeAttribute observer={character.initiativeObserver} />
                 <HpAttribute hp={character.hp} />
             </Flex>
