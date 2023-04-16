@@ -4,6 +4,7 @@ import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/cor
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import { ValueObserver } from "~/services/ValueObserver";
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive). 
@@ -51,7 +52,9 @@ function NameAttribute({ name }: { name: string }): JSX.Element {
     );
 }
 
-function InitiativeAttribute({ initiative }: { initiative: number }) {
+function InitiativeAttribute({ observer }: { observer: ValueObserver<number> }) {
+    const [initiative] = useWatchValueObserver(observer);
+
     return (
         <Attribute title="INITIATIVE">
             <Text>{initiative}</Text>
@@ -67,7 +70,7 @@ export function CharacterInInitiative(): JSX.Element {
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
                 <NameAttribute name={character.name} />
-                <InitiativeAttribute initiative={character.initiative} />
+                <InitiativeAttribute observer={character.initiativeObserver} />
                 <HpAttribute hp={character.hp} />
             </Flex>
         </Paper>
