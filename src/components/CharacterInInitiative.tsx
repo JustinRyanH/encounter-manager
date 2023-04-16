@@ -31,6 +31,25 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
     );
 }
 
+function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+    return (
+        <Flex align="center" gap="xs">
+            <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
+            <Stack spacing="xs">
+                <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
+                <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
+            </Stack>
+            <Divider orientation="vertical" />
+            <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
+        </Flex>
+    );
+
+
+    function HealthButton({ icon, color, children }: { icon?: React.ReactNode, color?: string, children: React.ReactNode }) {
+        return <Button size="xs" leftIcon={icon} color={color} styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>{children}</Button>;
+    }
+}
+
 function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver.readonly);
     const total = useWatchValueObserver(hp.totalObserver.readonly);
@@ -49,17 +68,7 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
                     </Attribute>
                 </UnstyledButton>
             </Popover.Target>
-            <Popover.Dropdown>
-                <Flex align="center" gap="xs">
-                    <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
-                    <Stack spacing="xs">
-                        <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
-                        <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
-                    </Stack>
-                    <Divider orientation="vertical" />
-                    <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
-                </Flex>
-            </Popover.Dropdown>
+            <Popover.Dropdown> <UpdateHealth hp={hp} /> </Popover.Dropdown>
         </Popover>
     );
 
