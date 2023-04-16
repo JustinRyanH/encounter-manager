@@ -1,6 +1,5 @@
-import React, {FocusEventHandler, MouseEventHandler} from "react";
-import {useWatchValueObserver} from "~/hooks/watchValueObserver";
-import {ValueObserver} from "~/services/ValueObserver";
+import React, { FocusEventHandler, MouseEventHandler } from "react";
+import { ValueObserver } from "~/services/ValueObserver";
 
 interface UserAttributeProps<T> {
     observer: ValueObserver<T>;
@@ -11,11 +10,6 @@ interface EditableAttributeReturn {
     handleOnBlur: FocusEventHandler<HTMLElement>;
     handleOnDoubleClick: MouseEventHandler<HTMLElement>;
     isEditing: boolean;
-}
-
-interface UserAttributeReturn<T> extends  EditableAttributeReturn{
-    setValue: (v: T) => void;
-    value: T;
 }
 
 export function useEditableAttribute(cannotEdit = false): EditableAttributeReturn {
@@ -31,15 +25,4 @@ export function useEditableAttribute(cannotEdit = false): EditableAttributeRetur
         handleOnDoubleClick,
         handleOnBlur
     };
-}
-
-export function useAttribute<T>({observer, cannotEdit}: UserAttributeProps<T>): UserAttributeReturn<T> {
-    const {
-        isEditing,
-        handleOnDoubleClick,
-        handleOnBlur
-    } = useEditableAttribute(cannotEdit);
-    const [value, setValue] = useWatchValueObserver<T>(observer);
-
-    return {isEditing, value, setValue, handleOnDoubleClick, handleOnBlur};
 }

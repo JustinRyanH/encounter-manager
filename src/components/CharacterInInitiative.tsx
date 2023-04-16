@@ -31,9 +31,9 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
 }
 
 function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
-    const [current] = useWatchValueObserver(hp.currentObserver, hp.setCurrent);
-    const [max] = useWatchValueObserver(hp.totalObserver, hp.setMax);
-    const [temporary] = useWatchValueObserver(hp.tempObserver, hp.setTemp);
+    const current = useWatchValueObserver(hp.currentObserver.readonly);
+    const max = useWatchValueObserver(hp.totalObserver.readonly);
+    const temporary = useWatchValueObserver(hp.tempObserver.readonly);
 
     return (
         <Attribute title="HIT POINTS">
@@ -45,7 +45,7 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
 }
 
 function NameAttribute({ observer }: { observer: ValueObserver<string> }): JSX.Element {
-    const [name] = useWatchValueObserver(observer);
+    const name = useWatchValueObserver(observer.readonly);
     return (
         <Attribute title="NAME">
             <Text>{name}</Text>
@@ -54,7 +54,7 @@ function NameAttribute({ observer }: { observer: ValueObserver<string> }): JSX.E
 }
 
 function InitiativeAttribute({ observer }: { observer: ValueObserver<number> }) {
-    const [initiative] = useWatchValueObserver(observer);
+    const initiative = useWatchValueObserver(observer.readonly);
 
     return (
         <Attribute title="INITIATIVE">
