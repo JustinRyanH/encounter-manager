@@ -86,4 +86,27 @@ export class HitPoints {
     get tempObserver(): ValueObserver<number> {
         return this.#temp;
     }
+
+    /**
+     * Update current hit points, and notify observers
+     * @param value
+     */
+    setCurrent = (value: number) => {
+        this.current = value;
+    }
+
+    /**
+     * Update total hit points, and notify observers
+     * @param value 
+     */
+    setMax = (value: number) => {
+        this.total = value;
+    }
+
+    /**
+     * Update temporary hit points, and notify observers
+     */
+    setTemp = (value: number) => {
+        this.temp = value;
+    }
 }

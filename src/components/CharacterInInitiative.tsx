@@ -31,9 +31,9 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
 }
 
 function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
-    const [current] = useWatchValueObserver(hp.currentObserver);
-    const [max] = useWatchValueObserver(hp.totalObserver);
-    const [temporary] = useWatchValueObserver(hp.tempObserver);
+    const [current] = useWatchValueObserver(hp.currentObserver, hp.setCurrent);
+    const [max] = useWatchValueObserver(hp.totalObserver, hp.setMax);
+    const [temporary] = useWatchValueObserver(hp.tempObserver, hp.setTemp);
 
     return (
         <Attribute title="HIT POINTS">
