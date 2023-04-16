@@ -19,6 +19,20 @@ function HitPoints({ current, max, temporary }: { current: number, max: number, 
     );
 }
 
+function Initiative({ initiative }: { initiative: number }) {
+    return (
+        <Paper withBorder p="xs">
+            <Stack>
+                <Title size="sm">INITIATIVE</Title>
+                <Divider />
+                <Flex justify="center" gap="sm">
+                    <Text>{initiative}</Text>
+                </Flex>
+            </Stack>
+        </Paper>
+    );
+}
+
 
 export function CharacterInInitiative(): JSX.Element {
     const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25 }), []);
@@ -27,7 +41,7 @@ export function CharacterInInitiative(): JSX.Element {
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
                 <TextInput styles={{ input: { textAlign: "center" } }} value={character.name} readOnly />
-                <NumberInput style={{ width: rem(50) }} value={character.initiative} hideControls />
+                <Initiative initiative={character.initiative} />
                 <HitPoints current={4} max={10} temporary={4} />
             </Flex>
         </Paper>
