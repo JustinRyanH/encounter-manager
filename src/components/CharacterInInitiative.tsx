@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Flex, NumberInput, Paper, Skeleton, Stack, Text, Title, rem } from "@mantine/core";
+import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { HitPoints } from "~/services/HitPoints";
@@ -32,14 +32,16 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
 
 function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver.readonly);
-    const max = useWatchValueObserver(hp.totalObserver.readonly);
+    const total = useWatchValueObserver(hp.totalObserver.readonly);
     const temporary = useWatchValueObserver(hp.tempObserver.readonly);
 
     return (
         <Attribute title="HIT POINTS">
-            <NumberInput size="xs" value={current + temporary} styles={{ input: { width: rem(50), textAlign: 'right' } }} hideControls />
-            <Text size="lg">/</Text>
-            <NumberInput size="xs" value={max} styles={{ input: { width: rem(50), textAlign: 'left' } }} readOnly hideControls />
+            <Text size="sm">{current + temporary}</Text>
+            <Text size="sm">/</Text>
+            <Text size="sm">{total}</Text>
+            <Divider orientation="vertical" />
+            <Text>--</Text>
         </Attribute>
     );
 }
@@ -48,7 +50,7 @@ function NameAttribute({ observer }: { observer: ValueObserver<string> }): JSX.E
     const name = useWatchValueObserver(observer.readonly);
     return (
         <Attribute title="NAME">
-            <Text>{name}</Text>
+            <Text size="sm">{name}</Text>
         </Attribute>
     );
 }
@@ -58,14 +60,14 @@ function InitiativeAttribute({ observer }: { observer: ValueObserver<number> }) 
 
     return (
         <Attribute title="INITIATIVE">
-            <Text>{initiative}</Text>
+            <Text size="sm">{initiative}</Text>
         </Attribute>
     );
 }
 
 
 export function CharacterInInitiative(): JSX.Element {
-    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25, hp: 1000 }), []);
+    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25, hp: randomRange(5, 15) }), []);
     return (
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">
