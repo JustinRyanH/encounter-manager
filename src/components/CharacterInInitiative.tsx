@@ -56,6 +56,8 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
                         <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
                         <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
                     </Stack>
+                    <Divider orientation="vertical" />
+                    <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
                 </Flex>
             </Popover.Dropdown>
         </Popover>
