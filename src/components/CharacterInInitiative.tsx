@@ -3,19 +3,27 @@ import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/cor
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
-function HitPoints({ current, max, temporary }: { current: number, max: number, temporary: number }) {
+function Attribute({ title, children }: { title: string, children: React.ReactNode }) {
     return (
         <Paper withBorder p="xs">
             <Stack>
-                <Title size="sm">HIT POINTS</Title>
+                <Title size="sm" align="center">{title}</Title>
                 <Divider />
                 <Flex justify="center" gap="sm">
-                    <Text>{current + temporary}</Text>
-                    <Text>/</Text>
-                    <Text>{max}</Text>
+                    {children}
                 </Flex>
             </Stack>
         </Paper>
+    );
+}
+
+function HitPoints({ current, max, temporary }: { current: number, max: number, temporary: number }) {
+    return (
+        <Attribute title="HIT POINTS">
+            <Text>{current + temporary}</Text>
+            <Text>/</Text>
+            <Text>{max}</Text>
+        </Attribute>
     );
 }
 
