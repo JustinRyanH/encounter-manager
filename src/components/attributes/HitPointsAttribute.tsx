@@ -11,21 +11,27 @@ export function HitPointsAttribute(): JSX.Element {
             <NumberInput
                 aria-label="Current"
                 placeholder="Current"
-                radius="md"
                 styles={{ input: { textAlign: "center" } }}
-                readOnly />
+                step={1}
+                min={-1000}
+                max={1000}
+            />
             <NumberInput
                 aria-label="Total"
                 placeholder="Total"
-                radius="md"
                 styles={{ input: { textAlign: "center" } }}
-                readOnly />
+                step={1}
+                min={0}
+                max={1000}
+            />
             <NumberInput
                 aria-label="Temp"
                 placeholder="Temp"
-                radius="md"
                 styles={{ input: { textAlign: "center" } }}
-                readOnly />
+                step={1}
+                min={0}
+                max={1000}
+            />
         </Flex>
     </Stack>);
 }
