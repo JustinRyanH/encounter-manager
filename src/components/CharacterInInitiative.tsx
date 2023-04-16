@@ -17,7 +17,7 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
     );
 }
 
-function HitPoints({ current, max, temporary }: { current: number, max: number, temporary: number }) {
+function HpAttribute({ current, max, temporary }: { current: number, max: number, temporary: number }) {
     return (
         <Attribute title="HIT POINTS">
             <Text>{current + temporary}</Text>
@@ -27,7 +27,7 @@ function HitPoints({ current, max, temporary }: { current: number, max: number, 
     );
 }
 
-function Name({ name }: { name: string }) {
+function NameAttribute({ name }: { name: string }) {
     return (
         <Paper withBorder p="xs">
             <Stack>
@@ -41,7 +41,7 @@ function Name({ name }: { name: string }) {
     );
 }
 
-function Initiative({ initiative }: { initiative: number }) {
+function InitiativeAttribute({ initiative }: { initiative: number }) {
     return (
         <Paper withBorder p="xs">
             <Stack>
@@ -62,9 +62,9 @@ export function CharacterInInitiative(): JSX.Element {
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
-                <Name name={character.name} />
-                <Initiative initiative={character.initiative} />
-                <HitPoints current={4} max={10} temporary={4} />
+                <NameAttribute name={character.name} />
+                <InitiativeAttribute initiative={character.initiative} />
+                <HpAttribute current={4} max={10} temporary={4} />
             </Flex>
         </Paper>
     );
