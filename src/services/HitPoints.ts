@@ -1,9 +1,9 @@
-import {ValueObserver} from "~/services/ValueObserver";
+import { ValueObserver } from "~/services/ValueObserver";
 
 interface HitPointsProps {
-    total: number;
-    current: number;
-    temp: number;
+    total?: number;
+    current?: number;
+    temp?: number;
 }
 
 /**
@@ -12,9 +12,9 @@ interface HitPointsProps {
 export class HitPoints {
     #total: ValueObserver<number> = new ValueObserver(0);
     #current: ValueObserver<number> = new ValueObserver(0);
-    #temp: ValueObserver<number | null> = new ValueObserver<number | null>(null);
+    #temp: ValueObserver<number> = new ValueObserver<number>(0);
 
-    constructor({total, current, temp}: HitPointsProps) {
+    constructor({ total = 0, current = 0, temp = 0 }: HitPointsProps = {}) {
         this.#total.value = total;
         this.#current.value = current;
         this.#temp.value = temp;
@@ -68,7 +68,7 @@ export class HitPoints {
     /**
      * Temporary hit points.
      */
-    get temp(): number | null {
+    get temp(): number {
         return this.#temp.value;
     }
 
@@ -76,14 +76,14 @@ export class HitPoints {
      * Update temporary hit points, and notify observers
      * @param temp
      */
-    set temp(temp: number | null) {
+    set temp(temp: number) {
         this.#temp.value = temp;
     }
 
     /**
      * Observer for temporary hit points.
      */
-    get tempObserver(): ValueObserver<number | null> {
+    get tempObserver(): ValueObserver<number> {
         return this.#temp;
     }
 }

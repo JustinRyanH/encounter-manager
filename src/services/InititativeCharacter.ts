@@ -1,8 +1,10 @@
-import {ValueObserver} from "./ValueObserver";
+import { HitPoints } from "~/services/HitPoints";
+import { ValueObserver } from "./ValueObserver";
 
 interface InitiativeCharacterProps {
     name: string;
     initiative: number;
+    max?: number;
 }
 
 /**
@@ -11,10 +13,13 @@ interface InitiativeCharacterProps {
 export class InitiativeCharacter {
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
+    #hp: HitPoints = new HitPoints();
 
-    constructor({ name, initiative }: InitiativeCharacterProps) {
+    constructor({ name, initiative, max = 10 }: InitiativeCharacterProps) {
         this.#initiative = new ValueObserver(initiative);
         this.#name = new ValueObserver(name);
+        this.#hp.total = max;
+        this.#hp.current = max;
     }
 
     /**
@@ -60,5 +65,9 @@ export class InitiativeCharacter {
      */
     get initiativeObserver(): ValueObserver<number> {
         return this.#initiative;
+    }
+
+    get hp(): HitPoints {
+        return this.#hp;
     }
 }

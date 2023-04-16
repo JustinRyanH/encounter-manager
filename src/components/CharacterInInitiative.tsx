@@ -2,6 +2,9 @@ import React from "react";
 import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { HitPoints } from "~/services/HitPoints";
+import { useResizeObserver } from "@mantine/hooks";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 function Attribute({ title, children }: { title: string, children: React.ReactNode }) {
     return (
@@ -17,7 +20,11 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
     );
 }
 
-function HpAttribute({ current, max, temporary }: { current: number, max: number, temporary: number }): JSX.Element {
+function HpAttribute({ hp }: { current: number, max: number, temporary: number, hp: HitPoints }): JSX.Element {
+    const [current] = useWatchValueObserver(hp.currentObserver);
+    const [max] = useWatchValueObserver(hp.totalObserver);
+    const [temporary] = useWatchValueObserver(hp.tempObserver);
+
     return (
         <Attribute title="HIT POINTS">
             <Text>{current + temporary}</Text>
@@ -52,7 +59,7 @@ export function CharacterInInitiative(): JSX.Element {
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
                 <NameAttribute name={character.name} />
                 <InitiativeAttribute initiative={character.initiative} />
-                <HpAttribute current={4} max={10} temporary={4} />
+                <HpAttribute current={4} max={10} temporary={4} hp={character.hp} />
             </Flex>
         </Paper>
     );
