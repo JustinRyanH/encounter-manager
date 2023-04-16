@@ -1,5 +1,6 @@
 import React from "react";
-import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
+import { Button, Divider, Flex, NumberInput, Paper, Popover, Skeleton, Stack, Text, Title, UnstyledButton, rem } from "@mantine/core";
+import { IconPlus, IconMinus } from "@tabler/icons-react";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { HitPoints } from "~/services/HitPoints";
@@ -36,13 +37,28 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const temporary = useWatchValueObserver(hp.tempObserver.readonly);
 
     return (
-        <Attribute title="HIT POINTS">
-            <Text size="sm">{current + temporary}</Text>
-            <Text size="sm">/</Text>
-            <Text size="sm">{total}</Text>
-            <Divider orientation="vertical" />
-            <Text>--</Text>
-        </Attribute>
+        <Popover position="left">
+            <Popover.Target>
+                <UnstyledButton>
+                    <Attribute title="HIT POINTS">
+                        <Text size="sm">{current + temporary}</Text>
+                        <Text size="sm">/</Text>
+                        <Text size="sm">{total}</Text>
+                        <Divider orientation="vertical" />
+                        <Text>--</Text>
+                    </Attribute>
+                </UnstyledButton>
+            </Popover.Target>
+            <Popover.Dropdown>
+                <Flex align="center" gap="xs">
+                    <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
+                    <Stack spacing="xs">
+                        <Button size="xs" leftIcon={<IconPlus />} color="green" styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>Heal</Button>
+                        <Button size="xs" leftIcon={<IconMinus />} color="red" styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>Damaage</Button>
+                    </Stack>
+                </Flex>
+            </Popover.Dropdown>
+        </Popover>
     );
 }
 
