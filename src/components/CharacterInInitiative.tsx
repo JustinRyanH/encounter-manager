@@ -53,13 +53,17 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
                 <Flex align="center" gap="xs">
                     <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
                     <Stack spacing="xs">
-                        <Button size="xs" leftIcon={<IconPlus />} color="green" styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>Heal</Button>
-                        <Button size="xs" leftIcon={<IconMinus />} color="red" styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>Damaage</Button>
+                        <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
+                        <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
                     </Stack>
                 </Flex>
             </Popover.Dropdown>
         </Popover>
     );
+
+    function HealthButton({ icon, color, children }: { icon?: React.ReactNode, color?: string, children: React.ReactNode }) {
+        return <Button size="xs" leftIcon={icon} color={color} styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>{children}</Button>;
+    }
 }
 
 function NameAttribute({ observer }: { observer: ValueObserver<string> }): JSX.Element {
