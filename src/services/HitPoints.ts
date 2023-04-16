@@ -119,4 +119,7 @@ export class HitPoints {
         this.temp = 0;
         this.current = Math.max(this.current - Math.abs(leftOver), 0);
     }
+    heal = (amount: number) => {
+        this.current += amount;
+    }
 }

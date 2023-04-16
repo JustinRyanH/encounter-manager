@@ -153,4 +153,37 @@ describe('HitPoints', () => {
             expect(hitPoints.temp).toEqual(2);
         });
     });
+
+    describe('heal', () => {
+        test('can heal current', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 5,
+                temp: 0,
+            });
+            hitPoints.heal(5);
+            expect(hitPoints.current).toEqual(10);
+        });
+
+        test('if heal results in current being greater than total, set current to total', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 5,
+                temp: 0,
+            });
+            hitPoints.heal(6);
+            expect(hitPoints.current).toEqual(10);
+        });
+
+        test('heal does not affect temporary hit points', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 5,
+                temp: 5,
+            });
+            hitPoints.heal(6);
+            expect(hitPoints.current).toEqual(10);
+            expect(hitPoints.temp).toEqual(5);
+        });
+    });
 });
