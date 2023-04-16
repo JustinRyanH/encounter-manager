@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Divider, Flex, NumberInput, Paper, Popover, Skeleton, Stack, Text, Title, UnstyledButton, rem } from "@mantine/core";
+import { Button, Divider, Flex, FocusTrap, NumberInput, Paper, Popover, Skeleton, Stack, Text, Title, UnstyledButton, rem } from "@mantine/core";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
@@ -33,15 +33,17 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     return (
-        <Flex align="center" gap="xs">
-            <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
-            <Stack spacing="xs">
-                <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
-                <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
-            </Stack>
-            <Divider orientation="vertical" />
-            <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
-        </Flex>
+        <FocusTrap>
+            <Flex align="center" gap="xs">
+                <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
+                <Stack spacing="xs">
+                    <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
+                    <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
+                </Stack>
+                <Divider orientation="vertical" />
+                <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
+            </Flex>
+        </FocusTrap>
     );
 
 
@@ -71,10 +73,6 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
             <Popover.Dropdown> <UpdateHealth hp={hp} /> </Popover.Dropdown>
         </Popover>
     );
-
-    function HealthButton({ icon, color, children }: { icon?: React.ReactNode, color?: string, children: React.ReactNode }) {
-        return <Button size="xs" leftIcon={icon} color={color} styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>{children}</Button>;
-    }
 }
 
 function NameAttribute({ observer }: { observer: ValueObserver<string> }): JSX.Element {
