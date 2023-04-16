@@ -29,7 +29,7 @@ function Attribute({ title, children }: { title: string, children: React.ReactNo
     );
 }
 
-function HpAttribute({ hp }: { current: number, max: number, temporary: number, hp: HitPoints }): JSX.Element {
+function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const [current] = useWatchValueObserver(hp.currentObserver);
     const [max] = useWatchValueObserver(hp.totalObserver);
     const [temporary] = useWatchValueObserver(hp.tempObserver);
@@ -68,7 +68,7 @@ export function CharacterInInitiative(): JSX.Element {
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
                 <NameAttribute name={character.name} />
                 <InitiativeAttribute initiative={character.initiative} />
-                <HpAttribute current={4} max={10} temporary={4} hp={character.hp} />
+                <HpAttribute hp={character.hp} />
             </Flex>
         </Paper>
     );
