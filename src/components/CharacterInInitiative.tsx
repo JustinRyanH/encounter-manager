@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Flex, NumberInput, Paper, Skeleton, Stack, Text, TextInput, Title, rem } from "@mantine/core";
+import { Divider, Flex, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
