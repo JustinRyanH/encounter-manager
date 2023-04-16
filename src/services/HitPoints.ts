@@ -99,7 +99,7 @@ export class HitPoints {
      * Update total hit points, and notify observers
      * @param value 
      */
-    setMax = (value: number) => {
+    setTotal = (value: number) => {
         this.total = value;
     }
 
@@ -109,6 +109,13 @@ export class HitPoints {
     setTemp = (value: number) => {
         this.temp = value;
     }
+
+    /**
+     * Damage the character and notify observers
+     *
+     * If the character has temporary hit points, damage those first then the current
+     * @param amount
+     */
     damage = (amount: number) => {
         const leftOver = this.temp - amount;
         if (leftOver >= 0) {
@@ -119,6 +126,11 @@ export class HitPoints {
         this.temp = 0;
         this.current = Math.max(this.current - Math.abs(leftOver), 0);
     }
+
+    /**
+     * Heal the character but not above the total hit points and notify observers
+     * @param amount
+     */
     heal = (amount: number) => {
         this.current += amount;
     }
