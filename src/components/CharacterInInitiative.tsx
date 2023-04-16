@@ -1,11 +1,25 @@
 import React from "react";
-import { Button, Divider, Flex, FocusTrap, NumberInput, Paper, Popover, Skeleton, Stack, Text, Title, UnstyledButton, rem } from "@mantine/core";
-import { IconPlus, IconMinus } from "@tabler/icons-react";
+import {
+    Button,
+    Divider,
+    Flex,
+    FocusTrap,
+    NumberInput,
+    Paper,
+    Popover,
+    rem,
+    Skeleton,
+    Stack,
+    Text,
+    UnstyledButton
+} from "@mantine/core";
+import {IconMinus, IconPlus} from "@tabler/icons-react";
 
-import { InitiativeCharacter } from "~/services/InititativeCharacter";
-import { HitPoints } from "~/services/HitPoints";
-import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { ValueObserver } from "~/services/ValueObserver";
+import {InitiativeCharacter} from "~/services/InititativeCharacter";
+import {HitPoints} from "~/services/HitPoints";
+import {useWatchValueObserver} from "~/hooks/watchValueObserver";
+import {ValueObserver} from "~/services/ValueObserver";
+import {Attribute} from "~/components/Attribute";
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive). 
@@ -15,20 +29,6 @@ import { ValueObserver } from "~/services/ValueObserver";
  */
 function randomRange(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function Attribute({ title, children }: { title: string, children: React.ReactNode }) {
-    return (
-        <Paper withBorder p="xs">
-            <Stack>
-                <Title size="sm" align="center">{title}</Title>
-                <Divider />
-                <Flex justify="center" gap="sm">
-                    {children}
-                </Flex>
-            </Stack>
-        </Paper>
-    );
 }
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
