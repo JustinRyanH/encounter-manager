@@ -29,29 +29,17 @@ function HpAttribute({ current, max, temporary }: { current: number, max: number
 
 function NameAttribute({ name }: { name: string }): JSX.Element {
     return (
-        <Paper withBorder p="xs">
-            <Stack>
-                <Title size="sm">NAME</Title>
-                <Divider />
-                <Flex justify="center" gap="sm">
-                    <Text>{name}</Text>
-                </Flex>
-            </Stack>
-        </Paper>
+        <Attribute title="NAME">
+            <Text>{name}</Text>
+        </Attribute>
     );
 }
 
 function InitiativeAttribute({ initiative }: { initiative: number }) {
     return (
-        <Paper withBorder p="xs">
-            <Stack>
-                <Title size="sm">INITIATIVE</Title>
-                <Divider />
-                <Flex justify="center" gap="sm">
-                    <Text>{initiative}</Text>
-                </Flex>
-            </Stack>
-        </Paper>
+        <Attribute title="INITIATIVE">
+            <Text>{initiative}</Text>
+        </Attribute>
     );
 }
 
