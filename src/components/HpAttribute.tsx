@@ -84,20 +84,6 @@ function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
                     styles={{input: {width: rem(70)}}}
                     value={temp}
                 />
-                <ActionIcon title="Edit Total" onClick={() => totalOpenedHandles.toggle()}>
-                    <IconArrowBadgeRight size="1.75rem" />
-                </ActionIcon>
-                <Transition transition="scale-x" mounted={totalOpened}>
-                    {(styles) => <div style={styles}>
-                        <NumberInput
-                            value={total}
-                            onChange={setTotal}
-                            placeholder="Total Hitpoints"
-                            styles={{ input: { width: rem(80) }}}
-                            hideControls
-                        />
-                    </div>}
-                </Transition>
             </Flex>
         </FocusTrap>
     );
@@ -118,6 +104,19 @@ function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
     }
 }
 
+function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
+    return (<Popover>
+        <Popover.Target>
+            <UnstyledButton>
+                {children}
+            </UnstyledButton>
+        </Popover.Target>
+        <Popover.Dropdown>
+            <UpdateHealth hp={hp}/>
+        </Popover.Dropdown>
+    </Popover>)
+}
+
 export function HpAttribute({hp}: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver.readonly);
     const total = useWatchValueObserver(hp.totalObserver.readonly);
@@ -127,27 +126,16 @@ export function HpAttribute({hp}: { hp: HitPoints }): JSX.Element {
     const blueIfWeighted = temporary > 0 ? 'blue' : undefined;
 
     return (
-        <Popover position="left" withArrow>
-            <Popover.Target>
-                <UnstyledButton>
-                    <Attribute title="HIT POINTS">
-                        <HoverCard>
-                            <HoverCard.Target>
-                                <Text fw={boldIfWeighted} color={blueIfWeighted} size="sm">{current + temporary}</Text>
-                            </HoverCard.Target>
-                            <HoverCard.Dropdown>
-                                <Text size="sm">Current: {current}</Text>
-                                {temporary > 0 && <Text color="blue" size="sm">Temporary: {temporary}</Text>}
-                            </HoverCard.Dropdown>
-                        </HoverCard>
-                        <Text size="sm">/</Text>
-                        <Text size="sm">{total}</Text>
-                        <Divider orientation="vertical"/>
-                        <Text size="sm">{temporary || '--'}</Text>
-                    </Attribute>
-                </UnstyledButton>
-            </Popover.Target>
-            <Popover.Dropdown> <UpdateHealth hp={hp}/> </Popover.Dropdown>
-        </Popover>
+        <Attribute title="HIT POINTS">
+            <EditHealthPopover hp={hp}>
+                <Text fw={boldIfWeighted} color={blueIfWeighted} size="sm">{current + temporary}</Text>
+            </EditHealthPopover>
+            <Text size="sm">/</Text>
+            <Text size="sm">{total}</Text>
+            <Divider orientation="vertical"/>
+            <EditHealthPopover hp={hp}>
+                <Text size="sm">{temporary || '--'}</Text>
+            </EditHealthPopover>
+        </Attribute>
     );
 }
