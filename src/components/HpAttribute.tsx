@@ -19,6 +19,7 @@ import {HitPoints} from "~/services/HitPoints";
 import {useWatchValueObserver} from "~/hooks/watchValueObserver";
 import {Attribute} from "~/components/Attribute";
 import {DisclousreHandles} from "./interfaces";
+import {EditPopover, useEditPopoverContext} from "~/components/EditPopover";
 
 
 interface HealthButtonProps {
@@ -121,57 +122,6 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
     }
 }
 
-interface EditPopoverProps {
-    children: React.ReactNode;
-    titleComponent?: React.ReactNode;
-}
-
-interface EditPopoverContext {
-    opened: boolean;
-    handles: DisclousreHandles;
-}
-
-const DefaultPopoverContext: EditPopoverContext = {
-    opened: false,
-    handles: {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        close: () => {}
-    }
-};
-const EditPopoverContext = React.createContext<EditPopoverContext>(DefaultPopoverContext);
-
-export function useEditPopoverContext(): EditPopoverContext {
-    return React.useContext(EditPopoverContext) || DefaultPopoverContext;
-}
-
-
-function EditPopover({ children, titleComponent }: EditPopoverProps): JSX.Element {
-    const [opened, handles] = useDisclosure(false);
-    const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
-
-    return (
-        <EditPopoverContext.Provider value={{opened, handles}}>
-            <Popover
-                position="top"
-                withArrow
-                trapFocus
-                returnFocus
-                opened={opened}
-            >
-                <Popover.Target>
-                    <UnstyledButton onClick={handles.open}>
-                        {titleComponent}
-                    </UnstyledButton>
-                </Popover.Target>
-                <Popover.Dropdown>
-                    <Flex ref={ref} align="center" gap="xs">
-                        {children}
-                    </Flex>
-                </Popover.Dropdown>
-            </Popover>
-        </EditPopoverContext.Provider>
-    )
-}
 
 function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
     const [opened, handles] = useDisclosure(false);
