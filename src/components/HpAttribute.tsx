@@ -28,22 +28,14 @@ interface HealthButtonProps {
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
-    const [totalOpened, totalOpenedHandles] = useDisclosure(false);
+function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     const actualTemp = useWatchValueObserver(hp.tempObserver.readonly);
-    const actualTotal = useWatchValueObserver(hp.totalObserver.readonly);
     const [change, setChange] = React.useState<number | ''>('');
     const [temp, setTemp] = useDebouncedState<number | ''>(actualTemp || '', 100);
-    const [total, setTotal] = useDebouncedState<number | ''>(actualTotal || '', 100);
 
     React.useEffect(() => {
         hp.setTemp(temp || 0);
     }, [temp]);
-    React.useEffect(() => {
-        if (total === '') return;
-        hp.setTotal(total);
-    }, [total]);
-
     const handleHeal = () => {
         if (change === '') return;
         hp.heal(change);
@@ -63,37 +55,34 @@ function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
     React.useEffect(() => {
         setTemp(actualTemp || '');
     }, [actualTemp]);
-    React.useEffect(() => {
-        setTotal(actualTotal || '');
-    });
 
     return (
         <FocusTrap>
             <Flex align="center" gap="xs">
-                <NumberInput value={change} onChange={setChange} styles={{input: {width: rem(60)}}} hideControls/>
+                <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
                 <Stack spacing="xs">
-                    <HealthButton onClick={handleHeal} icon={<IconPlus/>} color="green">Heal</HealthButton>
-                    <HealthButton onClick={handleDamage} icon={<IconMinus/>} color="red">Damage</HealthButton>
+                    <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
+                    <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
                 </Stack>
-                <Divider orientation="vertical"/>
+                <Divider orientation="vertical" />
                 <NumberInput
                     hideControls
                     onBlur={handleTempBlur}
                     onChange={setTemp}
                     placeholder="TEMP"
-                    styles={{input: {width: rem(70)}}}
+                    styles={{ input: { width: rem(70) } }}
                     value={temp}
                 />
             </Flex>
         </FocusTrap>
     );
 
-    function HealthButton({icon, color, children, onClick}: HealthButtonProps): JSX.Element {
+    function HealthButton({ icon, color, children, onClick }: HealthButtonProps): JSX.Element {
         return (<Button
             size="xs"
             leftIcon={icon}
             color={color}
-            styles={{inner: {justifyContent: "flex-start"}}}
+            styles={{ inner: { justifyContent: "flex-start" } }}
             onClick={onClick}
             fullWidth
             compact
@@ -112,12 +101,12 @@ function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.Re
             </UnstyledButton>
         </Popover.Target>
         <Popover.Dropdown>
-            <UpdateHealth hp={hp}/>
+            <UpdateHealth hp={hp} />
         </Popover.Dropdown>
     </Popover>)
 }
 
-export function HpAttribute({hp}: { hp: HitPoints }): JSX.Element {
+export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver.readonly);
     const total = useWatchValueObserver(hp.totalObserver.readonly);
     const temporary = useWatchValueObserver(hp.tempObserver.readonly);
@@ -132,7 +121,7 @@ export function HpAttribute({hp}: { hp: HitPoints }): JSX.Element {
             </EditHealthPopover>
             <Text size="sm">/</Text>
             <Text size="sm">{total}</Text>
-            <Divider orientation="vertical"/>
+            <Divider orientation="vertical" />
             <EditHealthPopover hp={hp}>
                 <Text size="sm">{temporary || '--'}</Text>
             </EditHealthPopover>
