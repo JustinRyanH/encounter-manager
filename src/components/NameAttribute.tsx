@@ -33,7 +33,7 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
         </Popover>
     );
 
-    function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: { readonly close: () => void } }) {
+    function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: { readonly close: () => void } }): JSX.Element {
         const ref = React.useRef<HTMLDivElement>(null);
         const [newName, setNewName] = React.useState('');
         const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
