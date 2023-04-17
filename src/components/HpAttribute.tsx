@@ -1,5 +1,5 @@
-import React, { KeyboardEvent, MouseEventHandler } from "react";
-import { useClickOutside, useDisclosure } from "@mantine/hooks";
+import React, {KeyboardEvent, MouseEventHandler} from "react";
+import {useClickOutside, useDisclosure} from "@mantine/hooks";
 import {
     ActionIcon,
     Button,
@@ -13,12 +13,12 @@ import {
     Text,
     UnstyledButton
 } from "@mantine/core";
-import { IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
+import {IconCheck, IconMinus, IconPlus} from "@tabler/icons-react";
 
-import { HitPoints } from "~/services/HitPoints";
-import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Attribute } from "~/components/Attribute";
-import { DisclousreHandles } from "./interfaces";
+import {HitPoints} from "~/services/HitPoints";
+import {useWatchValueObserver} from "~/hooks/watchValueObserver";
+import {Attribute} from "~/components/Attribute";
+import {DisclousreHandles} from "./interfaces";
 
 
 interface HealthButtonProps {
@@ -28,7 +28,8 @@ interface HealthButtonProps {
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function UpdateTempHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandles }): JSX.Element {
+function UpdateTempHealth({ hp }: { hp: HitPoints, handles?: DisclousreHandles }): JSX.Element {
+    const { handles } = useEditPopoverContext();
     const [temp, setTemp] = React.useState<number | ''>('');
     const commitTempHp = () => {
         if (temp !== '') {
@@ -121,34 +122,62 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
 }
 
 interface EditTempPopoverProps {
-    hp: HitPoints;
     children: React.ReactNode;
     titleComponent?: React.ReactNode;
 }
 
+interface EditPopoverContext {
+    opened: boolean;
+    handles: DisclousreHandles;
+}
 
-function EditTempPopover({ hp, children }: EditTempPopoverProps): JSX.Element {
+const DefaultPopoverContext: EditPopoverContext = {
+    opened: false,
+    handles: {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        close: () => {}
+    }
+};
+const EditPopoverContext = React.createContext<EditPopoverContext>(DefaultPopoverContext);
+
+export function EditPopoverProvider({ children }: { children: React.ReactNode }): JSX.Element {
+    const [opened, handles] = useDisclosure(false);
+    return (<EditPopoverContext.Provider value={{opened, handles}}>
+        {children}
+    </EditPopoverContext.Provider>)
+}
+
+export function useEditPopoverContext(): EditPopoverContext {
+    return React.useContext(EditPopoverContext) || DefaultPopoverContext;
+}
+
+
+function EditTempPopover({ children, titleComponent }: EditTempPopoverProps): JSX.Element {
     const [opened, handles] = useDisclosure(false);
     const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
-    return (<Popover
-        position="top"
-        withArrow
-        trapFocus
-        returnFocus
-        opened={opened}
-    >
-        <Popover.Target>
-            <UnstyledButton onClick={handles.open}>
-                {children}
-            </UnstyledButton>
-        </Popover.Target>
-        <Popover.Dropdown>
-            <Flex ref={ref} align="center" gap="xs">
-                <UpdateTempHealth hp={hp} handles={handles} />
-            </Flex>
-        </Popover.Dropdown>
-    </Popover>)
+    return (
+        <EditPopoverContext.Provider value={{opened, handles}}>
+            <Popover
+                position="top"
+                withArrow
+                trapFocus
+                returnFocus
+                opened={opened}
+            >
+                <Popover.Target>
+                    <UnstyledButton onClick={handles.open}>
+                        {titleComponent}
+                    </UnstyledButton>
+                </Popover.Target>
+                <Popover.Dropdown>
+                    <Flex ref={ref} align="center" gap="xs">
+                        {children}
+                    </Flex>
+                </Popover.Dropdown>
+            </Popover>
+        </EditPopoverContext.Provider>
+    )
 }
 
 function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
@@ -187,8 +216,8 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
             <Text size="sm">/</Text>
             <Text size="sm">{total}</Text>
             <Divider orientation="vertical" />
-            <EditTempPopover hp={hp}>
-                <Text size="sm">{temporary || '--'}</Text>
+            <EditTempPopover titleComponent={<Text size="sm">{temporary || '--'}</Text>}>
+                <UpdateTempHealth hp={hp} />
             </EditTempPopover>
         </Attribute>
     );
