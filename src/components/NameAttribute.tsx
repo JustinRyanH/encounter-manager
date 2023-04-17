@@ -3,15 +3,14 @@ import { ActionIcon, Flex, Popover, Text, TextInput, UnstyledButton } from "@man
 import { IconCheck } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
-import { ValueObserver } from "~/services/ValueObserver";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 
-export function NameAttribute({observer}: { character?: InitiativeCharacter, observer: ValueObserver<string> }): JSX.Element {
+export function NameAttribute({character}: { character: InitiativeCharacter }): JSX.Element {
     const [opened, openedHandles] = useDisclosure(false);
-    const name = useWatchValueObserver(observer.readonly);
+    const name = useWatchValueObserver(character.nameObserver.readonly);
     const [newName, setNewName] = React.useState('');
     const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(e.target.value);
