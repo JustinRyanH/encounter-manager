@@ -7,7 +7,7 @@ describe('SingleValuePublisher', () => {
         const subscriber = vi.fn();
         observer.add(subscriber);
         observer.updateValue(1);
-        expect(subscriber).toBeCalledWith({ observer, newValue: 1, oldValue: 0 });
+        expect(subscriber).toHaveBeenCalledWith({ newValue: 1, oldValue: 0 });
     });
 
     test('can remove a subscriber', () => {
