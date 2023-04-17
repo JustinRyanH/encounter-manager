@@ -34,6 +34,7 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
     );
 
     function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: { readonly close: () => void } }) {
+        const ref = React.useRef<HTMLDivElement>(null);
         const [newName, setNewName] = React.useState('');
         const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
             setNewName(e.target.value);
@@ -43,12 +44,12 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
                 character.name = newName;
                 setNewName('');
             }
-            openedHandles.close();
+            handles.close();
         }
 
         const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Escape') {
-                openedHandles.close();
+                handles.close();
                 return;
             }
             if (e.key === 'Enter') {
@@ -56,9 +57,15 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
             }
         }
 
-        return <Flex align="center" gap="xs">
-            <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} />
-            <ActionIcon title="Commit" onClick={commitNewName}>
+        const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLButtonElement>) => {
+            if (!ref.current?.contains(e.relatedTarget as Node)) {
+                handles.close();
+            }
+        }
+
+        return <Flex ref={ref} align="center" gap="xs">
+            <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} onBlur={handleBlur} />
+            <ActionIcon title="Commit" onClick={commitNewName} onBlur={handleBlur}>
                 <IconCheck size="1.75rem" />
             </ActionIcon>
         </Flex>;
