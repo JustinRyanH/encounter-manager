@@ -52,23 +52,23 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
     const name = useWatchValueObserver(character.nameObserver.readonly);
 
     return (
-        <Popover
-            position="top"
-            opened={opened}
-            withArrow
-            trapFocus
-            returnFocus
-        >
-            <Popover.Target>
-                <UnstyledButton onClick={openedHandles.toggle}>
-                    <Attribute title="NAME">
+        <Attribute title="NAME">
+            <Popover
+                position="top"
+                opened={opened}
+                withArrow
+                trapFocus
+                returnFocus
+            >
+                <Popover.Target>
+                    <UnstyledButton onClick={openedHandles.toggle}>
                         <Text size="sm">{name}</Text>
-                    </Attribute>
-                </UnstyledButton>
-            </Popover.Target>
-            <Popover.Dropdown>
-                <NameAttributeEdit character={character} handles={openedHandles} />
-            </Popover.Dropdown>
-        </Popover>
+                    </UnstyledButton>
+                </Popover.Target>
+                <Popover.Dropdown>
+                    <NameAttributeEdit character={character} handles={openedHandles} />
+                </Popover.Dropdown>
+            </Popover>
+        </Attribute>
     );
 }
