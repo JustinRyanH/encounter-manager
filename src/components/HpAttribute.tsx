@@ -127,7 +127,7 @@ export function HpAttribute({hp}: { hp: HitPoints }): JSX.Element {
     const blueIfWeighted = temporary > 0 ? 'blue' : undefined;
 
     return (
-        <Popover position="left">
+        <Popover position="left" withArrow>
             <Popover.Target>
                 <UnstyledButton>
                     <Attribute title="HIT POINTS">
