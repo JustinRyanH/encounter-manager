@@ -1,4 +1,4 @@
-import React from "react";
+import React, {MouseEvent, MouseEventHandler} from "react";
 import {
     Button,
     Divider,
@@ -20,6 +20,7 @@ import {HitPoints} from "~/services/HitPoints";
 import {useWatchValueObserver} from "~/hooks/watchValueObserver";
 import {ValueObserver} from "~/services/ValueObserver";
 import {Attribute} from "~/components/Attribute";
+import {useDisclosure} from "@mantine/hooks";
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive). 
@@ -32,13 +33,27 @@ function randomRange(min: number, max: number): number {
 }
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+    const [change, setChange] = React.useState<number | ''>('');
+
+    const handleHeal = () => {
+        if (change === '') return;
+        hp.heal(change);
+        setChange('');
+    }
+
+    const handleDamage = () => {
+        if (change === '') return;
+        hp.damage(change);
+        setChange('');
+    }
+
     return (
         <FocusTrap>
             <Flex align="center" gap="xs">
-                <NumberInput styles={{ input: { width: rem(60) } }} hideControls />
+                <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
                 <Stack spacing="xs">
-                    <HealthButton icon={<IconPlus />} color="green">Heal</HealthButton>
-                    <HealthButton icon={<IconMinus />} color="red">Damage</HealthButton>
+                    <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
+                    <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
                 </Stack>
                 <Divider orientation="vertical" />
                 <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
@@ -47,8 +62,26 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     );
 
 
-    function HealthButton({ icon, color, children }: { icon?: React.ReactNode, color?: string, children: React.ReactNode }) {
-        return <Button size="xs" leftIcon={icon} color={color} styles={{ inner: { justifyContent: "flex-start" } }} fullWidth compact uppercase>{children}</Button>;
+    interface HealthButtonProps {
+        icon?: React.ReactNode;
+        color?: string;
+        children: React.ReactNode;
+        onClick?: MouseEventHandler<HTMLButtonElement>;
+    }
+
+    function HealthButton({ icon, color, children, onClick }: HealthButtonProps): JSX.Element {
+        return (<Button
+            size="xs"
+            leftIcon={icon}
+            color={color}
+            styles={{ inner: { justifyContent: "flex-start" } }}
+            onClick={onClick}
+            fullWidth
+            compact
+            uppercase
+        >
+            {children}
+        </Button>);
     }
 }
 
