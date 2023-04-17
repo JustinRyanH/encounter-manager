@@ -1,7 +1,7 @@
 import React from "react";
 import { ActionIcon, Flex, Popover, Text, TextInput, UnstyledButton } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
-import { useDisclosure } from "@mantine/hooks";
+import { useClickOutside, useDisclosure } from "@mantine/hooks";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
@@ -9,7 +9,6 @@ import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 
 function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: { readonly close: () => void } }): JSX.Element {
-    const ref = React.useRef<HTMLDivElement>(null);
     const [newName, setNewName] = React.useState('');
     const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(e.target.value);
@@ -37,6 +36,8 @@ function NameAttributeEdit({ character, handles }: { character: InitiativeCharac
             handles.close();
         }
     }
+
+    const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
     return <Flex ref={ref} align="center" gap="xs">
         <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} onBlur={handleBlur} />
