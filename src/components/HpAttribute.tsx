@@ -53,7 +53,7 @@ function UpdateTempHealth({ hp }: { hp: HitPoints, handles?: DisclousreHandles }
             <NumberInput
                 hideControls
                 onChange={setTemp}
-                placeholder="new temp"
+                placeholder="New Temp"
                 styles={{ input: { width: rem(90), textAlign: 'center' } }}
                 value={temp}
                 onKeyDown={handleKeyDown} /><ActionIcon title="Set Temp" onClick={commitTempHp}>
@@ -121,6 +121,41 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     }
 }
 
+function UpdateTotal({ hp }: { hp: HitPoints }): JSX.Element {
+    const { handles } = useEditPopoverContext();
+    const [total, setTotal] = React.useState<number | ''>('');
+
+    const onCommit = () => {
+        hp.setTotal(total || 0);
+        setTotal('');
+        handles.close();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Escape') {
+            handles.close();
+            setTotal('');
+            return;
+        }
+        if (e.key === 'Enter') {
+            onCommit();
+        }
+    }
+    return (
+        <>
+            <NumberInput
+                hideControls
+                onChange={setTotal}
+                placeholder="New Total"
+                styles={{ input: { width: rem(90), textAlign: 'center' } }}
+                value={total}
+                onKeyDown={handleKeyDown} /><ActionIcon title="Set Total" onClick={onCommit}><IconCheck size="1.75rem" />
+            </ActionIcon>
+        </>
+    );
+}
+
+
 
 export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver.readonly);
@@ -136,7 +171,9 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
                 <UpdateHealth hp={hp} />
             </EditPopover>
             <Text size="sm">/</Text>
-            <Text size="sm">{total}</Text>
+            <EditPopover titleComponent={<Text size="sm">{total}</Text>}>
+                <UpdateTotal hp={hp} />
+            </EditPopover>
             <Divider orientation="vertical" />
             <EditPopover titleComponent={<Text size="sm">{temporary || '--'}</Text>}>
                 <UpdateTempHealth hp={hp} />
