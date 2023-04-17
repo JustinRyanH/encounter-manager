@@ -10,7 +10,7 @@ import {
     rem,
     SimpleGrid,
     Stack,
-    Text, 
+    Text,
     UnstyledButton
 } from "@mantine/core";
 import { IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
@@ -48,22 +48,18 @@ function UpdateTempHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreH
         }
     }
 
-    const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
-
     return (
-        <Flex ref={ref} align="center" gap="xs">
+        <>
             <NumberInput
                 hideControls
                 onChange={setTemp}
                 placeholder="new temp"
                 styles={{ input: { width: rem(90), textAlign: 'center' } }}
                 value={temp}
-                onKeyDown={handleKeyDown}
-            />
-            <ActionIcon title="Set Temp" onClick={commitTempHp}>
+                onKeyDown={handleKeyDown} /><ActionIcon title="Set Temp" onClick={commitTempHp}>
                 <IconCheck size="1.75rem" />
             </ActionIcon>
-        </Flex>
+        </>
     );
 }
 
@@ -127,6 +123,8 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
 
 function EditTempPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
     const [opened, handles] = useDisclosure(false);
+    const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
+
     return (<Popover
         position="top"
         withArrow
@@ -140,7 +138,9 @@ function EditTempPopover({ hp, children }: { hp: HitPoints, children: React.Reac
             </UnstyledButton>
         </Popover.Target>
         <Popover.Dropdown>
-            <UpdateTempHealth hp={hp} handles={handles} />
+            <Flex ref={ref} align="center" gap="xs">
+                <UpdateTempHealth hp={hp} handles={handles} />
+            </Flex>
         </Popover.Dropdown>
     </Popover>)
 }
