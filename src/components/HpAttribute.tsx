@@ -57,24 +57,22 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     }, [actualTemp]);
 
     return (
-        <FocusTrap>
-            <Flex align="center" gap="xs">
-                <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
-                <Stack spacing="xs">
-                    <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
-                    <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
-                </Stack>
-                <Divider orientation="vertical" />
-                <NumberInput
-                    hideControls
-                    onBlur={handleTempBlur}
-                    onChange={setTemp}
-                    placeholder="TEMP"
-                    styles={{ input: { width: rem(70) } }}
-                    value={temp}
-                />
-            </Flex>
-        </FocusTrap>
+        <Flex align="center" gap="xs">
+            <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
+            <Stack spacing="xs">
+                <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
+                <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
+            </Stack>
+            <Divider orientation="vertical" />
+            <NumberInput
+                hideControls
+                onBlur={handleTempBlur}
+                onChange={setTemp}
+                placeholder="TEMP"
+                styles={{ input: { width: rem(70) } }}
+                value={temp}
+            />
+        </Flex>
     );
 
     function HealthButton({ icon, color, children, onClick }: HealthButtonProps): JSX.Element {
@@ -94,7 +92,11 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
 }
 
 function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
-    return (<Popover>
+    return (<Popover
+        withArrow
+        trapFocus
+        returnFocus
+    >
         <Popover.Target>
             <UnstyledButton>
                 {children}
