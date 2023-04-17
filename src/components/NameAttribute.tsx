@@ -6,11 +6,8 @@ import { useClickOutside, useDisclosure } from "@mantine/hooks";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { DisclousreHandles } from "./interfaces";
 
-
-export interface DisclousreHandles {
-    readonly close: () => void;
-}
 
 function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: DisclousreHandles }): JSX.Element {
     const [newName, setNewName] = React.useState('');

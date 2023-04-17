@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react";
-import { useDebouncedState, useDisclosure } from "@mantine/hooks";
+import { useClickOutside, useDebouncedState, useDisclosure } from "@mantine/hooks";
 import {
     ActionIcon,
     Button,
@@ -19,6 +19,7 @@ import { IconArrowBadgeRight, IconMinus, IconPlus } from "@tabler/icons-react";
 import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
+import { DisclousreHandles } from "./interfaces";
 
 
 interface HealthButtonProps {
@@ -28,14 +29,48 @@ interface HealthButtonProps {
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
-    const actualTemp = useWatchValueObserver(hp.tempObserver.readonly);
-    const [change, setChange] = React.useState<number | ''>('');
-    const [temp, setTemp] = useDebouncedState<number | ''>(actualTemp || '', 100);
+function UpdateTempHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandles }): JSX.Element {
+    const [temp, setTemp] = React.useState<number | ''>('');
+    const commitTempHp = () => {
+        if (temp !== '') {
+            hp.setTemp(temp || 0);
+            setTemp('');
+        }
+        handles.close();
+    }
 
-    React.useEffect(() => {
-        hp.setTemp(temp || 0);
-    }, [temp]);
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Escape') {
+            handles.close();
+            return;
+        }
+        if (e.key === 'Enter') {
+            commitTempHp();
+        }
+    }
+
+    const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
+
+    return (
+        <Flex ref={ref} align="center" gap="xs">
+            <NumberInput
+                hideControls
+                onChange={setTemp}
+                placeholder="TEMP"
+                styles={{ input: { width: rem(70) } }}
+                value={temp}
+                onKeyDown={handleKeyDown}
+            />
+            <ActionIcon title="Set Temp" onClick={() => hp.setTemp(temp || 0)}>
+                <IconArrowBadgeRight size="1.75rem" />
+            </ActionIcon>
+        </Flex>
+    );
+}
+
+function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+    const [change, setChange] = React.useState<number | ''>('');
+
     const handleHeal = () => {
         if (change === '') return;
         hp.heal(change);
@@ -48,14 +83,6 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
         setChange('');
     }
 
-    const handleTempBlur = () => {
-        hp.setTemp(temp || 0);
-    }
-
-    React.useEffect(() => {
-        setTemp(actualTemp || '');
-    }, [actualTemp]);
-
     return (
         <Flex align="center" gap="xs">
             <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
@@ -63,15 +90,6 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
                 <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
                 <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
             </Stack>
-            <Divider orientation="vertical" />
-            <NumberInput
-                hideControls
-                onBlur={handleTempBlur}
-                onChange={setTemp}
-                placeholder="TEMP"
-                styles={{ input: { width: rem(70) } }}
-                value={temp}
-            />
         </Flex>
     );
 
@@ -89,6 +107,27 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
             {children}
         </Button>);
     }
+}
+
+
+function EditTempPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
+    const [opened, handles] = useDisclosure(false);
+    return (<Popover
+        position="top"
+        withArrow
+        trapFocus
+        returnFocus
+        opened={opened}
+    >
+        <Popover.Target>
+            <UnstyledButton onClick={handles.open}>
+                {children}
+            </UnstyledButton>
+        </Popover.Target>
+        <Popover.Dropdown>
+            <UpdateTempHealth hp={hp} handles={handles} />
+        </Popover.Dropdown>
+    </Popover>)
 }
 
 function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
@@ -125,9 +164,9 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
             <Text size="sm">/</Text>
             <Text size="sm">{total}</Text>
             <Divider orientation="vertical" />
-            <EditHealthPopover hp={hp}>
+            <EditTempPopover hp={hp}>
                 <Text size="sm">{temporary || '--'}</Text>
-            </EditHealthPopover>
+            </EditTempPopover>
         </Attribute>
     );
 }
