@@ -9,7 +9,7 @@ function App() {
 
   const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250, lg: 300 }}>
     <Navbar.Section>
-      <Title align="center" order={3}>Enounter Manager</Title>
+      <Title align="center" order={3}>Encounter Manager</Title>
     </Navbar.Section>
   </Navbar>);
 
