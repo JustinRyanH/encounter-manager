@@ -8,26 +8,9 @@ import { Attribute } from "~/components/Attribute";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 
-export function NameAttribute({character}: { character: InitiativeCharacter }): JSX.Element {
+export function NameAttribute({ character }: { character: InitiativeCharacter }): JSX.Element {
     const [opened, openedHandles] = useDisclosure(false);
     const name = useWatchValueObserver(character.nameObserver.readonly);
-    const [newName, setNewName] = React.useState('');
-    const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewName(e.target.value);
-    }
-    const commitNewName = () => {
-        if (newName !== '') {
-            character.name = newName;
-            setNewName('');
-        }
-        openedHandles.close();
-    }
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            commitNewName();
-        }
-    }
 
     return (
         <Popover
@@ -45,13 +28,39 @@ export function NameAttribute({character}: { character: InitiativeCharacter }): 
                 </UnstyledButton>
             </Popover.Target>
             <Popover.Dropdown>
-                <Flex align="center" gap="xs">
-                    <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} />
-                    <ActionIcon title="Commit" onClick={commitNewName}>
-                        <IconCheck size="1.75rem" />
-                    </ActionIcon>
-                </Flex>
+                <NameAttributeEdit character={character} handles={openedHandles} />
             </Popover.Dropdown>
         </Popover>
     );
+
+    function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: { readonly close: () => void } }) {
+        const [newName, setNewName] = React.useState('');
+        const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setNewName(e.target.value);
+        }
+        const commitNewName = () => {
+            if (newName !== '') {
+                character.name = newName;
+                setNewName('');
+            }
+            openedHandles.close();
+        }
+
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Escape') {
+                openedHandles.close();
+                return;
+            }
+            if (e.key === 'Enter') {
+                commitNewName();
+            }
+        }
+
+        return <Flex align="center" gap="xs">
+            <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} />
+            <ActionIcon title="Commit" onClick={commitNewName}>
+                <IconCheck size="1.75rem" />
+            </ActionIcon>
+        </Flex>;
+    }
 }
