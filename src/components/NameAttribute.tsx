@@ -58,7 +58,7 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
             >
                 <Popover.Target>
                     <UnstyledButton onClick={openedHandles.toggle}>
-                        <Text size="sm">{name}</Text>
+                        <Text size="sm" align="center">{name}</Text>
                     </UnstyledButton>
                 </Popover.Target>
                 <Popover.Dropdown>
