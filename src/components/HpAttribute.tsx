@@ -140,13 +140,6 @@ const DefaultPopoverContext: EditPopoverContext = {
 };
 const EditPopoverContext = React.createContext<EditPopoverContext>(DefaultPopoverContext);
 
-export function EditPopoverProvider({ children }: { children: React.ReactNode }): JSX.Element {
-    const [opened, handles] = useDisclosure(false);
-    return (<EditPopoverContext.Provider value={{opened, handles}}>
-        {children}
-    </EditPopoverContext.Provider>)
-}
-
 export function useEditPopoverContext(): EditPopoverContext {
     return React.useContext(EditPopoverContext) || DefaultPopoverContext;
 }
