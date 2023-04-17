@@ -145,7 +145,7 @@ export function useEditPopoverContext(): EditPopoverContext {
 }
 
 
-function EditTempPopover({ children, titleComponent }: EditTempPopoverProps): JSX.Element {
+function EditPopover({ children, titleComponent }: EditTempPopoverProps): JSX.Element {
     const [opened, handles] = useDisclosure(false);
     const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
@@ -209,9 +209,9 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
             <Text size="sm">/</Text>
             <Text size="sm">{total}</Text>
             <Divider orientation="vertical" />
-            <EditTempPopover titleComponent={<Text size="sm">{temporary || '--'}</Text>}>
+            <EditPopover titleComponent={<Text size="sm">{temporary || '--'}</Text>}>
                 <UpdateTempHealth hp={hp} />
-            </EditTempPopover>
+            </EditPopover>
         </Attribute>
     );
 }
