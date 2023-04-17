@@ -29,8 +29,7 @@ function InitiativeAttribute({ observer }: { observer: ValueObserver<number> }) 
 }
 
 
-export function CharacterInInitiative(): JSX.Element {
-    const character = React.useMemo(() => new InitiativeCharacter({ name: 'Temp Name', initiative: 25, hp: randomRange(5, 15) }), []);
+export function CharacterInInitiative({ character }: { character: InitiativeCharacter }): JSX.Element {
     return (
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">

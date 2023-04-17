@@ -25,6 +25,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  uuid:
+    specifier: ^9.0.0
+    version: 9.0.0
 
 devDependencies:
   '@tauri-apps/cli':
@@ -42,6 +45,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.0.11
     version: 18.0.11
+  '@types/uuid':
+    specifier: ^9.0.1
+    version: 9.0.1
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.58.0
     version: 5.58.0(@typescript-eslint/parser@5.58.0)(eslint@8.38.0)(typescript@4.9.5)
@@ -1149,6 +1155,10 @@ packages:
     resolution: {integrity: sha512-SBwbxYoyPIvxHbeHxTZX2Pe/74F/tX2/D3mMvzabdeJ25bBojfW0TyB8BHrbq/9zaaKICJZjLP+8r6AeZMFCuQ==}
     dependencies:
       '@types/jest': 29.5.0
+    dev: true
+
+  /@types/uuid@9.0.1:
+    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
     dev: true
 
   /@types/yargs-parser@21.0.0:
@@ -3471,6 +3481,11 @@ packages:
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
     dev: false
 
   /vite-node@0.30.1(@types/node@18.15.11):

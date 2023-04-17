@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { HitPoints } from "~/services/HitPoints";
 import { ValueObserver } from "./ValueObserver";
 
@@ -11,6 +13,7 @@ interface InitiativeCharacterProps {
  * A Tracked Character
  */
 export class InitiativeCharacter {
+    #id: string = uuidv4();
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
     #hp: HitPoints = new HitPoints();
@@ -20,6 +23,13 @@ export class InitiativeCharacter {
         this.#name = new ValueObserver(name);
         this.#hp.total = hp;
         this.#hp.current = hp;
+    }
+
+    /**
+     * Returns a globally unique identifier for this character instance
+     */
+    get id() {
+        return this.#id;
     }
 
     /**

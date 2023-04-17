@@ -3,6 +3,15 @@ import { AppShell, Burger, Header, MediaQuery, Navbar, Stack, Title, rem } from 
 
 import "./App.css";
 import { CharacterInInitiative } from "./components/CharacterInInitiative";
+import { InitiativeCharacter } from "~/services/InititativeCharacter";
+
+const MockCharacters = [
+  { name: 'Frodo', initiative: 18, hp: 8 },
+  { name: 'Sam', initiative: 19, hp: 6 },
+  { name: 'Aragon', initiative: 10, hp: 20 },
+  { name: 'Pippin', initiative: 1, hp: 4 },
+  { name: 'Merry', initiative: 10, hp: 6 },
+]
 
 function App() {
   const [opened, setOpened] = React.useState(false);
@@ -19,14 +28,14 @@ function App() {
     </MediaQuery>
   </Header>)
 
+  const characters = React.useMemo(
+      () => MockCharacters.map((c) => new InitiativeCharacter(c)),
+      [MockCharacters])
+  ;
+
   return (<AppShell navbar={navbar} header={header}>
     <Stack align="flex-start">
-      <CharacterInInitiative />
-      <CharacterInInitiative />
-      <CharacterInInitiative />
-      <CharacterInInitiative />
-      <CharacterInInitiative />
-      <CharacterInInitiative />
+      {characters.map((c) => <CharacterInInitiative character={c} key={c.id} />)}
     </Stack>
   </AppShell>);
 }
