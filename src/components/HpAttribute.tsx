@@ -10,11 +10,12 @@ import {
     NumberInput,
     Popover,
     rem,
+    SimpleGrid,
     Stack,
     Text, Transition,
     UnstyledButton
 } from "@mantine/core";
-import { IconArrowBadgeRight, IconMinus, IconPlus } from "@tabler/icons-react";
+import { IconArrowBadgeRight, IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
 
 import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -61,14 +62,17 @@ function UpdateTempHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreH
                 value={temp}
                 onKeyDown={handleKeyDown}
             />
-            <ActionIcon title="Set Temp" onClick={() => hp.setTemp(temp || 0)}>
-                <IconArrowBadgeRight size="1.75rem" />
+            <ActionIcon title="Set Temp" onClick={commitTempHp}>
+                <IconCheck size="1.75rem" />
             </ActionIcon>
         </Flex>
     );
 }
 
 function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandles }): JSX.Element {
+    const current = useWatchValueObserver(hp.currentObserver.readonly);
+    const temp = useWatchValueObserver(hp.tempObserver.readonly);
+
     const [change, setChange] = React.useState<number | ''>('');
 
     const handleHeal = () => {
@@ -85,10 +89,19 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
         handles.close();
     }
 
+    const onEscape = (e) => e.key === 'Escape' && handles.close();
+
     const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
     return (
-        <Flex ref={ref} align="center" gap="xs">
+        <Flex ref={ref} align="center" gap="xs" onKeyDown={onEscape}>
+            <SimpleGrid cols={2} spacing="xs">
+                <Text fw={700} size="sm">Current</Text>
+                <Text fw={700} size="sm">Temp</Text>
+                <Text size="sm">{current}</Text>
+                <Text size="sm">{temp}</Text>
+            </SimpleGrid>
+            <Divider orientation="vertical" />
             <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
             <Stack spacing="xs">
                 <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
