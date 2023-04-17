@@ -1,17 +1,15 @@
 import React, {KeyboardEvent, MouseEventHandler} from "react";
-import {useClickOutside, useDisclosure} from "@mantine/hooks";
+import {useClickOutside} from "@mantine/hooks";
 import {
     ActionIcon,
     Button,
     Divider,
     Flex,
     NumberInput,
-    Popover,
     rem,
     SimpleGrid,
     Stack,
-    Text,
-    UnstyledButton
+    Text
 } from "@mantine/core";
 import {IconCheck, IconMinus, IconPlus} from "@tabler/icons-react";
 
@@ -65,7 +63,8 @@ function UpdateTempHealth({ hp }: { hp: HitPoints, handles?: DisclousreHandles }
     );
 }
 
-function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandles }): JSX.Element {
+function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+    const { handles } = useEditPopoverContext();
     const current = useWatchValueObserver(hp.currentObserver.readonly);
     const temp = useWatchValueObserver(hp.tempObserver.readonly);
 
@@ -123,26 +122,6 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
 }
 
 
-function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
-    const [opened, handles] = useDisclosure(false);
-    return (<Popover
-        position="top"
-        withArrow
-        trapFocus
-        returnFocus
-        opened={opened}
-    >
-        <Popover.Target>
-            <UnstyledButton onClick={handles.open}>
-                {children}
-            </UnstyledButton>
-        </Popover.Target>
-        <Popover.Dropdown>
-            <UpdateHealth hp={hp} handles={handles} />
-        </Popover.Dropdown>
-    </Popover>)
-}
-
 export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver.readonly);
     const total = useWatchValueObserver(hp.totalObserver.readonly);
@@ -153,9 +132,9 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
 
     return (
         <Attribute title="HIT POINTS">
-            <EditHealthPopover hp={hp}>
-                <Text fw={boldIfWeighted} color={blueIfWeighted} size="sm">{current + temporary}</Text>
-            </EditHealthPopover>
+            <EditPopover titleComponent={<Text fw={boldIfWeighted} color={blueIfWeighted} size="sm">{current + temporary}</Text>}>
+                <UpdateHealth hp={hp} />
+            </EditPopover>
             <Text size="sm">/</Text>
             <Text size="sm">{total}</Text>
             <Divider orientation="vertical" />
