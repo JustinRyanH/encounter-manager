@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React, { KeyboardEvent, MouseEventHandler } from "react";
 import { useClickOutside, useDebouncedState, useDisclosure } from "@mantine/hooks";
 import {
     ActionIcon,
@@ -89,7 +89,7 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
         handles.close();
     }
 
-    const onEscape = (e) => e.key === 'Escape' && handles.close();
+    const onEscape = (e: KeyboardEvent<HTMLElement>) => e.key === 'Escape' && handles.close();
 
     const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
