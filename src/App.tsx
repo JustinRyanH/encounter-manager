@@ -16,7 +16,6 @@ function App() {
   const header = (<Header p="xs" height={{ base: rem(50), md: rem(70) }}>
     <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
       <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" mr="xl" />
-
     </MediaQuery>
   </Header>)
 
