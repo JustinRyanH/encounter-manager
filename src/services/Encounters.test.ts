@@ -34,5 +34,17 @@ describe('Encounters', function () {
 
             expect(encounters.characters.map(c => c.name)).toEqual(['A']);
         });
+
+        test('sorts the characters by initiative', function () {
+            const characterA = new InitiativeCharacter({ name: 'A', initiative: 5 });
+            const characterB = new InitiativeCharacter({ name: 'B', initiative: 15 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+
+            encounters.addCharacter(new InitiativeCharacter({ name: 'C', initiative: 20 }));
+            encounters.addCharacter(new InitiativeCharacter({ name: 'D', initiative: 1 }));
+
+            expect(encounters.characters.map(c => c.name)).toEqual(['C', 'B', 'A', 'D']);
+        });
     });
 });
