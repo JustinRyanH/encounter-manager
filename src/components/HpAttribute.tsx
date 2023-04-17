@@ -68,23 +68,27 @@ function UpdateTempHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreH
     );
 }
 
-function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandles }): JSX.Element {
     const [change, setChange] = React.useState<number | ''>('');
 
     const handleHeal = () => {
         if (change === '') return;
         hp.heal(change);
         setChange('');
+        handles.close();
     }
 
     const handleDamage = () => {
         if (change === '') return;
         hp.damage(change);
         setChange('');
+        handles.close();
     }
 
+    const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
+
     return (
-        <Flex align="center" gap="xs">
+        <Flex ref={ref} align="center" gap="xs">
             <NumberInput value={change} onChange={setChange} styles={{ input: { width: rem(60) } }} hideControls />
             <Stack spacing="xs">
                 <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
@@ -131,19 +135,21 @@ function EditTempPopover({ hp, children }: { hp: HitPoints, children: React.Reac
 }
 
 function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
+    const [opened, handles] = useDisclosure(false);
     return (<Popover
         position="top"
         withArrow
         trapFocus
         returnFocus
+        opened={opened}
     >
         <Popover.Target>
-            <UnstyledButton>
+            <UnstyledButton onClick={handles.open}>
                 {children}
             </UnstyledButton>
         </Popover.Target>
         <Popover.Dropdown>
-            <UpdateHealth hp={hp} />
+            <UpdateHealth hp={hp} handles={handles} />
         </Popover.Dropdown>
     </Popover>)
 }
