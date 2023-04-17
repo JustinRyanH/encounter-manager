@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { HitPoints } from "~/services/HitPoints";
-import { ValueObserver } from "./ValueObserver";
+import { ReadonlyValueObserver, ValueObserver } from "./ValueObserver";
 
 interface InitiativeCharacterProps {
     name: string;
@@ -51,8 +51,8 @@ export class InitiativeCharacter {
     /**
      * Observer for the name of the character
      */
-    get nameObserver(): ValueObserver<string> {
-        return this.#name;
+    get nameObserver(): ReadonlyValueObserver<string> {
+        return this.#name.readonly;
     }
 
     /**
@@ -73,8 +73,8 @@ export class InitiativeCharacter {
     /**
      * Observer for the initiative of the character
      */
-    get initiativeObserver(): ValueObserver<number> {
-        return this.#initiative;
+    get initiativeObserver(): ReadonlyValueObserver<number> {
+        return this.#initiative.readonly;
     }
 
     get hp(): HitPoints {

@@ -1,4 +1,4 @@
-import { ValueObserver } from "~/services/ValueObserver";
+import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 
 interface HitPointsProps {
     total?: number;
@@ -39,8 +39,8 @@ export class HitPoints {
     /**
      * Observer for total hit points.
      */
-    get totalObserver(): ValueObserver<number> {
-        return this.#total;
+    get totalObserver(): ReadonlyValueObserver<number> {
+        return this.#total.readonly;
     }
 
     /**
@@ -61,8 +61,8 @@ export class HitPoints {
     /**
      * Observer for current hit points.
      */
-    get currentObserver(): ValueObserver<number> {
-        return this.#current;
+    get currentObserver(): ReadonlyValueObserver<number> {
+        return this.#current.readonly;
     }
 
     /**
@@ -83,8 +83,8 @@ export class HitPoints {
     /**
      * Observer for temporary hit points.
      */
-    get tempObserver(): ValueObserver<number> {
-        return this.#temp;
+    get tempObserver(): ReadonlyValueObserver<number> {
+        return this.#temp.readonly;
     }
 
     /**

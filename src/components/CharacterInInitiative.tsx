@@ -3,7 +3,7 @@ import { Flex, Paper, Skeleton, Text } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { ValueObserver } from "~/services/ValueObserver";
+import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { Attribute } from "~/components/Attribute";
 import { HpAttribute } from "~/components/HpAttribute";
 import { NameAttribute } from "~/components/NameAttribute";
@@ -18,8 +18,8 @@ function randomRange(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function InitiativeAttribute({ observer }: { observer: ValueObserver<number> }) {
-    const initiative = useWatchValueObserver(observer.readonly);
+function InitiativeAttribute({ observer }: { observer: ReadonlyValueObserver<number> }) {
+    const initiative = useWatchValueObserver(observer);
 
     return (
         <Attribute title="INITIATIVE">

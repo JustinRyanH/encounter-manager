@@ -45,7 +45,7 @@ function NameAttributeEdit({ character, handles }: { character: InitiativeCharac
 
 export function NameAttribute({ character }: { character: InitiativeCharacter }): JSX.Element {
     const [opened, openedHandles] = useDisclosure(false);
-    const name = useWatchValueObserver(character.nameObserver.readonly);
+    const name = useWatchValueObserver(character.nameObserver);
 
     return (
         <Attribute title="NAME">

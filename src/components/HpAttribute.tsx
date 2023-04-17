@@ -65,8 +65,8 @@ function UpdateTempHealth({ hp }: { hp: HitPoints, handles?: DisclousreHandles }
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     const { handles } = useEditPopoverContext();
-    const current = useWatchValueObserver(hp.currentObserver.readonly);
-    const temp = useWatchValueObserver(hp.tempObserver.readonly);
+    const current = useWatchValueObserver(hp.currentObserver);
+    const temp = useWatchValueObserver(hp.tempObserver);
 
     const [change, setChange] = React.useState<number | ''>('');
 
@@ -158,9 +158,9 @@ function UpdateTotal({ hp }: { hp: HitPoints }): JSX.Element {
 
 
 export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
-    const current = useWatchValueObserver(hp.currentObserver.readonly);
-    const total = useWatchValueObserver(hp.totalObserver.readonly);
-    const temporary = useWatchValueObserver(hp.tempObserver.readonly);
+    const current = useWatchValueObserver(hp.currentObserver);
+    const total = useWatchValueObserver(hp.totalObserver);
+    const temporary = useWatchValueObserver(hp.tempObserver);
 
     const boldIfWeighted = temporary > 0 ? 700 : undefined;
     const blueIfWeighted = temporary > 0 ? 'blue' : undefined;
