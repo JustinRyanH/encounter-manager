@@ -1,6 +1,7 @@
-import React, {MouseEventHandler} from "react";
-import {useDebouncedState} from "@mantine/hooks";
+import React, { MouseEventHandler } from "react";
+import { useDebouncedState, useDisclosure } from "@mantine/hooks";
 import {
+    ActionIcon,
     Button,
     Divider,
     Flex,
@@ -10,14 +11,14 @@ import {
     Popover,
     rem,
     Stack,
-    Text,
+    Text, Transition,
     UnstyledButton
 } from "@mantine/core";
-import {IconMinus, IconPlus} from "@tabler/icons-react";
+import { IconArrowBadgeRight, IconMinus, IconPlus } from "@tabler/icons-react";
 
-import {HitPoints} from "~/services/HitPoints";
-import {useWatchValueObserver} from "~/hooks/watchValueObserver";
-import {Attribute} from "~/components/Attribute";
+import { HitPoints } from "~/services/HitPoints";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import { Attribute } from "~/components/Attribute";
 
 
 interface HealthButtonProps {
@@ -28,13 +29,20 @@ interface HealthButtonProps {
 }
 
 function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
+    const [totalOpened, totalOpenedHandles] = useDisclosure(false);
     const actualTemp = useWatchValueObserver(hp.tempObserver.readonly);
+    const actualTotal = useWatchValueObserver(hp.totalObserver.readonly);
     const [change, setChange] = React.useState<number | ''>('');
     const [temp, setTemp] = useDebouncedState<number | ''>(actualTemp || '', 100);
+    const [total, setTotal] = useDebouncedState<number | ''>(actualTotal || '', 100);
 
     React.useEffect(() => {
         hp.setTemp(temp || 0);
     }, [temp]);
+    React.useEffect(() => {
+        if (total === '') return;
+        hp.setTotal(total);
+    }, [total]);
 
     const handleHeal = () => {
         if (change === '') return;
@@ -55,6 +63,9 @@ function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
     React.useEffect(() => {
         setTemp(actualTemp || '');
     }, [actualTemp]);
+    React.useEffect(() => {
+        setTotal(actualTotal || '');
+    });
 
     return (
         <FocusTrap>
@@ -73,6 +84,20 @@ function UpdateHealth({hp}: { hp: HitPoints }): JSX.Element {
                     styles={{input: {width: rem(70)}}}
                     value={temp}
                 />
+                <ActionIcon title="Edit Total" onClick={() => totalOpenedHandles.toggle()}>
+                    <IconArrowBadgeRight size="1.75rem" />
+                </ActionIcon>
+                <Transition transition="scale-x" mounted={totalOpened}>
+                    {(styles) => <div style={styles}>
+                        <NumberInput
+                            value={total}
+                            onChange={setTotal}
+                            placeholder="Total Hitpoints"
+                            styles={{ input: { width: rem(80) }}}
+                            hideControls
+                        />
+                    </div>}
+                </Transition>
             </Flex>
         </FocusTrap>
     );
