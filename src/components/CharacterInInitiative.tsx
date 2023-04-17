@@ -35,7 +35,7 @@ export function CharacterInInitiative(): JSX.Element {
         <Paper p="xl" shadow="md" withBorder>
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
-                <NameAttribute observer={character.nameObserver} />
+                <NameAttribute character={character} observer={character.nameObserver} />
                 <InitiativeAttribute observer={character.initiativeObserver} />
                 <HpAttribute hp={character.hp} />
             </Flex>
