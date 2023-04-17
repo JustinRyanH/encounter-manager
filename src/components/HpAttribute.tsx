@@ -123,6 +123,7 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
 interface EditTempPopoverProps {
     hp: HitPoints;
     children: React.ReactNode;
+    titleComponent?: React.ReactNode;
 }
 
 
