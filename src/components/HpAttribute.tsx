@@ -121,7 +121,7 @@ function UpdateHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreHandl
     }
 }
 
-interface EditTempPopoverProps {
+interface EditPopoverProps {
     children: React.ReactNode;
     titleComponent?: React.ReactNode;
 }
@@ -145,7 +145,7 @@ export function useEditPopoverContext(): EditPopoverContext {
 }
 
 
-function EditPopover({ children, titleComponent }: EditTempPopoverProps): JSX.Element {
+function EditPopover({ children, titleComponent }: EditPopoverProps): JSX.Element {
     const [opened, handles] = useDisclosure(false);
     const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
