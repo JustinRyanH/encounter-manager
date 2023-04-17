@@ -9,11 +9,26 @@ export class Encounters {
         }
     }
 
+    /**
+     * Returns the characters in the encounter.
+     */
     get characters(): Array<InitiativeCharacter> {
         return this.#characters.value;
     }
 
+    /**
+     * Returns a readonly observer for the characters.
+     */
     get charactersObserver(): ReadonlyValueObserver<Array<InitiativeCharacter>> {
         return this.#characters.readonly;
+    }
+
+    /**
+     * Adds a character to the encounter and sorts the characters by initiative.
+     * @param initiativeCharacter
+     */
+    addCharacter = (initiativeCharacter: InitiativeCharacter) => {
+        this.#characters.value = [...this.#characters.value, initiativeCharacter]
+            .sort((a, b) => b.initiative - a.initiative);
     }
 }

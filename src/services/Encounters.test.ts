@@ -25,4 +25,14 @@ describe('Encounters', function () {
 
         expect(encounters.characters.map(c => c.name)).toEqual(['B', 'A']);
     });
+
+    describe('addCharacter', function () {
+        test('adds a character to the encounter', function () {
+            const encounters = new Encounters();
+
+            encounters.addCharacter(new InitiativeCharacter({ name: 'A', initiative: 1 }));
+
+            expect(encounters.characters.map(c => c.name)).toEqual(['A']);
+        });
+    });
 });
