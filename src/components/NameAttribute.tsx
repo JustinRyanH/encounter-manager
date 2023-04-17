@@ -31,17 +31,11 @@ function NameAttributeEdit({ character, handles }: { character: InitiativeCharac
         }
     }
 
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLButtonElement>) => {
-        if (!ref.current?.contains(e.relatedTarget as Node)) {
-            handles.close();
-        }
-    }
-
     const ref = useClickOutside(() => handles.close(), ['mousedown', 'touchstart']);
 
     return <Flex ref={ref} align="center" gap="xs">
-        <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} onBlur={handleBlur} />
-        <ActionIcon title="Commit" onClick={commitNewName} onBlur={handleBlur}>
+        <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} />
+        <ActionIcon title="Commit" onClick={commitNewName}>
             <IconCheck size="1.75rem" />
         </ActionIcon>
     </Flex>;
