@@ -1,14 +1,15 @@
 import React from "react";
 import { ActionIcon, Flex, Popover, Text, TextInput, UnstyledButton } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
 
 import { ValueObserver } from "~/services/ValueObserver";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
-import { useDisclosure } from "@mantine/hooks";
+import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 
-export function NameAttribute({observer}: { observer: ValueObserver<string> }): JSX.Element {
+export function NameAttribute({observer}: { character?: InitiativeCharacter, observer: ValueObserver<string> }): JSX.Element {
     const [opened, openedHandles] = useDisclosure(false);
     const name = useWatchValueObserver(observer.readonly);
     const [newName, setNewName] = React.useState('');
