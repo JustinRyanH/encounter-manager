@@ -1,21 +1,19 @@
 import React, { KeyboardEvent, MouseEventHandler } from "react";
-import { useClickOutside, useDebouncedState, useDisclosure } from "@mantine/hooks";
+import { useClickOutside, useDisclosure } from "@mantine/hooks";
 import {
     ActionIcon,
     Button,
     Divider,
     Flex,
-    FocusTrap,
-    HoverCard,
     NumberInput,
     Popover,
     rem,
     SimpleGrid,
     Stack,
-    Text, Transition,
+    Text, 
     UnstyledButton
 } from "@mantine/core";
-import { IconArrowBadgeRight, IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
+import { IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
 
 import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -57,8 +55,8 @@ function UpdateTempHealth({ hp, handles }: { hp: HitPoints, handles: DisclousreH
             <NumberInput
                 hideControls
                 onChange={setTemp}
-                placeholder="TEMP"
-                styles={{ input: { width: rem(70) } }}
+                placeholder="new temp"
+                styles={{ input: { width: rem(90), textAlign: 'center' } }}
                 value={temp}
                 onKeyDown={handleKeyDown}
             />
