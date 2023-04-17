@@ -22,6 +22,10 @@ export class ReadonlyValueObserver<T> {
         return this.#observer.value;
     }
 
+    get readonly(): ReadonlyValueObserver<T> {
+        return this;
+    }
+
     /**
      * Sets the value of the publisher and notifies all subscribers. 
      */
