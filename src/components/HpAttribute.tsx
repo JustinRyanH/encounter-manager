@@ -93,6 +93,7 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
 
 function EditHealthPopover({ hp, children }: { hp: HitPoints, children: React.ReactNode }): JSX.Element {
     return (<Popover
+        position="top"
         withArrow
         trapFocus
         returnFocus

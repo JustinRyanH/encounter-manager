@@ -53,7 +53,7 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
 
     return (
         <Popover
-            position="right"
+            position="top"
             opened={opened}
             withArrow
             trapFocus
