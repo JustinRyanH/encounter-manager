@@ -1,5 +1,5 @@
 import React from "react";
-import { ActionIcon, Flex, Popover, Text, TextInput, UnstyledButton } from "@mantine/core";
+import { ActionIcon, Flex, FocusTrap, Popover, Text, TextInput, UnstyledButton } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -17,24 +17,36 @@ export function NameAttribute({character}: { character: InitiativeCharacter }): 
     }
     const commitNewName = () => {
         if (newName !== '') {
+            character.name = newName;
             setNewName('');
         }
         openedHandles.close();
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            commitNewName();
+        }
+    }
+
     return (
-        <Popover position="right" opened={opened} withArrow>
+        <Popover
+            position="right"
+            opened={opened}
+            withArrow
+            trapFocus
+            returnFocus
+        >
             <Popover.Target>
                 <UnstyledButton onClick={openedHandles.toggle}>
                     <Attribute title="NAME">
                         <Text size="sm">{name}</Text>
                     </Attribute>
-
                 </UnstyledButton>
             </Popover.Target>
             <Popover.Dropdown>
                 <Flex align="center" gap="xs">
-                    <TextInput placeholder="Update Character Name" value={newName} onChange={handleSetNewName} />
+                    <TextInput onKeyDown={handleKeyDown} placeholder="Update Character Name" value={newName} onChange={handleSetNewName} />
                     <ActionIcon title="Commit" onClick={commitNewName}>
                         <IconCheck size="1.75rem" />
                     </ActionIcon>
