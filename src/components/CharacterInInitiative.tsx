@@ -20,7 +20,7 @@ import {HitPoints} from "~/services/HitPoints";
 import {useWatchValueObserver} from "~/hooks/watchValueObserver";
 import {ValueObserver} from "~/services/ValueObserver";
 import {Attribute} from "~/components/Attribute";
-import {useDisclosure} from "@mantine/hooks";
+import {useDebouncedState, useDisclosure} from "@mantine/hooks";
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive). 
@@ -34,6 +34,10 @@ function randomRange(min: number, max: number): number {
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     const [change, setChange] = React.useState<number | ''>('');
+    const [temp, setTemp] = useDebouncedState<number | ''>('', 300);
+    React.useEffect(() => {
+        hp.setTemp(temp || 0);
+    }, [temp]);
 
     const handleHeal = () => {
         if (change === '') return;
@@ -47,6 +51,10 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
         setChange('');
     }
 
+    const handleTempBlur = () => {
+        hp.setTemp(temp || 0);
+    }
+
     return (
         <FocusTrap>
             <Flex align="center" gap="xs">
@@ -56,7 +64,14 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
                     <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
                 </Stack>
                 <Divider orientation="vertical" />
-                <NumberInput placeholder="TEMP" styles={{ input: { width: rem(70) } }} hideControls />
+                <NumberInput
+                    hideControls
+                    onBlur={handleTempBlur}
+                    onChange={setTemp}
+                    placeholder="TEMP"
+                    styles={{ input: { width: rem(70) } }}
+                    value={temp}
+                />
             </Flex>
         </FocusTrap>
     );
