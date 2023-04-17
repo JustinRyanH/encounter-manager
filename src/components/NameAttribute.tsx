@@ -8,7 +8,11 @@ import { Attribute } from "~/components/Attribute";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
 
-function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: { readonly close: () => void } }): JSX.Element {
+export interface DisclousreHandles {
+    readonly close: () => void;
+}
+
+function NameAttributeEdit({ character, handles }: { character: InitiativeCharacter, handles: DisclousreHandles }): JSX.Element {
     const [newName, setNewName] = React.useState('');
     const handleSetNewName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(e.target.value);
