@@ -1,5 +1,5 @@
 import React from "react";
-import {Flex, Paper, Skeleton, Text} from "@mantine/core";
+import { Flex, Paper, Popover, Skeleton, Text, UnstyledButton } from "@mantine/core";
 
 import {InitiativeCharacter} from "~/services/InititativeCharacter";
 import {useWatchValueObserver} from "~/hooks/watchValueObserver";
@@ -20,9 +20,19 @@ function randomRange(min: number, max: number): number {
 function NameAttribute({ observer }: { observer: ValueObserver<string> }): JSX.Element {
     const name = useWatchValueObserver(observer.readonly);
     return (
-        <Attribute title="NAME">
-            <Text size="sm">{name}</Text>
-        </Attribute>
+        <Popover position="right" withArrow>
+            <Popover.Target>
+                <UnstyledButton>
+                    <Attribute title="NAME">
+                        <Text size="sm">{name}</Text>
+                    </Attribute>
+
+                </UnstyledButton>
+            </Popover.Target>
+            <Popover.Dropdown>
+                Poop
+            </Popover.Dropdown>
+        </Popover>
     );
 }
 
