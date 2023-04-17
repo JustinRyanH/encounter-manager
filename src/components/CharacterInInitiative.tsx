@@ -3,7 +3,7 @@ import {
     Button,
     Divider,
     Flex,
-    FocusTrap,
+    FocusTrap, HoverCard,
     NumberInput,
     Paper,
     Popover,
@@ -20,7 +20,7 @@ import {HitPoints} from "~/services/HitPoints";
 import {useWatchValueObserver} from "~/hooks/watchValueObserver";
 import {ValueObserver} from "~/services/ValueObserver";
 import {Attribute} from "~/components/Attribute";
-import {useDebouncedState, useDisclosure} from "@mantine/hooks";
+import {useDebouncedState} from "@mantine/hooks";
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive). 
@@ -33,8 +33,10 @@ function randomRange(min: number, max: number): number {
 }
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+    const actualTemp = useWatchValueObserver(hp.tempObserver.readonly);
     const [change, setChange] = React.useState<number | ''>('');
-    const [temp, setTemp] = useDebouncedState<number | ''>('', 300);
+    const [temp, setTemp] = useDebouncedState<number | ''>(actualTemp || '', 100);
+
     React.useEffect(() => {
         hp.setTemp(temp || 0);
     }, [temp]);
@@ -54,6 +56,10 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     const handleTempBlur = () => {
         hp.setTemp(temp || 0);
     }
+
+    React.useEffect(() => {
+        setTemp(actualTemp || '');
+    }, [actualTemp]);
 
     return (
         <FocusTrap>
@@ -105,16 +111,27 @@ function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const total = useWatchValueObserver(hp.totalObserver.readonly);
     const temporary = useWatchValueObserver(hp.tempObserver.readonly);
 
+    const boldIfWeighted = temporary > 0 ? 700 : undefined;
+    const blueIfWeighted = temporary > 0 ? 'blue' : undefined;
+
     return (
         <Popover position="left">
             <Popover.Target>
                 <UnstyledButton>
                     <Attribute title="HIT POINTS">
-                        <Text size="sm">{current + temporary}</Text>
+                        <HoverCard>
+                            <HoverCard.Target>
+                                <Text fw={boldIfWeighted} color={blueIfWeighted} size="sm">{current + temporary}</Text>
+                            </HoverCard.Target>
+                            <HoverCard.Dropdown>
+                                <Text size="sm">Current: {current}</Text>
+                                { temporary > 0 && <Text color="blue" size="sm">Temporary: {temporary}</Text>}
+                            </HoverCard.Dropdown>
+                        </HoverCard>
                         <Text size="sm">/</Text>
                         <Text size="sm">{total}</Text>
                         <Divider orientation="vertical" />
-                        <Text>--</Text>
+                        <Text size="sm">{ temporary || '--' }</Text>
                     </Attribute>
                 </UnstyledButton>
             </Popover.Target>
