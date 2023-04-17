@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { HitPoints } from "~/services/HitPoints";
 import { ReadonlyValueObserver, ValueObserver } from "./ValueObserver";
+import { I } from "@tauri-apps/api/path-e12e0e34";
 
 interface InitiativeCharacterProps {
     name: string;
@@ -79,5 +80,9 @@ export class InitiativeCharacter {
 
     get hp(): HitPoints {
         return this.#hp;
+    }
+
+    static newCharacter(param: InitiativeCharacterProps): InitiativeCharacter {
+        return new InitiativeCharacter(param);
     }
 }

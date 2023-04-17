@@ -17,6 +17,14 @@ describe('Encounters', function () {
         expect(encounters.characters).toEqual([characterB, characterA]);
     });
 
+    test('newCharacter', () => {
+        const result = InitiativeCharacter.newCharacter({ name: 'A', initiative: 1, hp: 10 });
+
+        expect(result.name).toEqual('A');
+        expect(result.initiative).toEqual(1);
+        expect(result.hp.total).toEqual(10);
+    });
+
     test('orders characters by initiative', function () {
         const characterA = new InitiativeCharacter({ name: 'A', initiative: 1 });
         const characterB = new InitiativeCharacter({ name: 'B', initiative: 2 });
