@@ -127,11 +127,11 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
             </EditPopover>
             <Text size="sm">/</Text>
             <EditPopover titleComponent={<Text size="sm">{total}</Text>}>
-                <UpdateNumber updateNumber={hp.setTotal} />
+                <UpdateNumber placeholder="Total HP" updateNumber={hp.setTotal} />
             </EditPopover>
             <Divider orientation="vertical" />
             <EditPopover titleComponent={<Text size="sm">{temporary || '--'}</Text>}>
-                <UpdateTempHealth hp={hp} />
+                <UpdateNumber updateNumber={hp.setTemp} placeholder="Temp HP" />
             </EditPopover>
         </Attribute>
     );

@@ -3,19 +3,19 @@ import { Flex, Paper, Skeleton, Text } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { ReadonlyValueObserver } from "~/services/ValueObserver";
 import { Attribute } from "~/components/Attribute";
 import { HpAttribute } from "~/components/HpAttribute";
 import { NameAttribute } from "~/components/NameAttribute";
 import { EditPopover } from "~/components/EditPopover";
+import { UpdateNumber } from "~/components/UpdateNumber";
 
-function InitiativeAttribute({ observer }: { observer: ReadonlyValueObserver<number> }) {
-    const initiative = useWatchValueObserver(observer);
+function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {
+    const initiative = useWatchValueObserver(character.initiativeObserver);
 
     return (
         <Attribute title="INITIATIVE">
-            <EditPopover titleComponent={<Text size="sm">Initiative</Text>}>
-                <Text size="xl">{initiative}</Text>
+            <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
+                <UpdateNumber placeholder="Initiative" updateNumber={character.updateInitiative} />
             </EditPopover>
         </Attribute>
     );
@@ -28,7 +28,7 @@ export function CharacterInInitiative({ character }: { character: InitiativeChar
             <Flex gap="sm" align="center">
                 <Skeleton radius="lg" width={50} height={50} animate={false} />
                 <NameAttribute character={character} />
-                <InitiativeAttribute observer={character.initiativeObserver} />
+                <InitiativeAttribute character={character} />
                 <HpAttribute hp={character.hp} />
             </Flex>
         </Paper>

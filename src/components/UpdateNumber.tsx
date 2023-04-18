@@ -34,7 +34,7 @@ export function UpdateNumber({ updateNumber, placeholder = "New Value" }: Update
                 hideControls
                 onChange={setValue}
                 placeholder={placeholder}
-                styles={{ input: { width: rem(90), textAlign: 'center' } }}
+                styles={{ input: { width: rem(100), textAlign: 'center' } }}
                 value={value}
                 onKeyDown={handleKeyDown}/>
             <ActionIcon title="Set Value" onClick={onCommit}>
