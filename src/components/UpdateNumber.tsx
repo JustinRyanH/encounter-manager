@@ -31,8 +31,10 @@ export function UpdateNumber({ updateNumber }: { updateNumber: (value: number) =
                 placeholder="New Value"
                 styles={{ input: { width: rem(90), textAlign: 'center' } }}
                 value={value}
-                onKeyDown={handleKeyDown}/><ActionIcon title="Set Value" onClick={onCommit}><IconCheck size="1.75rem"/>
-        </ActionIcon>
+                onKeyDown={handleKeyDown}/>
+            <ActionIcon title="Set Value" onClick={onCommit}>
+                <IconCheck size="1.75rem"/>
+            </ActionIcon>
         </>
     );
 }
