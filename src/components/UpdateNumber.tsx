@@ -3,7 +3,12 @@ import React from "react";
 import { ActionIcon, NumberInput, rem } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 
-export function UpdateNumber({ updateNumber }: { updateNumber: (value: number) => void }): JSX.Element {
+interface UpdateNumberProps {
+    placeholder?: string;
+    updateNumber: (value: number) => void;
+}
+
+export function UpdateNumber({ updateNumber, placeholder = "New Value" }: UpdateNumberProps): JSX.Element {
     const { handles } = useEditPopoverContext();
     const [value, setValue] = React.useState<number | ''>('');
 
@@ -28,7 +33,7 @@ export function UpdateNumber({ updateNumber }: { updateNumber: (value: number) =
             <NumberInput
                 hideControls
                 onChange={setValue}
-                placeholder="New Value"
+                placeholder={placeholder}
                 styles={{ input: { width: rem(90), textAlign: 'center' } }}
                 value={value}
                 onKeyDown={handleKeyDown}/>
