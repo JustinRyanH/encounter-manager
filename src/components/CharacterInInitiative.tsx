@@ -7,7 +7,7 @@ import { Attribute } from "~/components/Attribute";
 import { HpAttribute } from "~/components/HpAttribute";
 import { NameAttribute } from "~/components/NameAttribute";
 import { EditPopover } from "~/components/EditPopover";
-import { UpdateNumber } from "~/components/UpdateNumber";
+import { UpdateNumber } from "~/components/UpdateAttribute";
 
 function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);

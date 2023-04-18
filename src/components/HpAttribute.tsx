@@ -1,14 +1,13 @@
 import React, { KeyboardEvent, MouseEventHandler } from "react";
 import { useClickOutside } from "@mantine/hooks";
-import { ActionIcon, Button, Divider, Flex, NumberInput, rem, SimpleGrid, Stack, Text } from "@mantine/core";
-import { IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
+import { Button, Divider, Flex, NumberInput, rem, SimpleGrid, Stack, Text } from "@mantine/core";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
 
 import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
-import { DisclousreHandles } from "./interfaces";
 import { EditPopover, useEditPopoverContext } from "~/components/EditPopover";
-import { UpdateNumber } from "~/components/UpdateNumber";
+import { UpdateNumber } from "~/components/UpdateAttribute";
 
 
 interface HealthButtonProps {
@@ -16,42 +15,6 @@ interface HealthButtonProps {
     color?: string;
     children: React.ReactNode;
     onClick?: MouseEventHandler<HTMLButtonElement>;
-}
-
-function UpdateTempHealth({ hp }: { hp: HitPoints, handles?: DisclousreHandles }): JSX.Element {
-    const { handles } = useEditPopoverContext();
-    const [temp, setTemp] = React.useState<number | ''>('');
-    const commitTempHp = () => {
-        if (temp !== '') {
-            hp.setTemp(temp || 0);
-            setTemp('');
-        }
-        handles.close();
-    }
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Escape') {
-            handles.close();
-            return;
-        }
-        if (e.key === 'Enter') {
-            commitTempHp();
-        }
-    }
-
-    return (
-        <>
-            <NumberInput
-                hideControls
-                onChange={setTemp}
-                placeholder="New Temp"
-                styles={{ input: { width: rem(90), textAlign: 'center' } }}
-                value={temp}
-                onKeyDown={handleKeyDown} /><ActionIcon title="Set Temp" onClick={commitTempHp}>
-                <IconCheck size="1.75rem" />
-            </ActionIcon>
-        </>
-    );
 }
 
 function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
