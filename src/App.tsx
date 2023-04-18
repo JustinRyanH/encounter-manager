@@ -10,9 +10,6 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
   { name: 'Sam', initiative: 19, hp: 6 },
-  { name: 'Aragon', initiative: 10, hp: 20 },
-  { name: 'Pippin', initiative: 1, hp: 4 },
-  { name: 'Merry', initiative: 10, hp: 6 },
 ]
 
 function App() {
