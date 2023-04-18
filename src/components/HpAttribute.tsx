@@ -1,23 +1,14 @@
-import React, {KeyboardEvent, MouseEventHandler} from "react";
-import {useClickOutside} from "@mantine/hooks";
-import {
-    ActionIcon,
-    Button,
-    Divider,
-    Flex,
-    NumberInput,
-    rem,
-    SimpleGrid,
-    Stack,
-    Text
-} from "@mantine/core";
-import {IconCheck, IconMinus, IconPlus} from "@tabler/icons-react";
+import React, { KeyboardEvent, MouseEventHandler } from "react";
+import { useClickOutside } from "@mantine/hooks";
+import { ActionIcon, Button, Divider, Flex, NumberInput, rem, SimpleGrid, Stack, Text } from "@mantine/core";
+import { IconCheck, IconMinus, IconPlus } from "@tabler/icons-react";
 
-import {HitPoints} from "~/services/HitPoints";
-import {useWatchValueObserver} from "~/hooks/watchValueObserver";
-import {Attribute} from "~/components/Attribute";
-import {DisclousreHandles} from "./interfaces";
-import {EditPopover, useEditPopoverContext} from "~/components/EditPopover";
+import { HitPoints } from "~/services/HitPoints";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import { Attribute } from "~/components/Attribute";
+import { DisclousreHandles } from "./interfaces";
+import { EditPopover, useEditPopoverContext } from "~/components/EditPopover";
+import { UpdateNumber } from "~/components/UpdateNumber";
 
 
 interface HealthButtonProps {
@@ -119,40 +110,6 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
             {children}
         </Button>);
     }
-}
-
-function UpdateNumber({ updateNumber }: { updateNumber: (value: number) => void }): JSX.Element {
-    const { handles } = useEditPopoverContext();
-    const [value, setValue] = React.useState<number | ''>('');
-
-    const onCommit = () => {
-        updateNumber(value || 0);
-        setValue('');
-        handles.close();
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Escape') {
-            handles.close();
-            setValue('');
-            return;
-        }
-        if (e.key === 'Enter') {
-            onCommit();
-        }
-    }
-    return (
-        <>
-            <NumberInput
-                hideControls
-                onChange={setValue}
-                placeholder="New Value"
-                styles={{ input: { width: rem(90), textAlign: 'center' } }}
-                value={value}
-                onKeyDown={handleKeyDown} /><ActionIcon title="Set Value" onClick={onCommit}><IconCheck size="1.75rem" />
-            </ActionIcon>
-        </>
-    );
 }
 
 export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
