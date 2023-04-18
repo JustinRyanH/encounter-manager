@@ -8,6 +8,10 @@ export function DisplayEncounter({ encounter }: { encounter: Encounters }) {
     const characters = useWatchValueObserver(encounter.charactersObserver);
 
     return (<Stack align="flex-start">
-        {characters.map((c) => <EncounterCharacter character={c} key={c.id}/>)}
+        {characters.map((c) => {
+            return (<>
+                <EncounterCharacter character={c} key={c.id}/>
+            </>);
+        })}
     </Stack>);
 }
