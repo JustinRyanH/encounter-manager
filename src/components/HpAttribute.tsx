@@ -84,7 +84,7 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const blueIfWeighted = temporary > 0 ? 'blue' : undefined;
 
     return (
-        <Attribute title="HIT POINTS">
+        <Attribute title="HIT POINTS" grow={2}>
             <EditPopover titleComponent={<Text fw={boldIfWeighted} color={blueIfWeighted} size="sm">{current + temporary}</Text>}>
                 <UpdateHealth hp={hp} />
             </EditPopover>
