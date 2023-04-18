@@ -1,5 +1,5 @@
 import React from "react";
-import { Center, Group, Paper, Skeleton, Text } from "@mantine/core";
+import { Accordion, Button, Center, Group, Paper, Skeleton, Stack, Text } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -23,16 +23,29 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 
 
 export function CharacterInInitiative({ character }: { character: InitiativeCharacter }): JSX.Element {
+    const name = useWatchValueObserver(character.nameObserver);
     return (
-        <Paper p="xl" shadow="md" withBorder>
-            <Group spacing="sm" style={{ minWidth: '28rem' }}>
-                <Center maw={75}>
-                    <Skeleton radius="lg" width={50} height={50} animate={false}/>
-                </Center>
-                <NameAttribute character={character}/>
-                <InitiativeAttribute character={character}/>
-                <HpAttribute hp={character.hp}/>
-            </Group>
-        </Paper>
+            <Accordion variant="separated">
+                <Accordion.Item value={character.id}>
+                    <Accordion.Control>
+                        <Group spacing="sm" style={{ minWidth: '28rem' }}>
+                            <Center maw={75}>
+                                <Skeleton radius="lg" width={25} height={25} animate={false}/>
+                            </Center>
+                            <Text>{name}</Text>
+                        </Group>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <Group spacing="sm" style={{ minWidth: '28rem' }}>
+                            <Center maw={75}>
+                                <Skeleton radius="lg" width={50} height={50} animate={false}/>
+                            </Center>
+                            <NameAttribute character={character}/>
+                            <InitiativeAttribute character={character}/>
+                            <HpAttribute hp={character.hp}/>
+                        </Group>
+                    </Accordion.Panel>
+                </Accordion.Item>
+            </Accordion>
     );
 }
