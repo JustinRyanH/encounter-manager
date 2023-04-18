@@ -22,22 +22,30 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 }
 
 
-export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
+function EncounterCharacterControl({ character }: { character: InitiativeCharacter }): JSX.Element {
     const name = useWatchValueObserver(character.nameObserver);
     const current = useWatchValueObserver(character.hp.currentObserver);
     const total = useWatchValueObserver(character.hp.totalObserver);
     const temp = useWatchValueObserver(character.hp.tempObserver);
 
+   return (<Group spacing="sm" style={{ minWidth: '28rem' }}>
+        <Center maw={75}>
+            <Skeleton radius="lg" width={25} height={25} animate={false}/>
+        </Center>
+        <Text fz="lg" weight={700} >{name}</Text>
+        <Group spacing="xs">
+            <Text>{current + temp}</Text>
+            <Text>/</Text>
+            <Text>{total}</Text>
+        </Group>
+    </Group>);
+}
+
+export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
     return (
         <Accordion.Item value={character.id}>
             <Accordion.Control>
-                <Group spacing="sm" style={{ minWidth: '28rem' }}>
-                    <Center maw={75}>
-                        <Skeleton radius="lg" width={25} height={25} animate={false}/>
-                    </Center>
-                    <Text>{name}</Text>
-                    <Text>{current + temp} / {total}</Text>
-                </Group>
+                <EncounterCharacterControl character={character} />
             </Accordion.Control>
             <Accordion.Panel>
                 <Group spacing="sm" style={{ minWidth: '28rem' }}>
