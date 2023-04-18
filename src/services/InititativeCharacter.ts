@@ -85,4 +85,12 @@ export class InitiativeCharacter {
     get hp(): HitPoints {
         return this.#hp;
     }
+
+    /**
+     * Update total hit points, and notify observers
+     * @param initiative
+     */
+    updateInitiative: (initiative: number) => void = (initiative: number) => {
+        this.initiative = initiative;
+    };
 }

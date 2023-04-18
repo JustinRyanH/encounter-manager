@@ -77,4 +77,15 @@ describe('InitiativeCharacter', () => {
             });
         });
     });
+
+    describe('updateInitiative', () => {
+        test('can update initiative', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.updateInitiative(20);
+            expect(character.initiative).toEqual(20);
+        });
+    });
 });
