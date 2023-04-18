@@ -88,4 +88,15 @@ describe('InitiativeCharacter', () => {
             expect(character.initiative).toEqual(20);
         });
     });
+
+    describe('updateName', () => {
+        test('can update name', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.updateName('Test2');
+            expect(character.name).toEqual('Test2');
+        });
+    });
 });

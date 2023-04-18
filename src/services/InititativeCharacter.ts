@@ -93,4 +93,12 @@ export class InitiativeCharacter {
     updateInitiative: (initiative: number) => void = (initiative: number) => {
         this.initiative = initiative;
     };
+
+    /**
+     * Update total hit points, and notify observers
+     * @param name
+     */
+    updateName = (name: string) => {
+        this.name = name;
+    }
 }
