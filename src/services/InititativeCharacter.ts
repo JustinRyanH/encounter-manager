@@ -14,6 +14,10 @@ interface InitiativeCharacterProps {
  * A Tracked Character
  */
 export class InitiativeCharacter {
+    static newCharacter(param: InitiativeCharacterProps): InitiativeCharacter {
+        return new InitiativeCharacter(param);
+    }
+
     #id: string = uuidv4();
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
@@ -80,9 +84,5 @@ export class InitiativeCharacter {
 
     get hp(): HitPoints {
         return this.#hp;
-    }
-
-    static newCharacter(param: InitiativeCharacterProps): InitiativeCharacter {
-        return new InitiativeCharacter(param);
     }
 }
