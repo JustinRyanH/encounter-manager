@@ -25,7 +25,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 export function CharacterInInitiative({ character }: { character: InitiativeCharacter }): JSX.Element {
     return (
         <Paper p="xl" shadow="md" withBorder>
-            <Group spacing="sm" style={{ minWidth: '32rem' }}>
+            <Group spacing="sm" style={{ minWidth: '28rem' }}>
                 <Center maw={75}>
                     <Skeleton radius="lg" width={50} height={50} animate={false}/>
                 </Center>
