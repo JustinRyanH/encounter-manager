@@ -24,6 +24,10 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 
 export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
     const name = useWatchValueObserver(character.nameObserver);
+    const current = useWatchValueObserver(character.hp.currentObserver);
+    const total = useWatchValueObserver(character.hp.totalObserver);
+    const temp = useWatchValueObserver(character.hp.tempObserver);
+
     return (
         <Accordion.Item value={character.id}>
             <Accordion.Control>
@@ -32,6 +36,7 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
                         <Skeleton radius="lg" width={25} height={25} animate={false}/>
                     </Center>
                     <Text>{name}</Text>
+                    <Text>{current + temp} / {total}</Text>
                 </Group>
             </Accordion.Control>
             <Accordion.Panel>
