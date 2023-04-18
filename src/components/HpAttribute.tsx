@@ -121,20 +121,20 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     }
 }
 
-function UpdateTotal({ hp }: { hp: HitPoints }): JSX.Element {
+function UpdateNumber({ updateNumber }: { updateNumber: (value: number) => void }): JSX.Element {
     const { handles } = useEditPopoverContext();
-    const [total, setTotal] = React.useState<number | ''>('');
+    const [value, setValue] = React.useState<number | ''>('');
 
     const onCommit = () => {
-        hp.setTotal(total || 0);
-        setTotal('');
+        updateNumber(value || 0);
+        setValue('');
         handles.close();
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Escape') {
             handles.close();
-            setTotal('');
+            setValue('');
             return;
         }
         if (e.key === 'Enter') {
@@ -145,14 +145,18 @@ function UpdateTotal({ hp }: { hp: HitPoints }): JSX.Element {
         <>
             <NumberInput
                 hideControls
-                onChange={setTotal}
-                placeholder="New Total"
+                onChange={setValue}
+                placeholder="New Value"
                 styles={{ input: { width: rem(90), textAlign: 'center' } }}
-                value={total}
-                onKeyDown={handleKeyDown} /><ActionIcon title="Set Total" onClick={onCommit}><IconCheck size="1.75rem" />
+                value={value}
+                onKeyDown={handleKeyDown} /><ActionIcon title="Set Value" onClick={onCommit}><IconCheck size="1.75rem" />
             </ActionIcon>
         </>
     );
+}
+
+function UpdateTotal({ hp }: { hp: HitPoints }): JSX.Element {
+    return <UpdateNumber updateNumber={hp.setTotal} />;
 }
 
 
