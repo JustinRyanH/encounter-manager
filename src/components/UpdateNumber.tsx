@@ -3,12 +3,12 @@ import React from "react";
 import { ActionIcon, NumberInput, rem } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 
-interface UpdateNumberProps {
+interface UpdateAttributeProps<T> {
     placeholder?: string;
-    updateNumber: (value: number) => void;
+    updateNumber: (value: T) => void;
 }
 
-export function UpdateNumber({ updateNumber, placeholder = "New Value" }: UpdateNumberProps): JSX.Element {
+export function UpdateNumber({ updateNumber, placeholder = "New Value" }: UpdateAttributeProps<number>): JSX.Element {
     const { handles } = useEditPopoverContext();
     const [value, setValue] = React.useState<number | ''>('');
 
