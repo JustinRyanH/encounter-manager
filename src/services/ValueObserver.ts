@@ -4,6 +4,7 @@ export interface ValueChangeMessageProps<T> {
 }
 
 export type ValueChangeMessage<T> = (props: ValueChangeMessageProps<T>) => void;
+export type StopObserving = () => void;
 
 /**
  * Watches a ValueObserver and prevents subscribers from modifying the value.

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { HitPoints } from "~/services/HitPoints";
-import { ReadonlyValueObserver, ValueChangeMessage, ValueObserver } from "./ValueObserver";
+import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "./ValueObserver";
 
 interface InitiativeCharacterProps {
     name: string;
@@ -106,7 +106,7 @@ export class InitiativeCharacter {
      * @param message
      * @return unsubscribe function
      */
-    observeInitiative = (message: ValueChangeMessage<number>) => {
+    observeInitiative = (message: ValueChangeMessage<number>): StopObserving => {
         this.#initiative.add(message);
         return () => this.#initiative.remove(message);
     }

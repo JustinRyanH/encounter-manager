@@ -55,4 +55,19 @@ describe('Encounters', function () {
             expect(encounters.characters.map(c => c.name)).toEqual(['C', 'B', 'A', 'D']);
         });
     });
+
+    describe('auto sorting characters', function () {
+        test('sorts characters when initiative changes', function () {
+            const characterA = new InitiativeCharacter({ name: 'A', initiative: 10 });
+            const characterB = new InitiativeCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+
+            expect(encounters.characters.map(c => c.name)).toEqual(['A', 'B']);
+
+            characterB.initiative = 20;
+
+            expect(encounters.characters.map(c => c.name)).toEqual(['B', 'A']);
+        });
+    });
 });

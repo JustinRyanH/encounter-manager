@@ -1,12 +1,20 @@
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
-import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
+import {
+    ReadonlyValueObserver,
+    StopObserving,
+    ValueChangeMessage,
+    ValueChangeMessageProps,
+    ValueObserver
+} from "~/services/ValueObserver";
+
+const sortInitiative = (a: InitiativeCharacter, b: InitiativeCharacter) => b.initiative - a.initiative;
 
 export class Encounters {
+    #initiativeMap: Map<string, StopObserving> = new Map();
     #characters: ValueObserver<Array<InitiativeCharacter>> = new ValueObserver<Array<InitiativeCharacter>>([]);
+
     constructor({ characters }: { characters?: Array<InitiativeCharacter> } = {}) {
-        if (characters) {
-            this.#characters.value = Array.from(characters).sort((a, b) => b.initiative - a.initiative);
-        }
+        if (characters) this.setCharacters(characters);
     }
 
     /**
@@ -28,7 +36,27 @@ export class Encounters {
      * @param initiativeCharacter
      */
     addCharacter = (initiativeCharacter: InitiativeCharacter) => {
-        this.#characters.value = [...this.#characters.value, initiativeCharacter]
-            .sort((a, b) => b.initiative - a.initiative);
+        this.setCharacters([...this.characters, initiativeCharacter]);
+    }
+
+    private setCharacters = (characters: Array<InitiativeCharacter>) => {
+        this.#characters.value = [...characters].sort(sortInitiative);
+        this.characters.forEach((character) => {
+            const { id } = character;
+            const messageCallback = () => this.resortCharacters();
+            if (!this.#initiativeMap.has(id)) {
+                this.#initiativeMap.set(id, character.observeInitiative(messageCallback));
+            }
+        });
+        this.#initiativeMap.forEach((stopObserving, id) => {
+            if (!this.characters.find((character) => character.id === id)) {
+                stopObserving();
+                this.#initiativeMap.delete(id);
+            }
+        });
+    }
+
+    private resortCharacters = () => {
+        this.#characters.value = [...this.characters].sort(sortInitiative);
     }
 }
