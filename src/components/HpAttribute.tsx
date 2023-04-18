@@ -155,12 +155,6 @@ function UpdateNumber({ updateNumber }: { updateNumber: (value: number) => void 
     );
 }
 
-function UpdateTotal({ hp }: { hp: HitPoints }): JSX.Element {
-    return <UpdateNumber updateNumber={hp.setTotal} />;
-}
-
-
-
 export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
     const current = useWatchValueObserver(hp.currentObserver);
     const total = useWatchValueObserver(hp.totalObserver);
@@ -176,7 +170,7 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
             </EditPopover>
             <Text size="sm">/</Text>
             <EditPopover titleComponent={<Text size="sm">{total}</Text>}>
-                <UpdateTotal hp={hp} />
+                <UpdateNumber updateNumber={hp.setTotal} />
             </EditPopover>
             <Divider orientation="vertical" />
             <EditPopover titleComponent={<Text size="sm">{temporary || '--'}</Text>}>
