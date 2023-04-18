@@ -22,7 +22,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 }
 
 
-export function CharacterInInitiative({ character }: { character: InitiativeCharacter }): JSX.Element {
+export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
     const name = useWatchValueObserver(character.nameObserver);
     return (
             <Accordion variant="separated">
