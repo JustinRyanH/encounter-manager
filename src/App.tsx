@@ -4,6 +4,8 @@ import { AppShell, Burger, Header, MediaQuery, Navbar, Stack, Title, rem } from 
 import "./App.css";
 import { CharacterInInitiative } from "./components/CharacterInInitiative";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { Encounters } from "~/services/Encounters";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -28,10 +30,11 @@ function App() {
     </MediaQuery>
   </Header>)
 
-  const characters = React.useMemo(
-      () => MockCharacters.map((c) => new InitiativeCharacter(c)),
-      [MockCharacters])
-  ;
+  const encounter = React.useMemo(() => new Encounters({
+    characters: MockCharacters.map((c) => new InitiativeCharacter(c)),
+  }), []);
+
+  const characters = useWatchValueObserver(encounter.charactersObserver);
 
   return (<AppShell navbar={navbar} header={header}>
     <Stack align="flex-start">
