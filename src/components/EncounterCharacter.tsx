@@ -25,27 +25,25 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
     const name = useWatchValueObserver(character.nameObserver);
     return (
-            <Accordion variant="separated">
-                <Accordion.Item value={character.id}>
-                    <Accordion.Control>
-                        <Group spacing="sm" style={{ minWidth: '28rem' }}>
-                            <Center maw={75}>
-                                <Skeleton radius="lg" width={25} height={25} animate={false}/>
-                            </Center>
-                            <Text>{name}</Text>
-                        </Group>
-                    </Accordion.Control>
-                    <Accordion.Panel>
-                        <Group spacing="sm" style={{ minWidth: '28rem' }}>
-                            <Center maw={75}>
-                                <Skeleton radius="lg" width={50} height={50} animate={false}/>
-                            </Center>
-                            <NameAttribute character={character}/>
-                            <InitiativeAttribute character={character}/>
-                            <HpAttribute hp={character.hp}/>
-                        </Group>
-                    </Accordion.Panel>
-                </Accordion.Item>
-            </Accordion>
+        <Accordion.Item value={character.id}>
+            <Accordion.Control>
+                <Group spacing="sm" style={{ minWidth: '28rem' }}>
+                    <Center maw={75}>
+                        <Skeleton radius="lg" width={25} height={25} animate={false}/>
+                    </Center>
+                    <Text>{name}</Text>
+                </Group>
+            </Accordion.Control>
+            <Accordion.Panel>
+                <Group spacing="sm" style={{ minWidth: '28rem' }}>
+                    <Center maw={75}>
+                        <Skeleton radius="lg" width={50} height={50} animate={false}/>
+                    </Center>
+                    <NameAttribute character={character}/>
+                    <InitiativeAttribute character={character}/>
+                    <HpAttribute hp={character.hp}/>
+                </Group>
+            </Accordion.Panel>
+        </Accordion.Item>
     );
 }
