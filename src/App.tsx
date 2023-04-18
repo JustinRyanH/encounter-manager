@@ -1,24 +1,15 @@
 import React from "react";
-import { AppShell, Burger, Header, MediaQuery, Navbar, Stack, Title, rem } from "@mantine/core";
+import { AppShell, Burger, Header, MediaQuery, Navbar, rem, Title } from "@mantine/core";
 
 import "./App.css";
-import { CharacterInInitiative } from "./components/CharacterInInitiative";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { Encounters } from "~/services/Encounters";
-import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import { DisplayEncounter } from "~/components/DisplayEncounter";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
   { name: 'Sam', initiative: 19, hp: 6 },
 ]
-
-function DisplayEncounter({ encounter }: { encounter: Encounters  }) {
-    const characters = useWatchValueObserver(encounter.charactersObserver);
-
-    return (<Stack align="flex-start">
-        {characters.map((c) => <CharacterInInitiative character={c} key={c.id} />)}
-    </Stack>);
-}
 
 function App() {
   const [opened, setOpened] = React.useState(false);
