@@ -1,5 +1,5 @@
-import {test, vi, describe} from 'vitest';
-import {HitPoints} from "~/services/HitPoints";
+import { test, vi, describe, expect } from 'vitest';
+import { HitPoints } from "~/services/HitPoints";
 
 describe('HitPoints', () => {
     describe('total', () => {
