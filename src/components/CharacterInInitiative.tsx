@@ -9,13 +9,6 @@ import { HpAttribute } from "~/components/HpAttribute";
 import { NameAttribute } from "~/components/NameAttribute";
 import { EditPopover } from "~/components/EditPopover";
 
-/**
- * Returns a random integer between min (inclusive) and max (inclusive). 
- * @param min 
- * @param max 
- * @returns 
- */
-
 function InitiativeAttribute({ observer }: { observer: ReadonlyValueObserver<number> }) {
     const initiative = useWatchValueObserver(observer);
 
