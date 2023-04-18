@@ -99,4 +99,32 @@ describe('InitiativeCharacter', () => {
             expect(character.name).toEqual('Test2');
         });
     });
+
+    describe('observeInitiative', function () {
+        test('can subscribe to initiative changes', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            const observer = vi.fn();
+            character.observeInitiative(observer);
+            character.initiative = 20;
+            expect(observer).toHaveBeenCalledWith({
+                newValue: 20,
+                oldValue: 10,
+            });
+        });
+
+        test('can unsubscribe from initiative changes', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            const observer = vi.fn();
+            const unsubscribe = character.observeInitiative(observer);
+            unsubscribe();
+            character.initiative = 20;
+            expect(observer).not.toHaveBeenCalled();
+        });
+    });
 });

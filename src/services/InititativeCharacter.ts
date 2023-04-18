@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { HitPoints } from "~/services/HitPoints";
-import { ReadonlyValueObserver, ValueObserver } from "./ValueObserver";
-import { I } from "@tauri-apps/api/path-e12e0e34";
+import { ReadonlyValueObserver, ValueChangeMessage, ValueObserver } from "./ValueObserver";
 
 interface InitiativeCharacterProps {
     name: string;
@@ -100,5 +99,15 @@ export class InitiativeCharacter {
      */
     updateName = (name: string) => {
         this.name = name;
+    }
+
+    /**
+     * Observer for the initiative of the character
+     * @param message
+     * @return unsubscribe function
+     */
+    observeInitiative = (message: ValueChangeMessage<number>) => {
+        this.#initiative.add(message);
+        return () => this.#initiative.remove(message);
     }
 }
