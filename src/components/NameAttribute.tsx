@@ -14,7 +14,7 @@ export function NameAttribute({ character }: { character: InitiativeCharacter })
     return (
         <Attribute title="NAME">
             <EditPopover titleComponent={<Text size="sm" align="center">{name}</Text>}>
-                <UpdateString updateAttribute={character.updateName} placeholder="Name" />
+                <UpdateString width="10rem" updateAttribute={character.updateName} placeholder="Name" />
             </EditPopover>
         </Attribute>
     );

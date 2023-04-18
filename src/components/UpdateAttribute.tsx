@@ -2,13 +2,15 @@ import { useEditPopoverContext } from "~/components/EditPopover";
 import React from "react";
 import { ActionIcon, NumberInput, rem, TextInput } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
+import { s } from "@tauri-apps/api/shell-cbf4da8b";
 
 interface UpdateAttributeProps<T> {
     placeholder?: string;
     updateAttribute: (value: T) => void;
+    width?: string;
 }
 
-export function UpdateString({ updateAttribute, placeholder = "New Value" }: UpdateAttributeProps<string>): JSX.Element {
+export function UpdateString({ width = '7rem', updateAttribute, placeholder = "New Value" }: UpdateAttributeProps<string>): JSX.Element {
     const { handles } = useEditPopoverContext();
     const [value, setValue] = React.useState<string>('');
 
@@ -33,7 +35,7 @@ export function UpdateString({ updateAttribute, placeholder = "New Value" }: Upd
             <TextInput
                 onChange={(e) => setValue(e.target.value)}
                 placeholder={placeholder}
-                styles={{ input: { width: rem(100), textAlign: 'center' } }}
+                styles={{ input: { width, textAlign: 'center' } }}
                 value={value}
                 onKeyDown={handleKeyDown}/>
             <ActionIcon title="Set Value" onClick={onCommit}>
@@ -43,7 +45,7 @@ export function UpdateString({ updateAttribute, placeholder = "New Value" }: Upd
     );
 }
 
-export function UpdateNumber({ updateAttribute, placeholder = "New Value" }: UpdateAttributeProps<number>): JSX.Element {
+export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "New Value" }: UpdateAttributeProps<number>): JSX.Element {
     const { handles } = useEditPopoverContext();
     const [value, setValue] = React.useState<number | ''>('');
 
@@ -69,7 +71,7 @@ export function UpdateNumber({ updateAttribute, placeholder = "New Value" }: Upd
                 hideControls
                 onChange={setValue}
                 placeholder={placeholder}
-                styles={{ input: { width: rem(100), textAlign: 'center' } }}
+                styles={{ input: { width, textAlign: 'center' } }}
                 value={value}
                 onKeyDown={handleKeyDown}/>
             <ActionIcon title="Set Value" onClick={onCommit}>
