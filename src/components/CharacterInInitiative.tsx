@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Paper, Skeleton, Text } from "@mantine/core";
+import { Container, Flex, Group, Paper, SimpleGrid, Skeleton, Text } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -15,7 +15,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
     return (
         <Attribute title="INITIATIVE">
             <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
-                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative} />
+                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative}/>
             </EditPopover>
         </Attribute>
     );
