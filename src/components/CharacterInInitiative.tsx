@@ -15,7 +15,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
     return (
         <Attribute title="INITIATIVE">
             <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
-                <UpdateNumber placeholder="Initiative" updateNumber={character.updateInitiative} />
+                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative} />
             </EditPopover>
         </Attribute>
     );
