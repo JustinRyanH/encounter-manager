@@ -12,6 +12,12 @@ const MockCharacters = [
   { name: 'Sam', initiative: 19, hp: 6 },
 ]
 
+function DisplayEncounter({ characters }: { characters: InitiativeCharacter[]}) {
+    return (<Stack align="flex-start">
+        {characters.map((c) => <CharacterInInitiative character={c} key={c.id} />)}
+    </Stack>);
+}
+
 function App() {
   const [opened, setOpened] = React.useState(false);
 
@@ -34,9 +40,7 @@ function App() {
   const characters = useWatchValueObserver(encounter.charactersObserver);
 
   return (<AppShell navbar={navbar} header={header}>
-    <Stack align="flex-start">
-      {characters.map((c) => <CharacterInInitiative character={c} key={c.id} />)}
-    </Stack>
+    <DisplayEncounter characters={characters} />
   </AppShell>);
 }
 
