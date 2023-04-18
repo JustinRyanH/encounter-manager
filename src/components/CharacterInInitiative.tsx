@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Flex, Group, Paper, SimpleGrid, Skeleton, Text } from "@mantine/core";
+import { Center, Group, Paper, Skeleton, Text } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -25,12 +25,14 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 export function CharacterInInitiative({ character }: { character: InitiativeCharacter }): JSX.Element {
     return (
         <Paper p="xl" shadow="md" withBorder>
-            <Flex gap="sm" align="center">
-                <Skeleton radius="lg" width={50} height={50} animate={false} />
-                <NameAttribute character={character} />
-                <InitiativeAttribute character={character} />
-                <HpAttribute hp={character.hp} />
-            </Flex>
+            <Group spacing="sm" style={{ minWidth: '32rem' }}>
+                <Center maw={75}>
+                    <Skeleton radius="lg" width={50} height={50} animate={false}/>
+                </Center>
+                <NameAttribute character={character}/>
+                <InitiativeAttribute character={character}/>
+                <HpAttribute hp={character.hp}/>
+            </Group>
         </Paper>
     );
 }
