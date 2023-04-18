@@ -7,11 +7,7 @@ import React from "react";
 export function DisplayEncounter({ encounter }: { encounter: Encounters }) {
     const characters = useWatchValueObserver(encounter.charactersObserver);
 
-    return <Stack align="flex-start">
-        {
-            characters.map((c) => <Accordion variant="separated" key={c.id}>
-                <EncounterCharacter character={c} key={c.id}/>
-            </Accordion>)
-        }
-    </Stack>;
+    return (<Accordion variant="separated">
+        { characters.map((c) => <EncounterCharacter character={c} key={c.id}/>)}
+    </Accordion>);
 }
