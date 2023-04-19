@@ -127,4 +127,14 @@ describe('InitiativeCharacter', () => {
             expect(observer).not.toHaveBeenCalled();
         });
     });
+
+    describe('inPlay', () => {
+        test('defaults to  false', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            expect(character.inPlay).toEqual(false);
+        });
+    });
 });

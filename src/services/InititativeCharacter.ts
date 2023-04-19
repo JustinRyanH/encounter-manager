@@ -43,6 +43,10 @@ export class InitiativeCharacter {
         return this.#name.value;
     }
 
+    get inPlay(): boolean {
+        return false;
+    }
+
 
     /**
      * Update name of the character, and notify observers
