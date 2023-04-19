@@ -33,7 +33,7 @@ function App() {
 
   return (<AppShell navbar={navbar} header={header}>
     <EncounterProvider encounter={encounter}>
-      <DisplayEncounter encounter={encounter} />
+      <DisplayEncounter />
     </EncounterProvider>
   </AppShell>);
 }
