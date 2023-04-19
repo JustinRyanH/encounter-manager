@@ -9,10 +9,12 @@ const sortInitiative = (a: InitiativeCharacter, b: InitiativeCharacter) => b.ini
 
 export class Encounters {
     #initiativeMap: Map<string, StopObserving> = new Map();
+    #activeCharacter: InitiativeCharacter | null = null;
     #characters: ValueObserver<Array<InitiativeCharacter>> = new ValueObserver<Array<InitiativeCharacter>>([]);
 
     constructor({ characters }: { characters?: Array<InitiativeCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
+        this.#activeCharacter = this.characters[0];
     }
 
     /**
@@ -29,8 +31,8 @@ export class Encounters {
         return this.#characters.readonly;
     }
 
-    get currentCharacter(): InitiativeCharacter {
-        return this.characters[0];
+    get activeCharacter(): InitiativeCharacter | null {
+        return this.#activeCharacter;
     }
 
     /**
