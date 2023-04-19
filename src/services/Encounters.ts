@@ -9,12 +9,12 @@ const sortInitiative = (a: InitiativeCharacter, b: InitiativeCharacter) => b.ini
 
 export class Encounters {
     #initiativeMap: Map<string, StopObserving> = new Map();
-    #activeCharacter: InitiativeCharacter | null = null;
+    #activeCharacter: ValueObserver<InitiativeCharacter | null> = new ValueObserver<InitiativeCharacter | null>(null);
     #characters: ValueObserver<Array<InitiativeCharacter>> = new ValueObserver<Array<InitiativeCharacter>>([]);
 
     constructor({ characters }: { characters?: Array<InitiativeCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
-        this.#activeCharacter = this.characters[0];
+        this.#activeCharacter.value = this.characters[0];
     }
 
     /**
@@ -32,7 +32,7 @@ export class Encounters {
     }
 
     get activeCharacter(): InitiativeCharacter | null {
-        return this.#activeCharacter;
+        return this.#activeCharacter.value;
     }
 
     /**
@@ -49,7 +49,7 @@ export class Encounters {
     nextCharacter() {
         if (!this.characters.length) return;
         if (!this.activeCharacter) {
-            this.#activeCharacter = this.characters[0];
+            this.#activeCharacter.value = this.characters[0];
             return;
         }
 
@@ -57,7 +57,7 @@ export class Encounters {
         if (activeCharacterIndex === -1) return;
 
         const nextCharacterIndex = activeCharacterIndex + 1 === this.characters.length ? 0 : activeCharacterIndex + 1;
-        this.#activeCharacter = this.characters[nextCharacterIndex];
+        this.#activeCharacter.value = this.characters[nextCharacterIndex];
     }
 
     private setCharacters = (characters: Array<InitiativeCharacter>) => {
