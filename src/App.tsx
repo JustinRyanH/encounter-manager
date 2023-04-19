@@ -1,5 +1,5 @@
 import React from "react";
-import { AppShell, Burger, Header, MediaQuery, Navbar, rem, Title } from "@mantine/core";
+import { AppShell, Box, Burger, Header, MediaQuery, Navbar, rem, Title, Text } from "@mantine/core";
 
 import "./App.css";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
@@ -32,6 +32,23 @@ function App() {
   }), []);
 
   return (<AppShell navbar={navbar} header={header}>
+    <Box sx={(theme) => ({
+      background: '' +
+          `linear-gradient(90deg, ${theme.colors.orange} 50%, transparent 0) repeat-x,` +
+          `linear-gradient(90deg, ${theme.colors.orange} 50%, transparent 0) repeat-x,` +
+          `linear-gradient(0deg, ${theme.colors.orange} 50%, transparent 0) repeat-y,` +
+          `linear-gradient(0deg, ${theme.colors.orange} 50%, transparent 0) repeat-y`,
+      backgroundSize: '4px 2px, 4px 2px, 2px 4px, 2px 4px',
+      backgroundPosition: '0 0, 0 100%, 0 0, 100% 0',
+      padding: '1rem',
+      margin: '1rem',
+      animation: 'linearGradiantMove .3s linear infinite',
+      '@keyframes linearGradiantMove': {
+        '100%': { backgroundPosition: '4px 0, -4px 100%, 0 -4px, 100% 4px' },
+      }
+    })}>
+      <Text>Test</Text>
+    </Box>
     <EncounterProvider encounter={encounter}>
       <DisplayEncounter />
     </EncounterProvider>
