@@ -21,7 +21,7 @@ export class InitiativeCharacter {
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
     #hp: HitPoints = new HitPoints();
-    #inPlay: boolean = false;
+    #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
     constructor({ name, initiative, hp = 10 }: InitiativeCharacterProps) {
         this.#initiative = new ValueObserver(initiative);
@@ -61,11 +61,11 @@ export class InitiativeCharacter {
     }
 
     get inPlay(): boolean {
-        return this.#inPlay;
+        return this.#inPlay.value;
     }
 
     set inPlay(newValue: boolean) {
-        this.#inPlay = newValue;
+        this.#inPlay.value = newValue;
     }
 
     /**
