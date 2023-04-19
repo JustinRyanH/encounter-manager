@@ -136,5 +136,14 @@ describe('InitiativeCharacter', () => {
             });
             expect(character.inPlay).toEqual(false);
         });
+
+        test('can be updated', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.inPlay = true;
+            expect(character.inPlay).toEqual(true);
+        });
     });
 });

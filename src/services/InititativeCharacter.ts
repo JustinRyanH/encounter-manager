@@ -21,6 +21,7 @@ export class InitiativeCharacter {
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
     #hp: HitPoints = new HitPoints();
+    #inPlay: boolean = false;
 
     constructor({ name, initiative, hp = 10 }: InitiativeCharacterProps) {
         this.#initiative = new ValueObserver(initiative);
@@ -43,10 +44,6 @@ export class InitiativeCharacter {
         return this.#name.value;
     }
 
-    get inPlay(): boolean {
-        return false;
-    }
-
 
     /**
      * Update name of the character, and notify observers
@@ -61,6 +58,14 @@ export class InitiativeCharacter {
      */
     get nameObserver(): ReadonlyValueObserver<string> {
         return this.#name.readonly;
+    }
+
+    get inPlay(): boolean {
+        return this.#inPlay;
+    }
+
+    set inPlay(newValue: boolean) {
+        this.#inPlay = newValue;
     }
 
     /**
