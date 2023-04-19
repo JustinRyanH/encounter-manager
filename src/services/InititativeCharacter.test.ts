@@ -137,13 +137,27 @@ describe('InitiativeCharacter', () => {
             expect(character.inPlay).toEqual(false);
         });
 
-        test('can be updated', () => {
+        test('inPlay can be updated', () => {
             const character = new InitiativeCharacter({
                 name: 'Test',
                 initiative: 10,
             });
             character.inPlay = true;
             expect(character.inPlay).toEqual(true);
+        });
+
+        test('changing inPlay will notify observers', () => {
+            const character = new InitiativeCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            const observer = vi.fn();
+            character.inPlayObserver.add(observer);
+            character.inPlay = true;
+            expect(observer).toHaveBeenCalledWith({
+                newValue: true,
+                oldValue: false,
+            });
         });
     });
 });

@@ -60,12 +60,26 @@ export class InitiativeCharacter {
         return this.#name.readonly;
     }
 
+    /**
+     * if the character is in play
+     */
     get inPlay(): boolean {
         return this.#inPlay.value;
     }
 
+    /**
+     * Update name of the character, and notify observers
+     * @param newValue
+     */
     set inPlay(newValue: boolean) {
         this.#inPlay.value = newValue;
+    }
+
+    /**
+     * Observer for the initiative of the character
+     */
+    get inPlayObserver(): ReadonlyValueObserver<boolean> {
+        return this.#inPlay.readonly;
     }
 
     /**
