@@ -70,4 +70,15 @@ describe('Encounters', function () {
             expect(encounters.characters.map(c => c.name)).toEqual(['B', 'A']);
         });
     });
+
+    describe('current character', function () {
+        test('starts with character on top of the initiative list', function () {
+            const characterA = new InitiativeCharacter({ name: 'A', initiative: 10 });
+            const characterB = new InitiativeCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+
+            expect(encounters.currentCharacter).toEqual(characterA);
+        });
+    });
 });

@@ -2,8 +2,6 @@ import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import {
     ReadonlyValueObserver,
     StopObserving,
-    ValueChangeMessage,
-    ValueChangeMessageProps,
     ValueObserver
 } from "~/services/ValueObserver";
 
@@ -29,6 +27,10 @@ export class Encounters {
      */
     get charactersObserver(): ReadonlyValueObserver<Array<InitiativeCharacter>> {
         return this.#characters.readonly;
+    }
+
+    get currentCharacter(): InitiativeCharacter {
+        return this.characters[0];
     }
 
     /**
