@@ -46,7 +46,7 @@ export class Encounters {
     /**
      * Sets the active character to the next character in the initiative order.
      */
-    nextCharacter() {
+    nextCharacter = () => {
         if (!this.characters.length) return;
         if (!this.activeCharacter) {
             this.#activeCharacter.value = this.characters[0];
@@ -58,7 +58,7 @@ export class Encounters {
 
         const nextCharacterIndex = activeCharacterIndex + 1 === this.characters.length ? 0 : activeCharacterIndex + 1;
         this.#activeCharacter.value = this.characters[nextCharacterIndex];
-    }
+    };
 
     private setCharacters = (characters: Array<InitiativeCharacter>) => {
         this.#characters.value = [...characters].sort(sortInitiative);
