@@ -80,5 +80,16 @@ describe('Encounters', function () {
 
             expect(encounters.activeCharacter).toEqual(characterA);
         });
+
+        test('moves to next character when nextCharacter is called', function () {
+            const characterA = new InitiativeCharacter({ name: 'A', initiative: 10 });
+            const characterB = new InitiativeCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+
+            encounters.nextCharacter();
+
+            expect(encounters.activeCharacter).toEqual(characterB);
+        });
     });
 });
