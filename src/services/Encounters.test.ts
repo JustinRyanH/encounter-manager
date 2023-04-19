@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { Encounters } from "~/services/Encounters";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 
@@ -90,6 +90,20 @@ describe('Encounters', function () {
             encounters.nextCharacter();
 
             expect(encounters.activeCharacter).toEqual(characterB);
+        });
+
+        test('signaling when the current character changes', function () {
+            const listener = vi.fn();
+            const characterA = new InitiativeCharacter({ name: 'A', initiative: 10 });
+            const characterB = new InitiativeCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+
+            encounters.activeCharacterObserver.add(listener);
+
+            encounters.nextCharacter();
+
+            expect(listener).toHaveBeenCalledWith({ oldValue: characterA, newValue: characterB });
         });
     });
 });

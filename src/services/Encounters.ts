@@ -36,6 +36,13 @@ export class Encounters {
     }
 
     /**
+     * Returns a readonly observer for the active character.
+     */
+    get activeCharacterObserver(): ReadonlyValueObserver<InitiativeCharacter | null> {
+        return this.#activeCharacter.readonly;
+    }
+
+    /**
      * Adds a character to the encounter and sorts the characters by initiative.
      * @param initiativeCharacter
      */
