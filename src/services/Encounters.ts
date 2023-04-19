@@ -14,7 +14,7 @@ export class Encounters {
 
     constructor({ characters }: { characters?: Array<InitiativeCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
-        this.#activeCharacter.value = this.characters[0];
+        this.setActiveCharacter(this.characters[0]);
     }
 
     /**
@@ -56,7 +56,7 @@ export class Encounters {
     nextCharacter = () => {
         if (!this.characters.length) return;
         if (!this.activeCharacter) {
-            this.#activeCharacter.value = this.characters[0];
+            this.setActiveCharacter(this.characters[0]);
             return;
         }
 
@@ -64,7 +64,7 @@ export class Encounters {
         if (activeCharacterIndex === -1) return;
 
         const nextCharacterIndex = activeCharacterIndex + 1 === this.characters.length ? 0 : activeCharacterIndex + 1;
-        this.#activeCharacter.value = this.characters[nextCharacterIndex];
+        this.setActiveCharacter(this.characters[nextCharacterIndex]);
     };
 
     private setCharacters = (characters: Array<InitiativeCharacter>) => {
@@ -86,5 +86,15 @@ export class Encounters {
 
     private resortCharacters = () => {
         this.#characters.value = [...this.characters].sort(sortInitiative);
+    }
+
+    private setActiveCharacter = (character: InitiativeCharacter | null) => {
+        this.#activeCharacter.value = character;
+        if (character) {
+            character.inPlay = true;
+        }
+        this.characters.forEach((character) => {
+            if (character !== this.activeCharacter) character.inPlay = false;
+        });
     }
 }

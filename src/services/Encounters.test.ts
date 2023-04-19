@@ -79,6 +79,7 @@ describe('Encounters', function () {
             const encounters = new Encounters({ characters: [characterA, characterB] });
 
             expect(encounters.activeCharacter).toEqual(characterA);
+            expect(characterA.inPlay).toEqual(true);
         });
 
         test('moves to next character when nextCharacter is called', function () {
@@ -87,9 +88,15 @@ describe('Encounters', function () {
 
             const encounters = new Encounters({ characters: [characterA, characterB] });
 
+            expect(encounters.activeCharacter).toEqual(characterA);
+            expect(characterA.inPlay).toEqual(true);
+            expect(characterB.inPlay).toEqual(false);
+
             encounters.nextCharacter();
 
             expect(encounters.activeCharacter).toEqual(characterB);
+            expect(characterA.inPlay).toEqual(false);
+            expect(characterB.inPlay).toEqual(true);
         });
 
         test('signaling when the current character changes', function () {
