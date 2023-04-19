@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Button, Center, Group, Paper, Skeleton, Stack, Text } from "@mantine/core";
+import { Accordion, Button, Center, Divider, Group, Paper, Skeleton, Stack, Text } from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -33,9 +33,10 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
     return (<Group spacing="sm" style={{ minWidth: '28rem' }}>
         <Center maw={75}>
-            <Skeleton radius="lg" width={25} height={25} animate={false}/>
+            <Skeleton circle width={25} height={25} animate={false}/>
         </Center>
         <Text fz="lg" weight={700}>{name}</Text>
+        <Divider orientation="vertical" size="xs"/>
         <Group spacing="xs">
             <Text color={color}>{current + temp}</Text>
             <Text>/</Text>
