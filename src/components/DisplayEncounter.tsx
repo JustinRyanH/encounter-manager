@@ -1,10 +1,13 @@
+import React from "react";
+import { Accordion } from "@mantine/core";
+
 import { Encounters } from "~/services/Encounters";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Accordion } from "@mantine/core";
 import { EncounterCharacter } from "~/components/EncounterCharacter";
-import React from "react";
+import { useEncounterContext } from "~/components/EncounterContext";
 
-export function DisplayEncounter({ encounter }: { encounter: Encounters }) {
+export function DisplayEncounter({  }: { encounter: Encounters }) {
+    const encounter = useEncounterContext();
     const characters = useWatchValueObserver(encounter.charactersObserver);
     const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
 

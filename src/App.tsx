@@ -5,6 +5,7 @@ import "./App.css";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { Encounters } from "~/services/Encounters";
 import { DisplayEncounter } from "~/components/DisplayEncounter";
+import { EncounterProvider } from "~/components/EncounterContext";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -31,7 +32,9 @@ function App() {
   }), []);
 
   return (<AppShell navbar={navbar} header={header}>
-    <DisplayEncounter encounter={encounter} />
+    <EncounterProvider encounter={encounter}>
+      <DisplayEncounter encounter={encounter} />
+    </EncounterProvider>
   </AppShell>);
 }
 
