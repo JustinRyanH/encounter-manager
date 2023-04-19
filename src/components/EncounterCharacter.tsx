@@ -1,5 +1,16 @@
 import React from "react";
-import { Accordion, Button, Center, Divider, Group, Paper, Skeleton, Stack, Text } from "@mantine/core";
+import {
+    Accordion,
+    AccordionControlProps,
+    Button,
+    Center,
+    Divider,
+    Group,
+    Paper,
+    Skeleton,
+    Stack,
+    Text
+} from "@mantine/core";
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -45,12 +56,17 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
     </Group>);
 }
 
+
+function EncounterControl(props: AccordionControlProps) {
+    return (<Accordion.Control {...props}/>);
+}
+
 export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
     return (
         <Accordion.Item value={character.id}>
-            <Accordion.Control>
+            <EncounterControl>
                 <EncounterCharacterControl character={character}/>
-            </Accordion.Control>
+            </EncounterControl>
             <Accordion.Panel>
                 <Group spacing="sm" style={{ minWidth: '28rem' }}>
                     <Center maw={75}>
