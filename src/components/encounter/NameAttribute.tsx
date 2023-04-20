@@ -2,9 +2,9 @@ import React from "react";
 import { Text } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Attribute } from "~/components/Attribute";
+import { Attribute } from "~/components/systems/Attribute";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
-import { EditPopover } from "~/components/EditPopover";
+import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateString } from "~/components/encounter/UpdateAttribute";
 
 

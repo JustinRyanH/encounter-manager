@@ -11,14 +11,14 @@ import {
 
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Attribute } from "~/components/Attribute";
+import { Attribute } from "~/components/systems/Attribute";
 import { HpAttribute } from "~/components/encounter/HpAttribute";
 import { NameAttribute } from "~/components/encounter/NameAttribute";
-import { EditPopover } from "~/components/EditPopover";
+import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/encounter/UpdateAttribute";
 
 import { useStyles } from "./EncounterCharacter.styles";
-import { IconCornerRightDownDouble, IconPlus } from "@tabler/icons-react";
+import { IconCornerRightDownDouble } from "@tabler/icons-react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
 function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {

@@ -5,8 +5,8 @@ import { IconMinus, IconPlus } from "@tabler/icons-react";
 
 import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Attribute } from "~/components/Attribute";
-import { EditPopover, useEditPopoverContext } from "~/components/EditPopover";
+import { Attribute } from "~/components/systems/Attribute";
+import { EditPopover, useEditPopoverContext } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/encounter/UpdateAttribute";
 
 

@@ -1,8 +1,7 @@
-import { useEditPopoverContext } from "~/components/EditPopover";
+import { useEditPopoverContext } from "~/components/systems/EditPopover";
 import React from "react";
-import { ActionIcon, NumberInput, rem, TextInput } from "@mantine/core";
+import { ActionIcon, NumberInput, TextInput } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
-import { s } from "@tauri-apps/api/shell-cbf4da8b";
 
 interface UpdateAttributeProps<T> {
     placeholder?: string;
