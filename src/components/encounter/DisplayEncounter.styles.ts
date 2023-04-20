@@ -30,7 +30,7 @@ export const useStyles = createStyles((theme) => {
             padding: theme.spacing.xs,
             borderRadius: theme.radius.sm,
 
-            '&:not(:first-child)': {
+            '&:not(::first-of-type)': {
                 marginTop: theme.spacing.lg,
             }
         },
