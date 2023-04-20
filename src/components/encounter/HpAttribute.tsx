@@ -7,7 +7,7 @@ import { HitPoints } from "~/services/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { EditPopover, useEditPopoverContext } from "~/components/systems/EditPopover";
-import { UpdateNumber } from "~/components/encounter/UpdateAttribute";
+import { UpdateNumber } from "~/components/systems/UpdateAttribute";
 
 
 interface HealthButtonProps {

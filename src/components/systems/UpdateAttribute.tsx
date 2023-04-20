@@ -36,9 +36,9 @@ export function UpdateString({ width = '7rem', updateAttribute, placeholder = "N
                 placeholder={placeholder}
                 styles={{ input: { width, textAlign: 'center' } }}
                 value={value}
-                onKeyDown={handleKeyDown}/>
+                onKeyDown={handleKeyDown} />
             <ActionIcon title="Set Value" onClick={onCommit}>
-                <IconCheck size="1.75rem"/>
+                <IconCheck size="1.75rem" />
             </ActionIcon>
         </>
     );
@@ -72,9 +72,9 @@ export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "N
                 placeholder={placeholder}
                 styles={{ input: { width, textAlign: 'center' } }}
                 value={value}
-                onKeyDown={handleKeyDown}/>
+                onKeyDown={handleKeyDown} />
             <ActionIcon title="Set Value" onClick={onCommit}>
-                <IconCheck size="1.75rem"/>
+                <IconCheck size="1.75rem" />
             </ActionIcon>
         </>
     );
