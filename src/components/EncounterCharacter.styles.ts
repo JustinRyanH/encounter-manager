@@ -5,7 +5,7 @@ export const linearGradiantMove = keyframes({
 });
 
 export const useStyles = createStyles((theme) => ({
-    animatedOrangeBorder: {
+    inPlay: {
         background: '' +
             `linear-gradient(90deg, ${theme.colors.orange} 50%, transparent 0) repeat-x,` +
             `linear-gradient(90deg, ${theme.colors.orange} 50%, transparent 0) repeat-x,` +
