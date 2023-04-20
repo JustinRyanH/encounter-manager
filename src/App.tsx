@@ -10,6 +10,8 @@ import { EncounterProvider } from "~/components/EncounterContext";
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
   { name: 'Sam', initiative: 19, hp: 6 },
+  { name: 'Pippin', initiative: 5, hp: 4 },
+  { name: 'Merry', initiative: 3, hp: 7 },
 ]
 
 function App() {
