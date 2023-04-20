@@ -43,7 +43,7 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
     const hasTemp = temp !== 0;
     const color = hasTemp ? 'blue' : undefined;
 
-    return (<Group spacing="sm" style={{ minWidth: '28rem' }}>
+    return (<Group spacing="sm">
         <Center maw={75}>
             <Skeleton circle width={25} height={25} animate={false}/>
         </Center>
@@ -71,7 +71,7 @@ interface EncounterCharacterProps extends AccordionControlProps {
 
 function EncounterControl(props: EncounterCharacterProps) {
     return (<Paper radius="sm">
-        <Box sx={{ paddingRight: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Accordion.Control {...props} />
             <ActionIcon
                 color="dark"
@@ -99,7 +99,7 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
             </EncounterControl>
             <Accordion.Panel>
                 <Paper radius="lg" p="sm">
-                    <Group spacing="sm" style={{ minWidth: '28rem' }}>
+                    <Group spacing="sm">
                         <Center maw={75}>
                             <Skeleton radius="lg" width={50} height={50} animate={false}/>
                         </Center>
