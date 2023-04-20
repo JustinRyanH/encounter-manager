@@ -12,20 +12,22 @@ export function DisplayEncounter() {
 
     const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
     const [userOpenedCharacters, setUserOpenedCharacter] = React.useState<string[]>([]);
+
+    const updateCharacters = React.useCallback((opended: string[]) => {
+        if (!activeCharacter) return setUserOpenedCharacter(opended);
+        if (!opended.includes(activeCharacter.id)) return setUserOpenedCharacter([activeCharacter.id, ...opended]);
+        return setUserOpenedCharacter(opended);
+    }, [activeCharacter]);
+
     React.useEffect(() => {
-        if (activeCharacter) {
-            setUserOpenedCharacter((opened) => {
-                if (opened.includes(activeCharacter.id)) return opened;
-                return [activeCharacter.id];
-            });
-        }
+        if (activeCharacter) setUserOpenedCharacter([activeCharacter.id]);
     }, [activeCharacter]);
 
     const { classes } = useStyles();
 
     return (<Accordion
         value={userOpenedCharacters}
-        onChange={setUserOpenedCharacter}
+        onChange={updateCharacters}
         classNames={classes}
         chevronPosition="left"
         variant="separated"
