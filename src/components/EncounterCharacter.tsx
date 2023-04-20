@@ -93,7 +93,7 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
     const inPlay = useWatchValueObserver(character.inPlayObserver);
     const { classes, cx } = useStyles();
     return (
-        <Accordion.Item className={cx(classes.accordion, { [classes.inPlay]: inPlay })} value={character.id}>
+        <Accordion.Item data-in-play={inPlay}  className={cx(classes.accordion, classes.inPlay)} value={character.id}>
             <EncounterControl inPlay={inPlay} nextTurn={encounter.nextCharacter}>
                 <EncounterCharacterControl character={character}/>
             </EncounterControl>
