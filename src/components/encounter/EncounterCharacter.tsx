@@ -8,7 +8,7 @@ import {
     Text
 } from "@mantine/core";
 
-import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { HpAttribute } from "~/components/encounter/HpAttribute";
@@ -19,7 +19,7 @@ import { UpdateNumber } from "~/components/encounter/UpdateAttribute";
 import { IconCornerRightDownDouble } from "@tabler/icons-react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
-function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {
+function InitiativeAttribute({ character }: { character: ActiveCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);
 
     return (
@@ -32,7 +32,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
 }
 
 
-function EncounterCharacterControl({ character }: { character: InitiativeCharacter }): JSX.Element {
+function EncounterCharacterControl({ character }: { character: ActiveCharacter }): JSX.Element {
     const name = useWatchValueObserver(character.nameObserver);
     const current = useWatchValueObserver(character.hp.currentObserver);
     const total = useWatchValueObserver(character.hp.totalObserver);
@@ -85,7 +85,7 @@ function EncounterControl(props: EncounterCharacterProps) {
     </Paper>);
 }
 
-export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
+export function EncounterCharacter({ character }: { character: ActiveCharacter }): JSX.Element {
     const encounter = useEncounterContext();
 
     const inPlay = useWatchValueObserver(character.inPlayObserver);

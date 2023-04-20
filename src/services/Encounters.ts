@@ -1,18 +1,18 @@
-import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { ActiveCharacter } from "~/services/ActiveCharacter";
 import {
     ReadonlyValueObserver,
     StopObserving,
     ValueObserver
 } from "~/services/ValueObserver";
 
-const sortInitiative = (a: InitiativeCharacter, b: InitiativeCharacter) => b.initiative - a.initiative;
+const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative - a.initiative;
 
 export class Encounters {
     #initiativeMap: Map<string, StopObserving> = new Map();
-    #activeCharacter: ValueObserver<InitiativeCharacter | null> = new ValueObserver<InitiativeCharacter | null>(null);
-    #characters: ValueObserver<Array<InitiativeCharacter>> = new ValueObserver<Array<InitiativeCharacter>>([]);
+    #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);
+    #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<Array<ActiveCharacter>>([]);
 
-    constructor({ characters }: { characters?: Array<InitiativeCharacter> } = {}) {
+    constructor({ characters }: { characters?: Array<ActiveCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
         this.setActiveCharacter(this.characters[0]);
     }
@@ -20,25 +20,25 @@ export class Encounters {
     /**
      * Returns the characters in the encounter.
      */
-    get characters(): Array<InitiativeCharacter> {
+    get characters(): Array<ActiveCharacter> {
         return this.#characters.value;
     }
 
     /**
      * Returns a readonly observer for the characters.
      */
-    get charactersObserver(): ReadonlyValueObserver<Array<InitiativeCharacter>> {
+    get charactersObserver(): ReadonlyValueObserver<Array<ActiveCharacter>> {
         return this.#characters.readonly;
     }
 
-    get activeCharacter(): InitiativeCharacter | null {
+    get activeCharacter(): ActiveCharacter | null {
         return this.#activeCharacter.value;
     }
 
     /**
      * Returns a readonly observer for the active character.
      */
-    get activeCharacterObserver(): ReadonlyValueObserver<InitiativeCharacter | null> {
+    get activeCharacterObserver(): ReadonlyValueObserver<ActiveCharacter | null> {
         return this.#activeCharacter.readonly;
     }
 
@@ -46,7 +46,7 @@ export class Encounters {
      * Adds a character to the encounter and sorts the characters by initiative.
      * @param initiativeCharacter
      */
-    addCharacter = (initiativeCharacter: InitiativeCharacter) => {
+    addCharacter = (initiativeCharacter: ActiveCharacter) => {
         this.setCharacters([...this.characters, initiativeCharacter]);
     }
 
@@ -67,7 +67,7 @@ export class Encounters {
         this.setActiveCharacter(this.characters[nextCharacterIndex]);
     };
 
-    private setCharacters = (characters: Array<InitiativeCharacter>) => {
+    private setCharacters = (characters: Array<ActiveCharacter>) => {
         this.#characters.value = [...characters].sort(sortInitiative);
         this.characters.forEach((character) => {
             const { id } = character;
@@ -88,7 +88,7 @@ export class Encounters {
         this.#characters.value = [...this.characters].sort(sortInitiative);
     }
 
-    private setActiveCharacter = (character: InitiativeCharacter | null) => {
+    private setActiveCharacter = (character: ActiveCharacter | null) => {
         this.#activeCharacter.value = character;
         if (character) {
             character.inPlay = true;

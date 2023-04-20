@@ -1,10 +1,10 @@
 import { describe, test, vi, expect } from 'vitest';
 
-import { InitiativeCharacter } from './InititativeCharacter';
+import { ActiveCharacter } from './ActiveCharacter';
 
-describe('InitiativeCharacter', () => {
+describe('ActiveCharacter', () => {
     test('constructor', () => {
-        const character = new InitiativeCharacter({
+        const character = new ActiveCharacter({
             name: 'Test',
             initiative: 10,
         });
@@ -14,7 +14,7 @@ describe('InitiativeCharacter', () => {
 
     describe('name', () => {
         test('return the name', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -22,7 +22,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('can set the name', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -31,7 +31,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('can subscribe to name changes', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -47,7 +47,7 @@ describe('InitiativeCharacter', () => {
 
     describe('initiative', () => {
         test('return the initiative', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -55,7 +55,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('can set the initiative', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -64,7 +64,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('can subscribe to initiative changes', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -80,7 +80,7 @@ describe('InitiativeCharacter', () => {
 
     describe('updateInitiative', () => {
         test('can update initiative', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -91,7 +91,7 @@ describe('InitiativeCharacter', () => {
 
     describe('updateName', () => {
         test('can update name', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -102,7 +102,7 @@ describe('InitiativeCharacter', () => {
 
     describe('observeInitiative', function () {
         test('can subscribe to initiative changes', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -116,7 +116,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('can unsubscribe from initiative changes', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -130,7 +130,7 @@ describe('InitiativeCharacter', () => {
 
     describe('inPlay', () => {
         test('defaults to  false', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -138,7 +138,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('inPlay can be updated', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });
@@ -147,7 +147,7 @@ describe('InitiativeCharacter', () => {
         });
 
         test('changing inPlay will notify observers', () => {
-            const character = new InitiativeCharacter({
+            const character = new ActiveCharacter({
                 name: 'Test',
                 initiative: 10,
             });

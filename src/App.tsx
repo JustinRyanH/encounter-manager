@@ -2,7 +2,7 @@ import React from "react";
 import { AppShell, Burger, Header, MediaQuery, Navbar, rem, Title } from "@mantine/core";
 
 import "./App.css";
-import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { Encounters } from "~/services/Encounters";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
@@ -30,7 +30,7 @@ function App() {
   </Header>)
 
   const encounter = React.useMemo(() => new Encounters({
-    characters: MockCharacters.map((c) => new InitiativeCharacter(c)),
+    characters: MockCharacters.map((c) => new ActiveCharacter(c)),
   }), []);
 
   return (<AppShell navbar={navbar} header={header}>

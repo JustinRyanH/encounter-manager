@@ -12,9 +12,9 @@ interface InitiativeCharacterProps {
 /**
  * A Tracked Character
  */
-export class InitiativeCharacter {
-    static newCharacter(param: InitiativeCharacterProps): InitiativeCharacter {
-        return new InitiativeCharacter(param);
+export class ActiveCharacter {
+    static newCharacter(param: InitiativeCharacterProps): ActiveCharacter {
+        return new ActiveCharacter(param);
     }
 
     #id: string = uuidv4();

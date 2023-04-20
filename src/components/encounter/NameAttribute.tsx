@@ -3,12 +3,12 @@ import { Text } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
-import { InitiativeCharacter } from "~/services/InititativeCharacter";
+import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateString } from "~/components/encounter/UpdateAttribute";
 
 
-export function NameAttribute({ character }: { character: InitiativeCharacter }): JSX.Element {
+export function NameAttribute({ character }: { character: ActiveCharacter }): JSX.Element {
     const name = useWatchValueObserver(character.nameObserver);
 
     return (
