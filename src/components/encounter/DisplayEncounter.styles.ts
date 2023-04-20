@@ -10,9 +10,10 @@ export const useStyles = createStyles((theme) => {
     const backgroundDarkColor = theme.colors.danger[0];
     const backgroundDangerColor = theme.colors.danger[2];
     return ({
-        inPlay: {
+        item: {
+            padding: theme.spacing.xs,
             border: `1px solid ${theme.colors.dark[5]}`,
-            transition: 'background 1s ease-in-out, border 1s ease-in-out, background-image 1s ease-in-out background-size 1s ease-in-out',
+            transition: 'background-color 0.8s ease-in-out, border 0.8s ease-in-out',
 
             '&[data-in-play="true"]': {
                 border: `1px solid ${theme.colors.danger[1]}`,
@@ -21,6 +22,9 @@ export const useStyles = createStyles((theme) => {
                 backgroundSize: '200% 200%',
                 animation: `${animatedStripes} 20s linear infinite`,
             }
+        },
+        content: {
+            padding: `${theme.spacing.xs} 0 0 0`,
         },
         accordion: {
             padding: theme.spacing.xs,

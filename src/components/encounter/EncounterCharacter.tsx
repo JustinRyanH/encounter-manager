@@ -17,7 +17,7 @@ import { NameAttribute } from "~/components/encounter/NameAttribute";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/encounter/UpdateAttribute";
 
-import { useStyles } from "./EncounterCharacter.styles";
+import { useStyles } from "./DisplayEncounter.styles";
 import { IconCornerRightDownDouble } from "@tabler/icons-react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
@@ -70,7 +70,7 @@ interface EncounterCharacterProps extends AccordionControlProps {
 }
 
 function EncounterControl(props: EncounterCharacterProps) {
-    return (<Paper radius="sm">
+    return (<Paper radius="md">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Accordion.Control {...props} />
             <ActionIcon
@@ -91,14 +91,13 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
     const encounter = useEncounterContext();
 
     const inPlay = useWatchValueObserver(character.inPlayObserver);
-    const { classes, cx } = useStyles();
     return (
-        <Accordion.Item data-in-play={inPlay}  className={cx(classes.accordion, classes.inPlay)} value={character.id}>
+        <Accordion.Item data-in-play={inPlay} value={character.id}>
             <EncounterControl inPlay={inPlay} nextTurn={encounter.nextCharacter}>
                 <EncounterCharacterControl character={character}/>
             </EncounterControl>
-            <Accordion.Panel>
-                <Paper radius="lg" p="sm">
+            <Accordion.Panel sx={{ padding: 0 }}>
+                <Paper radius="md" p="sm">
                     <Group spacing="sm">
                         <Center maw={75}>
                             <Skeleton radius="lg" width={50} height={50} animate={false}/>
