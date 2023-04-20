@@ -1,4 +1,3 @@
-import React from "react";
 import {
     Accordion,
     AccordionControlProps, ActionIcon, Box,
@@ -17,7 +16,6 @@ import { NameAttribute } from "~/components/encounter/NameAttribute";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/encounter/UpdateAttribute";
 
-import { useStyles } from "./DisplayEncounter.styles";
 import { IconCornerRightDownDouble } from "@tabler/icons-react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
@@ -27,7 +25,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
     return (
         <Attribute title="INITIATIVE">
             <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
-                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative}/>
+                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative} />
             </EditPopover>
         </Attribute>
     );
@@ -45,7 +43,7 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
     return (<Group spacing="sm">
         <Center maw={75}>
-            <Skeleton circle width={25} height={25} animate={false}/>
+            <Skeleton circle width={25} height={25} animate={false} />
         </Center>
         <Text fz="lg" weight={700}>{name}</Text>
         <Group spacing="xs">
@@ -59,8 +57,8 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 const NextButtonSx = {
     '&[data-disabled]': {
         opacity: 0.2,
-            backgroundColor: 'transparent',
-            borderColor: 'transparent',
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
     },
 };
 
@@ -81,7 +79,7 @@ function EncounterControl(props: EncounterCharacterProps) {
                 variant="subtle"
                 onClick={props.nextTurn}
             >
-                <IconCornerRightDownDouble size="1.75rem"/>
+                <IconCornerRightDownDouble size="1.75rem" />
             </ActionIcon>
         </Box>
     </Paper>);
@@ -94,17 +92,17 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
     return (
         <Accordion.Item data-in-play={inPlay} value={character.id}>
             <EncounterControl inPlay={inPlay} nextTurn={encounter.nextCharacter}>
-                <EncounterCharacterControl character={character}/>
+                <EncounterCharacterControl character={character} />
             </EncounterControl>
             <Accordion.Panel sx={{ padding: 0 }}>
                 <Paper radius="md" p="sm">
                     <Group spacing="sm">
                         <Center maw={75}>
-                            <Skeleton radius="lg" width={50} height={50} animate={false}/>
+                            <Skeleton radius="lg" width={50} height={50} animate={false} />
                         </Center>
-                        <NameAttribute character={character}/>
-                        <InitiativeAttribute character={character}/>
-                        <HpAttribute hp={character.hp}/>
+                        <NameAttribute character={character} />
+                        <InitiativeAttribute character={character} />
+                        <HpAttribute hp={character.hp} />
                     </Group>
                 </Paper>
             </Accordion.Panel>
