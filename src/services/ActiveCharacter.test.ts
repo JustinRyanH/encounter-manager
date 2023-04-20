@@ -98,6 +98,15 @@ describe('ActiveCharacter', () => {
             character.updateName('Test2');
             expect(character.name).toEqual('Test2');
         });
+
+        test('reverts name if empty', () => {
+            const character = new ActiveCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.updateName('');
+            expect(character.name).toEqual('Test');
+        });
     });
 
     describe('observeInitiative', function () {

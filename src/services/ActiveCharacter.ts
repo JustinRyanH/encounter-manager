@@ -50,6 +50,10 @@ export class ActiveCharacter {
      * @param name
      */
     set name(name: string) {
+        if (!name) {
+            return;
+        }
+
         this.#name.value = name;
     }
 
