@@ -55,12 +55,20 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
     </Group>);
 }
 
+const NextButtonSx = {
+    '&[data-disabled]': {
+        opacity: 0.2,
+            backgroundColor: 'transparent',
+            borderColor: 'transparent',
+    },
+};
+
 
 function EncounterControl(props: AccordionControlProps) {
     return (<Paper radius="sm">
         <Box sx={{ paddingRight: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Accordion.Control {...props} />
-            <ActionIcon>
+            <ActionIcon variant="subtle" color="dark" size="md" sx={NextButtonSx}>
                 <IconCornerRightDownDouble size="1.75rem"/>
             </ActionIcon>
         </Box>
