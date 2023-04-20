@@ -5,7 +5,7 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/Attribute";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { EditPopover } from "~/components/EditPopover";
-import { UpdateString } from "~/components/UpdateAttribute";
+import { UpdateString } from "~/components/encounter/UpdateAttribute";
 
 
 export function NameAttribute({ character }: { character: InitiativeCharacter }): JSX.Element {

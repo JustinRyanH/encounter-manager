@@ -4,8 +4,8 @@ import { AppShell, Burger, Header, MediaQuery, Navbar, rem, Title } from "@manti
 import "./App.css";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { Encounters } from "~/services/Encounters";
-import { DisplayEncounter } from "~/components/DisplayEncounter";
-import { EncounterProvider } from "~/components/EncounterContext";
+import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
+import { EncounterProvider } from "~/components/encounter/EncounterContext";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },

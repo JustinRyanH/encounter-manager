@@ -2,8 +2,8 @@ import React from "react";
 import { Accordion } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { EncounterCharacter } from "~/components/EncounterCharacter";
-import { useEncounterContext } from "~/components/EncounterContext";
+import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
+import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
 export function DisplayEncounter() {
     const encounter = useEncounterContext();
