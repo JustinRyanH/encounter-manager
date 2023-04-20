@@ -49,7 +49,6 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
             <Skeleton circle width={25} height={25} animate={false} />
         </Center>
         <Text fz="lg" weight={700}>{name}</Text>
-        <Divider orientation="vertical" size="xs" />
         <Group spacing="xs">
             <Text color={color}>{current + temp}</Text>
             <Text>/</Text>
