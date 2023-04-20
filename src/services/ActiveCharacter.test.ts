@@ -1,6 +1,9 @@
 import { describe, test, vi, expect } from 'vitest';
 
 import { ActiveCharacter } from './ActiveCharacter';
+import { notifications } from '@mantine/notifications';
+
+vi.mock('@mantine/notifications');
 
 describe('ActiveCharacter', () => {
     test('constructor', () => {
@@ -106,6 +109,19 @@ describe('ActiveCharacter', () => {
             });
             character.updateName('');
             expect(character.name).toEqual('Test');
+        });
+
+        test('notififies if name is empty', () => {
+            const character = new ActiveCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.updateName('');
+            expect(notifications.show).toHaveBeenCalledWith({
+                title: 'Error',
+                message: 'Name cannot be empty',
+                color: 'red',
+            });
         });
     });
 

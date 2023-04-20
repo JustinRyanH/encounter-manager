@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { HitPoints } from "~/services/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "./ValueObserver";
+import { notifications } from "@mantine/notifications";
 
 interface InitiativeCharacterProps {
     name: string;
@@ -51,6 +52,11 @@ export class ActiveCharacter {
      */
     set name(name: string) {
         if (!name) {
+            notifications.show({
+                title: 'Error',
+                message: 'Name cannot be empty',
+                color: 'red',
+            });
             return;
         }
 
