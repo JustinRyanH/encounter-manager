@@ -45,7 +45,6 @@ export class ActiveCharacter {
         return this.#name.value;
     }
 
-
     /**
      * Update name of the character, and notify observers
      * @param name
