@@ -8,9 +8,8 @@ import { useEncounterContext } from "~/components/EncounterContext";
 export function DisplayEncounter() {
     const encounter = useEncounterContext();
     const characters = useWatchValueObserver(encounter.charactersObserver);
-    const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
 
-    return (<Accordion multiple variant="separated">
+    return (<Accordion chevronPosition="left" multiple variant="separated">
         {characters.map((c) => <EncounterCharacter character={c} key={c.id} />)}
     </Accordion>);
 }
