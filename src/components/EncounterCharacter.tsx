@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Accordion,
-    AccordionControlProps,
+    AccordionControlProps, ActionIcon, Box,
     Center,
     Group,
     Paper,
@@ -18,6 +18,7 @@ import { EditPopover } from "~/components/EditPopover";
 import { UpdateNumber } from "~/components/UpdateAttribute";
 
 import { useStyles } from "./EncounterCharacter.styles";
+import { IconCornerRightDownDouble, IconPlus } from "@tabler/icons-react";
 
 function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);
@@ -25,7 +26,7 @@ function InitiativeAttribute({ character }: { character: InitiativeCharacter }) 
     return (
         <Attribute title="INITIATIVE">
             <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
-                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative} />
+                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative}/>
             </EditPopover>
         </Attribute>
     );
@@ -43,7 +44,7 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
     return (<Group spacing="sm" style={{ minWidth: '28rem' }}>
         <Center maw={75}>
-            <Skeleton circle width={25} height={25} animate={false} />
+            <Skeleton circle width={25} height={25} animate={false}/>
         </Center>
         <Text fz="lg" weight={700}>{name}</Text>
         <Group spacing="xs">
@@ -57,7 +58,12 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
 function EncounterControl(props: AccordionControlProps) {
     return (<Paper radius="sm">
-        <Accordion.Control {...props} />
+        <Box sx={{ paddingRight: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Accordion.Control {...props} />
+            <ActionIcon>
+                <IconCornerRightDownDouble size="1.75rem"/>
+            </ActionIcon>
+        </Box>
     </Paper>);
 }
 
@@ -67,17 +73,17 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
     return (
         <Accordion.Item className={cx(classes.accordion, { [classes.inPlay]: inPlay })} value={character.id}>
             <EncounterControl>
-                    <EncounterCharacterControl character={character} />
+                <EncounterCharacterControl character={character}/>
             </EncounterControl>
             <Accordion.Panel>
                 <Paper radius="lg" p="sm">
                     <Group spacing="sm" style={{ minWidth: '28rem' }}>
                         <Center maw={75}>
-                            <Skeleton radius="lg" width={50} height={50} animate={false} />
+                            <Skeleton radius="lg" width={50} height={50} animate={false}/>
                         </Center>
-                        <NameAttribute character={character} />
-                        <InitiativeAttribute character={character} />
-                        <HpAttribute hp={character.hp} />
+                        <NameAttribute character={character}/>
+                        <InitiativeAttribute character={character}/>
+                        <HpAttribute hp={character.hp}/>
                     </Group>
                 </Paper>
             </Accordion.Panel>
