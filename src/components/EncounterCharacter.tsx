@@ -56,7 +56,9 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
 
 function EncounterControl(props: AccordionControlProps) {
-    return (<Accordion.Control {...props} />);
+    return (<Paper radius="sm">
+        <Accordion.Control {...props} />
+    </Paper>);
 }
 
 export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
