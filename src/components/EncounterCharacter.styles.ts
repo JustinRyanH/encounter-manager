@@ -4,7 +4,7 @@ export const linearGradiantMove = keyframes({
     '100%': { backgroundPosition: '4px 0, -4px 100%, 0 -4px, 100% 4px' },
 });
 
-export const useAnimationStyles = createStyles((theme) => ({
+export const useStyles = createStyles((theme) => ({
     animatedOrangeBorder: {
         background: '' +
             `linear-gradient(90deg, ${theme.colors.orange} 50%, transparent 0) repeat-x,` +
@@ -13,10 +13,14 @@ export const useAnimationStyles = createStyles((theme) => ({
             `linear-gradient(0deg, ${theme.colors.orange} 50%, transparent 0) repeat-y`,
         backgroundSize: '4px 2px, 4px 2px, 2px 4px, 2px 4px',
         backgroundPosition: '0 0, 0 100%, 0 0, 100% 0',
-        padding: '1rem',
-        margin: '1rem',
         animation: `${linearGradiantMove} .3s linear infinite`,
     },
-    '@keyframes linearGradiantMove': {
+    accordion: {
+        padding: theme.spacing.xs,
+        borderRadius: theme.radius.sm,
+
+        '&:not(:first-child)': {
+            marginTop: theme.spacing.lg,
+        }
     },
 }));

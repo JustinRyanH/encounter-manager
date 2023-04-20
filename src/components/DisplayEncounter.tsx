@@ -17,7 +17,7 @@ export function DisplayEncounter() {
     }, [activeCharacter]);
 
 
-    return (<Accordion multiple variant="separated" value={openedCharacters}>
-        { characters.map((c) => <EncounterCharacter character={c} key={c.id}/>)}
+    return (<Accordion multiple variant="separated">
+        {characters.map((c) => <EncounterCharacter character={c} key={c.id} />)}
     </Accordion>);
 }

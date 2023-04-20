@@ -1,12 +1,11 @@
 import React from "react";
-import { AppShell, Box, Burger, Header, MediaQuery, Navbar, rem, Title, Text, createStyles, keyframes } from "@mantine/core";
+import { AppShell, Burger, Header, MediaQuery, Navbar, rem, Title } from "@mantine/core";
 
 import "./App.css";
 import { InitiativeCharacter } from "~/services/InititativeCharacter";
 import { Encounters } from "~/services/Encounters";
 import { DisplayEncounter } from "~/components/DisplayEncounter";
 import { EncounterProvider } from "~/components/EncounterContext";
-import { useAnimationStyles } from "~/classes/animations";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -14,8 +13,6 @@ const MockCharacters = [
 ]
 
 function App() {
-  const { classes } = useAnimationStyles();
-
   const [opened, setOpened] = React.useState(false);
 
   const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250, lg: 300 }}>
@@ -35,9 +32,6 @@ function App() {
   }), []);
 
   return (<AppShell navbar={navbar} header={header}>
-    <Box className={classes.animatedOrangeBorder}>
-      <Text>Test</Text>
-    </Box>
     <EncounterProvider encounter={encounter}>
       <DisplayEncounter />
     </EncounterProvider>

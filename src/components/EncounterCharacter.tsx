@@ -20,13 +20,15 @@ import { NameAttribute } from "~/components/NameAttribute";
 import { EditPopover } from "~/components/EditPopover";
 import { UpdateNumber } from "~/components/UpdateAttribute";
 
+import { useStyles } from "./EncounterCharacter.styles";
+
 function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);
 
     return (
         <Attribute title="INITIATIVE">
             <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
-                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative}/>
+                <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative} />
             </EditPopover>
         </Attribute>
     );
@@ -44,10 +46,10 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
     return (<Group spacing="sm" style={{ minWidth: '28rem' }}>
         <Center maw={75}>
-            <Skeleton circle width={25} height={25} animate={false}/>
+            <Skeleton circle width={25} height={25} animate={false} />
         </Center>
         <Text fz="lg" weight={700}>{name}</Text>
-        <Divider orientation="vertical" size="xs"/>
+        <Divider orientation="vertical" size="xs" />
         <Group spacing="xs">
             <Text color={color}>{current + temp}</Text>
             <Text>/</Text>
@@ -58,23 +60,25 @@ function EncounterCharacterControl({ character }: { character: InitiativeCharact
 
 
 function EncounterControl(props: AccordionControlProps) {
-    return (<Accordion.Control {...props}/>);
+    return (<Accordion.Control {...props} />);
 }
 
 export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
+    const inPlay = useWatchValueObserver(character.inPlayObserver);
+    const { classes, cx } = useStyles();
     return (
-        <Accordion.Item value={character.id}>
+        <Accordion.Item className={cx(classes.accordion, { [classes.animatedOrangeBorder]: inPlay })} value={character.id}>
             <EncounterControl>
-                <EncounterCharacterControl character={character}/>
+                <EncounterCharacterControl character={character} />
             </EncounterControl>
             <Accordion.Panel>
                 <Group spacing="sm" style={{ minWidth: '28rem' }}>
                     <Center maw={75}>
-                        <Skeleton radius="lg" width={50} height={50} animate={false}/>
+                        <Skeleton radius="lg" width={50} height={50} animate={false} />
                     </Center>
-                    <NameAttribute character={character}/>
-                    <InitiativeAttribute character={character}/>
-                    <HpAttribute hp={character.hp}/>
+                    <NameAttribute character={character} />
+                    <InitiativeAttribute character={character} />
+                    <HpAttribute hp={character.hp} />
                 </Group>
             </Accordion.Panel>
         </Accordion.Item>
