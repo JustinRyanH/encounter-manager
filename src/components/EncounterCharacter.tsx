@@ -19,6 +19,7 @@ import { UpdateNumber } from "~/components/UpdateAttribute";
 
 import { useStyles } from "./EncounterCharacter.styles";
 import { IconCornerRightDownDouble, IconPlus } from "@tabler/icons-react";
+import { useEncounterContext } from "~/components/EncounterContext";
 
 function InitiativeAttribute({ character }: { character: InitiativeCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);
@@ -63,12 +64,23 @@ const NextButtonSx = {
     },
 };
 
+interface EncounterCharacterProps extends AccordionControlProps {
+    inPlay: boolean,
+    nextTurn: () => void,
+}
 
-function EncounterControl(props: AccordionControlProps) {
+function EncounterControl(props: EncounterCharacterProps) {
     return (<Paper radius="sm">
         <Box sx={{ paddingRight: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Accordion.Control {...props} />
-            <ActionIcon variant="subtle" color="dark" size="md" sx={NextButtonSx}>
+            <ActionIcon
+                color="dark"
+                disabled={!props.inPlay}
+                size="md"
+                sx={NextButtonSx}
+                variant="subtle"
+                onClick={props.nextTurn}
+            >
                 <IconCornerRightDownDouble size="1.75rem"/>
             </ActionIcon>
         </Box>
@@ -76,11 +88,13 @@ function EncounterControl(props: AccordionControlProps) {
 }
 
 export function EncounterCharacter({ character }: { character: InitiativeCharacter }): JSX.Element {
+    const encounter = useEncounterContext();
+
     const inPlay = useWatchValueObserver(character.inPlayObserver);
     const { classes, cx } = useStyles();
     return (
         <Accordion.Item className={cx(classes.accordion, { [classes.inPlay]: inPlay })} value={character.id}>
-            <EncounterControl>
+            <EncounterControl inPlay={inPlay} nextTurn={encounter.nextCharacter}>
                 <EncounterCharacterControl character={character}/>
             </EncounterControl>
             <Accordion.Panel>
