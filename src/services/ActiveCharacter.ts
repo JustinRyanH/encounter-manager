@@ -104,6 +104,9 @@ export class ActiveCharacter {
         return this.#initiative.readonly;
     }
 
+    /**
+     * The hit points of the character
+     */
     get hp(): HitPoints {
         return this.#hp;
     }
