@@ -2,13 +2,10 @@ import React from "react";
 import {
     Accordion,
     AccordionControlProps,
-    Button,
     Center,
-    Divider,
     Group,
     Paper,
     Skeleton,
-    Stack,
     Text
 } from "@mantine/core";
 
