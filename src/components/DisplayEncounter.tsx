@@ -10,13 +10,6 @@ export function DisplayEncounter() {
     const characters = useWatchValueObserver(encounter.charactersObserver);
     const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
 
-    const openedCharacters = React.useMemo(() => {
-        if (!activeCharacter) return [];
-
-        return [activeCharacter.id];
-    }, [activeCharacter]);
-
-
     return (<Accordion multiple variant="separated">
         {characters.map((c) => <EncounterCharacter character={c} key={c.id} />)}
     </Accordion>);

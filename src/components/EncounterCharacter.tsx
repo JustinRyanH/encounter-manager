@@ -68,17 +68,19 @@ export function EncounterCharacter({ character }: { character: InitiativeCharact
     return (
         <Accordion.Item className={cx(classes.accordion, { [classes.inPlay]: inPlay })} value={character.id}>
             <EncounterControl>
-                <EncounterCharacterControl character={character} />
+                    <EncounterCharacterControl character={character} />
             </EncounterControl>
             <Accordion.Panel>
-                <Group spacing="sm" style={{ minWidth: '28rem' }}>
-                    <Center maw={75}>
-                        <Skeleton radius="lg" width={50} height={50} animate={false} />
-                    </Center>
-                    <NameAttribute character={character} />
-                    <InitiativeAttribute character={character} />
-                    <HpAttribute hp={character.hp} />
-                </Group>
+                <Paper radius="lg" p="sm">
+                    <Group spacing="sm" style={{ minWidth: '28rem' }}>
+                        <Center maw={75}>
+                            <Skeleton radius="lg" width={50} height={50} animate={false} />
+                        </Center>
+                        <NameAttribute character={character} />
+                        <InitiativeAttribute character={character} />
+                        <HpAttribute hp={character.hp} />
+                    </Group>
+                </Paper>
             </Accordion.Panel>
         </Accordion.Item>
     );
