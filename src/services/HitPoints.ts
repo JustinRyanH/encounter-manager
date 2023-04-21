@@ -101,7 +101,14 @@ export class HitPoints {
      * @param value 
      */
     setTotal = (value: number | null) => {
-        if (value === null) return;
+        if (value === null) {
+            notifications.show({
+                title: 'Invalid Hit Points',
+                message: 'Total hit points cannot be null',
+                color: 'red',
+            });
+            return;
+        }
         this.total = value;
     }
 
@@ -112,7 +119,7 @@ export class HitPoints {
         if (value === null) {
             notifications.show({
                 title: 'Invalid Temp Hp',
-                message: 'Temporary hit points must be a number',
+                message: 'Temporary hit points cannot be empty',
                 color: 'red'
             });
             return;

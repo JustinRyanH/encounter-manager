@@ -50,6 +50,20 @@ describe('HitPoints', () => {
             hitPoints.setTotal(null);
             expect(hitPoints.total).toEqual(10);
         });
+
+        test('if incoming total is null, broadcast a notification', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+            hitPoints.setTotal(null);
+            expect(notifications.show).toHaveBeenCalledWith({
+                title: 'Invalid Hit Points',
+                message: 'Total hit points cannot be empty',
+                color: 'red',
+            });
+        });
     });
 
     describe('current', () => {
