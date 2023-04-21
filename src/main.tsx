@@ -33,7 +33,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 },
             }}
         >
-            <Notifications autoClose={4000} />
+            <Notifications autoClose={2000} />
             <App />
         </MantineProvider>
     </React.StrictMode>
