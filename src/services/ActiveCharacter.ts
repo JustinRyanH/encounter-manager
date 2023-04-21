@@ -124,7 +124,8 @@ export class ActiveCharacter {
      * Update total hit points, and notify observers
      * @param initiative
      */
-    updateInitiative: (initiative: number) => void = (initiative: number) => {
+    updateInitiative = (initiative: number | null): void => {
+        if (initiative === null) return;
         this.initiative = initiative;
     };
 

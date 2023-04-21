@@ -44,20 +44,20 @@ export function UpdateString({ width = '7rem', updateAttribute, placeholder = "N
     );
 }
 
-export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "New Value" }: UpdateAttributeProps<number>): JSX.Element {
+export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "New Value" }: UpdateAttributeProps<number | null>): JSX.Element {
     const { handles } = useEditPopoverContext();
-    const [value, setValue] = React.useState<number | ''>('');
+    const [value, setValue] = React.useState<number | null>(null);
 
     const onCommit = () => {
         updateAttribute(value || 0);
-        setValue('');
+        setValue(null);
         handles.close();
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Escape') {
             handles.close();
-            setValue('');
+            setValue(null);
             return;
         }
         if (e.key === 'Enter') {
@@ -68,10 +68,10 @@ export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "N
         <>
             <NumberInput
                 hideControls
-                onChange={setValue}
+                onChange={(v) => setValue(v === '' ? null : v)}
                 placeholder={placeholder}
                 styles={{ input: { width, textAlign: 'center' } }}
-                value={value}
+                value={value === null ? '' : value}
                 onKeyDown={handleKeyDown} />
             <ActionIcon title="Set Value" onClick={onCommit}>
                 <IconCheck size="1.75rem" />

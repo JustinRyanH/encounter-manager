@@ -99,14 +99,16 @@ export class HitPoints {
      * Update total hit points, and notify observers
      * @param value 
      */
-    setTotal = (value: number) => {
+    setTotal = (value: number | null) => {
+        if (value === null) return;
         this.total = value;
     }
 
     /**
      * Update temporary hit points, and notify observers
      */
-    setTemp = (value: number) => {
+    setTemp = (value: number | null) => {
+        if (value === null) return;
         this.temp = value;
     }
 

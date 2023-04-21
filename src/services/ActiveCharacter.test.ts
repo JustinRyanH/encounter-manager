@@ -90,6 +90,15 @@ describe('ActiveCharacter', () => {
             character.updateInitiative(20);
             expect(character.initiative).toEqual(20);
         });
+
+        test('if the initiative is not a number, it does not update', () => {
+            const character = new ActiveCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.updateInitiative(null);
+            expect(character.initiative).toEqual(10);
+        });
     });
 
     describe('updateName', () => {

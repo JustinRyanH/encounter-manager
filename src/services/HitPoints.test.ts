@@ -36,6 +36,16 @@ describe('HitPoints', () => {
                 oldValue: 10,
             });
         });
+
+        test('if incoming total is null, ignore it', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+            hitPoints.setTotal(null);
+            expect(hitPoints.total).toEqual(10);
+        });
     });
 
     describe('current', () => {
@@ -117,6 +127,16 @@ describe('HitPoints', () => {
                 newValue: 20,
                 oldValue: 0,
             });
+        });
+
+        test('if incoming temp is null, ignore it', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 3,
+            });
+            hitPoints.setTemp(null);
+            expect(hitPoints.temp).toEqual(3);
         });
     });
 
