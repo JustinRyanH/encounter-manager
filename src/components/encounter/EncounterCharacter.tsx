@@ -77,6 +77,7 @@ function EncounterControl(props: EncounterCharacterProps) {
                 size="md"
                 sx={NextButtonSx}
                 variant="subtle"
+                title="Next Turn"
                 onClick={props.nextTurn}
             >
                 <IconCornerRightDownDouble size="1.75rem" />
