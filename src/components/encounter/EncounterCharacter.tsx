@@ -3,9 +3,9 @@ import {
     AccordionControlProps, ActionIcon, Box,
     Center,
     Group,
-    Paper,
-    Skeleton,
-    Text
+    Paper, Popover, SimpleGrid,
+    Skeleton, Stack,
+    Text, UnstyledButton
 } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/ActiveCharacter";
@@ -18,6 +18,7 @@ import { UpdateNumber } from "~/components/systems/UpdateAttribute";
 
 import { IconCornerRightDownDouble } from "@tabler/icons-react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
+import { useDisclosure } from "@mantine/hooks";
 
 function InitiativeAttribute({ character }: { character: ActiveCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);
@@ -38,6 +39,8 @@ function EncounterCharacterControl({ character }: { character: ActiveCharacter }
     const total = useWatchValueObserver(character.hp.totalObserver);
     const temp = useWatchValueObserver(character.hp.tempObserver);
 
+    const [opened, { close, open }] = useDisclosure(false)
+
     const hasTemp = temp !== 0;
     const color = hasTemp ? 'blue' : undefined;
 
@@ -47,7 +50,19 @@ function EncounterCharacterControl({ character }: { character: ActiveCharacter }
         </Center>
         <Text fz="lg" weight={700}>{name}</Text>
         <Group spacing="xs">
-            <Text color={color}>{current + temp}</Text>
+            <Popover position="top" opened={opened}>
+                <Popover.Target>
+                    <UnstyledButton onMouseEnter={() => temp && open()} onMouseLeave={close}>
+                        <Text color={color}>{current + temp}</Text>
+                    </UnstyledButton>
+                </Popover.Target>
+                <Popover.Dropdown>
+                    <SimpleGrid verticalSpacing="xs" cols={2}>
+                        <Text size="xs" align="right">Current:</Text> <Text size="xs">{current}</Text>
+                        <Text size="xs" align="right">Temp:</Text> <Text color="blue" size="xs">{temp}</Text>
+                    </SimpleGrid>
+                </Popover.Dropdown>
+            </Popover>
             <Text>/</Text>
             <Text>{total}</Text>
         </Group>
