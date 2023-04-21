@@ -104,12 +104,15 @@ export class HitPoints {
         if (value === null) {
             notifications.show({
                 title: 'Invalid Hit Points',
-                message: 'Total hit points cannot be null',
+                message: 'Total hit points cannot be empty',
                 color: 'red',
             });
             return;
         }
         this.total = value;
+        if (this.current > value) {
+            this.current = value;
+        }
     }
 
     /**

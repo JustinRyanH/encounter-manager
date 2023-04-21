@@ -6,6 +6,10 @@ import { notifications } from '@mantine/notifications';
 vi.mock('@mantine/notifications');
 
 describe('ActiveCharacter', () => {
+    afterEach(() => {
+        vi.clearAllMocks()
+    })
+
     test('constructor', () => {
         const character = new ActiveCharacter({
             name: 'Test',
@@ -107,8 +111,8 @@ describe('ActiveCharacter', () => {
             });
             character.updateInitiative(null);
             expect(notifications.show).toHaveBeenCalledWith({
-                title: 'Error',
-                message: 'Initiative must be a number',
+                title: 'Invalid Initiative',
+                message: 'Initiative cannot be empty',
                 color: 'red',
             });
         });
@@ -140,7 +144,7 @@ describe('ActiveCharacter', () => {
             });
             character.updateName('');
             expect(notifications.show).toHaveBeenCalledWith({
-                title: 'Error',
+                title: 'Invalid Name',
                 message: 'Name cannot be empty',
                 color: 'red',
             });

@@ -6,6 +6,10 @@ import { HitPoints } from "~/services/HitPoints";
 vi.mock('@mantine/notifications');
 
 describe('HitPoints', () => {
+    afterEach(() => {
+        vi.clearAllMocks()
+    });
+
     describe('total', () => {
         test('return the total', () => {
             const hitPoints = new HitPoints({
@@ -63,6 +67,16 @@ describe('HitPoints', () => {
                 message: 'Total hit points cannot be empty',
                 color: 'red',
             });
+        });
+
+        test('if new total is less than current the current updates to total', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+            hitPoints.setTotal(5);
+            expect(hitPoints.current).toEqual(5);
         });
     });
 
@@ -177,7 +191,7 @@ describe('HitPoints', () => {
             hitPoints.setTemp(null);
             expect(notifications.show).toHaveBeenCalledWith({
                 title: 'Invalid Temp Hp',
-                message: 'Temporary hit points must be a number',
+                message: 'Temporary hit points cannot be empty',
                 color: 'red',
             });
         });
