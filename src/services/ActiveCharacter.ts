@@ -52,7 +52,7 @@ export class ActiveCharacter {
     set name(name: string) {
         if (!name) {
             notifications.show({
-                title: 'Error',
+                title: 'Invalid Name',
                 message: 'Name cannot be empty',
                 color: 'red',
             });
@@ -127,7 +127,7 @@ export class ActiveCharacter {
     updateInitiative = (initiative: number | null): void => {
         if (initiative === null) {
             notifications.show({
-                title: 'Error',
+                title: 'Invalid Initiative',
                 message: 'Initiative cannot be empty',
                 color: 'red',
             });
