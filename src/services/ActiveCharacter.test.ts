@@ -99,6 +99,19 @@ describe('ActiveCharacter', () => {
             character.updateInitiative(null);
             expect(character.initiative).toEqual(10);
         });
+
+        test('if the initiative is not a number, it broadcasts a notification', () => {
+            const character = new ActiveCharacter({
+                name: 'Test',
+                initiative: 10,
+            });
+            character.updateInitiative(null);
+            expect(notifications.show).toHaveBeenCalledWith({
+                title: 'Error',
+                message: 'Initiative must be a number',
+                color: 'red',
+            });
+        });
     });
 
     describe('updateName', () => {

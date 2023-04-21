@@ -125,7 +125,14 @@ export class ActiveCharacter {
      * @param initiative
      */
     updateInitiative = (initiative: number | null): void => {
-        if (initiative === null) return;
+        if (initiative === null) {
+            notifications.show({
+                title: 'Error',
+                message: 'Initiative cannot be empty',
+                color: 'red',
+            });
+            return;
+        }
         this.initiative = initiative;
     };
 

@@ -49,7 +49,7 @@ export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "N
     const [value, setValue] = React.useState<number | null>(null);
 
     const onCommit = () => {
-        updateAttribute(value || 0);
+        updateAttribute(value);
         setValue(null);
         handles.close();
     };
