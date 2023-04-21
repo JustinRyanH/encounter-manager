@@ -161,14 +161,14 @@ describe('HitPoints', () => {
             });
         });
 
-        test('if incoming temp is null, ignore it', () => {
+        test('if incoming temp is null, set it to zero', () => {
             const hitPoints = new HitPoints({
                 total: 10,
                 current: 10,
                 temp: 3,
             });
             hitPoints.setTemp(null);
-            expect(hitPoints.temp).toEqual(3);
+            expect(hitPoints.temp).toEqual(0);
         });
 
         test('if incoming temp is negative, set to zero', () => {
@@ -190,10 +190,21 @@ describe('HitPoints', () => {
 
             hitPoints.setTemp(null);
             expect(notifications.show).toHaveBeenCalledWith({
-                title: 'Invalid Temp Hp',
-                message: 'Temporary hit points cannot be empty',
-                color: 'red',
+                title: 'Reset Temporary Hit Points',
+                message: 'Zeroed out temporary hit points',
+                color: 'blue'
             });
+        });
+
+        test('does not send notification if temp is already 0', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+
+            hitPoints.setTemp(null);
+            expect(notifications.show).not.toHaveBeenCalled();
         });
     });
 

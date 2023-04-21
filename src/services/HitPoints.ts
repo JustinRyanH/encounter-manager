@@ -120,10 +120,12 @@ export class HitPoints {
      */
     setTemp = (value: number | null) => {
         if (value === null) {
+            if (this.temp === 0) return;
+            this.temp = 0;
             notifications.show({
-                title: 'Invalid Temp Hp',
-                message: 'Temporary hit points cannot be empty',
-                color: 'red'
+                title: 'Reset Temporary Hit Points',
+                message: 'Zeroed out temporary hit points',
+                color: 'blue'
             });
             return;
         }
