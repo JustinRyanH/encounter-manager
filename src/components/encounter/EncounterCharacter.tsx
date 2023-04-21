@@ -52,9 +52,7 @@ function EncounterCharacterControl({ character }: { character: ActiveCharacter }
         <Group spacing="xs">
             <Popover position="top" opened={opened}>
                 <Popover.Target>
-                    <UnstyledButton onMouseEnter={() => temp && open()} onMouseLeave={close}>
-                        <Text color={color}>{current + temp}</Text>
-                    </UnstyledButton>
+                    <Text onMouseEnter={() => temp && open()} onMouseLeave={close} color={color}>{current + temp}</Text>
                 </Popover.Target>
                 <Popover.Dropdown>
                     <SimpleGrid verticalSpacing="xs" cols={2}>
