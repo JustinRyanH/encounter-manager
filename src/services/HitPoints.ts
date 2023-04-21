@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 
 interface HitPointsProps {
@@ -108,8 +109,11 @@ export class HitPoints {
      * Update temporary hit points, and notify observers
      */
     setTemp = (value: number | null) => {
-        if (value === null) return;
-        this.temp = value;
+        if (value === null) {
+            notifications.show({ title: 'Invalid Temp Hp', message: 'Temporary hit points must be a number', color: 'red' });
+            return;
+        }
+        this.temp = Math.max(0, value);
     }
 
     /**

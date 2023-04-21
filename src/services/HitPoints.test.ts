@@ -1,5 +1,9 @@
 import { test, vi, describe, expect } from 'vitest';
+import { notifications } from '@mantine/notifications';
+
 import { HitPoints } from "~/services/HitPoints";
+
+vi.mock('@mantine/notifications');
 
 describe('HitPoints', () => {
     describe('total', () => {
@@ -137,6 +141,31 @@ describe('HitPoints', () => {
             });
             hitPoints.setTemp(null);
             expect(hitPoints.temp).toEqual(3);
+        });
+
+        test('if incoming temp is negative, set to zero', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 3,
+            });
+            hitPoints.setTemp(-1);
+            expect(hitPoints.temp).toEqual(0);
+        });
+
+        test('if incoming temp is null, broadcast error message', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 3,
+            });
+
+            hitPoints.setTemp(null);
+            expect(notifications.show).toHaveBeenCalledWith({
+                title: 'Invalid Temp Hp',
+                message: 'Temporary hit points must be a number',
+                color: 'red',
+            });
         });
     });
 
