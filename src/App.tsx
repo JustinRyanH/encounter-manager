@@ -1,5 +1,5 @@
 import React from "react";
-import { AppShell, Burger, Header, MediaQuery, Navbar, rem, Title } from "@mantine/core";
+import { AppShell, Burger, Divider, Header, MediaQuery, Navbar, rem, Stack, Title } from "@mantine/core";
 
 import "./App.css";
 import { ActiveCharacter } from "~/services/ActiveCharacter";
@@ -23,7 +23,13 @@ function App() {
 
   const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250, lg: 300 }}>
     <Navbar.Section>
-      <Title align="center" order={3}>Encounter Manager</Title>
+      <Stack>
+        <Title align="center" order={3}>Encounter Manager</Title>
+        <Divider />
+        <Stack>
+          <Title order={4}>Add Character</Title>
+        </Stack>
+      </Stack>
     </Navbar.Section>
   </Navbar>);
 
