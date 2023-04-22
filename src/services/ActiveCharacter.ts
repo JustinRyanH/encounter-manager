@@ -19,6 +19,11 @@ export class ActiveCharacter {
         return [];
     }
 
+    static ValidateInitiative(value: number | null) {
+        if (!value) return ['Initiative cannot be empty'];
+        return [];
+    }
+
     static newCharacter(param: InitiativeCharacterProps): ActiveCharacter {
         return new ActiveCharacter(param);
     }
@@ -55,15 +60,8 @@ export class ActiveCharacter {
      * @param name
      */
     set name(name: string) {
-        const errors = this.#validateName(name);
-        if (errors && errors.length) {
-            notifications.show({
-                title: 'Invalid Name',
-                message: errors.join(', '),
-                color: 'red',
-            });
-            return;
-        }
+        const errors = this.#validateName(name).join(', ');
+        if (this.#notifyErrors({ errors, title: 'Invalid Name' })) return;
 
         this.#name.value = name;
     }
@@ -131,15 +129,9 @@ export class ActiveCharacter {
      * @param initiative
      */
     updateInitiative = (initiative: number | null): void => {
-        if (initiative === null) {
-            notifications.show({
-                title: 'Invalid Initiative',
-                message: 'Initiative cannot be empty',
-                color: 'red',
-            });
-            return;
-        }
-        this.initiative = initiative;
+        const errors = this.#validateInitiative(initiative).join(', ');
+        if (this.#notifyErrors({ errors, title: 'Invalid Initiative' })) return;
+        this.initiative = initiative || 0;
     };
 
     /**
@@ -161,4 +153,14 @@ export class ActiveCharacter {
     }
 
     #validateName = (name: string | null): string[] => ActiveCharacter.ValidateName(name)
+    #validateInitiative = (value: number | null): string[] => ActiveCharacter.ValidateInitiative(value)
+
+    #notifyErrors({ errors, title }: { errors: string, title: string, }): boolean {
+        if (errors) {
+            notifications.show({ title, message: errors, color: 'red' });
+            return true
+        }
+        return false;
+    }
+
 }

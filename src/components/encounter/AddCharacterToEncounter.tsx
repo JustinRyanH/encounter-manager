@@ -22,6 +22,7 @@ export function AddCharacterToEncounter({}: { encounter: Encounters; }) {
         },
         validate: {
             name: (value) => ActiveCharacter.ValidateName(value).join(', ') || null,
+            initiative: (value) => ActiveCharacter.ValidateInitiative(value || null).join(', ') || null,
         }
     });
 
