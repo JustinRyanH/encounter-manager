@@ -80,18 +80,18 @@ interface EncounterCharacterProps extends AccordionControlProps {
     nextTurn: () => void,
 }
 
-function EncounterControl(props: EncounterCharacterProps) {
+function EncounterControl({ inPlay, nextTurn, ...props  }: EncounterCharacterProps) {
     return (<Paper radius="md">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Accordion.Control {...props} />
             <ActionIcon
                 color="dark"
-                disabled={!props.inPlay}
+                disabled={!inPlay}
                 size="md"
                 sx={NextButtonSx}
                 variant="subtle"
                 title="Next Turn"
-                onClick={props.nextTurn}
+                onClick={nextTurn}
             >
                 <IconCornerRightDownDouble size="1.75rem" />
             </ActionIcon>
