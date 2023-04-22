@@ -3,6 +3,7 @@ import { Button, CSSObject, Group, NumberInput, Stack, TextInput, Title } from "
 import { useForm } from "@mantine/form";
 
 import { Encounters } from "~/services/Encounters";
+import { ActiveCharacter } from "~/services/ActiveCharacter";
 
 interface EncounterFormProps {
     name: string,
@@ -11,7 +12,7 @@ interface EncounterFormProps {
     tmpHp: number | '',
 }
 
-export function AddCharacterToEncounter({ }: { encounter: Encounters; }) {
+export function AddCharacterToEncounter({}: { encounter: Encounters; }) {
     const form = useForm<EncounterFormProps>({
         initialValues: {
             name: '',
@@ -19,6 +20,9 @@ export function AddCharacterToEncounter({ }: { encounter: Encounters; }) {
             totalHp: '',
             tmpHp: '',
         },
+        validate: {
+            name: (value) => ActiveCharacter.ValidateName(value).join(', ') || null,
+        }
     });
 
 
