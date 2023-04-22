@@ -160,7 +160,8 @@ export class HitPoints {
      * @param amount
      */
     heal = (amount: number) => {
-        this.current += amount;
+        const newAmount = this.current + amount;
+        this.current = Math.min(newAmount, this.total);
     }
 
     #validateTotal = HitPoints.ValidateTotal;
