@@ -6,7 +6,7 @@ import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { Encounters } from "~/services/Encounters";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
-import { AddCharacterToEncounter } from "./components/encounter/AddCharacterToEncounter";
+import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
