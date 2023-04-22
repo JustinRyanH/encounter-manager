@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { HitPoints } from "~/services/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "./ValueObserver";
 import { notifications } from "@mantine/notifications";
+import { notifyErrors } from "~/services/notifications";
 
 interface InitiativeCharacterProps {
     name: string;
@@ -156,11 +157,7 @@ export class ActiveCharacter {
     #validateInitiative = (value: number | null): string[] => ActiveCharacter.ValidateInitiative(value)
 
     #notifyErrors({ errors, title }: { errors: string, title: string, }): boolean {
-        if (errors) {
-            notifications.show({ title, message: errors, color: 'red' });
-            return true
-        }
-        return false;
+        return notifyErrors({ errors, title });
     }
 
 }
