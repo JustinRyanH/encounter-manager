@@ -17,6 +17,10 @@ const MockCharacters = [
 function App() {
   const [opened, setOpened] = React.useState(false);
 
+  const encounter = React.useMemo(() => new Encounters({
+    characters: MockCharacters.map((c) => new ActiveCharacter(c)),
+  }), []);
+
   const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250, lg: 300 }}>
     <Navbar.Section>
       <Title align="center" order={3}>Encounter Manager</Title>
@@ -28,10 +32,6 @@ function App() {
       <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" mr="xl" />
     </MediaQuery>
   </Header>)
-
-  const encounter = React.useMemo(() => new Encounters({
-    characters: MockCharacters.map((c) => new ActiveCharacter(c)),
-  }), []);
 
   return (<AppShell navbar={navbar} header={header}>
     <EncounterProvider encounter={encounter}>
