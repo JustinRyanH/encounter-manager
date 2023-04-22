@@ -14,6 +14,11 @@ interface InitiativeCharacterProps {
  * A Tracked Character
  */
 export class ActiveCharacter {
+    static ValidateName = (name: string | null): string[] => {
+        if (!name) return ['Name cannot be empty'];
+        return [];
+    }
+
     static newCharacter(param: InitiativeCharacterProps): ActiveCharacter {
         return new ActiveCharacter(param);
     }
@@ -50,10 +55,11 @@ export class ActiveCharacter {
      * @param name
      */
     set name(name: string) {
-        if (!name) {
+        const errors = this.#validateName(name);
+        if (errors && errors.length) {
             notifications.show({
                 title: 'Invalid Name',
-                message: 'Name cannot be empty',
+                message: errors.join(', '),
                 color: 'red',
             });
             return;
@@ -153,4 +159,6 @@ export class ActiveCharacter {
         this.#initiative.add(message);
         return () => this.#initiative.remove(message);
     }
+
+    #validateName = (name: string | null): string[] => ActiveCharacter.ValidateName(name)
 }

@@ -1,4 +1,4 @@
-import { describe, test, vi, expect } from 'vitest';
+import { describe, test, vi, afterEach, expect } from 'vitest';
 
 import { ActiveCharacter } from './ActiveCharacter';
 import { notifications } from '@mantine/notifications';
