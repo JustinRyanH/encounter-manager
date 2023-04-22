@@ -1,4 +1,4 @@
-import { test, vi, describe, expect } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import { notifications } from '@mantine/notifications';
 
 import { HitPoints } from "~/services/HitPoints";

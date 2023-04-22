@@ -1,5 +1,6 @@
 import { notifications } from "@mantine/notifications";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
+import { notifyErrors } from "~/services/notifications";
 
 interface HitPointsProps {
     total?: number;
@@ -11,6 +12,15 @@ interface HitPointsProps {
  * A class that represents a character's hit points.
  */
 export class HitPoints {
+    static ValidateTotal = (value: number | null): string[] => {
+        if (!value) return ['Total hit points cannot be empty'];
+        return [];
+    }
+    static ValidateCurrent = (value: number | null): string[] => {
+        if (!value) return ['Current hit points cannot be empty'];
+        return [];
+    }
+
     #total: ValueObserver<number> = new ValueObserver(0);
     #current: ValueObserver<number> = new ValueObserver(0);
     #temp: ValueObserver<number> = new ValueObserver<number>(0);
@@ -101,14 +111,10 @@ export class HitPoints {
      * @param value 
      */
     setTotal = (value: number | null) => {
-        if (value === null) {
-            notifications.show({
-                title: 'Invalid Hit Points',
-                message: 'Total hit points cannot be empty',
-                color: 'red',
-            });
-            return;
-        }
+        const errors = this.#validateTotal(value).join(', ');
+        if (notifyErrors({ errors, title: 'Invalid Hit Points' })) return;
+        if (!value) return;
+
         this.total = value;
         if (this.current > value) {
             this.current = value;
@@ -156,4 +162,7 @@ export class HitPoints {
     heal = (amount: number) => {
         this.current += amount;
     }
+
+    #validateTotal = HitPoints.ValidateTotal;
+    #validateCurrent = HitPoints.ValidateCurrent;
 }
