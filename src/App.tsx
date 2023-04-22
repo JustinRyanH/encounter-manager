@@ -6,6 +6,7 @@ import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { Encounters } from "~/services/Encounters";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
+import { AddCharacterToEncounter } from "./AddCharacterToEncounter";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -26,9 +27,7 @@ function App() {
       <Stack>
         <Title align="center" order={3}>Encounter Manager</Title>
         <Divider />
-        <Stack>
-          <Title order={4}>Add Character</Title>
-        </Stack>
+        <AddCharacterToEncounter encounter={encounter} />
       </Stack>
     </Navbar.Section>
   </Navbar>);
