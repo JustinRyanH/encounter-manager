@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import { HitPoints } from "~/services/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "./ValueObserver";
-import { notifications } from "@mantine/notifications";
 import { notifyErrors } from "~/services/notifications";
 
 interface InitiativeCharacterProps {
@@ -62,7 +61,7 @@ export class ActiveCharacter {
      */
     set name(name: string) {
         const errors = this.#validateName(name).join(', ');
-        if (this.#notifyErrors({ errors, title: 'Invalid Name' })) return;
+        if (notifyErrors({ errors, title: 'Invalid Name' })) return;
 
         this.#name.value = name;
     }
@@ -131,7 +130,7 @@ export class ActiveCharacter {
      */
     updateInitiative = (initiative: number | null): void => {
         const errors = this.#validateInitiative(initiative).join(', ');
-        if (this.#notifyErrors({ errors, title: 'Invalid Initiative' })) return;
+        if (notifyErrors({ errors, title: 'Invalid Initiative' })) return;
         this.initiative = initiative || 0;
     };
 
@@ -155,9 +154,4 @@ export class ActiveCharacter {
 
     #validateName = (name: string | null): string[] => ActiveCharacter.ValidateName(name)
     #validateInitiative = (value: number | null): string[] => ActiveCharacter.ValidateInitiative(value)
-
-    #notifyErrors({ errors, title }: { errors: string, title: string, }): boolean {
-        return notifyErrors({ errors, title });
-    }
-
 }
