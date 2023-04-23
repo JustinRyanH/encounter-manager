@@ -8,7 +8,6 @@ import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
 
 import "./App.css";
-import { ManageEncounter } from "~/components/encounter/ManageEncounter";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -34,12 +33,6 @@ function App() {
             <Accordion.Control>Add Character</Accordion.Control>
             <Accordion.Panel>
               <AddCharacterToEncounter encounter={encounter} />
-            </Accordion.Panel>
-          </Accordion.Item>
-          <Accordion.Item value="Manager Encounter">
-            <Accordion.Control>Manager Encounter</Accordion.Control>
-            <Accordion.Panel>
-              <ManageEncounter encounter={encounter} />
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>

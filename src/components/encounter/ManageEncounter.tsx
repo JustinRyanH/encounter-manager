@@ -1,7 +1,6 @@
 import { Encounter } from "~/services/encounter/Encounter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Button, Stack } from "@mantine/core";
-import React from "react";
 
 export function ManageEncounter({ encounter }: { encounter: Encounter }) {
     const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);

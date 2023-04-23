@@ -1,10 +1,29 @@
 import React from "react";
-import { Accordion } from "@mantine/core";
+import { Accordion, Button, Group } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useStyles } from "~/components/encounter/DisplayEncounter.styles";
+
+function ManageEncounter() {
+    const encounter = useEncounterContext();
+    const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
+
+    return (
+        <Group p="1rem" align="center" position="apart">
+            <Button disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}>
+                Start Encounter
+            </Button>
+            <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}>
+                Restart Encounter
+            </Button>
+            <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}>
+                Stop Encounter
+            </Button>
+        </Group>
+    )
+}
 
 
 export function DisplayEncounter() {
@@ -15,7 +34,12 @@ export function DisplayEncounter() {
 
     const { classes } = useStyles();
 
-    return (<Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
-        {characters.map((c) => <EncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />)}
-    </Accordion>);
+    return (
+        <>
+            <ManageEncounter />
+            <Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
+                {characters.map((c) => <EncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />)}
+            </Accordion>
+        </>
+    );
 }
