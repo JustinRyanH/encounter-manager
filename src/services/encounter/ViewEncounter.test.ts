@@ -15,7 +15,7 @@ describe('ViewEncounter', () => {
             const viewEncounter = new ViewEncounter({ encounter });
 
             encounter.startEncounter();
-            expect(viewEncounter.openedCharacters).toEqual([characterA]);
+            expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
         });
 
         test('returns an empty array if there is no active character', () => {
@@ -39,11 +39,11 @@ describe('ViewEncounter', () => {
             expect(viewEncounter.openedCharacters).toEqual([]);
             viewEncounter.open(characterA.id);
 
-            expect(viewEncounter.openedCharacters).toEqual([characterA]);
+            expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
 
             viewEncounter.open(characterB.id);
 
-            expect(viewEncounter.openedCharacters).toEqual([characterA, characterB]);
+            expect(viewEncounter.openedCharacters).toEqual([characterA.id, characterB.id]);
         });
 
         test('removes the previous character from opened when active character changes', () => {
@@ -54,10 +54,10 @@ describe('ViewEncounter', () => {
             const viewEncounter = new ViewEncounter({ encounter });
 
             encounter.startEncounter();
-            expect(viewEncounter.openedCharacters).toEqual([characterA]);
+            expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
 
             encounter.nextCharacter();
-            expect(viewEncounter.openedCharacters).toEqual([characterB]);
+            expect(viewEncounter.openedCharacters).toEqual([characterB.id]);
         });
 
         test('allows closing a character', () => {
@@ -68,7 +68,7 @@ describe('ViewEncounter', () => {
             const viewEncounter = new ViewEncounter({ encounter });
 
             encounter.startEncounter();
-            expect(viewEncounter.openedCharacters).toEqual([characterA]);
+            expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
 
             viewEncounter.close(characterA.id);
             expect(viewEncounter.openedCharacters).toEqual([]);
@@ -82,7 +82,7 @@ describe('ViewEncounter', () => {
             const viewEncounter = new ViewEncounter({ encounter });
 
             viewEncounter.toggle(characterA.id);
-            expect(viewEncounter.openedCharacters).toEqual([characterA]);
+            expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
 
             viewEncounter.toggle(characterA.id);
             expect(viewEncounter.openedCharacters).toEqual([]);
