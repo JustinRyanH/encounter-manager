@@ -1,5 +1,4 @@
-import React from "react";
-import { Button, CSSObject, Group, NumberInput, Stack, TextInput, Title } from "@mantine/core";
+import { Button, CSSObject, Group, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { Encounter } from "~/services/encounter/Encounter";
@@ -56,7 +55,7 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounter; }
                 <NumberInput styles={{ input, label }} label="Initiative" withAsterisk hideControls {...form.getInputProps('initiative')} />
                 <Group position="apart" align="start" grow>
                     <NumberInput
-                        styles={{ input, label}}
+                        styles={{ input, label }}
                         label="Total HP"
                         hideControls
                         withAsterisk
