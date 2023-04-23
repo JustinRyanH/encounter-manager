@@ -35,6 +35,13 @@ function App() {
               <AddCharacterToEncounter encounter={encounter} />
             </Accordion.Panel>
           </Accordion.Item>
+
+          <Accordion.Item value="Manage Files">
+            <Accordion.Control>Files</Accordion.Control>
+            <Accordion.Panel>
+              <p>Manage Files</p>
+            </Accordion.Panel>
+          </Accordion.Item>
         </Accordion>
       </Stack>
     </Navbar.Section>
