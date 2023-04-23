@@ -31,7 +31,7 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
 
     const input: CSSObject = { textAlign: 'center' };
     const label: CSSObject = { width: '100%', textAlign: 'center' };
-    const onSubmit = form.onSubmit((values: EncounterFormProps) => {
+    const handleSuccess = (values: EncounterFormProps) => {
         if (!values.initiative || !values.totalHp) return;
         const newCharacter = ActiveCharacter.newCharacter({
             name: values.name,
@@ -41,7 +41,10 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
         });
         encounter.addCharacter(newCharacter);
         form.reset();
-    }, (errors: FormErrors) => console.log(errors))
+    };
+    const handleError = (errors: FormErrors) => console.log(errors);
+
+    const onSubmit = form.onSubmit(handleSuccess, handleError)
     return (
         <form onSubmit={onSubmit}>
             <Stack>
