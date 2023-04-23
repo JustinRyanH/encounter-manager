@@ -11,6 +11,7 @@ const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative 
 type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
 
 export class Encounters {
+    #lastActiveCharacter: ActiveCharacter | null = null;
     #initiativeMap: Map<string, StopObserving> = new Map();
     #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);
     #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<Array<ActiveCharacter>>([]);
@@ -71,6 +72,15 @@ export class Encounters {
         this.setActiveCharacter(this.characters[nextCharacterIndex]);
     };
 
+
+    restartEncounter() {
+        if (!this.#lastActiveCharacter) {
+            this.startEncounter();
+            return;
+        }
+        this.setActiveCharacter(this.#lastActiveCharacter);
+    }
+
     /**
      * Sets the active character to first character in the initiative order if not already active.
      */
@@ -109,6 +119,7 @@ export class Encounters {
     }
 
     private setActiveCharacter = (character: ActiveCharacter | null) => {
+        this.#lastActiveCharacter = this.activeCharacter;
         this.#activeCharacter.value = character;
         if (character) {
             character.inPlay = true;
