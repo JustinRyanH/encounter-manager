@@ -129,6 +129,46 @@ describe('Encounters', function () {
         });
     });
 
+    describe('startEncounter', function () {
+        test('sets the active character to the first character', function () {
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+            encounters.stopEncounter();
+
+            expect(encounters.activeCharacter).toEqual(null);
+
+            encounters.startEncounter();
+
+            expect(encounters.activeCharacter).toEqual(characterA);
+        });
+
+        test('no-ops if the character is already active character', function () {
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+            encounters.nextCharacter();
+
+            expect(encounters.activeCharacter).toEqual(characterB);
+
+            encounters.startEncounter();
+
+            expect(encounters.activeCharacter).toEqual(characterB);
+        });
+
+        test('no-ops if there are no characters', function () {
+            const encounters = new Encounters();
+
+            expect(encounters.activeCharacter).toEqual(null);
+
+            encounters.startEncounter();
+
+            expect(encounters.activeCharacter).toEqual(null);
+        });
+    });
+
     describe('stopEncounter', function () {
         test('clears the active character', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });

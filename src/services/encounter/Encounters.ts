@@ -18,7 +18,7 @@ export class Encounters {
 
     constructor({ characters }: { characters?: Array<ActiveCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
-        this.setActiveCharacter(this.characters[0]);
+        this.setActiveCharacter(this.characters[0] || null);
     }
 
     /**
@@ -72,6 +72,14 @@ export class Encounters {
         this.setActiveCharacter(this.characters[nextCharacterIndex]);
     };
 
+    /**
+     * Sets the active character to first character in the initiative order if not already active.
+     */
+    startEncounter = () => {
+        if (this.activeCharacter) return;
+        if (!this.characters.length) return;
+        this.setActiveCharacter(this.characters[0]);
+    }
     stopEncounter = () => {
         this.setActiveCharacter(null);
     }
