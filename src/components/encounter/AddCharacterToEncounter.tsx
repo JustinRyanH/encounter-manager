@@ -2,7 +2,7 @@ import React from "react";
 import { Button, CSSObject, Group, NumberInput, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
-import { Encounters } from "~/services/encounter/Encounters";
+import { Encounter } from "~/services/encounter/Encounter";
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { notifyErrors } from "~/services/notifications";
@@ -14,7 +14,7 @@ interface EncounterFormProps {
     tempHp: number | '',
 }
 
-export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; }) {
+export function AddCharacterToEncounter({ encounter }: { encounter: Encounter; }) {
     const form = useForm<EncounterFormProps>({
         initialValues: {
             name: '',

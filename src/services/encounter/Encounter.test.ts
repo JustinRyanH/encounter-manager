@@ -1,10 +1,10 @@
 import { describe, expect, test, vi } from 'vitest';
-import { Encounters } from "~/services/encounter/Encounters";
+import { Encounter } from "~/services/encounter/Encounter";
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 
-describe('Encounters', function () {
+describe('Encounter', function () {
     test('does not have any characters by default', function () {
-        const encounters = new Encounters();
+        const encounters = new Encounter();
         expect(encounters.characters).toEqual([]);
     });
 
@@ -12,7 +12,7 @@ describe('Encounters', function () {
         const characterA = new ActiveCharacter({ name: 'A', initiative: 1 });
         const characterB = new ActiveCharacter({ name: 'B', initiative: 2 });
 
-        const encounters = new Encounters({ characters: [characterA, characterB] });
+        const encounters = new Encounter({ characters: [characterA, characterB] });
 
         expect(encounters.characters).toEqual([characterB, characterA]);
     });
@@ -29,14 +29,14 @@ describe('Encounters', function () {
         const characterA = new ActiveCharacter({ name: 'A', initiative: 1 });
         const characterB = new ActiveCharacter({ name: 'B', initiative: 2 });
 
-        const encounters = new Encounters({ characters: [characterA, characterB] });
+        const encounters = new Encounter({ characters: [characterA, characterB] });
 
         expect(encounters.characters.map(c => c.name)).toEqual(['B', 'A']);
     });
 
     describe('addCharacter', function () {
         test('adds a character to the encounter', function () {
-            const encounters = new Encounters();
+            const encounters = new Encounter();
 
             encounters.addCharacter(new ActiveCharacter({ name: 'A', initiative: 1 }));
 
@@ -47,7 +47,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 5 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 15 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
 
             encounters.addCharacter(new ActiveCharacter({ name: 'C', initiative: 20 }));
             encounters.addCharacter(new ActiveCharacter({ name: 'D', initiative: 1 }));
@@ -60,7 +60,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 5 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 15 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.onCharacterAdded(observer);
 
 
@@ -76,7 +76,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
 
             expect(encounters.characters.map(c => c.name)).toEqual(['A', 'B']);
 
@@ -91,7 +91,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.nextCharacter();
 
             expect(encounters.activeCharacter).toEqual(characterA);
@@ -102,7 +102,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
 
             expect(encounters.activeCharacter).toEqual(null);
             expect(characterA.inPlay).toEqual(false);
@@ -126,7 +126,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.startEncounter();
 
             encounters.activeCharacterObserver.add(listener);
@@ -142,7 +142,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.stopEncounter();
 
             expect(encounters.activeCharacter).toEqual(null);
@@ -156,7 +156,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.startEncounter();
             encounters.nextCharacter();
 
@@ -168,7 +168,7 @@ describe('Encounters', function () {
         });
 
         test('no-ops if there are no characters', function () {
-            const encounters = new Encounters();
+            const encounters = new Encounter();
 
             expect(encounters.activeCharacter).toEqual(null);
 
@@ -183,7 +183,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.startEncounter();
 
             expect(encounters.activeCharacter).toEqual(characterA);
@@ -199,7 +199,7 @@ describe('Encounters', function () {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
-            const encounters = new Encounters({ characters: [characterA, characterB] });
+            const encounters = new Encounter({ characters: [characterA, characterB] });
             encounters.startEncounter();
             encounters.nextCharacter();
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Accordion, AppShell, Burger, Button, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
-import { Encounters } from "~/services/encounter/Encounters";
+import { Encounter } from "~/services/encounter/Encounter";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
@@ -19,7 +19,7 @@ const MockCharacters = [
 function App() {
   const [opened, setOpened] = React.useState(false);
 
-  const encounter = React.useMemo(() => new Encounters({
+  const encounter = React.useMemo(() => new Encounter({
     characters: MockCharacters.map((c) => new ActiveCharacter(c)),
   }), []);
 

@@ -10,7 +10,7 @@ const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative 
 
 type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
 
-export class Encounters {
+export class Encounter {
     #lastActiveCharacter: ActiveCharacter | null = null;
     #initiativeMap: Map<string, StopObserving> = new Map();
     #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);

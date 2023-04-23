@@ -1,22 +1,22 @@
 import React from "react";
 
-import { Encounters } from "~/services/encounter/Encounters";
+import { Encounter } from "~/services/encounter/Encounter";
 
-const EncounterContext = React.createContext(new Encounters())
+const EncounterContext = React.createContext(new Encounter())
 
 interface EncounterProviderProps {
     children: React.ReactNode;
-    encounter?: Encounters;
+    encounter?: Encounter;
 }
 
 export function EncounterProvider({ children, encounter: initialEncounter }: EncounterProviderProps): JSX.Element {
-    const encounter = React.useMemo(() => initialEncounter || new Encounters(), [initialEncounter]);
+    const encounter = React.useMemo(() => initialEncounter || new Encounter(), [initialEncounter]);
 
     return (<EncounterContext.Provider value={encounter}>
         {children}
     </EncounterContext.Provider>);
 }
 
-export function useEncounterContext(): Encounters {
+export function useEncounterContext(): Encounter {
     return React.useContext(EncounterContext);
 }
