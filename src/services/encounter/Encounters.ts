@@ -78,6 +78,7 @@ export class Encounters {
             this.startEncounter();
             return;
         }
+        if (this.activeCharacter) return;
         this.setActiveCharacter(this.#lastActiveCharacter);
     }
 

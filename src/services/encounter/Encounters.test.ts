@@ -193,4 +193,25 @@ describe('Encounters', function () {
             expect(encounters.activeCharacter).toEqual(null);
         });
     });
+
+    describe('restartEncounter', function () {
+        test('picks up encounter where it left off', function () {
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+            encounters.startEncounter();
+            encounters.nextCharacter();
+
+            expect(encounters.activeCharacter).toEqual(characterB);
+
+            encounters.stopEncounter();
+
+            expect(encounters.activeCharacter).toEqual(null);
+
+            encounters.restartEncounter();
+
+            expect(encounters.activeCharacter).toEqual(characterB);
+        });
+    });
 });
