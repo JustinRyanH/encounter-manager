@@ -5,6 +5,7 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useStyles } from "~/components/encounter/DisplayEncounter.styles";
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 
 /**
  * A hook that returns the expanded characters and a function to update the expanded characters.
@@ -26,6 +27,14 @@ function useExpandedEncounter() {
     React.useEffect(() => {
         if (activeCharacter) setUserOpenedCharacter([activeCharacter.id]);
     }, [activeCharacter]);
+
+    React.useEffect(() => {
+        const watchNewCharacters = ({ character }: { character: ActiveCharacter }) => {
+            setUserOpenedCharacter([...userOpenedCharacters, character.id]);
+        }
+        const signal = encounter.onCharacterAdded(watchNewCharacters);
+        return () => { signal.disconnect() };
+    }, [encounter, userOpenedCharacters]);
 
 
     return [userOpenedCharacters, updateCharacters] as const;
