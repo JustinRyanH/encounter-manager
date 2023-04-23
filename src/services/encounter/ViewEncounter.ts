@@ -22,9 +22,13 @@ export class ViewEncounter {
         }
     }
 
+    close(characterId: string): void {
+        this.#openededCharacters.value = this.openedCharacters.filter(character => character.id !== characterId);
+    }
+
     private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<ActiveCharacter | null>) => {
         if (newValue) {
-            const oldValues = this.openedCharacters.filter(character => character.id !== oldValue.id);
+            const oldValues = oldValue ? this.openedCharacters.filter(character => character.id !== oldValue.id) : this.openedCharacters;
             this.#openededCharacters.updateValue([newValue, ...oldValues]);
         }
     }
