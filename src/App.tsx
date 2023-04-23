@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
+import { Accordion, AppShell, Burger, Button, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { Encounters } from "~/services/encounter/Encounters";
@@ -33,6 +33,14 @@ function App() {
             <Accordion.Control>Add Character</Accordion.Control>
             <Accordion.Panel>
               <AddCharacterToEncounter encounter={encounter} />
+            </Accordion.Panel>
+          </Accordion.Item>
+          <Accordion.Item value="Manager Encounter">
+            <Accordion.Control>Manager Encounter</Accordion.Control>
+            <Accordion.Panel>
+              <Stack>
+                <Button color="gray" onClick={() => encounter.stopEncounter()}>Stop Encounter</Button>
+              </Stack>
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>
