@@ -21,6 +21,12 @@ export class HitPoints {
         return [];
     }
 
+    static ValidateTemp = (value: number | null): string[] => {
+        if (value === null) return [];
+        if (value < 0) return ['Temporary hit points cannot be negative'];
+        return [];
+    }
+
     #total: ValueObserver<number> = new ValueObserver(0);
     #current: ValueObserver<number> = new ValueObserver(0);
     #temp: ValueObserver<number> = new ValueObserver<number>(0);
@@ -125,6 +131,9 @@ export class HitPoints {
      * Update temporary hit points, and notify observers
      */
     setTemp = (value: number | null) => {
+        const errors = this.#validateTemp(value).join(', ');
+        if (notifyErrors({ errors, title: 'Invalid Temporary Hit Points' })) return;
+
         if (value === null) {
             if (this.temp === 0) return;
             this.temp = 0;
@@ -166,4 +175,5 @@ export class HitPoints {
 
     #validateTotal = HitPoints.ValidateTotal;
     #validateCurrent = HitPoints.ValidateCurrent;
+    #validateTemp = HitPoints.ValidateTemp;
 }

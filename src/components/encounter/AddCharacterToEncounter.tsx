@@ -26,6 +26,7 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
             name: (value) => ActiveCharacter.ValidateName(value).join(', ') || null,
             initiative: (value) => ActiveCharacter.ValidateInitiative(value || null).join(', ') || null,
             totalHp: (value) => HitPoints.ValidateTotal(value || null).join(', ') || null,
+            tempHp: (value) => HitPoints.ValidateTemp(value || null).join(', ') || null,
         }
     });
 
