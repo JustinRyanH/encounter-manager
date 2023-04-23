@@ -18,10 +18,10 @@ function useExpandedEncounter() {
     const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
     const [userOpenedCharacters, setUserOpenedCharacter] = React.useState<string[]>([]);
 
-    const updateCharacters = React.useCallback((opended: string[]) => {
-        if (!activeCharacter) return setUserOpenedCharacter(opended);
-        if (!opended.includes(activeCharacter.id)) return setUserOpenedCharacter([activeCharacter.id, ...opended]);
-        return setUserOpenedCharacter(opended);
+    const updateCharacters = React.useCallback((opened: string[]) => {
+        if (!activeCharacter) return setUserOpenedCharacter(opened);
+        if (!opened.includes(activeCharacter.id)) return setUserOpenedCharacter([activeCharacter.id, ...opened]);
+        return setUserOpenedCharacter(opened);
     }, [activeCharacter]);
 
     React.useEffect(() => {
