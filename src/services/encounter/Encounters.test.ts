@@ -128,4 +128,19 @@ describe('Encounters', function () {
             expect(listener).toHaveBeenCalledWith({ oldValue: characterA, newValue: characterB });
         });
     });
+
+    describe('stopEncounter', function () {
+        test('clears the active character', function () {
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+
+            expect(encounters.activeCharacter).toEqual(characterA);
+
+            encounters.stopEncounter();
+
+            expect(encounters.activeCharacter).toEqual(null);
+        });
+    });
 });

@@ -72,6 +72,10 @@ export class Encounters {
         this.setActiveCharacter(this.characters[nextCharacterIndex]);
     };
 
+    stopEncounter = () => {
+        this.setActiveCharacter(null);
+    }
+
     onCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
         return this.#characterAddedSignal.connect(observer);
     }
