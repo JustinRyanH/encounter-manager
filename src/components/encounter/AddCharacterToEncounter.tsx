@@ -63,7 +63,7 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounter; }
                     />
                     <NumberInput
                         styles={{ input, label }}
-                        label="Temporary HP"
+                        label="Temp HP"
                         hideControls
                         {...form.getInputProps('tempHp')}
                     />
