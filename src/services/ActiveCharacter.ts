@@ -8,6 +8,7 @@ interface InitiativeCharacterProps {
     name: string;
     initiative: number;
     hp?: number;
+    tempHp?: number | null;
 }
 
 /**
