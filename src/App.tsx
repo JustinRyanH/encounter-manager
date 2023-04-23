@@ -40,6 +40,7 @@ function App() {
             <Accordion.Panel>
               <Stack>
                 <Button onClick={() => encounter.startEncounter()}>Start Encounter</Button>
+                <Button color="gray" onClick={() => encounter.restartEncounter()}>Restart Encounter</Button>
                 <Button color="gray" onClick={() => encounter.stopEncounter()}>Stop Encounter</Button>
               </Stack>
             </Accordion.Panel>
