@@ -29,7 +29,7 @@ describe('ViewEncounter', () => {
             expect(viewEncounter.openedCharacters).toEqual([]);
         });
 
-        it('allows adding new characters be opened', () => {
+        test('allows adding new characters be opened', () => {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
@@ -46,7 +46,7 @@ describe('ViewEncounter', () => {
             expect(viewEncounter.openedCharacters).toEqual([characterA, characterB]);
         });
 
-        it('removes the previous character from opened when active character changes', () => {
+        test('removes the previous character from opened when active character changes', () => {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
@@ -60,7 +60,7 @@ describe('ViewEncounter', () => {
             expect(viewEncounter.openedCharacters).toEqual([characterB]);
         });
 
-        it('allows closing a character', () => {
+        test('allows closing a character', () => {
             const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
             const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
 
@@ -72,6 +72,20 @@ describe('ViewEncounter', () => {
 
             viewEncounter.close(characterA.id);
             expect(viewEncounter.openedCharacters).toEqual([]);
+        });
+    });
+
+    describe('isOpened', () => {
+        test('returns true if the character is opened', () => {
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+
+            const encounter = new Encounter({ characters: [characterA, characterB] })
+            const viewEncounter = new ViewEncounter({ encounter });
+
+            encounter.startEncounter();
+            expect(viewEncounter.isOpened(characterA.id)).toEqual(true);
+            expect(viewEncounter.isOpened(characterB.id)).toEqual(false);
         });
     });
 });

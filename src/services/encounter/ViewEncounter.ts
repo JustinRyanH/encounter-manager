@@ -26,10 +26,19 @@ export class ViewEncounter {
         this.#openededCharacters.value = this.openedCharacters.filter(character => character.id !== characterId);
     }
 
+    isOpened(characterId: string): boolean {
+        return this.openedCharacters.some(character => character.id === characterId);
+    }
+
     private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<ActiveCharacter | null>) => {
+        let oldValues: Array<ActiveCharacter> = this.openedCharacters;
+        if (oldValue) {
+            oldValues = oldValues.filter(character => character.id !== oldValue.id);
+        }
         if (newValue) {
-            const oldValues = oldValue ? this.openedCharacters.filter(character => character.id !== oldValue.id) : this.openedCharacters;
             this.#openededCharacters.updateValue([newValue, ...oldValues]);
+        } else {
+            this.#openededCharacters.updateValue(oldValues);
         }
     }
 }
