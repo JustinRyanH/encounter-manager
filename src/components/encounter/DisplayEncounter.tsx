@@ -12,15 +12,9 @@ function ManageEncounter() {
 
     return (
         <Group p="1rem" align="center" position="apart">
-            <Button disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}>
-                Start Encounter
-            </Button>
-            <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}>
-                Restart Encounter
-            </Button>
-            <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}>
-                Stop Encounter
-            </Button>
+            <Button disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}> Start Encounter </Button>
+            <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}> Restart Encounter </Button>
+            <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}> Stop Encounter </Button>
         </Group>
     )
 }
