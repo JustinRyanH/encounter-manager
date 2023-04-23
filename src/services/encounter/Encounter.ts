@@ -35,6 +35,9 @@ export class Encounter {
         return this.#characters.readonly;
     }
 
+    /**
+     * The active character in the encounter.
+     */
     get activeCharacter(): ActiveCharacter | null {
         return this.#activeCharacter.value;
     }
@@ -73,6 +76,10 @@ export class Encounter {
     };
 
 
+    /**
+     * Sets the active character to the previous character
+     * in the initiative order when the encounter has been stopped.
+     */
     restartEncounter() {
         if (!this.#lastActiveCharacter) {
             this.startEncounter();
@@ -90,10 +97,18 @@ export class Encounter {
         if (!this.characters.length) return;
         this.setActiveCharacter(this.characters[0]);
     }
+
+    /**
+     * Stops the encounter
+     */
     stopEncounter = () => {
         this.setActiveCharacter(null);
     }
 
+    /**
+     * Signals when a new character is added to the encounter.
+     * @param observer
+     */
     onCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
         return this.#characterAddedSignal.connect(observer);
     }
