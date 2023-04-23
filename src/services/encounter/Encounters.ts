@@ -1,4 +1,4 @@
-import { ActiveCharacter } from "~/services/ActiveCharacter";
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import {
     ReadonlyValueObserver,
     StopObserving,

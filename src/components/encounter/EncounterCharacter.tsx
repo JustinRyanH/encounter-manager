@@ -12,7 +12,7 @@ import {
     Text
 } from "@mantine/core";
 
-import { ActiveCharacter } from "~/services/ActiveCharacter";
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { HpAttribute } from "~/components/encounter/HpAttribute";

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { HitPoints } from "~/services/HitPoints";
-import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "./ValueObserver";
+import { HitPoints } from "~/services/encounter/HitPoints";
+import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
 
 interface InitiativeCharacterProps {

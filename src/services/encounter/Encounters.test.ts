@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
-import { Encounters } from "~/services/Encounters";
-import { ActiveCharacter } from "~/services/ActiveCharacter";
+import { Encounters } from "~/services/encounter/Encounters";
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 
 describe('Encounters', function () {
     test('does not have any characters by default', function () {

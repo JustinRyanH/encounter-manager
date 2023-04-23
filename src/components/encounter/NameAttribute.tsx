@@ -3,7 +3,7 @@ import { Text } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
-import { ActiveCharacter } from "~/services/ActiveCharacter";
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateString } from "~/components/systems/UpdateAttribute";
 

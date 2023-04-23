@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Encounters } from "~/services/Encounters";
+import { Encounters } from "~/services/encounter/Encounters";
 
 const EncounterContext = React.createContext(new Encounters())
 

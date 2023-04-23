@@ -1,8 +1,8 @@
 import React from "react";
 import { AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
 
-import { ActiveCharacter } from "~/services/ActiveCharacter";
-import { Encounters } from "~/services/Encounters";
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
+import { Encounters } from "~/services/encounter/Encounters";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";

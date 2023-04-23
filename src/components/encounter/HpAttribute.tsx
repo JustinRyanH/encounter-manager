@@ -3,7 +3,7 @@ import { useClickOutside } from "@mantine/hooks";
 import { Button, Divider, Flex, NumberInput, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 
-import { HitPoints } from "~/services/HitPoints";
+import { HitPoints } from "~/services/encounter/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { EditPopover, useEditPopoverContext } from "~/components/systems/EditPopover";

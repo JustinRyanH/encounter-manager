@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { notifications } from '@mantine/notifications';
 
-import { HitPoints } from "~/services/HitPoints";
+import { HitPoints } from "~/services/encounter/HitPoints";
 
 vi.mock('@mantine/notifications');
 
