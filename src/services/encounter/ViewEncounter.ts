@@ -26,6 +26,14 @@ export class ViewEncounter {
         this.#openededCharacters.value = this.openedCharacters.filter(character => character.id !== characterId);
     }
 
+    toggle(characterId: string): void {
+        if (this.isOpened(characterId)) {
+            this.close(characterId);
+        } else {
+            this.open(characterId);
+        }
+    }
+
     isOpened(characterId: string): boolean {
         return this.openedCharacters.some(character => character.id === characterId);
     }

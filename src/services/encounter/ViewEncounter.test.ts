@@ -73,6 +73,20 @@ describe('ViewEncounter', () => {
             viewEncounter.close(characterA.id);
             expect(viewEncounter.openedCharacters).toEqual([]);
         });
+
+        test('allows toggling a character', () => {
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+
+            const encounter = new Encounter({ characters: [characterA, characterB] })
+            const viewEncounter = new ViewEncounter({ encounter });
+
+            viewEncounter.toggle(characterA.id);
+            expect(viewEncounter.openedCharacters).toEqual([characterA]);
+
+            viewEncounter.toggle(characterA.id);
+            expect(viewEncounter.openedCharacters).toEqual([]);
+        });
     });
 
     describe('isOpened', () => {
