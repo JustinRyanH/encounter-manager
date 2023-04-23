@@ -43,6 +43,7 @@ function useExpandedEncounter() {
 export function DisplayEncounter() {
     const encounter = useEncounterContext();
     const characters = useWatchValueObserver(encounter.charactersObserver);
+    const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
 
     const [expanded, setExpanded] = useExpandedEncounter();
     const { classes } = useStyles();
