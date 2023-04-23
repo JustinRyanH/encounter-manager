@@ -78,6 +78,20 @@ describe('HitPoints', () => {
             hitPoints.setTotal(5);
             expect(hitPoints.current).toEqual(5);
         });
+
+        test('if new total is less than 0 it notifies the user', () => {
+            const hitPoints = new HitPoints({
+                total: 10,
+                current: 10,
+                temp: 0,
+            });
+            hitPoints.setTotal(-1);
+            expect(notifications.show).toHaveBeenCalledWith({
+                title: 'Invalid Hit Points',
+                message: 'Total hit points cannot be negative',
+                color: 'red',
+            });
+        });
     });
 
     describe('current', () => {
@@ -171,14 +185,19 @@ describe('HitPoints', () => {
             expect(hitPoints.temp).toEqual(0);
         });
 
-        test('if incoming temp is negative, set to zero', () => {
+        test('if incoming temp is negative, no-ops, and notifies the user', () => {
             const hitPoints = new HitPoints({
                 total: 10,
                 current: 10,
                 temp: 3,
             });
             hitPoints.setTemp(-1);
-            expect(hitPoints.temp).toEqual(0);
+            expect(hitPoints.temp).toEqual(3);
+            expect(notifications.show).toHaveBeenCalledWith({
+                title: 'Invalid Temporary Hit Points',
+                message: 'Temporary hit points cannot be negative',
+                color: 'red',
+            });
         });
 
         test('if incoming temp is null, broadcast error message', () => {

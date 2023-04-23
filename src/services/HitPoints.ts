@@ -14,6 +14,7 @@ interface HitPointsProps {
 export class HitPoints {
     static ValidateTotal = (value: number | null): string[] => {
         if (!value) return ['Total hit points cannot be empty'];
+        if (value < 0) return ['Total hit points cannot be negative'];
         return [];
     }
     static ValidateCurrent = (value: number | null): string[] => {
