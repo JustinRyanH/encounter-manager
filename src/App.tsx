@@ -8,6 +8,7 @@ import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
 
 import "./App.css";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -15,6 +16,17 @@ const MockCharacters = [
   { name: 'Pippin', initiative: 5, hp: 4 },
   { name: 'Merry', initiative: 3, hp: 7 },
 ]
+
+function ManageEncounter({ encounter }: { encounter: Encounter }) {
+  const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
+  return (
+      <Stack>
+        <Button disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}>Start Encounter</Button>
+        <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}>Restart Encounter</Button>
+        <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}>Stop Encounter</Button>
+      </Stack>
+  )
+}
 
 function App() {
   const [opened, setOpened] = React.useState(false);
@@ -38,11 +50,7 @@ function App() {
           <Accordion.Item value="Manager Encounter">
             <Accordion.Control>Manager Encounter</Accordion.Control>
             <Accordion.Panel>
-              <Stack>
-                <Button onClick={() => encounter.startEncounter()}>Start Encounter</Button>
-                <Button color="gray" onClick={() => encounter.restartEncounter()}>Restart Encounter</Button>
-                <Button color="gray" onClick={() => encounter.stopEncounter()}>Stop Encounter</Button>
-              </Stack>
+              <ManageEncounter encounter={encounter} />
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>
