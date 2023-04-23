@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, AppShell, Burger, Button, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
+import { Accordion, AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { Encounter } from "~/services/encounter/Encounter";
@@ -8,7 +8,7 @@ import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
 
 import "./App.css";
-import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import { ManageEncounter } from "~/components/encounter/ManageEncounter";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -16,17 +16,6 @@ const MockCharacters = [
   { name: 'Pippin', initiative: 5, hp: 4 },
   { name: 'Merry', initiative: 3, hp: 7 },
 ]
-
-function ManageEncounter({ encounter }: { encounter: Encounter }) {
-  const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
-  return (
-      <Stack>
-        <Button disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}>Start Encounter</Button>
-        <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}>Restart Encounter</Button>
-        <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}>Stop Encounter</Button>
-      </Stack>
-  )
-}
 
 function App() {
   const [opened, setOpened] = React.useState(false);
