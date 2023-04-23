@@ -103,7 +103,7 @@ export class Encounters {
         });
     }
 
-    watchCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
+    onCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
         return this.#characterAddedSignal.connect(observer);
     }
 }

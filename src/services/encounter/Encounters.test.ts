@@ -61,7 +61,7 @@ describe('Encounters', function () {
             const characterB = new ActiveCharacter({ name: 'B', initiative: 15 });
 
             const encounters = new Encounters({ characters: [characterA, characterB] });
-            encounters.watchCharacterAdded(observer);
+            encounters.onCharacterAdded(observer);
 
 
             const newCharacter = new ActiveCharacter({ name: 'C', initiative: 20 });
