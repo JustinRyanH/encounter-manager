@@ -49,6 +49,6 @@ export function DisplayEncounter() {
     const { classes } = useStyles();
 
     return (<Accordion value={expanded} onChange={setExpanded} classNames={classes} chevronPosition="left" variant="separated" multiple>
-        {characters.map((c) => <EncounterCharacter character={c} key={c.id} />)}
+        {characters.map((c) => <EncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />)}
     </Accordion>);
 }
