@@ -23,6 +23,7 @@ import { UpdateNumber } from "~/components/systems/UpdateAttribute";
 import { IconCornerRightDownDouble } from "@tabler/icons-react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useDisclosure } from "@mantine/hooks";
+import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
 function InitiativeAttribute({ character }: { character: ActiveCharacter }) {
     const initiative = useWatchValueObserver(character.initiativeObserver);
@@ -105,15 +106,16 @@ function EncounterControl({ inPlay, nextTurn, ...props }: EncounterControlProps)
 
 interface EncounterCharacterProps {
     character: ActiveCharacter,
+    viewEncounter: ViewEncounter,
 }
 
-export function EncounterCharacter({ character }: EncounterCharacterProps): JSX.Element {
+export function EncounterCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
     const encounter = useEncounterContext();
 
     const inPlay = useWatchValueObserver(character.inPlayObserver);
     return (
         <Accordion.Item data-in-play={inPlay} value={character.id}>
-            <EncounterControl inPlay={inPlay} nextTurn={encounter.nextCharacter}>
+            <EncounterControl onClick={() => viewEncounter.toggle(character.id)} inPlay={inPlay} nextTurn={encounter.nextCharacter}>
                 <EncounterCharacterControl character={character} />
             </EncounterControl>
             <Accordion.Panel sx={{ padding: 0 }}>

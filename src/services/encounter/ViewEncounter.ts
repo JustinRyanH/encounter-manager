@@ -1,6 +1,6 @@
 import { Encounter } from "~/services/encounter/Encounter";
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
-import { ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
+import { ReadonlyValueObserver, ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
 
 export class ViewEncounter {
     #encounter: Encounter;
@@ -13,6 +13,10 @@ export class ViewEncounter {
 
     get openedCharacters(): Array<string> {
         return this.#openededCharacters.value;
+    }
+
+    get openedCharactersObserver(): ReadonlyValueObserver<string[]> {
+        return this.#openededCharacters.readonly;
     }
 
     open(characterId: string): void {
