@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, CSSObject, Group, NumberInput, Stack, TextInput, Title } from "@mantine/core";
-import { FormErrors, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 
 import { Encounters } from "~/services/Encounters";
 import { ActiveCharacter } from "~/services/ActiveCharacter";
