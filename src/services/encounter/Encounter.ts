@@ -1,6 +1,8 @@
+import { Signal, SignalConnection } from "typed-signals";
+
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/ValueObserver";
-import { Signal, SignalConnection } from "typed-signals";
+import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
 const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative - a.initiative;
 
@@ -15,6 +17,10 @@ export class Encounter {
 
     constructor({ characters }: { characters?: Array<ActiveCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
+    }
+
+    get newViewEncounter() {
+        return new ViewEncounter({ encounter: this });
     }
 
     /**
@@ -105,7 +111,7 @@ export class Encounter {
      * Signals when a new character is added to the encounter.
      * @param observer
      */
-    onCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
+    onCharacterAdded(observer: CharacterAddedMessage): SignalConnection {
         return this.#characterAddedSignal.connect(observer);
     }
 
