@@ -45,7 +45,7 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
         form.reset();
     };
     const handleError = () => {
-        notifyErrors({ errors: 'Could Not Add Character, some fields are invalid', title: 'Cannot Add Character' });
+        notifyErrors({ errors: 'some fields are invalid', title: 'Cannot Add Character' });
     };
 
     const onSubmit = form.onSubmit(handleSuccess, handleError)
@@ -54,14 +54,14 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
             <Stack>
                 <Title order={4}>Add Character</Title>
 
-                <TextInput styles={{ input, label }} label="Name" required {...form.getInputProps('name')} />
-                <NumberInput styles={{ input, label }} label="Initiative" required hideControls {...form.getInputProps('initiative')} />
+                <TextInput styles={{ input, label }} label="Name" withAsterisk {...form.getInputProps('name')} />
+                <NumberInput styles={{ input, label }} label="Initiative" withAsterisk hideControls {...form.getInputProps('initiative')} />
                 <Group position="apart" align="start" grow>
                     <NumberInput
                         styles={{ input, label}}
                         label="Total HP"
                         hideControls
-                        required
+                        withAsterisk
                         {...form.getInputProps('totalHp')}
                     />
                     <NumberInput
