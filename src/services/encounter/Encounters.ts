@@ -18,7 +18,6 @@ export class Encounters {
 
     constructor({ characters }: { characters?: Array<ActiveCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
-        this.setActiveCharacter(this.characters[0] || null);
     }
 
     /**
