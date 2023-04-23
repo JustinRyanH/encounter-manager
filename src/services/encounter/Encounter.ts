@@ -1,22 +1,10 @@
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
-import {
-    ReadonlyValueObserver,
-    StopObserving,
-    ValueObserver
-} from "~/services/ValueObserver";
+import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/ValueObserver";
 import { Signal, SignalConnection } from "typed-signals";
 
 const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative - a.initiative;
 
 type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
-
-class ViewEncounter {
-    #encounter: Encounter;
-
-    constructor({ encounter }: { encounter: Encounter }) {
-        this.#encounter = encounter;
-    }
-}
 
 export class Encounter {
     #lastActiveCharacter: ActiveCharacter | null = null;
