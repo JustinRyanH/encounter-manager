@@ -79,12 +79,12 @@ const NextButtonSx = {
     },
 };
 
-interface EncounterCharacterProps extends AccordionControlProps {
+interface EncounterControlProps extends AccordionControlProps {
     inPlay: boolean,
     nextTurn: () => void,
 }
 
-function EncounterControl({ inPlay, nextTurn, ...props  }: EncounterCharacterProps) {
+function EncounterControl({ inPlay, nextTurn, ...props }: EncounterControlProps) {
     return (<Paper radius="md">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Accordion.Control {...props} />
@@ -103,7 +103,11 @@ function EncounterControl({ inPlay, nextTurn, ...props  }: EncounterCharacterPro
     </Paper>);
 }
 
-export function EncounterCharacter({ character }: { character: ActiveCharacter }): JSX.Element {
+interface EncounterCharacterProps {
+    character: ActiveCharacter,
+}
+
+export function EncounterCharacter({ character }: EncounterCharacterProps): JSX.Element {
     const encounter = useEncounterContext();
 
     const inPlay = useWatchValueObserver(character.inPlayObserver);
