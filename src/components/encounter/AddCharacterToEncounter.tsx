@@ -13,6 +13,7 @@ interface EncounterFormProps {
     tmpHp: number | '',
 }
 
+// eslint-disable-next-line no-empty-pattern
 export function AddCharacterToEncounter({}: { encounter: Encounters; }) {
     const form = useForm<EncounterFormProps>({
         initialValues: {

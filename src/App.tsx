@@ -1,12 +1,13 @@
 import React from "react";
-import { AppShell, Burger, Divider, Header, MediaQuery, Navbar, rem, Stack, Title } from "@mantine/core";
+import { AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
 
-import "./App.css";
 import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { Encounters } from "~/services/Encounters";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
+
+import "./App.css";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -32,7 +33,7 @@ function App() {
     </Navbar.Section>
   </Navbar>);
 
-  const header = (<Header p="xs" height={{ base: rem(50), md: rem(70) }}>
+  const header = (<Header p="xs" height={{ base: '3rem', md: '4rem' }}>
     <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
       <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" mr="xl" />
     </MediaQuery>

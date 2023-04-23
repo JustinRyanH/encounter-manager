@@ -1,10 +1,4 @@
 import React, { FocusEventHandler, MouseEventHandler } from "react";
-import { ValueObserver } from "~/services/ValueObserver";
-
-interface UserAttributeProps<T> {
-    observer: ValueObserver<T>;
-    cannotEdit?: boolean;
-}
 
 interface EditableAttributeReturn {
     handleOnBlur: FocusEventHandler<HTMLElement>;

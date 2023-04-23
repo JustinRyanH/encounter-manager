@@ -1,11 +1,15 @@
 import {
     Accordion,
-    AccordionControlProps, ActionIcon, Box,
+    AccordionControlProps,
+    ActionIcon,
+    Box,
     Center,
     Group,
-    Paper, Popover, SimpleGrid,
-    Skeleton, Stack,
-    Text, UnstyledButton
+    Paper,
+    Popover,
+    SimpleGrid,
+    Skeleton,
+    Text
 } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/ActiveCharacter";
