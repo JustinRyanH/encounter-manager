@@ -22,6 +22,7 @@
     "@tauri-apps/api": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "typed-signals": "^2.5.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

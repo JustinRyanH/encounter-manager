@@ -28,6 +28,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  typed-signals:
+    specifier: ^2.5.0
+    version: 2.5.0
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -3854,6 +3857,10 @@ packages:
       for-each: 0.3.3
       is-typed-array: 1.1.10
     dev: true
+
+  /typed-signals@2.5.0:
+    resolution: {integrity: sha512-m9lHc3eBCJerXYdx+G0uWZihyUXdqTzzgOdqiDDsoUo75WjhFJH6vP5/6w/xhyu04zoxHUqgYhf9FEt85dk/Ng==}
+    dev: false
 
   /typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
