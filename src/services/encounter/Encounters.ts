@@ -4,13 +4,17 @@ import {
     StopObserving,
     ValueObserver
 } from "~/services/ValueObserver";
+import { Signal, SignalConnection } from "typed-signals";
 
 const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative - a.initiative;
+
+type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
 
 export class Encounters {
     #initiativeMap: Map<string, StopObserving> = new Map();
     #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);
     #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<Array<ActiveCharacter>>([]);
+    #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
     constructor({ characters }: { characters?: Array<ActiveCharacter> } = {}) {
         if (characters) this.setCharacters(characters);
@@ -48,6 +52,7 @@ export class Encounters {
      */
     addCharacter = (initiativeCharacter: ActiveCharacter) => {
         this.setCharacters([...this.characters, initiativeCharacter]);
+        this.#characterAddedSignal.emit({ character: initiativeCharacter });
     }
 
     /**
@@ -96,5 +101,9 @@ export class Encounters {
         this.characters.forEach((character) => {
             if (character !== this.activeCharacter) character.inPlay = false;
         });
+    }
+
+    watchCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
+        return this.#characterAddedSignal.connect(observer);
     }
 }

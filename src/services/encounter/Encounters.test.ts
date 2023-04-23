@@ -54,6 +54,21 @@ describe('Encounters', function () {
 
             expect(encounters.characters.map(c => c.name)).toEqual(['C', 'B', 'A', 'D']);
         });
+
+        test('notifies the `characterAdded` signal', function () {
+            const observer = vi.fn();
+            const characterA = new ActiveCharacter({ name: 'A', initiative: 5 });
+            const characterB = new ActiveCharacter({ name: 'B', initiative: 15 });
+
+            const encounters = new Encounters({ characters: [characterA, characterB] });
+            encounters.watchCharacterAdded(observer);
+
+
+            const newCharacter = new ActiveCharacter({ name: 'C', initiative: 20 });
+            encounters.addCharacter(newCharacter);
+
+            expect(observer).toHaveBeenCalledWith({ character: newCharacter });
+        });
     });
 
     describe('auto sorting characters', function () {
