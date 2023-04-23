@@ -1,5 +1,5 @@
 import React from "react";
-import { AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
+import { Accordion, AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { Encounters } from "~/services/encounter/Encounters";
@@ -28,7 +28,14 @@ function App() {
       <Stack>
         <Title align="center" order={3}>Encounter Manager</Title>
         <Divider />
-        <AddCharacterToEncounter encounter={encounter} />
+        <Accordion>
+          <Accordion.Item value="Add Character">
+            <Accordion.Control>Add Character</Accordion.Control>
+            <Accordion.Panel>
+              <AddCharacterToEncounter encounter={encounter} />
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
       </Stack>
     </Navbar.Section>
   </Navbar>);

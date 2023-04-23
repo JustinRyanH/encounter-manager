@@ -52,8 +52,6 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
     return (
         <form onSubmit={onSubmit}>
             <Stack>
-                <Title order={4}>Add Character</Title>
-
                 <TextInput styles={{ input, label }} label="Name" withAsterisk {...form.getInputProps('name')} />
                 <NumberInput styles={{ input, label }} label="Initiative" withAsterisk hideControls {...form.getInputProps('initiative')} />
                 <Group position="apart" align="start" grow>
