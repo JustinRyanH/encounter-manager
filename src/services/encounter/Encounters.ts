@@ -72,6 +72,10 @@ export class Encounters {
         this.setActiveCharacter(this.characters[nextCharacterIndex]);
     };
 
+    onCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
+        return this.#characterAddedSignal.connect(observer);
+    }
+
     private setCharacters = (characters: Array<ActiveCharacter>) => {
         this.#characters.value = [...characters].sort(sortInitiative);
         this.characters.forEach((character) => {
@@ -101,9 +105,5 @@ export class Encounters {
         this.characters.forEach((character) => {
             if (character !== this.activeCharacter) character.inPlay = false;
         });
-    }
-
-    onCharacterAdded(observer: CharacterAddedMessage): SignalConnection  {
-        return this.#characterAddedSignal.connect(observer);
     }
 }
