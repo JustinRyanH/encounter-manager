@@ -5,6 +5,7 @@ import { FormErrors, useForm } from "@mantine/form";
 import { Encounters } from "~/services/Encounters";
 import { ActiveCharacter } from "~/services/ActiveCharacter";
 import { HitPoints } from "~/services/HitPoints";
+import { notifyErrors } from "~/services/notifications";
 
 interface EncounterFormProps {
     name: string,
@@ -42,7 +43,9 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
         encounter.addCharacter(newCharacter);
         form.reset();
     };
-    const handleError = (errors: FormErrors) => console.log(errors);
+    const handleError = () => {
+        notifyErrors({ errors: 'Could Not Add Character, some fields are invalid', title: 'Cannot Add Character' });
+    };
 
     const onSubmit = form.onSubmit(handleSuccess, handleError)
     return (
@@ -51,8 +54,8 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounters; 
                 <Title order={4}>Add Character</Title>
 
                 <TextInput styles={{ input, label }} label="Name" required {...form.getInputProps('name')} />
-                <NumberInput styles={{ input, label }} label="Initiative" hideControls required {...form.getInputProps('initiative')} />
-                <Group position="apart" grow>
+                <NumberInput styles={{ input, label }} label="Initiative" required hideControls {...form.getInputProps('initiative')} />
+                <Group position="apart" align="start" grow>
                     <NumberInput
                         styles={{ input, label}}
                         label="Total HP"
