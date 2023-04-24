@@ -9,6 +9,10 @@ import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEn
 
 import "./App.css";
 
+function FileExperiment() {
+  return <p>Manage Files</p>;
+}
+
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
   { name: 'Sam', initiative: 19, hp: 6 },
@@ -38,9 +42,7 @@ function App() {
 
           <Accordion.Item value="Manage Files">
             <Accordion.Control>Files</Accordion.Control>
-            <Accordion.Panel>
-              <p>Manage Files</p>
-            </Accordion.Panel>
+            <Accordion.Panel><FileExperiment /></Accordion.Panel>
           </Accordion.Item>
         </Accordion>
       </Stack>
