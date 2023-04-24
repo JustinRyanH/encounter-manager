@@ -8,10 +8,7 @@ import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
 
 import "./App.css";
-
-function FileExperiment() {
-  return <p>Manage Files</p>;
-}
+import { FileExperiment } from "~/components/FileExperiment";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
