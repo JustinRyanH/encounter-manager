@@ -6,9 +6,9 @@ import { Encounter } from "~/services/encounter/Encounter";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
+import { FileExperiment } from "~/components/FileExperiment";
 
 import "./App.css";
-import { FileExperiment } from "~/components/FileExperiment";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
