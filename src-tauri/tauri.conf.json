@@ -20,8 +20,9 @@
       "fs": {
         "all": true,
         "scope": [
-          "$APPDATA/encounter-manager/*",
-          "$DESKTOP/*"
+          "$DESKTOP/*",
+          "$DOCUMENT/*",
+          "$APPDATA/*"
         ]
       },
       "path": {
