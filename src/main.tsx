@@ -4,8 +4,11 @@ import ReactDOM from "react-dom/client";
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
+import { FileManagerProvider, TauriFileManager } from "~/components/FileManager";
+
 import App from "./App";
 
+const fileManager = new TauriFileManager();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <MantineProvider
@@ -34,7 +37,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             }}
         >
             <Notifications autoClose={2000} />
-            <App />
+            <FileManagerProvider fileManager={fileManager}>
+                <App />
+            </FileManagerProvider>
         </MantineProvider>
     </React.StrictMode>
 );

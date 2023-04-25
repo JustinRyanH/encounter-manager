@@ -3,6 +3,7 @@ import { Button, Stack } from "@mantine/core";
 import { invoke } from "@tauri-apps/api";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { v4 } from "uuid";
+import { useFileManager } from "~/components/FileManager";
 
 class ListenSingleton {
     private static instance: ListenSingleton;
@@ -11,10 +12,8 @@ class ListenSingleton {
 
     static get(): ListenSingleton {
         if (!ListenSingleton.instance) {
-            console.log('creating');
             ListenSingleton.instance = new ListenSingleton();
         }
-        console.log('created');
         return ListenSingleton.instance;
     }
 
@@ -39,14 +38,9 @@ class ListenSingleton {
 
 
 export function FileExperiment() {
-    React.useEffect(() => {
-        ListenSingleton.get();
-    });
-    const doStuff = async () => {
-        const result = await invoke("test_data");
-        console.log(result);
-    }
+    const fileManager = useFileManager();
+    React.useEffect(() => console.log('fileManager.uuid', fileManager.uuid), [fileManager]);
     return <Stack>
-        <Button onClick={doStuff}>Do Stuff</Button>
+        <Button>Do Stuff</Button>
     </Stack>
 }
