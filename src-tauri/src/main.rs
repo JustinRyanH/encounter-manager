@@ -4,13 +4,7 @@
 use std::fs;
 use tauri::api::path::document_dir;
 
-const ENCOUNTER_MANAGER_DIRECTORY: &'static str = "Encounter Manager";
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
 
 #[tauri::command]
 fn browse_document_files() -> Result<Vec<String>, String> {
@@ -38,7 +32,7 @@ fn browse_document_files() -> Result<Vec<String>, String> {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, browse_document_files])
+        .invoke_handler(tauri::generate_handler![browse_document_files])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
