@@ -2,11 +2,32 @@ import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { Event } from "@tauri-apps/api/event";
 import { v4 } from "uuid";
 
-interface ExampleStruct {
-    name: string;
-    age: number;
-}
+class TauriConnection<T> {
+    #isWatching = false;
+    stopListening: UnlistenFn | null = null;
+    #name;
 
+    constructor({ name }: { name: string }) {
+        this.#name = name;
+
+    }
+
+    get name() {
+        return this.#name;
+    }
+
+    async start() {
+        if (this.stopListening) return;
+        if (this.#isWatching) return;
+        const unListenPromise = listen(this.name, this.receiveMessage);
+        this.#isWatching = true;
+        this.stopListening = await unListenPromise;
+    }
+
+    private receiveMessage = (message: Event<T>) => {
+        console.log(message);
+    };
+}
 export class BaseFileManager {
     #uuid: string;
 
@@ -29,22 +50,20 @@ export class NullFileManger extends BaseFileManager {
     }
 }
 
+interface ExampleStruct {
+    name: string;
+    age: number,
+}
+
 export class TauriFileManager extends BaseFileManager {
-    #watching = false;
-    #unListen: UnlistenFn | null = null;
+    #connection;
 
     constructor() {
         super();
+        this.#connection = new TauriConnection<ExampleStruct>({ name: "test" });
     }
 
     async startWatching() {
-        if (this.#unListen) console.log('unListen', this.#unListen);
-        if (this.#watching) return;
-        const unListenPromise = listen("test", (e: Event<ExampleStruct>) => {
-            console.log(e.payload)
-        });
-        console.log('start watching');
-        this.#watching = true;
-        this.#unListen = await unListenPromise;
+        this.#connection.start();
     }
 }
