@@ -1,5 +1,11 @@
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import { Event } from "@tauri-apps/api/event";
 import { v4 } from "uuid";
+
+interface ExampleStruct {
+    name: string;
+    age: number;
+}
 
 export class BaseFileManager {
     #uuid: string;
@@ -34,8 +40,8 @@ export class TauriFileManager extends BaseFileManager {
     async startWatching() {
         if (this.#unListen) console.log('unListen', this.#unListen);
         if (this.#watching) return;
-        const unListenPromise = listen("test", (e) => {
-            console.log(e)
+        const unListenPromise = listen("test", (e: Event<ExampleStruct>) => {
+            console.log(e.payload)
         });
         console.log('start watching');
         this.#watching = true;

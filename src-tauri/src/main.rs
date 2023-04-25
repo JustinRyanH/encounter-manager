@@ -4,6 +4,7 @@
 use std::fs;
 use std::sync::Arc;
 use tokio::sync::Mutex;
+use serde::Serialize;
 use tauri::api::path::document_dir;
 use tauri::{generate_context, Manager, Runtime, State, Wry};
 
@@ -21,12 +22,21 @@ impl<R: Runtime> ArcData<R> {
     }
 }
 
+#[derive(Serialize)]
+struct ExampleStruct {
+    pub name: String,
+    pub age: u8,
+}
+
 #[tauri::command]
 async fn test_data(state: DataState<'_, Wry>) -> Result<(), String> {
     let data = state.0.lock().await;
     let app_handle = data.app_handle.clone();
     app_handle
-        .emit_all("test", Some("test"))
+        .emit_all("test", &ExampleStruct {
+            name: "test".to_string(),
+            age: 42,
+        })
         .expect("failed to emit");
     Ok(())
 }
