@@ -1,22 +1,52 @@
 import React from "react";
-import { invoke } from '@tauri-apps/api';
-import { notifications } from "@mantine/notifications";
-import { Stack, Text } from "@mantine/core";
+import { Button, Stack } from "@mantine/core";
+import { invoke } from "@tauri-apps/api";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import { v4 } from "uuid";
+
+class ListenSingleton {
+    private static instance: ListenSingleton;
+    #stopListening: UnlistenFn | null = null;
+    #uuid ;
+
+    static get(): ListenSingleton {
+        if (!ListenSingleton.instance) {
+            console.log('creating');
+            ListenSingleton.instance = new ListenSingleton();
+        }
+        console.log('created');
+        return ListenSingleton.instance;
+    }
+
+    private constructor() {
+        this.#uuid = v4();
+        this.setupListener();
+    }
+
+    get uuid() {
+        return this.#uuid;
+    }
+
+    private async setupListener() {
+        this.#stopListening = await listen(
+            "test",
+            (event) => console.log(this.uuid, event)
+        );
+    }
+}
+
+
+
 
 export function FileExperiment() {
-    const [files, setFiles] = React.useState<string[]>([]);
     React.useEffect(() => {
-        invoke('browse_document_files')
-            .then((result) => setFiles(result as string[]))
-            .catch((error) => {
-                notifications.show({
-                    title: 'Error',
-                    message: error,
-                    color: 'red',
-                });
-            });
-    }, []);
+        ListenSingleton.get();
+    });
+    const doStuff = async () => {
+        const result = await invoke("test_data");
+        console.log(result);
+    }
     return <Stack>
-        {files.map((f) => <Text key={f}>{f}</Text>)}
+        <Button onClick={doStuff}>Do Stuff</Button>
     </Stack>
 }
