@@ -39,8 +39,11 @@ class ListenSingleton {
 
 export function FileExperiment() {
     const fileManager = useFileManager();
-    React.useEffect(() => console.log('fileManager.uuid', fileManager.uuid), [fileManager]);
+    React.useEffect(() => {
+        fileManager.startWatching();
+        console.log('fileManager.uuid', fileManager.uuid);
+    }, [fileManager]);
     return <Stack>
-        <Button>Do Stuff</Button>
+        <Button onClick={() => invoke('test_data')}>Do Stuff</Button>
     </Stack>
 }
