@@ -1,6 +1,6 @@
 import React from "react";
 import { v4 } from "uuid";
-import { EventCallback, listen, UnlistenFn } from "@tauri-apps/api/event";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 
 
 export class BaseFileManager {
