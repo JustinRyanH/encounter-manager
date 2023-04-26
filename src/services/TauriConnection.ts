@@ -65,7 +65,6 @@ export class TauriConnection<T> {
 
     private receiveMessage = (message: Event<T>) => {
         this.#signal.emit(message.payload);
-        console.log(message);
     };
 
     private get signal() {
