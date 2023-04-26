@@ -55,6 +55,7 @@ describe('TauriConnection', function () {
             vi.runOnlyPendingTimers();
             vi.useRealTimers();
         });
+
         test('stop listening to the tauri event', async () => {
             vi.useFakeTimers();
             const connection = new TauriConnection({ name: 'test' });
@@ -69,5 +70,14 @@ describe('TauriConnection', function () {
 
             expect(stopListening).toHaveBeenCalled();
         });
+    });
+
+    describe('addConnection', function () {
+        test('pushing changes from tauri to the connection callback', () => {});
+    });
+
+    describe('removeConnection', function () {
+        test('stop pushing changes from tauri to the connection callback', () => {});
+
     });
 });
