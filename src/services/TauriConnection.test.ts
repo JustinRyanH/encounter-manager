@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, afterEach, Mock } from 'vitest';
+import { describe, test, expect, vi, afterEach, Mock, beforeEach } from 'vitest';
 import { listen } from '@tauri-apps/api/event';
 
 import {TauriConnection} from "~/services/TauriConnection";
@@ -7,10 +7,13 @@ vi.mock('@tauri-apps/api/event');
 
 describe('TauriConnection', function () {
     const stopListening = vi.fn();
+    beforeEach(() => {
+        (listen as Mock).mockResolvedValue(stopListening);
+    });
+
     afterEach(() => {
         vi.clearAllMocks();
         stopListening.mockClear();
-        (listen as Mock).mockResolvedValue(stopListening);
     });
 
     test('it initializes with a name', () => {
@@ -40,6 +43,31 @@ describe('TauriConnection', function () {
 
             expect(connection.isWatching).toEqual(true);
             expect(connection.isAbleToStop).toEqual(true);
+        });
+    });
+
+    describe('stop', () => {
+        beforeEach(() => {
+            vi.useFakeTimers()
+        });
+
+        afterEach(() => {
+            vi.runOnlyPendingTimers();
+            vi.useRealTimers();
+        });
+        test('stop listening to the tauri event', async () => {
+            vi.useFakeTimers();
+            const connection = new TauriConnection({ name: 'test' });
+            await connection.start();
+
+            expect(connection.isWatching).toEqual(true);
+            expect(connection.isAbleToStop).toEqual(true);
+
+            const result = connection.stop();
+            vi.runAllTimers();
+            await expect(result).resolves.toBeUndefined();
+
+            expect(stopListening).toHaveBeenCalled();
         });
     });
 });

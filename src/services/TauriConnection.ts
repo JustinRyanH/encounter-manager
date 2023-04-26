@@ -42,14 +42,14 @@ export class TauriConnection<T> {
         return await new Promise((resolve) => {
             this.#map.forEach((connection) => connection.disconnect());
             const internal = setInterval(() => {
-                if (this.#waitingForStopListening) {
+                if (this.isAbleToStop) {
                     if (this.#stopListening) this.#stopListening();
                     if (!this.#stopListening) console.error("Something went very wrong");
                     this.#stopListening = null;
                     clearInterval(internal);
                     resolve();
                 }
-            });
+            }, 100);
         });
     }
 
