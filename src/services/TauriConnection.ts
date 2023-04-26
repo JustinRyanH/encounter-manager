@@ -20,6 +20,10 @@ export class TauriConnection<T> {
         return this.#name;
     }
 
+    get isWatching() {
+        return this.#isWatching;
+    }
+
     async start() {
         if (this.#stopListening) return;
         if (this.#isWatching) return;
