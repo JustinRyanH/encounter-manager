@@ -25,11 +25,11 @@ export class TauriConnection<T> {
     }
 
     get isAbleToStop() {
-        return !this.#waitingForStopListening;
+        return Boolean(this.#stopListening);
     }
 
     async start() {
-        if (this.#stopListening) return;
+        if (this.isAbleToStop) return;
         if (this.#isWatching) return;
         this.#waitingForStopListening = true;
         const unListenPromise = listen(this.name, this.receiveMessage);
@@ -45,6 +45,7 @@ export class TauriConnection<T> {
                 if (this.#waitingForStopListening) {
                     if (this.#stopListening) this.#stopListening();
                     if (!this.#stopListening) console.error("Something went very wrong");
+                    this.#stopListening = null;
                     clearInterval(internal);
                     resolve();
                 }

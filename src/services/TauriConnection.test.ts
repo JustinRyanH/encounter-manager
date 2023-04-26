@@ -1,8 +1,18 @@
-import { describe, test, expect, vi } from 'vitest';
-import { listen, UnlistenFn } from '@tauri-apps/api/event';
+import { describe, test, expect, vi, afterEach, Mock } from 'vitest';
+import { listen } from '@tauri-apps/api/event';
 
 import {TauriConnection} from "~/services/TauriConnection";
+
+vi.mock('@tauri-apps/api/event');
+
 describe('TauriConnection', function () {
+    const stopListening = vi.fn();
+    afterEach(() => {
+        vi.clearAllMocks();
+        stopListening.mockClear();
+        (listen as Mock).mockResolvedValue(stopListening);
+    });
+
     test('it initializes with a name', () => {
         const connection = new TauriConnection({ name: 'test' });
         expect(connection.name).toEqual('test');
@@ -10,7 +20,6 @@ describe('TauriConnection', function () {
 
     describe('start', () => {
         test('the connection starts listening to the tauri event', async () => {
-            vi.mock('@tauri-apps/api/event');
             const connection = new TauriConnection({ name: 'test' });
             await connection.start();
 
