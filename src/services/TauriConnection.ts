@@ -24,14 +24,18 @@ export class TauriConnection<T> {
         return this.#isWatching;
     }
 
+    get isAbleToStop() {
+        return !this.#waitingForStopListening;
+    }
+
     async start() {
         if (this.#stopListening) return;
         if (this.#isWatching) return;
         this.#waitingForStopListening = true;
         const unListenPromise = listen(this.name, this.receiveMessage);
         this.#isWatching = true;
-        this.#waitingForStopListening = false;
         this.#stopListening = await unListenPromise;
+        this.#waitingForStopListening = false;
     }
 
     async stop(): Promise<void> {

@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { listen } from '@tauri-apps/api/event';
+import { listen, UnlistenFn } from '@tauri-apps/api/event';
 
 import {TauriConnection} from "~/services/TauriConnection";
 describe('TauriConnection', function () {
@@ -23,6 +23,14 @@ describe('TauriConnection', function () {
             await connection.start();
 
             expect(listen).toHaveBeenCalledTimes(1);
+        });
+
+        test('sets up a stopListening function', async () => {
+            const connection = new TauriConnection({ name: 'test' });
+            await connection.start();
+
+            expect(connection.isWatching).toEqual(true);
+            expect(connection.isAbleToStop).toEqual(true);
         });
     });
 });
