@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use serde::Serialize;
+use notify::{Watcher, RecursiveMode, RecommendedWatcher};
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
 use tokio::sync::Mutex;
 
@@ -19,8 +20,27 @@ impl ArcData {
         Self(Arc::new(Mutex::new(data)))
     }
 
-    pub fn start_main_loop(self) {
+    pub fn start_main_loop(self) -> Result<(), String> {
+        let mut watcher = notify::recommended_watcher(move |res| {
+            match res {
+                Ok(event) => {
+                    println!("event: {:?}", event);
+                }
+                Err(e) => println!("watch error: {:?}", e),
+            };
+        }).map_err(|e| e.to_string())?;
+
         async_runtime::spawn(async move {
+            let watch_path = {
+                let mut path = tauri::api::path::document_dir().expect("Could not find Document Directory");
+                path.push("Encounter Manager");
+                if !path.clone().exists() {
+                    std::fs::create_dir(path.clone()).expect("Could not create directory");
+                }
+                path
+            };
+
+            watcher.watch(watch_path.as_path(), RecursiveMode::Recursive).expect("Could not watch directory");
             loop {
                 let data = self.0.lock().await;
                 data.app_handle.emit_all("test",
@@ -32,6 +52,7 @@ impl ArcData {
                 tokio::time::sleep(std::time::Duration::from_secs(1)).await;
             }
         });
+        Ok(())
     }
 }
 
