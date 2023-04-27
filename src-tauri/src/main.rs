@@ -8,7 +8,8 @@ use std::time::Duration;
 use tauri::api::path::document_dir;
 use tauri::{async_runtime, generate_context, Manager};
 
-use services::data::{ArcData, Data, DataState, ExampleStruct};
+use services::data::{ArcData, BackgroundData, DataState, ExampleStruct};
+use crate::services::data;
 
 const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
 
@@ -58,26 +59,10 @@ fn main() {
     tauri::Builder::default()
         .setup(|app| {
             let app_handle = app.handle();
-            let data = Data { app_handle };
-            let arc_data = ArcData::new(data);
+            let bg_data = BackgroundData { app_handle };
+            let arc_data = ArcData::new(bg_data);
 
-            let arc_data_copy = arc_data.clone();
-            async_runtime::spawn(async move {
-                let local = arc_data_copy;
-                loop {
-                    let data = local.0.lock().await;
-                    data.app_handle
-                        .emit_all(
-                            "test",
-                            &ExampleStruct {
-                                name: "test".to_string(),
-                                age: 42,
-                            },
-                        )
-                        .expect("failed to emit");
-                    tokio::time::sleep(Duration::from_secs(5)).await;
-                }
-            });
+            data::start(&arc_data).expect("failed to start data");
             app.manage(arc_data);
             Ok(())
         })
