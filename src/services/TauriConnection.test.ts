@@ -5,6 +5,10 @@ import { TauriConnection } from "~/services/TauriConnection";
 
 vi.mock('@tauri-apps/api/event');
 
+interface TestEvent {
+    payload: string;
+}
+
 describe('TauriConnection', function () {
     const stopListening = vi.fn();
     beforeEach(() => {
@@ -78,12 +82,6 @@ describe('TauriConnection', function () {
             const callback = vi.fn();
             connection.addConnection(callback);
         });
-    });
-
-    describe('removeConnection', function () {
-        interface TestEvent {
-            payload: string;
-        }
 
         test('stop pushing changes from tauri to the connection callback', async () => {
             let outerCallback: (message: TestEvent) => void = () => { };
@@ -103,4 +101,6 @@ describe('TauriConnection', function () {
             expect(callback).toHaveBeenCalledWith('test');
         });
     });
+
+    describe('removeConnection', function () { });
 });
