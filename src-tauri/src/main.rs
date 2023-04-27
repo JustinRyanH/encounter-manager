@@ -4,12 +4,12 @@
 mod services;
 
 use std::fs;
-use std::time::Duration;
 use tauri::api::path::document_dir;
-use tauri::{async_runtime, generate_context, Manager};
+use tauri::{generate_context, Manager};
 
-use services::data::{ArcData, BackgroundData, DataState, ExampleStruct};
+use services::data::{ExampleStruct};
 use crate::services::data;
+use crate::services::data::DataState;
 
 const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
 
@@ -58,11 +58,7 @@ fn browse_document_files() -> Result<Vec<String>, String> {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let app_handle = app.handle();
-            let bg_data = BackgroundData { app_handle };
-            let arc_data = ArcData::new(bg_data);
-
-            data::start(&arc_data).expect("failed to start data");
+            let arc_data = data::start(app.handle())?;
             app.manage(arc_data);
             Ok(())
         })

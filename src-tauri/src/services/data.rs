@@ -26,8 +26,11 @@ pub struct ExampleStruct {
     pub age: u8,
 }
 
-pub fn start(data: &ArcData) -> Result<(), String> {
-    let data = data.clone();
+pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
+    let data_out = ArcData::new(BackgroundData {
+        app_handle: app_handle.clone(),
+    });
+    let data = data_out.clone();
     async_runtime::spawn(async move {
         loop {
             let data = data.0.lock().await;
@@ -40,5 +43,5 @@ pub fn start(data: &ArcData) -> Result<(), String> {
             tokio::time::sleep(std::time::Duration::from_secs(1)).await;
         }
     });
-    Ok(())
+    Ok(data_out)
 }
