@@ -10,6 +10,7 @@ import App from "./App";
 import { TauriFileManager } from "~/services/FileManager";
 
 const fileManager = new TauriFileManager();
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <MantineProvider

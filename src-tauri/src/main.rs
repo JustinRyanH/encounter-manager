@@ -4,8 +4,9 @@
 use serde::Serialize;
 use std::fs;
 use std::sync::Arc;
+use std::time::Duration;
 use tauri::api::path::document_dir;
-use tauri::{generate_context, Manager, Runtime, State, Wry};
+use tauri::{async_runtime, generate_context, Manager, Runtime, State, Wry};
 use tokio::sync::Mutex;
 
 const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
@@ -15,10 +16,13 @@ pub struct Data<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
 }
 
-pub type DataState<'a, R> = State<'a, ArcData<R>>;
-pub struct ArcData<R: Runtime>(pub Arc<Mutex<Data<R>>>);
-impl<R: Runtime> ArcData<R> {
-    pub fn new(data: Data<R>) -> Self {
+pub type DataState<'a> = State<'a, ArcData>;
+
+#[derive(Clone)]
+pub struct ArcData(pub Arc<Mutex<Data<Wry>>>);
+
+impl ArcData {
+    pub fn new(data: Data<Wry>) -> Self {
         Self(Arc::new(Mutex::new(data)))
     }
 }
@@ -30,7 +34,7 @@ struct ExampleStruct {
 }
 
 #[tauri::command]
-async fn test_data(state: DataState<'_, Wry>) -> Result<(), String> {
+async fn test_data(state: DataState<'_>) -> Result<(), String> {
     let data = state.0.lock().await;
     let app_handle = data.app_handle.clone();
     app_handle
@@ -77,6 +81,24 @@ fn main() {
             let app_handle = app.handle();
             let data = Data { app_handle };
             let arc_data = ArcData::new(data);
+
+            let arc_data_copy = arc_data.clone();
+            async_runtime::spawn(async move {
+                let local = arc_data_copy;
+                loop {
+                    let data = local.0.lock().await;
+                    data.app_handle
+                        .emit_all(
+                            "test",
+                            &ExampleStruct {
+                                name: "test".to_string(),
+                                age: 42,
+                            },
+                        )
+                        .expect("failed to emit");
+                    tokio::time::sleep(Duration::from_secs(5)).await;
+                }
+            });
             app.manage(arc_data);
             Ok(())
         })

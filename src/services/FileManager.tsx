@@ -34,6 +34,7 @@ export class TauriFileManager extends BaseFileManager {
     constructor() {
         super();
         this.#connection = new TauriConnection<ExampleStruct>({ name: "test" });
+        this.#connection.addConnection(console.log);
     }
 
     async startWatching() {
