@@ -1,15 +1,16 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use serde::Serialize;
 use std::fs;
 use std::sync::Arc;
-use tokio::sync::Mutex;
-use serde::Serialize;
 use tauri::api::path::document_dir;
 use tauri::{generate_context, Manager, Runtime, State, Wry};
+use tokio::sync::Mutex;
 
 const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
 
+#[derive(Clone)]
 pub struct Data<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
 }
@@ -33,10 +34,13 @@ async fn test_data(state: DataState<'_, Wry>) -> Result<(), String> {
     let data = state.0.lock().await;
     let app_handle = data.app_handle.clone();
     app_handle
-        .emit_all("test", &ExampleStruct {
-            name: "test".to_string(),
-            age: 42,
-        })
+        .emit_all(
+            "test",
+            &ExampleStruct {
+                name: "test".to_string(),
+                age: 42,
+            },
+        )
         .expect("failed to emit");
     Ok(())
 }
@@ -61,7 +65,9 @@ fn browse_document_files() -> Result<Vec<String>, String> {
         Err(_) => None,
     });
 
-    let out: Vec<String> = file_names.filter_map(|path| path.into_string().ok()).collect();
+    let out: Vec<String> = file_names
+        .filter_map(|path| path.into_string().ok())
+        .collect();
     Ok(out)
 }
 
@@ -69,7 +75,7 @@ fn main() {
     tauri::Builder::default()
         .setup(|app| {
             let app_handle = app.handle();
-            let data = Data { app_handle: app_handle.clone() };
+            let data = Data { app_handle };
             let arc_data = ArcData::new(data);
             app.manage(arc_data);
             Ok(())
