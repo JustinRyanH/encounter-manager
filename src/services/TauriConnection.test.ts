@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, afterEach, Mock, beforeEach } from 'vitest';
 import { listen } from '@tauri-apps/api/event';
 
-import {TauriConnection} from "~/services/TauriConnection";
+import { TauriConnection } from "~/services/TauriConnection";
 
 vi.mock('@tauri-apps/api/event');
 
@@ -73,11 +73,34 @@ describe('TauriConnection', function () {
     });
 
     describe('addConnection', function () {
-        test('pushing changes from tauri to the connection callback', () => {});
+        test('pushing changes from tauri to the connection callback', () => {
+            const connection = new TauriConnection({ name: 'test' });
+            const callback = vi.fn();
+            connection.addConnection(callback);
+        });
     });
 
     describe('removeConnection', function () {
-        test('stop pushing changes from tauri to the connection callback', () => {});
+        interface TestEvent {
+            payload: string;
+        }
 
+        test('stop pushing changes from tauri to the connection callback', async () => {
+            let outerCallback: (message: TestEvent) => void = () => { };
+            (listen as Mock).mockImplementation((_name, cb) => {
+                outerCallback = cb;
+                return stopListening;
+            });
+            const connection = new TauriConnection<string>({ name: 'test' });
+            await connection.start();
+            const callback = vi.fn();
+
+            connection.addConnection(callback);
+
+            expect(outerCallback).toBeDefined();
+            outerCallback({ payload: 'test' });
+
+            expect(callback).toHaveBeenCalledWith('test');
+        });
     });
 });
