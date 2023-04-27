@@ -1,8 +1,8 @@
-use tauri::{async_runtime, Manager, Runtime, State, Wry};
 use std::sync::Arc;
-use tokio::sync::Mutex;
-use serde::Serialize;
 
+use serde::Serialize;
+use tauri::{async_runtime, Manager, Runtime, State, Wry};
+use tokio::sync::Mutex;
 
 #[derive(Clone)]
 pub struct BackgroundData<R: Runtime> {
