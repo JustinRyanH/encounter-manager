@@ -78,6 +78,25 @@ describe('TauriConnection', function () {
 
             expect(stopListening).toHaveBeenCalled();
         });
+
+        test('is disconnect all of the connections', async () => {
+            const connection = new TauriConnection({ name: 'test' });
+            await connection.start();
+            const callback = vi.fn();
+            connection.addConnection(callback);
+
+            expect(connection.isWatching).toEqual(true);
+            expect(connection.isAbleToStop).toEqual(true);
+
+            expect(connection.numberOfConnections).toEqual(1);
+
+            const result = connection.stop();
+            vi.runAllTimers();
+            await expect(result).resolves.toBeUndefined();
+
+            expect(callback).not.toHaveBeenCalled();
+            expect(connection.numberOfConnections).toEqual(0);
+        });
     });
 
     describe('addConnection', function () {

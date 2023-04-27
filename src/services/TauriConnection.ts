@@ -28,6 +28,10 @@ export class TauriConnection<T> {
         return Boolean(this.#stopListening);
     }
 
+    get numberOfConnections() {
+        return this.#map.size;
+    }
+
     async start() {
         if (this.isAbleToStop) return;
         if (this.#isWatching) return;
@@ -41,6 +45,7 @@ export class TauriConnection<T> {
     async stop(): Promise<void> {
         return await new Promise((resolve) => {
             this.#map.forEach((connection) => connection.disconnect());
+            this.#map.clear();
             const internal = setInterval(() => {
                 if (this.isAbleToStop) {
                     if (this.#stopListening) this.#stopListening();
