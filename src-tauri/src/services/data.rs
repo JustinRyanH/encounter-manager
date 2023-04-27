@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use serde::Serialize;
-use notify::{Watcher, RecursiveMode, RecommendedWatcher};
+use notify::{Watcher, RecursiveMode};
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
 use tokio::sync::Mutex;
 
@@ -67,6 +67,6 @@ pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
     let data_out = ArcData::new(BackgroundData {
         app_handle: app_handle.clone(),
     });
-    data_out.clone().start_main_loop();
+    data_out.clone().start_main_loop()?;
     Ok(data_out)
 }
