@@ -101,5 +101,19 @@ describe('TauriConnection', function () {
         });
     });
 
-    describe('removeConnection', function () { });
+    describe('removeConnection', function () {
+        test('stop pushing changes from tauri to the connection callback', async () => {
+            const connection = new TauriConnection<string>({ name: 'test' });
+            await connection.start();
+            const callback = vi.fn();
+
+            connection.addConnection(callback);
+            connection.removeConnection(callback);
+
+            expect(outerCallback).toBeDefined();
+            outerCallback({ payload: 'test' });
+
+            expect(callback).not.toHaveBeenCalled();
+        });
+    });
 });
