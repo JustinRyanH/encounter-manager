@@ -11,8 +11,12 @@ interface TestEvent {
 
 describe('TauriConnection', function () {
     const stopListening = vi.fn();
+    let outerCallback: (message: TestEvent) => void = () => { };
     beforeEach(() => {
-        (listen as Mock).mockResolvedValue(stopListening);
+        (listen as Mock).mockImplementation((_name, cb) => {
+            outerCallback = cb;
+            return stopListening;
+        });
     });
 
     afterEach(() => {
@@ -84,11 +88,6 @@ describe('TauriConnection', function () {
         });
 
         test('stop pushing changes from tauri to the connection callback', async () => {
-            let outerCallback: (message: TestEvent) => void = () => { };
-            (listen as Mock).mockImplementation((_name, cb) => {
-                outerCallback = cb;
-                return stopListening;
-            });
             const connection = new TauriConnection<string>({ name: 'test' });
             await connection.start();
             const callback = vi.fn();
