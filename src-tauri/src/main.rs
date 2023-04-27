@@ -1,37 +1,16 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use serde::Serialize;
+mod services;
+
 use std::fs;
-use std::sync::Arc;
 use std::time::Duration;
 use tauri::api::path::document_dir;
-use tauri::{async_runtime, generate_context, Manager, Runtime, State, Wry};
-use tokio::sync::Mutex;
+use tauri::{async_runtime, generate_context, Manager};
+
+use services::data::{ArcData, Data, DataState, ExampleStruct};
 
 const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
-
-#[derive(Clone)]
-pub struct Data<R: Runtime> {
-    pub app_handle: tauri::AppHandle<R>,
-}
-
-pub type DataState<'a> = State<'a, ArcData>;
-
-#[derive(Clone)]
-pub struct ArcData(pub Arc<Mutex<Data<Wry>>>);
-
-impl ArcData {
-    pub fn new(data: Data<Wry>) -> Self {
-        Self(Arc::new(Mutex::new(data)))
-    }
-}
-
-#[derive(Serialize)]
-struct ExampleStruct {
-    pub name: String,
-    pub age: u8,
-}
 
 #[tauri::command]
 async fn test_data(state: DataState<'_>) -> Result<(), String> {
