@@ -1,4 +1,4 @@
-use std::fs::read_dir;
+use std::fs::{create_dir, read_dir};
 use std::path::{Path, PathBuf};
 
 use serde::Serialize;
@@ -18,9 +18,19 @@ pub struct FileQuery {
 
 impl FileQuery {
     pub fn new(root: &Path) -> Result<Self, String> {
+        if !root.exists() {
+            create_dir(&root).map_err(|e| e.to_string())?;
+        }
+        if !root.is_dir() {
+            return Err(format!("{} is not a directory", root.display()));
+        }
         Ok(Self {
             root: root.to_path_buf(),
         })
+    }
+
+    pub fn get_root(&self) -> PathBuf {
+        self.root.clone()
     }
 
     pub async fn query_root(&self) -> Result<Vec<FileType>, String> {
