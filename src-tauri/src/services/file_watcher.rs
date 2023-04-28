@@ -4,12 +4,14 @@ use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use notify::event::ModifyKind;
 
+
 pub struct FileWatcher {
     pub watcher: notify::RecommendedWatcher,
+    pub receiver: broadcast::Receiver<FileChangEvent>,
 }
 
 impl FileWatcher {
-    pub fn new() -> Result<(Self, broadcast::Receiver<FileChangEvent>), String> {
+    pub fn new() -> Result<Self, String> {
         let (sender, receiver) = broadcast::channel(4);
         let watcher = notify::recommended_watcher(move |res| {
             match res {
@@ -22,7 +24,7 @@ impl FileWatcher {
             };
         })
         .map_err(|e| e.to_string())?;
-        Ok((Self { watcher }, receiver))
+        Ok(Self { watcher, receiver })
     }
 
     pub fn watch(&mut self, path: &Path) -> Result<(), String> {

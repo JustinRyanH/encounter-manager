@@ -1,9 +1,8 @@
-use std::{path::Path, sync::Arc};
+use std::{sync::Arc};
 
-use notify::{event::ModifyKind, RecursiveMode, Watcher};
 use serde::Serialize;
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
-use tokio::sync::{broadcast, Mutex};
+use tokio::sync::{Mutex};
 
 use crate::services::file_watcher::FileWatcher;
 
@@ -23,7 +22,7 @@ impl ArcData {
     }
 
     pub fn start_main_loop(self) -> Result<(), String> {
-        let (mut file_watcher, mut receiver) = FileWatcher::new()?;
+        let mut file_watcher= FileWatcher::new()?;
 
         async_runtime::spawn(async move {
             let watch_path = get_or_create_doc_path("Encounter Manager");
@@ -34,7 +33,7 @@ impl ArcData {
 
             async_runtime::spawn(async move {
                 loop {
-                    let event = receiver.recv().await.expect("Could not receive event");
+                    let event = file_watcher.receiver.recv().await.expect("Could not receive event");
                     println!("event: {:?}", event);
                 }
             });
@@ -73,9 +72,7 @@ pub struct ExampleStruct {
 }
 
 pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
-    let data_out = ArcData::new(BackgroundData {
-        app_handle: app_handle.clone(),
-    });
+    let data_out = ArcData::new(BackgroundData { app_handle });
     data_out.clone().start_main_loop()?;
     Ok(data_out)
 }
