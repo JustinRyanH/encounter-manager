@@ -1,6 +1,9 @@
 use std::{path::Path, sync::Arc};
 
-use notify::{RecursiveMode, Watcher};
+use notify::{
+    event::{ModifyKind, RenameMode},
+    RecursiveMode, Watcher,
+};
 use serde::Serialize;
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
 use tokio::sync::{broadcast, Mutex};
@@ -19,8 +22,9 @@ impl From<&notify::Event> for FileChangEvent {
         match value.kind {
             notify::EventKind::Any => Self::Unknown,
             notify::EventKind::Create(_) => Self::Create,
+            notify::EventKind::Modify(ModifyKind::Name(_)) => Self::Rename,
             notify::EventKind::Modify(_) => Self::Modify,
-            notify::EventKind::Remove(_) => Self::Rename,
+            notify::EventKind::Remove(_) => Self::Delete,
             notify::EventKind::Other => FileChangEvent::Unknown,
             notify::EventKind::Access(_) => FileChangEvent::Unknown,
         }
@@ -78,18 +82,6 @@ impl ArcData {
             file_watcher
                 .watch(watch_path.as_path())
                 .expect("Could not watch directory");
-
-            async_runtime::spawn(async move {
-                let mut receiver = file_watcher
-                    .sender
-                    .subscribe()
-                    .expect("Could not subscribe to file watcher");
-
-                loop {
-                    let event = receiver.recv().await.expect("Could not receive event");
-                    println!("Received event: {:?}", event);
-                }
-            })
 
             loop {
                 let data = self.0.lock().await;
