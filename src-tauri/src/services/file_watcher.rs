@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use notify::event::ModifyKind;
+use notify::event::{ModifyKind, RenameMode};
 use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use tokio::sync::broadcast;
@@ -36,10 +36,22 @@ impl FileWatcher {
 
 #[derive(Clone, Debug, Serialize)]
 pub enum FileChangEvent {
-    Create { path: Option<PathBuf> },
-    Delete { path: Option<PathBuf> },
-    Modify { path: Option<PathBuf> },
-    Rename,
+    Create {
+        path: Option<PathBuf>,
+    },
+    Delete {
+        path: Option<PathBuf>,
+    },
+    Modify {
+        path: Option<PathBuf>,
+    },
+    RenameAny {
+        path: Option<PathBuf>,
+    },
+    RenameBoth {
+        from: Option<PathBuf>,
+        to: Option<PathBuf>,
+    },
     Ignore,
 }
 
@@ -50,7 +62,13 @@ impl From<&notify::Event> for FileChangEvent {
             notify::EventKind::Create(_) => Self::Create {
                 path: value.paths.first().cloned(),
             },
-            notify::EventKind::Modify(ModifyKind::Name(_)) => Self::Rename,
+            notify::EventKind::Modify(ModifyKind::Name(RenameMode::Both)) => Self::RenameBoth {
+                from: value.paths.first().cloned(),
+                to: value.paths.last().cloned(),
+            },
+            notify::EventKind::Modify(ModifyKind::Name(_)) => Self::RenameAny {
+                path: value.paths.first().cloned(),
+            },
             notify::EventKind::Modify(_) => Self::Modify {
                 path: value.paths.first().cloned(),
             },
