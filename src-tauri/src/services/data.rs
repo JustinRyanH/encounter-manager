@@ -23,21 +23,14 @@ impl ArcData {
 
     pub fn start_main_loop(self) -> Result<(), String> {
         let mut file_watcher= FileWatcher::new()?;
+        let watch_path = get_or_create_doc_path("Encounter Manager");
+
+        file_watcher
+            .watch(watch_path.as_path())
+            .expect("Could not watch directory");
+        file_watcher.push_to_frontend();
 
         async_runtime::spawn(async move {
-            let watch_path = get_or_create_doc_path("Encounter Manager");
-
-            file_watcher
-                .watch(watch_path.as_path())
-                .expect("Could not watch directory");
-
-            async_runtime::spawn(async move {
-                let mut receiver = file_watcher.sender.subscribe();
-                loop {
-                    let event = receiver.recv().await.expect("Could not receive event");
-                    println!("event: {:?}", event);
-                }
-            });
 
             loop {
                 let data = self.0.lock().await;

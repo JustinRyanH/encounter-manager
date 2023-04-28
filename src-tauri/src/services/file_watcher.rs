@@ -4,6 +4,7 @@ use std::path::Path;
 use notify::{RecursiveMode, Watcher};
 use notify::event::ModifyKind;
 use serde::Serialize;
+use tauri::async_runtime;
 use tokio::sync::broadcast;
 
 #[derive(Debug)]
@@ -34,6 +35,16 @@ impl FileWatcher {
         self.watcher
             .watch(path, RecursiveMode::Recursive)
             .map_err(|e| e.to_string())
+    }
+
+    pub fn push_to_frontend(&mut self) {
+        let mut receiver = self.sender.subscribe();
+        async_runtime::spawn(async move {
+            loop {
+                let event = receiver.recv().await.expect("Could not receive event");
+                println!("event: {:?}", event);
+            }
+        });
     }
 }
 
