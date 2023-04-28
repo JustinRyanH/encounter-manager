@@ -9,11 +9,9 @@ use std::fs;
 use tauri::api::path::document_dir;
 use tauri::{generate_context, Manager};
 
-use services::data::{ExampleStruct};
 use crate::services::data;
 use crate::services::data::DataState;
-
-const ENCOUNTER_MANAGER_DIRECTORY: &str = "Encounter Manager";
+use services::data::ExampleStruct;
 
 #[tauri::command]
 async fn test_data(state: DataState<'_>) -> Result<(), String> {
@@ -31,32 +29,6 @@ async fn test_data(state: DataState<'_>) -> Result<(), String> {
     Ok(())
 }
 
-#[tauri::command]
-fn browse_document_files() -> Result<Vec<String>, String> {
-    let mut path = document_dir().ok_or("Could not find Document Directory")?;
-    path.push(ENCOUNTER_MANAGER_DIRECTORY);
-    if !path.clone().exists() {
-        fs::create_dir(path.clone()).map_err(|e| e.to_string())?;
-    }
-    let entries = fs::read_dir(path.clone()).map_err(|e| e.to_string())?;
-    let file_names = entries.filter_map(|e| match e {
-        Ok(entry) => {
-            let path = entry.path();
-            if path.is_file() {
-                Some(entry.file_name())
-            } else {
-                None
-            }
-        }
-        Err(_) => None,
-    });
-
-    let out: Vec<String> = file_names
-        .filter_map(|path| path.into_string().ok())
-        .collect();
-    Ok(out)
-}
-
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -64,7 +36,7 @@ fn main() {
             app.manage(arc_data);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![test_data, browse_document_files])
+        .invoke_handler(tauri::generate_handler![test_data])
         .run(generate_context!())
         .expect("error while running tauri application");
 }
