@@ -18,7 +18,6 @@ impl FileWatcher {
         let watcher = notify::recommended_watcher(move |res| {
             match res {
                 Ok(event) => {
-                    println!("event: {:?}", event);
                     let event = FileChangeEvent::from(&event);
                     sender_copy.send(event).expect("Could not send event");
                 }
