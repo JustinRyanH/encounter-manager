@@ -2,24 +2,30 @@ use std::{path, sync::Arc};
 
 use notify::RecursiveMode;
 use serde::Serialize;
-use tauri::{async_runtime, Manager, Runtime, State, Wry};
+use tauri::{api::path::document_dir, async_runtime, Manager, Runtime, State, Wry};
 use tokio::sync::{Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
-use super::file_watcher::FileChangeEvent;
+use super::{file_structure::FileQuery, file_watcher::FileChangeEvent};
 
 pub struct BackgroundData<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
     pub file_watcher: FileWatcher,
+    pub file_query: FileQuery,
 }
 
 impl<R: Runtime> BackgroundData<R> {
     pub fn new(app_handle: tauri::AppHandle<R>) -> Result<Self, String> {
         let file_watcher = FileWatcher::new().map_err(String::from)?;
+        let mut document_path = document_dir().ok_or("Failed to get document Path")?;
+        document_path.push("Encounter Manager");
+
+        let file_query = FileQuery::new(document_path.as_path());
         Ok(Self {
             app_handle,
             file_watcher,
+            file_query,
         })
     }
 }

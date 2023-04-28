@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use serde::Serialize;
 
 #[derive(Clone, Debug, Serialize)]
+#[serde(tag = "type")]
 pub enum FileType {
     Directory { name: PathBuf },
     File { name: PathBuf },
@@ -11,7 +12,7 @@ pub enum FileType {
 }
 
 #[derive(Clone, Debug)]
-struct FileQuery {
+pub struct FileQuery {
     root: PathBuf,
 }
 
