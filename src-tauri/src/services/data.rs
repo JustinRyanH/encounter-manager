@@ -54,17 +54,35 @@ impl ArcData {
                 locked_self.file_watcher.sender.subscribe(),
             )
         };
-        let mut last_event: Option<FileChangeEvent>;
         async_runtime::spawn(async move {
+            let mut last_event: Option<FileChangeEvent> = None;
             loop {
                 let event = receiver
                     .recv()
                     .await
                     .expect("Something has happend to the connector");
 
-                app_handle
-                    .emit_all("file_system:update", event)
-                    .expect("failed to emit");
+                if let FileChangeEvent::RenameAny { path: Some(path) } = event.clone() {
+                    if let Some(FileChangeEvent::RenameAny {
+                        path: Some(last_path),
+                    }) = last_event
+                    {
+                        let new_event = FileChangeEvent::RenameBoth {
+                            from: Some(last_path),
+                            to: Some(path),
+                        };
+                        app_handle
+                            .emit_all("file_system:update", &new_event)
+                            .expect("failed to emit");
+                        last_event = None;
+                    } else {
+                        last_event = Some(event);
+                    }
+                } else {
+                    app_handle
+                        .emit_all("file_system:update", event)
+                        .expect("failed to emit");
+                }
             }
         });
     }
