@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use notify::event::{ModifyKind, RenameMode};
+use notify::event::{MetadataKind, ModifyKind, RenameMode};
 use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use tokio::sync::broadcast;
@@ -68,14 +68,18 @@ impl From<&notify::Event> for FileChangeEvent {
             notify::EventKind::Modify(ModifyKind::Name(_)) => Self::RenameAny {
                 path: value.paths.first().cloned(),
             },
-            notify::EventKind::Modify(_) => Self::Modify {
+            notify::EventKind::Modify(ModifyKind::Data(_)) => Self::Modify {
                 path: value.paths.first().cloned(),
             },
+            notify::EventKind::Modify(ModifyKind::Metadata(MetadataKind::WriteTime)) => {
+                Self::Modify {
+                    path: value.paths.first().cloned(),
+                }
+            }
             notify::EventKind::Remove(_) => Self::Delete {
                 path: value.paths.first().cloned(),
             },
-            notify::EventKind::Other => FileChangeEvent::Ignore,
-            notify::EventKind::Access(_) => FileChangeEvent::Ignore,
+            _ => FileChangeEvent::Ignore,
         }
     }
 }
