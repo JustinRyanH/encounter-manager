@@ -8,7 +8,7 @@ use tokio::sync::broadcast;
 #[derive(Debug)]
 pub struct FileWatcher {
     pub watcher: notify::RecommendedWatcher,
-    pub sender: broadcast::Sender<FileChangEvent>,
+    pub sender: broadcast::Sender<FileChangeEvent>,
 }
 
 impl FileWatcher {
@@ -19,7 +19,7 @@ impl FileWatcher {
             match res {
                 Ok(event) => {
                     println!("event: {:?}", event);
-                    let event = FileChangEvent::from(&event);
+                    let event = FileChangeEvent::from(&event);
                     sender_copy.send(event).expect("Could not send event");
                 }
                 Err(e) => println!("watch error: {:?}", e),
@@ -35,7 +35,7 @@ impl FileWatcher {
 }
 
 #[derive(Clone, Debug, Serialize)]
-pub enum FileChangEvent {
+pub enum FileChangeEvent {
     Create {
         path: Option<PathBuf>,
     },
@@ -55,7 +55,7 @@ pub enum FileChangEvent {
     Ignore,
 }
 
-impl From<&notify::Event> for FileChangEvent {
+impl From<&notify::Event> for FileChangeEvent {
     fn from(value: &notify::Event) -> Self {
         match value.kind {
             notify::EventKind::Any => Self::Ignore,
@@ -75,8 +75,8 @@ impl From<&notify::Event> for FileChangEvent {
             notify::EventKind::Remove(_) => Self::Delete {
                 path: value.paths.first().cloned(),
             },
-            notify::EventKind::Other => FileChangEvent::Ignore,
-            notify::EventKind::Access(_) => FileChangEvent::Ignore,
+            notify::EventKind::Other => FileChangeEvent::Ignore,
+            notify::EventKind::Access(_) => FileChangeEvent::Ignore,
         }
     }
 }

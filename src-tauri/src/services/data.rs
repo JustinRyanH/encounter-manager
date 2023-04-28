@@ -7,7 +7,7 @@ use tokio::sync::{Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
-use super::file_watcher::FileChangEvent;
+use super::file_watcher::FileChangeEvent;
 
 pub struct BackgroundData<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
@@ -54,7 +54,7 @@ impl ArcData {
                 locked_self.file_watcher.sender.subscribe(),
             )
         };
-        let mut last_event: Option<FileChangEvent>;
+        let mut last_event: Option<FileChangeEvent>;
         async_runtime::spawn(async move {
             loop {
                 let event = receiver
