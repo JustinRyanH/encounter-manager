@@ -26,11 +26,6 @@ export class NullFileManger extends BaseFileManager {
     }
 }
 
-interface ExampleStruct {
-    name: string;
-    age: number,
-}
-
 function notifySimpleEvent(title: string, simpleEvent?: FileSimpleChange) {
     if (!simpleEvent) return;
     notifications.show({ title, message: simpleEvent.path, color: 'green' });
