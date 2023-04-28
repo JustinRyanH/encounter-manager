@@ -1,8 +1,7 @@
 use std::path::Path;
 
-
-use notify::{RecursiveMode, Watcher};
 use notify::event::ModifyKind;
+use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use tauri::async_runtime;
 use tokio::sync::broadcast;
@@ -18,14 +17,15 @@ impl FileWatcher {
         let (sender, _) = broadcast::channel(4);
         let sender_copy = sender.clone();
         let watcher = notify::recommended_watcher(move |res| {
-            match res {
-                Ok(event) => {
-                    println!("event: {:?}", event);
-                    let event = FileChangEvent::from(&event);
-                    sender_copy.send(event).expect("Could not send event");
-                }
-                Err(e) => println!("watch error: {:?}", e),
-            };
+            println!("res: {:?}", res);
+            // match res {
+            //     Ok(event) => {
+            //         println!("event: {:?}", event);
+            //         let event = FileChangEvent::from(&event);
+            //         sender_copy.send(event).expect("Could not send event");
+            //     }
+            //     Err(e) => println!("watch error: {:?}", e),
+            // };
         })
         .map_err(|e| e.to_string())?;
         Ok(Self { watcher, sender })
@@ -38,12 +38,12 @@ impl FileWatcher {
     }
 
     pub fn push_to_frontend(&mut self) {
-        let mut receiver = self.sender.subscribe();
+        // let mut receiver = self.sender.subscribe();
         async_runtime::spawn(async move {
-            loop {
-                let event = receiver.recv().await.expect("Could not receive event");
-                println!("event: {:?}", event);
-            }
+            // loop {
+            //     let event = match receiver.recv().await.expect('Something has happend to the connector')
+            //     println!("event: {:?}", event);
+            // }
         });
     }
 }

@@ -1,14 +1,24 @@
-use std::{sync::Arc};
+use std::{ops::Deref, sync::Arc};
 
 use serde::Serialize;
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
-use tokio::sync::{Mutex};
+use tokio::sync::{watch, Mutex};
 
 use crate::services::file_watcher::FileWatcher;
 
-#[derive(Clone)]
 pub struct BackgroundData<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
+    pub file_watcher: FileWatcher,
+}
+
+impl<R: Runtime> BackgroundData<R> {
+    pub fn new(app_handle: tauri::AppHandle<R>) -> Result<Self, String> {
+        let file_watcher = FileWatcher::new().map_err(String::from)?;
+        Ok(Self {
+            app_handle,
+            file_watcher,
+        })
+    }
 }
 
 pub type DataState<'a> = State<'a, ArcData>;
@@ -22,16 +32,15 @@ impl ArcData {
     }
 
     pub fn start_main_loop(self) -> Result<(), String> {
-        let mut file_watcher= FileWatcher::new()?;
         let watch_path = get_or_create_doc_path("Encounter Manager");
 
-        file_watcher
-            .watch(watch_path.as_path())
-            .expect("Could not watch directory");
-        file_watcher.push_to_frontend();
-
         async_runtime::spawn(async move {
-
+            self.0
+                .lock()
+                .await
+                .file_watcher
+                .watch(&watch_path)
+                .expect("failed to watch");
             loop {
                 let data = self.0.lock().await;
                 data.app_handle
@@ -66,7 +75,7 @@ pub struct ExampleStruct {
 }
 
 pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
-    let data_out = ArcData::new(BackgroundData { app_handle });
+    let data_out = ArcData::new(BackgroundData::new(app_handle)?);
     data_out.clone().start_main_loop()?;
     Ok(data_out)
 }
