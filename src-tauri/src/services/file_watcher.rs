@@ -1,30 +1,33 @@
-use tokio::sync::broadcast;
 use std::path::Path;
+
+
 use notify::{RecursiveMode, Watcher};
-use serde::Serialize;
 use notify::event::ModifyKind;
+use serde::Serialize;
+use tokio::sync::broadcast;
 
-
+#[derive(Debug)]
 pub struct FileWatcher {
     pub watcher: notify::RecommendedWatcher,
-    pub receiver: broadcast::Receiver<FileChangEvent>,
+    pub sender: broadcast::Sender<FileChangEvent>,
 }
 
 impl FileWatcher {
     pub fn new() -> Result<Self, String> {
-        let (sender, receiver) = broadcast::channel(4);
+        let (sender, _) = broadcast::channel(4);
+        let sender_copy = sender.clone();
         let watcher = notify::recommended_watcher(move |res| {
             match res {
                 Ok(event) => {
                     println!("event: {:?}", event);
                     let event = FileChangEvent::from(&event);
-                    sender.send(event).expect("Could not send event");
+                    sender_copy.send(event).expect("Could not send event");
                 }
                 Err(e) => println!("watch error: {:?}", e),
             };
         })
         .map_err(|e| e.to_string())?;
-        Ok(Self { watcher, receiver })
+        Ok(Self { watcher, sender })
     }
 
     pub fn watch(&mut self, path: &Path) -> Result<(), String> {

@@ -32,8 +32,9 @@ impl ArcData {
                 .expect("Could not watch directory");
 
             async_runtime::spawn(async move {
+                let mut receiver = file_watcher.sender.subscribe();
                 loop {
-                    let event = file_watcher.receiver.recv().await.expect("Could not receive event");
+                    let event = receiver.recv().await.expect("Could not receive event");
                     println!("event: {:?}", event);
                 }
             });
