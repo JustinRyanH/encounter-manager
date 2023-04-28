@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { v4 } from "uuid";
 import { TauriConnection } from "~/services/TauriConnection";
 
@@ -33,8 +34,10 @@ export class TauriFileManager extends BaseFileManager {
 
     constructor() {
         super();
-        this.#connection = new TauriConnection<ExampleStruct>({ name: "test" });
-        this.#connection.addConnection(console.log);
+        this.#connection = new TauriConnection<ExampleStruct>({ name: "file_system:update" });
+        this.#connection.addConnection(event => {
+            notifications.show({ title: "File System", message: JSON.stringify(event), color: 'green' });
+        });
     }
 
     async startWatching() {

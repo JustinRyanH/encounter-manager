@@ -45,7 +45,24 @@ impl ArcData {
     }
 
     pub async fn push_file_changes_to_frontend(&mut self) {
-        self.lock().await.file_watcher.push_to_frontend();
+        let (app_handle, mut receiver) = {
+            let locked_self = self.lock().await;
+            (
+                locked_self.app_handle.clone(),
+                locked_self.file_watcher.sender.subscribe(),
+            )
+        };
+        async_runtime::spawn(async move {
+            loop {
+                let event = receiver
+                    .recv()
+                    .await
+                    .expect("Something has happend to the connector");
+                app_handle
+                    .emit_all("file_system:update", event)
+                    .expect("failed to emit");
+            }
+        });
     }
 
     pub fn start_main_loop(mut self) -> Result<(), String> {

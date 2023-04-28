@@ -38,7 +38,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 },
             }}
         >
-            <Notifications autoClose={2000} />
+            <Notifications autoClose={5000} />
             <FileManagerProvider fileManager={fileManager}>
                 <App />
             </FileManagerProvider>

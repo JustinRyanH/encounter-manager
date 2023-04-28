@@ -1,9 +1,8 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use notify::event::ModifyKind;
 use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
-use tauri::async_runtime;
 use tokio::sync::broadcast;
 
 #[derive(Debug)]
@@ -17,7 +16,6 @@ impl FileWatcher {
         let (sender, _) = broadcast::channel(4);
         let sender_copy = sender.clone();
         let watcher = notify::recommended_watcher(move |res| {
-            println!("res: {:?}", res);
             match res {
                 Ok(event) => {
                     println!("event: {:?}", event);
@@ -34,26 +32,13 @@ impl FileWatcher {
     pub fn watch(&mut self, path: &Path, mode: RecursiveMode) -> Result<(), String> {
         self.watcher.watch(path, mode).map_err(|e| e.to_string())
     }
-
-    pub fn push_to_frontend(&mut self) {
-        let mut receiver = self.sender.subscribe();
-        async_runtime::spawn(async move {
-            loop {
-                let event = receiver
-                    .recv()
-                    .await
-                    .expect("Something has happend to the connector");
-                println!("event: {:?}", event);
-            }
-        });
-    }
 }
 
-#[derive(Clone, Debug, Copy, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub enum FileChangEvent {
-    Create,
-    Delete,
-    Modify,
+    Create { path: Option<PathBuf> },
+    Delete { path: Option<PathBuf> },
+    Modify { path: Option<PathBuf> },
     Rename,
     Ignore,
 }
@@ -62,10 +47,16 @@ impl From<&notify::Event> for FileChangEvent {
     fn from(value: &notify::Event) -> Self {
         match value.kind {
             notify::EventKind::Any => Self::Ignore,
-            notify::EventKind::Create(_) => Self::Create,
+            notify::EventKind::Create(_) => Self::Create {
+                path: value.paths.first().cloned(),
+            },
             notify::EventKind::Modify(ModifyKind::Name(_)) => Self::Rename,
-            notify::EventKind::Modify(_) => Self::Modify,
-            notify::EventKind::Remove(_) => Self::Delete,
+            notify::EventKind::Modify(_) => Self::Modify {
+                path: value.paths.first().cloned(),
+            },
+            notify::EventKind::Remove(_) => Self::Delete {
+                path: value.paths.first().cloned(),
+            },
             notify::EventKind::Other => FileChangEvent::Ignore,
             notify::EventKind::Access(_) => FileChangEvent::Ignore,
         }
