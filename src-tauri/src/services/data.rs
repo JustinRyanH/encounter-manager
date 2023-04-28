@@ -11,19 +11,19 @@ pub enum FileChangEvent {
     Delete,
     Modify,
     Rename,
-    Unknown,
+    Ignore,
 }
 
 impl From<&notify::Event> for FileChangEvent {
     fn from(value: &notify::Event) -> Self {
         match value.kind {
-            notify::EventKind::Any => Self::Unknown,
+            notify::EventKind::Any => Self::Ignore,
             notify::EventKind::Create(_) => Self::Create,
             notify::EventKind::Modify(ModifyKind::Name(_)) => Self::Rename,
             notify::EventKind::Modify(_) => Self::Modify,
             notify::EventKind::Remove(_) => Self::Delete,
-            notify::EventKind::Other => FileChangEvent::Unknown,
-            notify::EventKind::Access(_) => FileChangEvent::Unknown,
+            notify::EventKind::Other => FileChangEvent::Ignore,
+            notify::EventKind::Access(_) => FileChangEvent::Ignore,
         }
     }
 }
