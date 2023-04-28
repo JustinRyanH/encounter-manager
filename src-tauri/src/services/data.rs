@@ -14,6 +14,19 @@ pub enum FileChangEvent {
     Unknown,
 }
 
+impl From<&notify::Event> for FileChangEvent {
+    fn from(value: &notify::Event) -> Self {
+        match value.kind {
+            notify::EventKind::Any => Self::Unknown,
+            notify::EventKind::Create(_) => Self::Create,
+            notify::EventKind::Modify(_) => Self::Modify,
+            notify::EventKind::Remove(_) => Self::Rename,
+            notify::EventKind::Other => FileChangEvent::Unknown,
+            notify::EventKind::Access(_) => FileChangEvent::Unknown,
+        }
+    }
+}
+
 struct FileWatcher {
     pub watcher: notify::RecommendedWatcher,
     pub sender: broadcast::Sender<FileChangEvent>,
