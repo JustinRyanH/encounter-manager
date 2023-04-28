@@ -49,7 +49,7 @@ impl ArcData {
         let mut file_watcher = FileWatcher::new()?;
 
         async_runtime::spawn(async move {
-            let watch_path = get_or_create_doc_path();
+            let watch_path = get_or_create_doc_path("Encounter Manager");
 
             file_watcher
                 .watch(watch_path.as_path())
@@ -73,16 +73,13 @@ impl ArcData {
     }
 }
 
-fn get_or_create_doc_path() -> std::path::PathBuf {
-    let watch_path = {
-        let mut path = tauri::api::path::document_dir().expect("Could not find Document Directory");
-        path.push("Encounter Manager");
-        if !path.clone().exists() {
-            std::fs::create_dir(path.clone()).expect("Could not create directory");
-        }
-        path
-    };
-    watch_path
+fn get_or_create_doc_path(directory: &str) -> std::path::PathBuf {
+    let mut path = tauri::api::path::document_dir().expect("Could not find Document Directory");
+    path.push(directory);
+    if !path.clone().exists() {
+        std::fs::create_dir(path.clone()).expect("Could not create directory");
+    }
+    path
 }
 
 #[derive(Serialize)]
