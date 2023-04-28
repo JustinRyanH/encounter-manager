@@ -31,10 +31,8 @@ impl FileWatcher {
         Ok(Self { watcher, sender })
     }
 
-    pub fn watch(&mut self, path: &Path) -> Result<(), String> {
-        self.watcher
-            .watch(path, RecursiveMode::Recursive)
-            .map_err(|e| e.to_string())
+    pub fn watch(&mut self, path: &Path, mode: RecursiveMode) -> Result<(), String> {
+        self.watcher.watch(path, mode).map_err(|e| e.to_string())
     }
 
     pub fn push_to_frontend(&mut self) {

@@ -1,8 +1,9 @@
-use std::{ops::Deref, sync::Arc};
+use std::{path, sync::Arc};
 
+use notify::RecursiveMode;
 use serde::Serialize;
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
-use tokio::sync::{watch, Mutex, MutexGuard};
+use tokio::sync::{Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
@@ -35,16 +36,22 @@ impl ArcData {
         self.0.lock().await
     }
 
-    pub fn start_main_loop(self) -> Result<(), String> {
+    pub async fn watch_path(
+        &mut self,
+        path: &path::Path,
+        mode: RecursiveMode,
+    ) -> Result<(), String> {
+        self.lock().await.file_watcher.watch(path, mode)
+    }
+
+    pub fn start_main_loop(mut self) -> Result<(), String> {
         let watch_path = get_or_create_doc_path("Encounter Manager");
 
         async_runtime::spawn(async move {
-            self.lock()
+            self.watch_path(&watch_path, RecursiveMode::Recursive)
                 .await
-                .file_watcher
-                .watch(&watch_path)
                 .expect("failed to watch");
-            
+
             loop {
                 let data = self.0.lock().await;
                 data.app_handle
@@ -56,7 +63,7 @@ impl ArcData {
                         },
                     )
                     .expect("failed to emit");
-                tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+                tokio::time::sleep(std::time::Duration::from_secs(10)).await;
             }
         });
         Ok(())
