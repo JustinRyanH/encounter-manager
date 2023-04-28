@@ -44,6 +44,10 @@ impl ArcData {
         self.lock().await.file_watcher.watch(path, mode)
     }
 
+    pub async fn push_file_changes_to_frontend(&mut self) {
+        self.lock().await.file_watcher.push_to_frontend();
+    }
+
     pub fn start_main_loop(mut self) -> Result<(), String> {
         let watch_path = get_or_create_doc_path("Encounter Manager");
 
@@ -51,6 +55,7 @@ impl ArcData {
             self.watch_path(&watch_path, RecursiveMode::Recursive)
                 .await
                 .expect("failed to watch");
+            self.push_file_changes_to_frontend().await;
 
             loop {
                 let data = self.0.lock().await;
