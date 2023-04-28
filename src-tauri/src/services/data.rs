@@ -57,28 +57,33 @@ impl ArcData {
         async_runtime::spawn(async move {
             let mut last_event: Option<FileChangeEvent> = None;
             loop {
-                let event = receiver
+                let event = match receiver
                     .recv()
                     .await
-                    .expect("Something has happend to the connector");
-
-                if let FileChangeEvent::RenameAny { path: Some(path) } = event.clone() {
-                    if let Some(FileChangeEvent::RenameAny {
-                        path: Some(last_path),
-                    }) = last_event
-                    {
-                        let new_event = FileChangeEvent::RenameBoth {
-                            from: Some(last_path),
-                            to: Some(path),
-                        };
-                        app_handle
-                            .emit_all("file_system:update", &new_event)
-                            .expect("failed to emit");
-                        last_event = None;
-                    } else {
-                        last_event = Some(event);
+                    .expect("Something has happend to the connector")
+                {
+                    FileChangeEvent::Create { path } => Some(FileChangeEvent::Create { path }),
+                    FileChangeEvent::Delete { path } => Some(FileChangeEvent::Delete { path }),
+                    FileChangeEvent::Modify { path } => Some(FileChangeEvent::Modify { path }),
+                    FileChangeEvent::RenameAny { path } => {
+                        if let Some(FileChangeEvent::RenameAny { path: Some(from) }) = last_event {
+                            last_event = None;
+                            Some(FileChangeEvent::RenameBoth {
+                                from: Some(from),
+                                to: path,
+                            })
+                        } else {
+                            last_event = Some(FileChangeEvent::RenameAny { path });
+                            None
+                        }
                     }
-                } else {
+                    FileChangeEvent::RenameBoth { from, to } => {
+                        Some(FileChangeEvent::RenameBoth { from, to })
+                    }
+                    FileChangeEvent::Ignore => None,
+                };
+
+                if let Some(event) = event {
                     app_handle
                         .emit_all("file_system:update", event)
                         .expect("failed to emit");
