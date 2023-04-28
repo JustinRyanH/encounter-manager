@@ -3,14 +3,25 @@ use std::{path::Path, sync::Arc};
 use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
-use tokio::sync::Mutex;
+use tokio::sync::{broadcast, Mutex};
+
+#[derive(Clone, Debug, Copy, Serialize)]
+pub enum FileChangEvent {
+    Create,
+    Delete,
+    Modify,
+    Rename,
+    Unknown,
+}
 
 struct FileWatcher {
     pub watcher: notify::RecommendedWatcher,
+    pub sender: broadcast::Sender<FileChangEvent>,
 }
 
 impl FileWatcher {
-    pub fn new() -> Result<Self, String> {
+    pub fn new() -> Result<(Self, broadcast::Receiver<FileChangEvent>), String> {
+        let (sender, receiver) = broadcast::channel(1);
         let watcher = notify::recommended_watcher(|res| {
             match res {
                 Ok(event) => {
@@ -20,7 +31,7 @@ impl FileWatcher {
             };
         })
         .map_err(|e| e.to_string())?;
-        Ok(Self { watcher })
+        Ok((Self { watcher, sender }, receiver))
     }
 
     pub fn watch(&mut self, path: &Path) -> Result<(), String> {
@@ -46,7 +57,7 @@ impl ArcData {
     }
 
     pub fn start_main_loop(self) -> Result<(), String> {
-        let mut file_watcher = FileWatcher::new()?;
+        let (mut file_watcher, receiver) = FileWatcher::new()?;
 
         async_runtime::spawn(async move {
             let watch_path = get_or_create_doc_path("Encounter Manager");
@@ -54,6 +65,18 @@ impl ArcData {
             file_watcher
                 .watch(watch_path.as_path())
                 .expect("Could not watch directory");
+
+            async_runtime::spawn(async move {
+                let mut receiver = file_watcher
+                    .sender
+                    .subscribe()
+                    .expect("Could not subscribe to file watcher");
+
+                loop {
+                    let event = receiver.recv().await.expect("Could not receive event");
+                    println!("Received event: {:?}", event);
+                }
+            })
 
             loop {
                 let data = self.0.lock().await;
