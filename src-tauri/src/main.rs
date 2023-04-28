@@ -5,13 +5,26 @@ extern crate core;
 
 mod services;
 
-use std::fs;
-use tauri::api::path::document_dir;
+use services::file_structure::{QueryCommand, QueryCommandResponse};
 use tauri::{generate_context, Manager};
 
 use crate::services::data;
 use crate::services::data::DataState;
 use services::data::ExampleStruct;
+
+#[tauri::command]
+async fn query_file_system(
+    state: DataState<'_>,
+    command: QueryCommand,
+) -> Result<QueryCommandResponse, String> {
+    let data = state.lock().await;
+    let file_query = &data.file_query;
+    println!("Foo {:?}!", command);
+    match command {
+        QueryCommand::Root => file_query.query_root(),
+        _ => unimplemented!("Command not implemented"),
+    }
+}
 
 #[tauri::command]
 async fn test_data(state: DataState<'_>) -> Result<(), String> {
@@ -36,7 +49,7 @@ fn main() {
             app.manage(arc_data);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![test_data])
+        .invoke_handler(tauri::generate_handler![test_data, query_file_system])
         .run(generate_context!())
         .expect("error while running tauri application");
 }

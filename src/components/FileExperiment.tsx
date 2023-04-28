@@ -4,11 +4,12 @@ import { invoke } from "@tauri-apps/api";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { v4 } from "uuid";
 import { useFileManager } from "~/components/FileManager";
+import { on } from "process";
 
 class ListenSingleton {
     private static instance: ListenSingleton;
     #stopListening: UnlistenFn | null = null;
-    #uuid ;
+    #uuid;
 
     static get(): ListenSingleton {
         if (!ListenSingleton.instance) {
@@ -39,11 +40,12 @@ class ListenSingleton {
 
 export function FileExperiment() {
     const fileManager = useFileManager();
-    React.useEffect(() => {
-        fileManager.startWatching();
-        console.log('fileManager.uuid', fileManager.uuid);
-    }, [fileManager]);
+
+    const onClick = async () => {
+        const result = await invoke('query_file_system', { command: { command: 'Root' } });
+        console.log({ result });
+    };
     return <Stack>
-        <Button onClick={() => invoke('test_data')}>Do Stuff</Button>
+        <Button onClick={onClick}>Do Stuff</Button>
     </Stack>
 }

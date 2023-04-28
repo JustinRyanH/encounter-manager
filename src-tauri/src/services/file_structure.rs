@@ -1,7 +1,21 @@
 use std::fs::{create_dir, read_dir};
 use std::path::{Path, PathBuf};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(tag = "command")]
+pub enum QueryCommand {
+    Root,
+    Path { path: PathBuf },
+}
+
+#[derive(Clone, Debug, Serialize)]
+#[serde(tag = "response")]
+pub enum QueryCommandResponse {
+    Root { entries: Vec<FileType> },
+    Path { path: FileType },
+}
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "type")]
@@ -33,7 +47,7 @@ impl FileQuery {
         self.root.clone()
     }
 
-    pub async fn query_root(&self) -> Result<Vec<FileType>, String> {
+    pub fn query_root(&self) -> Result<QueryCommandResponse, String> {
         if !self.root.exists() {
             return Err("Root Directory does not exist".to_string());
         }
@@ -53,7 +67,7 @@ impl FileQuery {
                 })
                 .collect();
 
-            Ok(entries)
+            Ok(QueryCommandResponse::Root { entries })
         } else {
             Err("Root is not a directory".to_string())
         }
