@@ -2,7 +2,7 @@ use std::{ops::Deref, sync::Arc};
 
 use serde::Serialize;
 use tauri::{async_runtime, Manager, Runtime, State, Wry};
-use tokio::sync::{watch, Mutex};
+use tokio::sync::{watch, Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
@@ -31,16 +31,20 @@ impl ArcData {
         Self(Arc::new(Mutex::new(data)))
     }
 
+    pub async fn lock(&self) -> MutexGuard<BackgroundData<Wry>> {
+        self.0.lock().await
+    }
+
     pub fn start_main_loop(self) -> Result<(), String> {
         let watch_path = get_or_create_doc_path("Encounter Manager");
 
         async_runtime::spawn(async move {
-            self.0
-                .lock()
+            self.lock()
                 .await
                 .file_watcher
                 .watch(&watch_path)
                 .expect("failed to watch");
+            
             loop {
                 let data = self.0.lock().await;
                 data.app_handle
