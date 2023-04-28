@@ -13,7 +13,7 @@ pub struct FileWatcher {
 
 impl FileWatcher {
     pub fn new() -> Result<Self, String> {
-        let (sender, _) = broadcast::channel(4);
+        let (sender, _) = broadcast::channel(32);
         let sender_copy = sender.clone();
         let watcher = notify::recommended_watcher(move |res| {
             match res {
