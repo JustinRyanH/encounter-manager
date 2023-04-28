@@ -21,7 +21,7 @@ impl<R: Runtime> BackgroundData<R> {
         let mut document_path = document_dir().ok_or("Failed to get document Path")?;
         document_path.push("Encounter Manager");
 
-        let file_query = FileQuery::new(document_path.as_path());
+        let file_query = FileQuery::new(document_path.as_path())?;
         Ok(Self {
             app_handle,
             file_watcher,

@@ -17,10 +17,10 @@ pub struct FileQuery {
 }
 
 impl FileQuery {
-    pub fn new(root: &Path) -> Self {
-        Self {
+    pub fn new(root: &Path) -> Result<Self, String> {
+        Ok(Self {
             root: root.to_path_buf(),
-        }
+        })
     }
 
     pub async fn query_root(&self) -> Result<Vec<FileType>, String> {
