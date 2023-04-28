@@ -108,8 +108,11 @@ impl ArcData {
             self.push_file_changes_to_frontend().await;
 
             loop {
-                let data = self.0.lock().await;
-                data.app_handle
+                let handle = {
+                    let data = self.lock().await;
+                    data.app_handle.clone()
+                };
+                handle
                     .emit_all(
                         "test",
                         &ExampleStruct {
