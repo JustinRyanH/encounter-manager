@@ -20,8 +20,8 @@ pub enum QueryCommandResponse {
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "type")]
 pub enum FileType {
-    Directory { path: PathBuf },
-    File { path: PathBuf },
+    Directory { path: PathBuf, name: Option<String> },
+    File { path: PathBuf, name: Option<String> },
     Unknown,
 }
 
@@ -58,9 +58,15 @@ impl FileQuery {
                     let entry = entry.unwrap();
                     let path = entry.path();
                     if path.is_dir() {
-                        FileType::Directory { path }
+                        FileType::Directory {
+                            name: path.file_name().map(|s| s.to_string_lossy().to_string()),
+                            path,
+                        }
                     } else if path.is_file() {
-                        FileType::File { path }
+                        FileType::File {
+                            name: path.file_name().map(|s| s.to_string_lossy().to_string()),
+                            path,
+                        }
                     } else {
                         FileType::Unknown
                     }
