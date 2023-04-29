@@ -35,11 +35,11 @@ class ListenSingleton {
     }
 }
 
-
-
-
 export function FileExperiment() {
     const fileManager = useFileManager();
+    React.useEffect(() => {
+        fileManager.startWatching();
+    }, [fileManager]);
 
     const onClick = async () => {
         const result = await invoke('query_file_system', { command: { command: 'Root' } });

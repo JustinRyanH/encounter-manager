@@ -43,7 +43,6 @@ export class TauriFileManager extends BaseFileManager {
         super();
         this.#connection = new TauriConnection<FileChangeEvent>({ name: "file_system:update" });
         this.#connection.addConnection((event) => {
-            console.log(event);
             notifySimpleEvent("File Created", event.Create);
             notifySimpleEvent("File Deleted", event.Delete);
             notifySimpleEvent("File Modified", event.Modify);
