@@ -39,19 +39,16 @@ impl FileWatcher {
 #[serde(tag = "type")]
 #[serde(rename_all = "camelCase")]
 pub enum FileChangeEvent {
-    Create(Option<FileData>),
-    Delete {
-        path: Option<PathBuf>,
-    },
-    Modify {
-        path: Option<PathBuf>,
-    },
+    Create(FileData),
+    Delete(FileData),
+    Modify(FileData),
     RenameAny {
-        path: Option<PathBuf>,
+        path: PathBuf,
     },
     RenameBoth {
-        from: Option<PathBuf>,
-        to: Option<PathBuf>,
+        from: PathBuf,
+        to: PathBuf,
+        data: FileData,
     },
     Ignore,
 }
@@ -60,25 +57,51 @@ impl From<&notify::Event> for FileChangeEvent {
     fn from(value: &notify::Event) -> Self {
         match value.kind {
             notify::EventKind::Any => Self::Ignore,
-            notify::EventKind::Create(_) => Self::Create(value.paths.first().map(FileData::from)),
-            notify::EventKind::Modify(ModifyKind::Name(RenameMode::Both)) => Self::RenameBoth {
-                from: value.paths.first().cloned(),
-                to: value.paths.last().cloned(),
-            },
-            notify::EventKind::Modify(ModifyKind::Name(_)) => Self::RenameAny {
-                path: value.paths.first().cloned(),
-            },
-            notify::EventKind::Modify(ModifyKind::Data(_)) => Self::Modify {
-                path: value.paths.first().cloned(),
-            },
-            notify::EventKind::Modify(ModifyKind::Metadata(MetadataKind::WriteTime)) => {
-                Self::Modify {
-                    path: value.paths.first().cloned(),
+            notify::EventKind::Create(_) => {
+                let path = value.paths.first().cloned();
+                match path {
+                    Some(path) => Self::Create(FileData::from(path)),
+                    None => Self::Ignore,
                 }
             }
-            notify::EventKind::Remove(_) => Self::Delete {
-                path: value.paths.first().cloned(),
-            },
+            notify::EventKind::Modify(ModifyKind::Name(RenameMode::Both)) => {
+                let paths = value.paths.first().zip(value.paths.last());
+                match paths {
+                    Some((from, to)) => Self::RenameBoth {
+                        from: from.clone(),
+                        to: to.clone(),
+                        data: FileData::from(to),
+                    },
+                    None => Self::Ignore,
+                }
+            }
+            notify::EventKind::Modify(ModifyKind::Name(_)) => value
+                .paths
+                .first()
+                .map_or(FileChangeEvent::Ignore, |path| Self::RenameAny {
+                    path: path.clone(),
+                }),
+            notify::EventKind::Modify(ModifyKind::Data(_)) => {
+                let path = value.paths.first().cloned();
+                match path {
+                    Some(path) => Self::Modify(FileData::from(path)),
+                    None => Self::Ignore,
+                }
+            }
+            notify::EventKind::Modify(ModifyKind::Metadata(MetadataKind::WriteTime)) => {
+                let path = value.paths.first().cloned();
+                match path {
+                    Some(path) => Self::Modify(FileData::from(path)),
+                    None => Self::Ignore,
+                }
+            }
+            notify::EventKind::Remove(_) => {
+                let path = value.paths.first().cloned();
+                match path {
+                    Some(path) => Self::Delete(FileData::from(path)),
+                    None => Self::Ignore,
+                }
+            }
             _ => FileChangeEvent::Ignore,
         }
     }

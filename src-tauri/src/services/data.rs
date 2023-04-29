@@ -6,7 +6,7 @@ use tokio::sync::{Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
-use super::{file_structure::FileQuery, file_watcher::FileChangeEvent};
+use super::{file::FileData, file_structure::FileQuery, file_watcher::FileChangeEvent};
 
 pub struct BackgroundData<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
@@ -63,29 +63,34 @@ impl ArcData {
                     .await
                     .expect("Something has happend to the connector")
                 {
-                    FileChangeEvent::Create { path } => Some(FileChangeEvent::Create { path }),
-                    FileChangeEvent::Delete { path } => Some(FileChangeEvent::Delete { path }),
-                    FileChangeEvent::Modify { path } => Some(FileChangeEvent::Modify { path }),
+                    FileChangeEvent::Create(file_data) => Some(FileChangeEvent::Create(file_data)),
+                    FileChangeEvent::Delete(file_data) => Some(FileChangeEvent::Delete(file_data)),
+                    FileChangeEvent::Modify(file_data) => Some(FileChangeEvent::Modify(file_data)),
                     FileChangeEvent::RenameAny { path } => {
-                        if let Some(FileChangeEvent::RenameAny { path: Some(from) }) = last_event {
+                        if let Some(FileChangeEvent::RenameAny { path: from }) = last_event {
                             last_event = None;
                             Some(FileChangeEvent::RenameBoth {
-                                from: Some(from),
-                                to: path,
+                                from: from.clone(),
+                                to: path.clone(),
+                                data: FileData::from(path),
                             })
                         } else {
                             last_event = Some(FileChangeEvent::RenameAny { path });
                             None
                         }
                     }
-                    FileChangeEvent::RenameBoth { from, to } => {
-                        Some(FileChangeEvent::RenameBoth { from, to })
+                    FileChangeEvent::RenameBoth { from, to, data } => {
+                        Some(FileChangeEvent::RenameBoth { from, to, data })
                     }
-                    FileChangeEvent::Ignore => None,
+                    FileChangeEvent::Ignore => {
+                        last_event = None;
+                        None
+                    }
                 };
 
                 if let Some(event) = event {
                     let app_handle = cloned_self.lock().await.app_handle.clone();
+                    println!("Sending event to frontend: {:?}", event);
                     app_handle
                         .emit_all("file_system:update", event)
                         .expect("failed to emit");

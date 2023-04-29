@@ -1,5 +1,4 @@
-use std::ffi::OsStr;
-use std::fs::{create_dir, read_dir, File};
+use std::fs::{create_dir, read_dir};
 use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
