@@ -21,11 +21,19 @@ pub enum QueryCommandResponse {
 }
 
 #[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FileData {
+    name: Option<String>,
+    parent_dir: Option<String>,
+    path: PathBuf,
+}
+
+#[derive(Clone, Debug, Serialize)]
 #[serde(tag = "type")]
 #[serde(rename_all = "camelCase")]
 pub enum FileType {
-    Directory { path: PathBuf, name: Option<String> },
-    File { path: PathBuf, name: Option<String> },
+    Directory(FileData),
+    File(FileData),
     Unknown,
 }
 
@@ -70,15 +78,17 @@ impl FileQuery {
                     let entry = entry.unwrap();
                     let path = entry.path();
                     if path.is_dir() {
-                        FileType::Directory {
+                        FileType::Directory(FileData {
+                            parent_dir: os_str_to_string(path.parent().and_then(|p| p.file_name())),
                             name: os_str_to_string(path.file_name()),
                             path,
-                        }
+                        })
                     } else if path.is_file() {
-                        FileType::File {
+                        FileType::File(FileData {
+                            parent_dir: os_str_to_string(path.parent().and_then(|p| p.file_name())),
                             name: os_str_to_string(path.file_name()),
                             path,
-                        }
+                        })
                     } else {
                         FileType::Unknown
                     }
@@ -88,10 +98,11 @@ impl FileQuery {
             Ok(QueryCommandResponse::Directory { entries })
         } else if path.is_file() {
             Ok(QueryCommandResponse::Path {
-                path: FileType::File {
+                path: FileType::File(FileData {
+                    parent_dir: os_str_to_string(path.parent().and_then(|p| p.file_name())),
                     name: path.file_name().map(|s| s.to_string_lossy().to_string()),
                     path,
-                },
+                }),
             })
         } else {
             Err(format!(

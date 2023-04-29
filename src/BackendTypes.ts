@@ -18,6 +18,7 @@ export interface FileType {
     type: 'directory' | 'file' | 'unknown';
     path?: string;
     name?: string;
+    parent_dir?: string;
 }
 
 export interface FileQueryCommand {
