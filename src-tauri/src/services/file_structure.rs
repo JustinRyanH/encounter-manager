@@ -20,8 +20,8 @@ pub enum QueryCommandResponse {
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "type")]
 pub enum FileType {
-    Directory { name: PathBuf },
-    File { name: PathBuf },
+    Directory { path: PathBuf },
+    File { path: PathBuf },
     Unknown,
 }
 
@@ -58,9 +58,9 @@ impl FileQuery {
                     let entry = entry.unwrap();
                     let path = entry.path();
                     if path.is_dir() {
-                        FileType::Directory { name: path }
+                        FileType::Directory { path }
                     } else if path.is_file() {
-                        FileType::File { name: path }
+                        FileType::File { path }
                     } else {
                         FileType::Unknown
                     }
