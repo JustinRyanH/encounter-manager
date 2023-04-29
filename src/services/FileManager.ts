@@ -1,8 +1,9 @@
 import { v4 } from "uuid";
+
 import { TauriConnection } from "~/services/TauriConnection";
-import { FileChangeEvent, FileData } from "~/BackendTypes";
-import { queryRootDirectory } from "./FileCommands";
-import { ReadonlyValueObserver, ValueObserver } from "./ValueObserver";
+import { FileChangeEvent } from "~/BackendTypes";
+
+import { ValueObserver } from "./ValueObserver";
 
 export class BaseFileManager {
     #uuid: string;
@@ -16,10 +17,34 @@ export class BaseFileManager {
     }
 }
 
-class File { }
+interface FileDirectoryProps {
+    name: string;
+    path: string,
+    files?: File[];
+    directories?: Directory[];
+}
+
+class File {
+    #path: ValueObserver<string>;
+    #name: ValueObserver<string>;
+
+    constructor({ name, path }: FileDirectoryProps) {
+        this.#path = new ValueObserver(path);
+        this.#name = new ValueObserver(name);
+    }
+}
 class Directory {
-    #files = new ValueObserver<File[]>([]);
-    #directories = new ValueObserver<Directory[]>([]);
+    #path: ValueObserver<string>;
+    #files: ValueObserver<File[]>;
+    #directories: ValueObserver<Directory[]>;
+    #name: ValueObserver<string>;
+
+    constructor({ name, path, files = [], directories = [] }: FileDirectoryProps) {
+        this.#path = new ValueObserver(path);
+        this.#name = new ValueObserver(name);
+        this.#files = new ValueObserver(files);
+        this.#directories = new ValueObserver(directories);
+    }
 }
 
 export class TauriFileManager extends BaseFileManager {
