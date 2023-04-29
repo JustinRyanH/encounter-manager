@@ -19,27 +19,10 @@ async fn query_file_system(
 ) -> Result<QueryCommandResponse, String> {
     let data = state.lock().await;
     let file_query = &data.file_query;
-    println!("Foo {:?}!", command);
     match command {
         QueryCommand::Root => file_query.query_root(),
         _ => unimplemented!("Command not implemented"),
     }
-}
-
-#[tauri::command]
-async fn test_data(state: DataState<'_>) -> Result<(), String> {
-    let data = state.0.lock().await;
-    let app_handle = data.app_handle.clone();
-    app_handle
-        .emit_all(
-            "test",
-            &ExampleStruct {
-                name: "test".to_string(),
-                age: 42,
-            },
-        )
-        .expect("failed to emit");
-    Ok(())
 }
 
 fn main() {
@@ -49,7 +32,7 @@ fn main() {
             app.manage(arc_data);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![test_data, query_file_system])
+        .invoke_handler(tauri::generate_handler![query_file_system])
         .run(generate_context!())
         .expect("error while running tauri application");
 }
