@@ -10,7 +10,6 @@ use tauri::{generate_context, Manager};
 
 use crate::services::data;
 use crate::services::data::DataState;
-use services::data::ExampleStruct;
 
 #[tauri::command]
 async fn query_file_system(
