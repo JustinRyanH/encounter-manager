@@ -5,6 +5,8 @@ use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use tokio::sync::broadcast;
 
+use super::file::FileData;
+
 #[derive(Debug)]
 pub struct FileWatcher {
     pub watcher: notify::RecommendedWatcher,
@@ -37,9 +39,7 @@ impl FileWatcher {
 #[serde(tag = "type")]
 #[serde(rename_all = "camelCase")]
 pub enum FileChangeEvent {
-    Create {
-        path: Option<PathBuf>,
-    },
+    Create(Option<FileData>),
     Delete {
         path: Option<PathBuf>,
     },
@@ -60,9 +60,7 @@ impl From<&notify::Event> for FileChangeEvent {
     fn from(value: &notify::Event) -> Self {
         match value.kind {
             notify::EventKind::Any => Self::Ignore,
-            notify::EventKind::Create(_) => Self::Create {
-                path: value.paths.first().cloned(),
-            },
+            notify::EventKind::Create(_) => Self::Create(value.paths.first().map(FileData::from)),
             notify::EventKind::Modify(ModifyKind::Name(RenameMode::Both)) => Self::RenameBoth {
                 from: value.paths.first().cloned(),
                 to: value.paths.last().cloned(),

@@ -25,3 +25,13 @@ impl From<PathBuf> for FileData {
         }
     }
 }
+
+impl From<&PathBuf> for FileData {
+    fn from(value: &PathBuf) -> Self {
+        Self {
+            name: value.file_name().map(|s| s.to_string_lossy().to_string()),
+            parent_dir: value.parent().map(|s| s.to_string_lossy().to_string()),
+            path: value.clone(),
+        }
+    }
+}
