@@ -1,7 +1,6 @@
 use std::{path, sync::Arc};
 
 use notify::RecursiveMode;
-use serde::Serialize;
 use tauri::{api::path::document_dir, async_runtime, Manager, Runtime, State, Wry};
 use tokio::sync::{Mutex, MutexGuard};
 
@@ -53,14 +52,10 @@ impl ArcData {
     }
 
     pub async fn push_file_changes_to_frontend(&mut self) {
-        let (app_handle, mut receiver) = {
-            let locked_self = self.lock().await;
-            (
-                locked_self.app_handle.clone(),
-                locked_self.file_watcher.sender.subscribe(),
-            )
-        };
+        let cloned_self = self.clone();
         async_runtime::spawn(async move {
+            let mut receiver = { (cloned_self.lock().await).file_watcher.sender.subscribe() };
+
             let mut last_event: Option<FileChangeEvent> = None;
             loop {
                 let event = match receiver
@@ -90,6 +85,7 @@ impl ArcData {
                 };
 
                 if let Some(event) = event {
+                    let app_handle = cloned_self.lock().await.app_handle.clone();
                     app_handle
                         .emit_all("file_system:update", event)
                         .expect("failed to emit");
@@ -108,19 +104,6 @@ impl ArcData {
             self.push_file_changes_to_frontend().await;
 
             loop {
-                let handle = {
-                    let data = self.lock().await;
-                    data.app_handle.clone()
-                };
-                handle
-                    .emit_all(
-                        "test",
-                        &ExampleStruct {
-                            name: "test".to_string(),
-                            age: 42,
-                        },
-                    )
-                    .expect("failed to emit");
                 tokio::time::sleep(std::time::Duration::from_secs(10)).await;
             }
         });
@@ -135,12 +118,6 @@ fn get_or_create_doc_path(directory: &str) -> std::path::PathBuf {
         std::fs::create_dir(path.clone()).expect("Could not create directory");
     }
     path
-}
-
-#[derive(Serialize)]
-pub struct ExampleStruct {
-    pub name: String,
-    pub age: u8,
 }
 
 pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
