@@ -11,7 +11,7 @@ pub enum QueryCommand {
 }
 
 #[derive(Clone, Debug, Serialize)]
-#[serde(tag = "response")]
+#[serde(tag = "type")]
 pub enum QueryCommandResponse {
     Directory { entries: Vec<FileType> },
     Path { path: FileType },
@@ -43,16 +43,20 @@ impl FileQuery {
         })
     }
 
-    pub fn get_root(&self) -> PathBuf {
-        self.root.clone()
-    }
-
     pub fn query_root(&self) -> Result<QueryCommandResponse, String> {
         if !self.root.exists() {
             return Err("Root Directory does not exist".to_string());
         }
-        if self.root.is_dir() {
-            let entries = read_dir(&self.root)
+        return self.query_path(&self.root);
+    }
+
+    pub fn query_path(&self, path: &Path) -> Result<QueryCommandResponse, String> {
+        let path = self.root.join(path);
+        if !path.exists() {
+            return Err(format!("Path {} does not exist", path.display()));
+        }
+        if path.is_dir() {
+            let entries = read_dir(&path)
                 .map_err(|e| e.to_string())?
                 .map(|entry| {
                     let entry = entry.unwrap();
@@ -74,8 +78,18 @@ impl FileQuery {
                 .collect();
 
             Ok(QueryCommandResponse::Directory { entries })
+        } else if path.is_file() {
+            Ok(QueryCommandResponse::Path {
+                path: FileType::File {
+                    name: path.file_name().map(|s| s.to_string_lossy().to_string()),
+                    path,
+                },
+            })
         } else {
-            Err("Root is not a directory".to_string())
+            Err(format!(
+                "Path {} is not a file or directory",
+                path.display()
+            ))
         }
     }
 }

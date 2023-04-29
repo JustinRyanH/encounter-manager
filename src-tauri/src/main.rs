@@ -3,26 +3,12 @@
 
 extern crate core;
 
+mod commands;
 mod services;
 
-use services::file_structure::{QueryCommand, QueryCommandResponse};
 use tauri::{generate_context, Manager};
 
-use crate::services::data;
-use crate::services::data::DataState;
-
-#[tauri::command]
-async fn query_file_system(
-    state: DataState<'_>,
-    command: QueryCommand,
-) -> Result<QueryCommandResponse, String> {
-    let data = state.lock().await;
-    let file_query = &data.file_query;
-    match command {
-        QueryCommand::Root => file_query.query_root(),
-        _ => unimplemented!("Command not implemented"),
-    }
-}
+use crate::{commands::query_file_system, services::data};
 
 fn main() {
     tauri::Builder::default()
