@@ -34,6 +34,8 @@ impl FileWatcher {
 }
 
 #[derive(Clone, Debug, Serialize)]
+#[serde(tag = "type")]
+#[serde(rename_all = "camelCase")]
 pub enum FileChangeEvent {
     Create {
         path: Option<PathBuf>,

@@ -1,8 +1,10 @@
 use std::ffi::OsStr;
-use std::fs::{create_dir, read_dir};
+use std::fs::{create_dir, read_dir, File};
 use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
+
+use super::file::FileData;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "command")]
@@ -17,15 +19,7 @@ pub enum QueryCommand {
 #[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
     Directory { entries: Vec<FileType> },
-    Path { path: FileType },
-}
-
-#[derive(Clone, Debug, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct FileData {
-    name: Option<String>,
-    parent_dir: Option<String>,
-    path: PathBuf,
+    Path(FileData),
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -37,13 +31,21 @@ pub enum FileType {
     Unknown,
 }
 
+impl From<PathBuf> for FileType {
+    fn from(value: PathBuf) -> Self {
+        if value.is_dir() {
+            Self::Directory(FileData::new(value))
+        } else if value.is_file() {
+            Self::File(FileData::new(value))
+        } else {
+            Self::Unknown
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct FileQuery {
     root: PathBuf,
-}
-
-fn os_str_to_string(os_str: Option<&OsStr>) -> Option<String> {
-    os_str.map(|s| s.to_string_lossy().to_string())
 }
 
 impl FileQuery {
@@ -77,33 +79,13 @@ impl FileQuery {
                 .map(|entry| {
                     let entry = entry.unwrap();
                     let path = entry.path();
-                    if path.is_dir() {
-                        FileType::Directory(FileData {
-                            parent_dir: os_str_to_string(path.parent().and_then(|p| p.file_name())),
-                            name: os_str_to_string(path.file_name()),
-                            path,
-                        })
-                    } else if path.is_file() {
-                        FileType::File(FileData {
-                            parent_dir: os_str_to_string(path.parent().and_then(|p| p.file_name())),
-                            name: os_str_to_string(path.file_name()),
-                            path,
-                        })
-                    } else {
-                        FileType::Unknown
-                    }
+                    path.into()
                 })
                 .collect();
 
             Ok(QueryCommandResponse::Directory { entries })
         } else if path.is_file() {
-            Ok(QueryCommandResponse::Path {
-                path: FileType::File(FileData {
-                    parent_dir: os_str_to_string(path.parent().and_then(|p| p.file_name())),
-                    name: path.file_name().map(|s| s.to_string_lossy().to_string()),
-                    path,
-                }),
-            })
+            Ok(QueryCommandResponse::Path(FileData::new(path)))
         } else {
             Err(format!(
                 "Path {} is not a file or directory",
