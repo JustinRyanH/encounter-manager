@@ -17,29 +17,8 @@ pub enum QueryCommand {
 #[serde(tag = "type")]
 #[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
-    Directory { entries: Vec<FileType> },
+    Directory { entries: Vec<FileData> },
     Path(FileData),
-}
-
-#[derive(Clone, Debug, Serialize)]
-#[serde(tag = "type")]
-#[serde(rename_all = "camelCase")]
-pub enum FileType {
-    Directory(FileData),
-    File(FileData),
-    Unknown,
-}
-
-impl From<PathBuf> for FileType {
-    fn from(value: PathBuf) -> Self {
-        if value.is_dir() {
-            Self::Directory(value.into())
-        } else if value.is_file() {
-            Self::File(value.into())
-        } else {
-            Self::Unknown
-        }
-    }
 }
 
 #[derive(Clone, Debug)]

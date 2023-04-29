@@ -90,7 +90,6 @@ impl ArcData {
 
                 if let Some(event) = event {
                     let app_handle = cloned_self.lock().await.app_handle.clone();
-                    println!("Sending event to frontend: {:?}", event);
                     app_handle
                         .emit_all("file_system:update", event)
                         .expect("failed to emit");
