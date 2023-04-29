@@ -1,8 +1,8 @@
-import { notifications } from "@mantine/notifications";
 import { v4 } from "uuid";
 import { TauriConnection } from "~/services/TauriConnection";
-import { FileChangeEvent, FileSimpleChange, FileRename } from "~/BackendTypes";
+import { FileChangeEvent, FileData } from "~/BackendTypes";
 import { queryRootDirectory } from "./FileCommands";
+import { ReadonlyValueObserver, ValueObserver } from "./ValueObserver";
 
 export class BaseFileManager {
     #uuid: string;
@@ -16,17 +16,9 @@ export class BaseFileManager {
     }
 }
 
-function notifySimpleEvent(title: string, simpleEvent?: FileSimpleChange) {
-    if (!simpleEvent) return;
-    notifications.show({ title, message: simpleEvent.path, color: 'green' });
-}
-
-function notifyRename(title: string, rename?: FileRename) {
-    if (!rename) return;
-    notifications.show({ title, message: `${rename.from} -> ${rename.to}`, color: 'green' });
-}
-
 export class TauriFileManager extends BaseFileManager {
+    #directories = new Map<string, ValueObserver<FileData[]>>();
+    #rootName = new ValueObserver<string>('');
     #connection;
 
     constructor() {
@@ -34,11 +26,19 @@ export class TauriFileManager extends BaseFileManager {
         this.#connection = new TauriConnection<FileChangeEvent>({ name: "file_system:update" });
         this.#connection.addConnection((event) => {
             console.log(event);
-            notifySimpleEvent("File Created", event.Create);
-            notifySimpleEvent("File Deleted", event.Delete);
-            notifySimpleEvent("File Modified", event.Modify);
-            notifyRename("File Renamed", event.RenameBoth);
         });
+    }
+
+    get rootName() {
+        return this.#rootName.value;
+    }
+
+    get rootNamePublisher(): ReadonlyValueObserver<string> {
+        return this.#rootName.readonly;
+    }
+
+    getDirectory(name: string): ReadonlyValueObserver<FileData[]> {
+        return this.getDirectoryObserver(name).readonly;
     }
 
     async startWatching() {
@@ -48,6 +48,23 @@ export class TauriFileManager extends BaseFileManager {
     async getRoot() {
         const result = await queryRootDirectory();
         if (result.type !== 'directory') throw new Error("Root is not a directory");
-        console.log(result);
+        if (!result.data.name) throw new Error("Root directory has no name");
+        const directoryName = result.data.name;
+        const entries = result.entries ?? [];
+        this.updateDirectory(directoryName, entries);
+        console.log(entries);
+        this.#rootName.updateValue(directoryName);
+    }
+
+    private updateDirectory(name: string, entries: FileData[]) {
+        this.getDirectoryObserver(name).updateValue(entries);
+    }
+
+    private getDirectoryObserver(name: string) {
+        let observer = this.#directories.get(name);
+        if (observer) return observer;
+        observer = new ValueObserver<FileData[]>([]);
+        this.#directories.set(name, observer);
+        return observer;
     }
 }

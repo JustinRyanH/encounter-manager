@@ -17,8 +17,13 @@ pub enum QueryCommand {
 #[serde(tag = "type")]
 #[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
-    Directory { entries: Vec<FileData> },
-    Path(FileData),
+    Directory {
+        data: FileData,
+        entries: Vec<FileData>,
+    },
+    Path {
+        data: FileData,
+    },
 }
 
 #[derive(Clone, Debug)]
@@ -61,9 +66,12 @@ impl FileQuery {
                 })
                 .collect();
 
-            Ok(QueryCommandResponse::Directory { entries })
+            Ok(QueryCommandResponse::Directory {
+                data: FileData::from(path),
+                entries,
+            })
         } else if path.is_file() {
-            Ok(QueryCommandResponse::Path(path.into()))
+            Ok(QueryCommandResponse::Path { data: path.into() })
         } else {
             Err(format!(
                 "Path {} is not a file or directory",

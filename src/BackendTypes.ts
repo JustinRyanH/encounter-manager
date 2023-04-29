@@ -14,11 +14,12 @@ export interface FileChangeEvent {
     RenameBoth?: FileRename,
 }
 
-export interface FileType {
-    type: 'directory' | 'file' | 'unknown';
+export interface FileData {
+    fileType: 'directory' | 'file' | 'unknown';
     path?: string;
     name?: string;
-    parent_dir?: string;
+    parentDir?: string;
+    extension?: string;
 }
 
 export interface FileQueryCommand {
@@ -28,6 +29,6 @@ export interface FileQueryCommand {
 
 export interface FileQueryResponse {
     type: 'directory' | 'file';
-    path?: string;
-    entries?: string[];
+    data: FileData;
+    entries?: FileData[];
 }
