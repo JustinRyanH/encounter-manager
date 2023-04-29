@@ -13,7 +13,7 @@ pub enum QueryCommand {
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "response")]
 pub enum QueryCommandResponse {
-    Root { entries: Vec<FileType> },
+    Directory { entries: Vec<FileType> },
     Path { path: FileType },
 }
 
@@ -73,7 +73,7 @@ impl FileQuery {
                 })
                 .collect();
 
-            Ok(QueryCommandResponse::Root { entries })
+            Ok(QueryCommandResponse::Directory { entries })
         } else {
             Err("Root is not a directory".to_string())
         }
