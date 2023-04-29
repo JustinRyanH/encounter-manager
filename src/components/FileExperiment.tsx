@@ -42,7 +42,7 @@ export function FileExperiment() {
     }, [fileManager]);
 
     const onClick = async () => {
-        const result = await invoke('query_file_system', { command: { command: 'Root' } });
+        const result = await invoke('query_file_system', { command: { command: 'root' } });
         console.log({ result });
     };
     return <Stack>

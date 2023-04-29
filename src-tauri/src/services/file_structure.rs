@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "command")]
+#[serde(rename_all = "camelCase")]
 pub enum QueryCommand {
     Root,
     Path { path: PathBuf },
@@ -12,6 +13,7 @@ pub enum QueryCommand {
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "type")]
+#[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
     Directory { entries: Vec<FileType> },
     Path { path: FileType },
@@ -19,6 +21,7 @@ pub enum QueryCommandResponse {
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(tag = "type")]
+#[serde(rename_all = "camelCase")]
 pub enum FileType {
     Directory { path: PathBuf, name: Option<String> },
     File { path: PathBuf, name: Option<String> },

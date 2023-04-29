@@ -13,3 +13,20 @@ export interface FileChangeEvent {
     Modify?: FileSimpleChange,
     RenameBoth?: FileRename,
 }
+
+export interface FileType {
+    type: 'directory' | 'file' | 'unknown';
+    path?: string;
+    name?: string;
+}
+
+export interface FileQueryCommand {
+    command: 'root' | 'path';
+    path?: string,
+}
+
+export interface FileQueryResponse {
+    type: 'directory' | 'file';
+    path?: string;
+    entries?: string[];
+}
