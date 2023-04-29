@@ -21,13 +21,16 @@ interface FileDirectoryProps {
     name: string;
     path: string,
     files?: File[];
+    parent?: Directory;
 }
 
 class File {
+    #parent: ValueObserver<Directory | null>;
     #path: ValueObserver<string>;
     #name: ValueObserver<string>;
 
-    constructor({ name, path }: FileDirectoryProps) {
+    constructor({ name, path, parent }: FileDirectoryProps) {
+        this.#parent = new ValueObserver(parent || null);
         this.#path = new ValueObserver(path);
         this.#name = new ValueObserver(name);
     }
@@ -39,8 +42,8 @@ class File {
 class Directory extends File {
     #files: ValueObserver<File[]>;
 
-    constructor({ name, path, files = [] }: FileDirectoryProps) {
-        super({ name, path });
+    constructor({ name, path, parent, files = [] }: FileDirectoryProps) {
+        super({ name, path, parent });
         this.#files = new ValueObserver(files);
     }
 

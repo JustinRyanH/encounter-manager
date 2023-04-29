@@ -51,8 +51,6 @@ impl From<&PathBuf> for FileData {
             name: value.file_name().map(|s| s.to_string_lossy().to_string()),
             parent_dir: value
                 .parent()
-                .map(|p| p.file_name())
-                .flatten()
                 .map(|s| s.to_string_lossy().to_string()),
             extension: value.extension().map(|s| s.to_string_lossy().to_string()),
             path: value.clone(),
