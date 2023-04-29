@@ -34,9 +34,9 @@ pub enum FileType {
 impl From<PathBuf> for FileType {
     fn from(value: PathBuf) -> Self {
         if value.is_dir() {
-            Self::Directory(FileData::new(value))
+            Self::Directory(value.into())
         } else if value.is_file() {
-            Self::File(FileData::new(value))
+            Self::File(value.into())
         } else {
             Self::Unknown
         }
@@ -85,7 +85,7 @@ impl FileQuery {
 
             Ok(QueryCommandResponse::Directory { entries })
         } else if path.is_file() {
-            Ok(QueryCommandResponse::Path(FileData::new(path)))
+            Ok(QueryCommandResponse::Path(path.into()))
         } else {
             Err(format!(
                 "Path {} is not a file or directory",

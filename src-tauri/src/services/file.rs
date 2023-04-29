@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use serde::Serialize;
 
@@ -16,6 +16,22 @@ impl FileData {
             name: path.file_name().map(|s| s.to_string_lossy().to_string()),
             parent_dir: path.parent().map(|s| s.to_string_lossy().to_string()),
             path,
+        }
+    }
+}
+
+impl From<&Path> for FileData {
+    fn from(value: &Path) -> Self {
+        value.to_path_buf().into()
+    }
+}
+
+impl From<PathBuf> for FileData {
+    fn from(value: PathBuf) -> Self {
+        Self {
+            name: value.file_name().map(|s| s.to_string_lossy().to_string()),
+            parent_dir: value.parent().map(|s| s.to_string_lossy().to_string()),
+            path: value,
         }
     }
 }
