@@ -16,16 +16,6 @@ export class BaseFileManager {
     }
 }
 
-export class NullFileManger extends BaseFileManager {
-    constructor() {
-        super();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    async startWatching() {
-    }
-}
-
 function notifySimpleEvent(title: string, simpleEvent?: FileSimpleChange) {
     if (!simpleEvent) return;
     notifications.show({ title, message: simpleEvent.path, color: 'green' });

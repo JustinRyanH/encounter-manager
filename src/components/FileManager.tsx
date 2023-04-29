@@ -1,11 +1,10 @@
 import React from "react";
-import { NullFileManger, TauriFileManager } from "~/services/FileManager";
+import { TauriFileManager } from "~/services/FileManager";
 
 
-type FileManager = NullFileManger | TauriFileManager
+type FileManager = TauriFileManager;
 
-
-const FileManagerContext: React.Context<FileManager> = React.createContext(new NullFileManger());
+const FileManagerContext = React.createContext<FileManager | null>(null);
 
 interface FileManagerProviderProps {
     children: React.ReactNode;
@@ -17,5 +16,7 @@ export function FileManagerProvider(props: FileManagerProviderProps): JSX.Elemen
 }
 
 export function useFileManager(): FileManager {
-    return React.useContext(FileManagerContext);
+    const result = React.useContext(FileManagerContext);
+    if (!result) throw new Error("useFileManager must be used within a FileManagerProvider");
+    return result;
 }
