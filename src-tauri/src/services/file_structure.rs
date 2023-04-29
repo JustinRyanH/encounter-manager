@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::fs::{create_dir, read_dir};
 use std::path::{Path, PathBuf};
 
@@ -33,6 +34,10 @@ pub struct FileQuery {
     root: PathBuf,
 }
 
+fn os_str_to_string(os_str: Option<&OsStr>) -> Option<String> {
+    os_str.map(|s| s.to_string_lossy().to_string())
+}
+
 impl FileQuery {
     pub fn new(root: &Path) -> Result<Self, String> {
         if !root.exists() {
@@ -66,12 +71,12 @@ impl FileQuery {
                     let path = entry.path();
                     if path.is_dir() {
                         FileType::Directory {
-                            name: path.file_name().map(|s| s.to_string_lossy().to_string()),
+                            name: os_str_to_string(path.file_name()),
                             path,
                         }
                     } else if path.is_file() {
                         FileType::File {
-                            name: path.file_name().map(|s| s.to_string_lossy().to_string()),
+                            name: os_str_to_string(path.file_name()),
                             path,
                         }
                     } else {
