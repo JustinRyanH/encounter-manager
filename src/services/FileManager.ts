@@ -33,21 +33,20 @@ class File {
         this.#name = new ValueObserver(name);
     }
 }
-class Directory {
-    #path: ValueObserver<string>;
+class Directory extends File {
     #files: ValueObserver<File[]>;
     #directories: ValueObserver<Directory[]>;
-    #name: ValueObserver<string>;
 
     constructor({ name, path, files = [], directories = [] }: FileDirectoryProps) {
-        this.#path = new ValueObserver(path);
-        this.#name = new ValueObserver(name);
+        super({ name, path });
         this.#files = new ValueObserver(files);
         this.#directories = new ValueObserver(directories);
     }
 }
 
 export class TauriFileManager extends BaseFileManager {
+    #fileMap = new Map<string, File>();
+    #rootDirectory = new ValueObserver<Directory | null>(null);
     #connection;
 
     constructor() {
