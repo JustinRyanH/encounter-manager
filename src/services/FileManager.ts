@@ -1,8 +1,8 @@
 import { notifications } from "@mantine/notifications";
 import { v4 } from "uuid";
 import { TauriConnection } from "~/services/TauriConnection";
-
 import { FileChangeEvent, FileSimpleChange, FileRename } from "~/BackendTypes";
+import { queryRootDirectory } from "./FileCommands";
 
 export class BaseFileManager {
     #uuid: string;
@@ -42,5 +42,11 @@ export class TauriFileManager extends BaseFileManager {
 
     async startWatching() {
         this.#connection.start();
+    }
+
+    async getRoot() {
+        const result = await queryRootDirectory();
+        if (result.type !== 'directory') throw new Error("Root is not a directory");
+        console.log(result);
     }
 }

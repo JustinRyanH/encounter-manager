@@ -11,8 +11,7 @@ export function FileExperiment() {
     }, [fileManager]);
 
     const onClick = async () => {
-        const result = await invoke('query_file_system', { command: { command: 'root' } });
-        console.log({ result });
+        await fileManager.getRoot();
     };
     return <Stack>
         <Button onClick={onClick}>Do Stuff</Button>
