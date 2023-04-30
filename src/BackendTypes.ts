@@ -16,8 +16,8 @@ export interface FileChangeEvent {
 
 export interface FileData {
     fileType: 'directory' | 'file' | 'unknown';
-    path?: string;
-    name?: string;
+    path: string;
+    name: string;
     parentDir?: string;
     extension?: string;
 }

@@ -26,7 +26,7 @@ impl From<&PathBuf> for FileType {
 #[serde(rename_all = "camelCase")]
 pub struct FileData {
     file_type: FileType,
-    name: Option<String>,
+    name: String,
     parent_dir: Option<String>,
     extension: Option<String>,
     path: PathBuf,
@@ -48,10 +48,11 @@ impl From<&PathBuf> for FileData {
     fn from(value: &PathBuf) -> Self {
         Self {
             file_type: FileType::from(value),
-            name: value.file_name().map(|s| s.to_string_lossy().to_string()),
-            parent_dir: value
-                .parent()
-                .map(|s| s.to_string_lossy().to_string()),
+            name: value
+                .file_name()
+                .map(|s| s.to_string_lossy().to_string())
+                .unwrap_or_default(),
+            parent_dir: value.parent().map(|s| s.to_string_lossy().to_string()),
             extension: value.extension().map(|s| s.to_string_lossy().to_string()),
             path: value.clone(),
         }
