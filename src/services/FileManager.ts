@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 
 import { TauriConnection } from "~/services/TauriConnection";
-import { FileChangeEvent } from "~/BackendTypes";
+import { DirectoryQueryResponse, FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
 import { queryRootDirectory } from "./FileCommands";
@@ -13,6 +13,11 @@ function ParseFileFromType(file: FileData): File | Directory {
     } else {
         return new File({ name: file.name, path: file.path });
     }
+}
+
+function ParseDirectoryFrom(directory: DirectoryQueryResponse): Directory {
+    const files = directory.entries.map(ParseFileFromType);
+    return new Directory({ name: directory.data.name, path: directory.data.path, files });
 }
 
 export class BaseFileManager {
@@ -114,12 +119,12 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     async loadRootDirectory() {
+        if (!this.#rootDirectory) return;
+
         const { directory } = await queryRootDirectory();
         if (!directory) throw new Error("No root directory found");
-        const { data, entries } = directory;
-        const root = ParseFileFromType(data) as Directory;
-        const files = entries.map(ParseFileFromType);
-        root.files = files;
+        const root = ParseDirectoryFrom(directory);
+
         this.#rootDirectory.value = root;
     }
 }
