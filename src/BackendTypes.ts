@@ -28,7 +28,15 @@ export interface FileQueryCommand {
 }
 
 export interface FileQueryResponse {
-    type: 'directory' | 'file';
     data: FileData;
-    entries?: FileData[];
+}
+
+export interface DirectoryQueryResponse {
+    data: FileData;
+    entires: FileData[];
+}
+
+export interface FileQueryResponse {
+    directory?: DirectoryQueryResponse,
+    file?: FileQueryResponse,
 }
