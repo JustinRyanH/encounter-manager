@@ -64,6 +64,10 @@ class File {
     set parent(value) {
         this.#parent.value = value;
     }
+
+    toEqual(file: File) {
+        return this.path === file.path;
+    }
 }
 class Directory extends File {
     #files: ValueObserver<File[]>;
