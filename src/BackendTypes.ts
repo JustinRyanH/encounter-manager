@@ -22,7 +22,7 @@ export interface FileData {
     extension?: string;
 }
 
-export interface FileQueryCommand {
+export interface FsQueryCommmand {
     command: 'root' | 'path';
     path?: string,
 }
@@ -36,7 +36,7 @@ export interface DirectoryQueryResponse {
     entires: FileData[];
 }
 
-export interface FileQueryResponse {
+export interface FsQueryResponse {
     directory?: DirectoryQueryResponse,
     file?: FileQueryResponse,
 }
