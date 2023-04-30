@@ -7,7 +7,11 @@ import { useFileManager } from "~/components/FileManager";
 export function FileExperiment() {
     const fileManager = useFileManager();
     React.useEffect(() => {
-        fileManager.startWatching();
+        const loadFiles = async () => {
+            await fileManager.startWatching();
+            await fileManager.loadRootDirectory();
+        };
+        loadFiles();
     }, [fileManager]);
 
     return <Stack>

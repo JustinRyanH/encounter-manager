@@ -4,6 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
+import { queryRootDirectory } from "./FileCommands";
 
 export class BaseFileManager {
     #uuid: string;
@@ -67,5 +68,11 @@ export class TauriFileManager extends BaseFileManager {
 
     async startWatching() {
         this.#connection.start();
+    }
+
+    async loadRootDirectory() {
+        const { directory } = await queryRootDirectory();
+        if (!directory) throw new Error("No root directory found");
+        console.log({ directory });
     }
 }
