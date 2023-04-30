@@ -39,7 +39,7 @@ interface FileDirectoryProps {
     parent?: Directory;
 }
 
-class File {
+export class File {
     #parent: ValueObserver<Directory | null>;
     #path: ValueObserver<string>;
     #name: ValueObserver<string>;
@@ -54,8 +54,24 @@ class File {
         return this.#name.value;
     }
 
+    set name(value: string) {
+        this.#name.value = value;
+    }
+
+    get nameObserver() {
+        return this.#name.readonly;
+    }
+
     get path() {
         return this.#path.value;
+    }
+
+    set path(value: string) {
+        this.#path.value = value;
+    }
+
+    get pathObserver() {
+        return this.#path.readonly;
     }
 
     get type() {
@@ -75,7 +91,7 @@ class File {
     }
 }
 
-class Directory extends File {
+export class Directory extends File {
     #files: ValueObserver<File[]>;
 
     constructor({ name, path, parent, files = [] }: FileDirectoryProps) {
@@ -90,6 +106,10 @@ class Directory extends File {
     set files(files: File[]) {
         files.forEach(file => file.parent = this);
         this.#files.value = files;
+    }
+
+    get filesObserver() {
+        return this.#files.readonly;
     }
 
     get type() {
@@ -112,6 +132,10 @@ export class TauriFileManager extends BaseFileManager {
 
     get rootDirectory() {
         return this.#rootDirectory.value;
+    }
+
+    get rootDirectoryObserver() {
+        return this.#rootDirectory.readonly;
     }
 
     async startWatching() {
