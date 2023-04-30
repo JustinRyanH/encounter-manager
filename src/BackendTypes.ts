@@ -33,7 +33,7 @@ export interface FileQueryResponse {
 
 export interface DirectoryQueryResponse {
     data: FileData;
-    entires: FileData[];
+    entries: FileData[];
 }
 
 export interface FsQueryResponse {

@@ -5,6 +5,15 @@ import { FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
 import { queryRootDirectory } from "./FileCommands";
+import { FileData } from "~/BackendTypes";
+
+function ParseFileFromType(file: FileData): File | Directory {
+    if (file.fileType === 'directory') {
+        return new Directory({ name: file.name, path: file.path });
+    } else {
+        return new File({ name: file.name, path: file.path });
+    }
+}
 
 export class BaseFileManager {
     #uuid: string;
@@ -47,6 +56,14 @@ class File {
     get type() {
         return 'file';
     }
+
+    get parent() {
+        return this.#parent.value;
+    }
+
+    set parent(value) {
+        this.#parent.value = value;
+    }
 }
 class Directory extends File {
     #files: ValueObserver<File[]>;
@@ -54,6 +71,15 @@ class Directory extends File {
     constructor({ name, path, parent, files = [] }: FileDirectoryProps) {
         super({ name, path, parent });
         this.#files = new ValueObserver(files);
+    }
+
+    get files() {
+        return this.#files.value;
+    }
+
+    set files(files: File[]) {
+        files.forEach(file => file.parent = this);
+        this.#files.value = files;
     }
 
     get type() {
@@ -85,8 +111,10 @@ export class TauriFileManager extends BaseFileManager {
     async loadRootDirectory() {
         const { directory } = await queryRootDirectory();
         if (!directory) throw new Error("No root directory found");
-        const data = directory.data;
+        const { data, entries } = directory;
         const root = new Directory({ name: data.name, path: data.path });
+        const files = entries.map(ParseFileFromType);
+        root.files = files;
         this.#rootDirectory.value = root;
     }
 }
