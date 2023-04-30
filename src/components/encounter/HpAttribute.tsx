@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, MouseEventHandler } from "react";
 import { useClickOutside } from "@mantine/hooks";
 import { Button, Divider, Flex, NumberInput, SimpleGrid, Stack, Text } from "@mantine/core";
-import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { Minus, Plus } from '@phosphor-icons/react';
 
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -53,8 +53,8 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
             <Divider orientation="vertical" />
             <NumberInput value={change} onChange={setChange} styles={{ input: { width: '5rem', textAlign: 'center' } }} hideControls />
             <Stack spacing="xs">
-                <HealthButton onClick={handleHeal} icon={<IconPlus />} color="green">Heal</HealthButton>
-                <HealthButton onClick={handleDamage} icon={<IconMinus />} color="red">Damage</HealthButton>
+                <HealthButton onClick={handleHeal} icon={<Plus />} color="green">Heal</HealthButton>
+                <HealthButton onClick={handleDamage} icon={<Minus />} color="red">Damage</HealthButton>
             </Stack>
         </Flex>
     );

@@ -20,7 +20,7 @@ import { NameAttribute } from "~/components/encounter/NameAttribute";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/systems/UpdateAttribute";
 
-import { IconCornerRightDownDouble } from "@tabler/icons-react";
+import { ArrowBendRightDown } from '@phosphor-icons/react';
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useDisclosure } from "@mantine/hooks";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
@@ -98,7 +98,7 @@ function EncounterControl({ inPlay, nextTurn, ...props }: EncounterControlProps)
                 title="Next Turn"
                 onClick={nextTurn}
             >
-                <IconCornerRightDownDouble size="1.75rem" />
+                <ArrowBendRightDown size="1.75rem" />
             </ActionIcon>
         </Box>
     </Paper>);

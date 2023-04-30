@@ -1,7 +1,7 @@
 import { useEditPopoverContext } from "~/components/systems/EditPopover";
 import React from "react";
 import { ActionIcon, NumberInput, TextInput } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { CheckFat } from '@phosphor-icons/react';
 
 interface UpdateAttributeProps<T> {
     placeholder?: string;
@@ -38,7 +38,7 @@ export function UpdateString({ width = '7rem', updateAttribute, placeholder = "N
                 value={value}
                 onKeyDown={handleKeyDown} />
             <ActionIcon title="Set Value" onClick={onCommit}>
-                <IconCheck size="1.75rem" />
+                <CheckFat size="1.75rem" />
             </ActionIcon>
         </>
     );
@@ -74,7 +74,7 @@ export function UpdateNumber({ width = '6rem', updateAttribute, placeholder = "N
                 value={value === null ? '' : value}
                 onKeyDown={handleKeyDown} />
             <ActionIcon title="Set Value" onClick={onCommit}>
-                <IconCheck size="1.75rem" />
+                <CheckFat size="1.75rem" />
             </ActionIcon>
         </>
     );
