@@ -36,6 +36,14 @@ class File {
         this.#name = new ValueObserver(name);
     }
 
+    get name() {
+        return this.#name.value;
+    }
+
+    get path() {
+        return this.#path.value;
+    }
+
     get type() {
         return 'file';
     }
@@ -66,6 +74,10 @@ export class TauriFileManager extends BaseFileManager {
         });
     }
 
+    get rootDirectory() {
+        return this.#rootDirectory.value;
+    }
+
     async startWatching() {
         this.#connection.start();
     }
@@ -73,6 +85,8 @@ export class TauriFileManager extends BaseFileManager {
     async loadRootDirectory() {
         const { directory } = await queryRootDirectory();
         if (!directory) throw new Error("No root directory found");
-        console.log({ directory });
+        const data = directory.data;
+        const root = new Directory({ name: data.name, path: data.path });
+        this.#rootDirectory.value = root;
     }
 }
