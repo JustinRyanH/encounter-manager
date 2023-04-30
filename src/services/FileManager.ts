@@ -69,6 +69,7 @@ class File {
         return this.path === file.path;
     }
 }
+
 class Directory extends File {
     #files: ValueObserver<File[]>;
 
