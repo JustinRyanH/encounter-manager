@@ -117,7 +117,7 @@ export class TauriFileManager extends BaseFileManager {
         const { directory } = await queryRootDirectory();
         if (!directory) throw new Error("No root directory found");
         const { data, entries } = directory;
-        const root = new Directory({ name: data.name, path: data.path });
+        const root = ParseFileFromType(data) as Directory;
         const files = entries.map(ParseFileFromType);
         root.files = files;
         this.#rootDirectory.value = root;
