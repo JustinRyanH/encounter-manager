@@ -1,22 +1,35 @@
 import React from "react";
-import { Button, Flex, Stack, Text } from "@mantine/core";
-import { FolderNotch, Plus } from '@phosphor-icons/react';
+import { Button, Group, Stack, Text } from "@mantine/core";
+import { File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/FileManager";
-import { Directory } from "~/services/FileManager";
+import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
+
+function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '' }) {
+    const name = useWatchValueObserver(file.nameObserver);
+    return (<Group>
+        <FileIcon />
+        <Text pl={spacing} size="sm">{name}</Text>
+    </Group>)
+}
 
 function DirectoryLine({ directory }: { directory: Directory }) {
     const name = useWatchValueObserver(directory.nameObserver);
     const files = useWatchValueObserver(directory.filesObserver);
-    return (<Flex px="xs" wrap="nowrap" align="center" justify="space-between" >
-        <FolderNotch />
-        <Text size="sm">{name}</Text>
-        <Button px="xs" size="xs" variant="subtle" color="gray" disabled={!files.length}>
-            <Plus />
-        </Button>
-    </Flex>)
+    return (<>
+        <Group position="apart">
+            <Group position="left">
+                <FolderNotch />
+                <Text size="sm">{name}</Text>
+            </Group>
+            <Button px="xs" size="xs" variant="subtle" color="gray" disabled={!files.length}>
+                <Plus />
+            </Button>
+        </Group>
+        {files.map((file) => <FileLine key={file.path} file={file} spacing="xs" />)}
+    </>);
 }
 
 export function FileExperiment() {
