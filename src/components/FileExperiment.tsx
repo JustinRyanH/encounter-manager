@@ -1,12 +1,11 @@
 import React from "react";
-import { Button, Collapse, Flex, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Collapse, Flex, Stack, Text, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/FileManager";
 import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-
 
 function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '' }) {
     const name = useWatchValueObserver(file.nameObserver);
@@ -26,6 +25,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
         return <FileLine key={file.path} file={file} spacing="xs" />;
     });
 
+
     return (<>
         <UnstyledButton onClick={toggle}>
             <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
@@ -34,8 +34,10 @@ function DirectoryLine({ directory }: { directory: Directory }) {
                 {!!files.length && <Plus onClick={toggle} />}
             </Flex>
         </UnstyledButton>
-        <Collapse in={opened}>
-            {fileComponents}
+        <Collapse pl={rem(4)} in={opened} transitionDuration={300} transitionTimingFunction="linear">
+            <Stack spacing={rem(4)}>
+                {fileComponents}
+            </Stack>
         </Collapse>
     </>);
 }
@@ -52,7 +54,7 @@ export function FileExperiment() {
 
     const rootDirectory = useWatchValueObserver(fileManager.rootDirectoryObserver);
 
-    return <Stack>
+    return <Stack spacing={rem(4)}>
         {rootDirectory && <DirectoryLine directory={rootDirectory} />}
     </Stack>
 }
