@@ -109,13 +109,13 @@ export class Directory extends File {
         if (files.length > 0) this.updateFileDirectory(files);
     }
 
-    get allPaths() {
-        const otherPaths = this.entries.map(file => file.path);
+    get allPaths(): string[] {
+        const otherPaths: string[] = this.entries
+            .flatMap((file) => file.type === 'directory' ? (file as Directory).allPaths : [file.path]);
 
         return [
             this.path,
             ...otherPaths,
-            '/directory1/file2',
         ];
     }
 
