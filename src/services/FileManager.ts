@@ -230,14 +230,6 @@ export class TauriFileManager extends BaseFileManager {
         }
     }
 
-    private async aggresivelyLoadAllDirectories(directories: Directory[]) {
-        const directoryPromises = directories.map(directory => this.loadPath(directory.path));
-        const files = await Promise.all(directoryPromises);
-        const loadedDirectories = files.filter(files => files.type === 'directory') as Directory[];
-        const subdirectories = loadedDirectories.flatMap(directory => directory.directories);
-        return subdirectories
-    }
-
     /**
      * Loads a file or directory from the path. 
      * - Updates existing files and directories or creates new ones.
@@ -263,6 +255,20 @@ export class TauriFileManager extends BaseFileManager {
         } else {
             throw new Error("No file or directory found");
         }
+    }
+
+
+    /**
+     * Loads all of the Directories and files in the directory, and aggressively queries them until all directories are loaded.
+     * @param directories 
+     * @returns 
+     */
+    private async aggresivelyLoadAllDirectories(directories: Directory[]) {
+        const directoryPromises = directories.map(directory => this.loadPath(directory.path));
+        const files = await Promise.all(directoryPromises);
+        const loadedDirectories = files.filter(files => files.type === 'directory') as Directory[];
+        const subdirectories = loadedDirectories.flatMap(directory => directory.directories);
+        return subdirectories
     }
 
     /**
