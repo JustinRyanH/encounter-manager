@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, Divider, Flex, Stack, Text, UnstyledButton, rem } from "@mantine/core";
+import { Collapse, Divider, Flex, ScrollArea, Stack, Text, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
 
@@ -29,7 +29,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
     const fileList = (<>
         <Divider />
-        <Collapse pl={rem(8)} in={opened} transitionDuration={300} transitionTimingFunction="linear">
+        <Collapse pl={rem(8)} in={opened} transitionDuration={100} transitionTimingFunction="linear">
             <Stack spacing={rem(4)}>
                 {fileComponents}
             </Stack>
@@ -62,6 +62,8 @@ export function FileExperiment() {
     const rootDirectory = useWatchValueObserver(fileManager.rootDirectoryObserver);
 
     return <Stack spacing={rem(4)}>
-        {rootDirectory && <DirectoryLine directory={rootDirectory} />}
+        <ScrollArea h={200} offsetScrollbars scrollbarSize={2}>
+            {rootDirectory && <DirectoryLine directory={rootDirectory} />}
+        </ScrollArea>
     </Stack>
 }
