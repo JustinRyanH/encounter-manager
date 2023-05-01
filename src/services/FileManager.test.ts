@@ -20,6 +20,13 @@ const mockFileTwo = {
     parentDir: '/',
 }
 
+const mockDirectoryOne = {
+    fileType: 'directory',
+    name: 'directory1',
+    path: '/directory1',
+    parentDir: '/',
+}
+
 const rootMockDirectoryWithEntries = {
     directory: {
         data: {
@@ -41,6 +48,13 @@ const rootMockDirectoryWithoutEntries = {
         entries: []
     }
 };
+
+const mockDirectoryOneResponse = {
+    directory: {
+        data: mockDirectoryOne,
+        entries: []
+    }
+}
 
 describe('FileManager', () => {
     test('load the root Directory', async () => {
@@ -120,6 +134,31 @@ describe('FileManager', () => {
         expect(fileTwo?.name).toEqual('file2');
         expect(rootDir.files.includes(fileTwo as File)).toBeTruthy();
         expect(fileTwo?.parent).toEqual(rootDir);
+    });
+
+    test('load path loads directories, and inserts them into their directory', async () => {
+        (queryRootDirectory as Mock)
+            .mockResolvedValue(rootMockDirectoryWithEntries);
+        (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [] } });
+
+        const rootDirectory = new TauriFileManager();
+        await rootDirectory.loadRootDirectory();
+
+        const rootDir = rootDirectory.findFile('/') as Directory;
+        expect(rootDir).not.toBeNull();
+        expect(rootDirectory.findFile('/file1')).not.toBeNull();
+        expect(rootDirectory.findFile('/directory1')).toBeNull();
+
+        await rootDirectory.loadPath('/directory1');
+
+        let directory = rootDirectory.findFile('/directory1');
+        expect(directory).not.toBeNull();
+        directory = directory as Directory;
+
+        expect(directory?.name).toEqual('directory1');
+        expect(rootDir.directories.includes(directory as Directory)).toBeTruthy();
+        expect(directory?.parent).toEqual(rootDir);
+
     });
 
     test('prevent duplication of files', async () => {

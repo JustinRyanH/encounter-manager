@@ -233,6 +233,7 @@ export class TauriFileManager extends BaseFileManager {
         if (directory) {
             const dir = ParseDirectoryFromResponse(directory);
             this.#fileMap.set(dir.path, dir);
+            parent.addFile(dir);
 
             return dir;
         } else if (file) {
