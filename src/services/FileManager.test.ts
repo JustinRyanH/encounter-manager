@@ -79,8 +79,11 @@ describe('FileManager', () => {
         expect(file1).not.toBeNull();
     });
 
-    test('files are set to their directory', () => {
+    test('files are set to their directory', async () => {
+        (queryRootDirectory as Mock)
+            .mockResolvedValue(rootMockDirectoryWithEntries);
         const rootDirectory = new TauriFileManager();
+        await rootDirectory.loadRootDirectory();
 
         const file1 = rootDirectory.findFile('/file1');
         const root = rootDirectory.findFile('/');

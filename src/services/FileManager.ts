@@ -97,6 +97,7 @@ export class Directory extends File {
     constructor({ name, path, parent, files = [] }: FileDirectoryProps) {
         super({ name, path, parent });
         this.#files = new ValueObserver(files);
+        this.updateFileDirectory(files);
     }
 
     get files() {
@@ -104,7 +105,7 @@ export class Directory extends File {
     }
 
     set files(files: File[]) {
-        files.forEach(file => file.parent = this);
+        this.updateFileDirectory(files);
         this.#files.value = files;
     }
 
@@ -114,6 +115,10 @@ export class Directory extends File {
 
     get type() {
         return 'directory';
+    }
+
+    private updateFileDirectory(files: File[]) {
+        files.forEach(file => file.parent = this);
     }
 }
 
