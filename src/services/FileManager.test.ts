@@ -61,4 +61,21 @@ describe('FileManager', () => {
         if (!root) throw new Error("Root directory not loaded");
         expect(root.files.length).toEqual(1);
     });
+
+    test('files and directories are accessible through getFile', async () => {
+        (queryRootDirectory as Mock)
+            .mockResolvedValue(rootMockDirectoryWithEntries);
+        const rootDirectory = new TauriFileManager();
+
+        expect(rootDirectory.findFile('/')).toBeNull();
+        expect(rootDirectory.findFile('/file1')).toBeNull();
+
+        await rootDirectory.loadRootDirectory();
+
+        const root = rootDirectory.findFile('/');
+        const file1 = rootDirectory.findFile('/file1');
+
+        expect(root).not.toBeNull();
+        expect(file1).not.toBeNull();
+    });
 });

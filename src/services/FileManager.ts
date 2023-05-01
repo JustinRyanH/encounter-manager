@@ -138,6 +138,10 @@ export class TauriFileManager extends BaseFileManager {
         return this.#rootDirectory.readonly;
     }
 
+    findFile(path: string): File | null {
+        return this.#fileMap.get(path) || null;
+    }
+
     async startWatching() {
         this.#connection.start();
     }
@@ -150,5 +154,8 @@ export class TauriFileManager extends BaseFileManager {
         const root = ParseDirectoryFrom(directory);
 
         this.#rootDirectory.value = root;
+        this.#fileMap.set(root.path, root);
+        this.rootDirectory?.files
+            .forEach(file => this.#fileMap.set(file.path, file));
     }
 }
