@@ -20,6 +20,13 @@ const mockFileTwo = {
     parentDir: '/',
 }
 
+const mockFileThree = {
+    fileType: 'file',
+    name: 'file3',
+    path: '/directory1/file3',
+    parentDir: '/directory1',
+}
+
 const mockDirectoryOne = {
     fileType: 'directory',
     name: 'directory1',
@@ -35,11 +42,7 @@ const mockRootDirectory = {
 
 const rootMockDirectoryWithEntries = {
     directory: {
-        data: {
-            fileType: 'directory',
-            name: 'root',
-            path: '/',
-        },
+        data: mockRootDirectory,
         entries: [mockFileOne]
     }
 };
@@ -171,6 +174,19 @@ describe('FileManager', () => {
         await rootDirectory.loadPath('/file1');
 
         expect(rootDir.entries.length).toEqual(1);
+    });
+
+    describe('renameFile', () => {
+        test('renames a file', async () => {
+            (queryRootDirectory as Mock)
+                .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
+            (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
+
+            const rootDirectory = new TauriFileManager();
+            await rootDirectory.loadRootDirectory();
+
+            expect(rootDirectory.findFile('/directory1/file3')).not.toBeNull();
+        });
     });
 });
 

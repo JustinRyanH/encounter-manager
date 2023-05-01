@@ -244,6 +244,7 @@ export class TauriFileManager extends BaseFileManager {
                 const dir = parent.getFileFromPath(path) as Directory;
                 this.syncFile(dir, parent);
                 const entries = directory.entries.map(ParseFileFromType);
+                entries.forEach(file => this.#fileMap.set(file.path, file));
                 dir.entries = entries;
                 return dir;
             }
