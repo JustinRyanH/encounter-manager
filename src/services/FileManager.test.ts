@@ -1,9 +1,24 @@
 import { describe, test, vi, Mock, expect } from 'vitest';
 
-import { TauriFileManager } from '~/services/FileManager';
-import { queryRootDirectory } from '~/services/FileCommands';
+import { Directory, File, TauriFileManager } from '~/services/FileManager';
+import { queryRootDirectory, queryPath } from '~/services/FileCommands';
 
 vi.mock('~/services/FileCommands');
+
+
+const mockFileOne = {
+    fileType: 'file',
+    name: 'file1',
+    path: '/file1',
+    parentDir: '/',
+}
+
+const mockFileTwo = {
+    fileType: 'file',
+    name: 'file2',
+    path: '/file2',
+    parentDir: '/',
+}
 
 const rootMockDirectoryWithEntries = {
     directory: {
@@ -12,11 +27,7 @@ const rootMockDirectoryWithEntries = {
             name: 'root',
             path: '/',
         },
-        entries: [{
-            fileType: 'file',
-            name: 'file1',
-            path: '/file1',
-        }]
+        entries: [mockFileOne]
     }
 };
 
@@ -30,7 +41,6 @@ const rootMockDirectoryWithoutEntries = {
         entries: []
     }
 };
-
 
 describe('FileManager', () => {
     test('load the root Directory', async () => {
@@ -89,5 +99,26 @@ describe('FileManager', () => {
         const root = rootDirectory.findFile('/');
 
         expect(file1?.parent).toEqual(root);
+    });
+
+    test('load path loads files, and inserts them into their directory', async () => {
+        (queryRootDirectory as Mock)
+            .mockResolvedValue(rootMockDirectoryWithEntries);
+        (queryPath as Mock).mockResolvedValue({ file: { data: mockFileTwo } });
+
+        const rootDirectory = new TauriFileManager();
+        await rootDirectory.loadRootDirectory();
+
+        const rootDir = rootDirectory.findFile('/') as Directory;
+        expect(rootDir).not.toBeNull();
+        expect(rootDirectory.findFile('/file1')).not.toBeNull();
+        expect(rootDirectory.findFile('/file2')).toBeNull();
+
+        await rootDirectory.loadPath('/file2');
+
+        const fileTwo = rootDirectory.findFile('/file2');
+        expect(fileTwo?.name).toEqual('file2');
+        expect(rootDir.files.includes(fileTwo as File)).toBeTruthy();
+        expect(fileTwo?.parent).toEqual(rootDir);
     });
 });

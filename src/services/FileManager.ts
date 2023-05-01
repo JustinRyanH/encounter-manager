@@ -4,8 +4,9 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryRootDirectory } from "./FileCommands";
+import { queryPath, queryRootDirectory } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
+import { FileQueryResponse } from "~/BackendTypes";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -13,6 +14,11 @@ function ParseFileFromType(file: FileData): File | Directory {
     } else {
         return new File({ name: file.name, path: file.path });
     }
+}
+
+
+function PraseFileFromResponse(file: FileQueryResponse): File {
+    return new File({ name: file.data.name, path: file.data.path });
 }
 
 function ParseDirectoryFromResponse(directory: DirectoryQueryResponse): Directory {
@@ -117,12 +123,29 @@ export class Directory extends File {
         this.#files.value = files;
     }
 
+    get files() {
+        return this.entries.filter(file => file.type === 'file') as File[];
+    }
+
+    get directories() {
+        return this.entries.filter(file => file.type === 'directory') as Directory[];
+    }
+
     get filesObserver() {
         return this.#files.readonly;
     }
 
     get type() {
         return 'directory';
+    }
+
+    addFile(file: File) {
+        this.#files.value = [...this.#files.value, file];
+        file.parent = this;
+    }
+
+    removeFile(file: File) {
+        this.#files.value = this.#files.value.filter(f => f.path !== file.path);
     }
 
     private updateFileDirectory(files: File[]) {
@@ -168,7 +191,40 @@ export class TauriFileManager extends BaseFileManager {
 
         this.#rootDirectory.value = root;
         this.#fileMap.set(root.path, root);
-        root.entries
-            .forEach(file => this.#fileMap.set(file.path, file));
+        root.entries.forEach(file => this.#fileMap.set(file.path, file));
+        this.updateFileMap(root.entries);
+        const directoryPromises = root.entries
+            .filter(file => file.type === 'directory')
+            .map(file => this.loadPath(file.path));
+        await Promise.all(directoryPromises);
+    }
+
+    async loadPath(path: string): Promise<File> {
+        const { directory, file } = await queryPath(path);
+        if (directory) {
+            const dir = ParseDirectoryFromResponse(directory);
+            this.#fileMap.set(dir.path, dir);
+
+            return dir;
+        } else if (file) {
+            const parentPath = file.data.parentDir;
+            if (!parentPath || !this.#fileMap.has(parentPath)) {
+                throw Error("Loaded file without known directory");
+            }
+
+            const f = PraseFileFromResponse(file);
+            this.#fileMap.set(f.path, f);
+            const parent = this.#fileMap.get(parentPath) as Directory;
+            if (parent.type !== 'directory') throw new Error("Parent is not a directory");
+            parent.addFile(f);
+
+            return f;
+        } else {
+            throw new Error("No file or directory found");
+        }
+    }
+
+    private updateFileMap(files: File[]) {
+        files.forEach(file => this.#fileMap.set(file.path, file));
     }
 }
