@@ -258,6 +258,15 @@ export class TauriFileManager extends BaseFileManager {
         }
     }
 
+    renameFile({ oldPath, newPath, newName }: { oldPath: string, newPath: string, newName: string }) {
+        const file = this.findFile(oldPath);
+        if (!file) throw new Error("File not found");
+        file.name = newName;
+        file.path = newPath;
+        this.#fileMap.delete(oldPath);
+        this.#fileMap.set(newPath, file);
+     }
+
 
     /**
      * Loads all of the Directories and files in the directory, and aggressively queries them until all directories are loaded.

@@ -186,6 +186,8 @@ describe('FileManager', () => {
             await rootDirectory.loadRootDirectory();
 
             expect(rootDirectory.findFile('/directory1/file3')).not.toBeNull();
+
+            rootDirectory.renameFile({ oldPath: '/directory1/file3', newPath: '/directory1/file4', newName: 'file 4' });
         });
     });
 });
