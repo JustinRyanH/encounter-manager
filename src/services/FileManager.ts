@@ -231,7 +231,6 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     private async aggresivelyLoadAllDirectories(directories: Directory[]) {
-        console.log(directories);
         const directoryPromises = directories.map(directory => this.loadPath(directory.path));
         const files = await Promise.all(directoryPromises);
         const loadedDirectories = files.filter(files => files.type === 'directory') as Directory[];
