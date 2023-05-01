@@ -24,7 +24,7 @@ function App() {
     characters: MockCharacters.map((c) => new ActiveCharacter(c)),
   }), []);
 
-  const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250, lg: 300 }}>
+  const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: '17rem', lg: '20rem' }}>
     <Navbar.Section>
       <Stack>
         <Title align="center" order={3}>Encounter Manager</Title>
