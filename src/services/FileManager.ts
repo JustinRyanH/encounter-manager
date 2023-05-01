@@ -106,9 +106,8 @@ export class Directory extends File {
     constructor({ name, path, parent, files = [], loaded = false }: FileDirectoryProps) {
         super({ name, path, parent });
         this.#loaded = loaded;
-        if (files.length > 0) this.#loaded = true;
         this.#files = new ValueObserver(files);
-        this.updateFileDirectory(files);
+        if (files.length > 0) this.updateFileDirectory(files);
     }
 
     get loaded() {
@@ -164,6 +163,7 @@ export class Directory extends File {
 
     private updateFileDirectory(files: File[]) {
         files.forEach(file => file.parent = this);
+        this.#loaded = true;
     }
 
     private get entryPaths() {
@@ -215,10 +215,19 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(root.path, root);
         root.entries.forEach(file => this.#fileMap.set(file.path, file));
         this.updateFileMap(root.entries);
-        const directoryPromises = root.entries
-            .filter(file => file.type === 'directory')
-            .map(file => this.loadPath(file.path));
-        await Promise.all(directoryPromises);
+        let subdirectories = await this.aggresivelyLoadAllDirectories(root.directories);
+        while (subdirectories.length > 0) {
+            subdirectories = await this.aggresivelyLoadAllDirectories(subdirectories);
+        }
+    }
+
+    private async aggresivelyLoadAllDirectories(directories: Directory[]) {
+        console.log(directories);
+        const directoryPromises = directories.map(directory => this.loadPath(directory.path));
+        const files = await Promise.all(directoryPromises);
+        const loadedDirectories = files.filter(files => files.type === 'directory') as Directory[];
+        const subdirectories = loadedDirectories.flatMap(directory => directory.directories);
+        return subdirectories
     }
 
     /**
@@ -233,6 +242,7 @@ export class TauriFileManager extends BaseFileManager {
         if (directory) {
             if (parent.hasfileOfPath(path)) {
                 const dir = parent.getFileFromPath(path) as Directory;
+                this.syncFile(dir, parent);
                 const entries = directory.entries.map(ParseFileFromType);
                 dir.entries = entries;
                 return dir;
