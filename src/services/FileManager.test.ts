@@ -78,4 +78,13 @@ describe('FileManager', () => {
         expect(root).not.toBeNull();
         expect(file1).not.toBeNull();
     });
+
+    test('files are set to their directory', () => {
+        const rootDirectory = new TauriFileManager();
+
+        const file1 = rootDirectory.findFile('/file1');
+        const root = rootDirectory.findFile('/');
+
+        expect(file1?.parent).toEqual(root);
+    });
 });
