@@ -27,6 +27,12 @@ const mockDirectoryOne = {
     parentDir: '/',
 }
 
+const mockRootDirectory = {
+    fileType: 'directory',
+    name: 'root',
+    path: '/',
+};
+
 const rootMockDirectoryWithEntries = {
     directory: {
         data: {
@@ -40,11 +46,7 @@ const rootMockDirectoryWithEntries = {
 
 const rootMockDirectoryWithoutEntries = {
     directory: {
-        data: {
-            fileType: 'directory',
-            name: 'root',
-            path: '/',
-        },
+        data: mockRootDirectory,
         entries: []
     }
 };
@@ -169,5 +171,20 @@ describe('FileManager', () => {
         await rootDirectory.loadPath('/file1');
 
         expect(rootDir.entries.length).toEqual(1);
+    });
+});
+
+describe('Directory', () => {
+    test('can return all of the files in the directory', async () => {
+        const directory = new Directory({ name: 'root', path: '/' });
+        const innerFile = new File({ name: 'file1', path: '/file1' });
+        const innerDirectory = new Directory({ name: 'directory1', path: '/directory1' });
+        const innerDirectoryFile = new File({ name: 'file2', path: '/directory1/file2' });
+
+        directory.addFile(innerFile);
+        directory.addFile(innerDirectory);
+        innerDirectory.addFile(innerDirectoryFile);
+
+        expect(directory.allPaths).toEqual(['/', '/file1', '/directory1', '/directory1/file2']);
     });
 });

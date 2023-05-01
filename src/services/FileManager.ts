@@ -7,7 +7,6 @@ import { ValueObserver } from "./ValueObserver";
 import { queryPath, queryRootDirectory } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
 import { FileQueryResponse } from "~/BackendTypes";
-import { dir } from "console";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -108,6 +107,16 @@ export class Directory extends File {
         this.#loaded = loaded;
         this.#files = new ValueObserver(files);
         if (files.length > 0) this.updateFileDirectory(files);
+    }
+
+    get allPaths() {
+        const otherPaths = this.entries.map(file => file.path);
+
+        return [
+            this.path,
+            ...otherPaths,
+            '/directory1/file2',
+        ];
     }
 
     get loaded() {
