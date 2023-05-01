@@ -7,6 +7,7 @@ import { ValueObserver } from "./ValueObserver";
 import { queryPath, queryRootDirectory } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
 import { FileQueryResponse } from "~/BackendTypes";
+import { dir } from "console";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -211,17 +212,17 @@ export class TauriFileManager extends BaseFileManager {
 
     async loadPath(path: string): Promise<File> {
         const { directory, file } = await queryPath(path);
+        const parentPath = file?.data.parentDir || directory?.data.parentDir;
+        if (!parentPath || !this.#fileMap.has(parentPath)) {
+            throw Error("Loaded file without known directory");
+        }
+
         if (directory) {
             const dir = ParseDirectoryFromResponse(directory);
             this.#fileMap.set(dir.path, dir);
 
             return dir;
         } else if (file) {
-            const parentPath = file.data.parentDir;
-            if (!parentPath || !this.#fileMap.has(parentPath)) {
-                throw Error("Loaded file without known directory");
-            }
-
             const f = PraseFileFromResponse(file);
             this.#fileMap.set(f.path, f);
             const parent = this.#fileMap.get(parentPath) as Directory;
