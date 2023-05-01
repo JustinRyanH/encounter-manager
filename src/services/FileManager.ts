@@ -15,7 +15,7 @@ function ParseFileFromType(file: FileData): File | Directory {
     }
 }
 
-function ParseDirectoryFrom(directory: DirectoryQueryResponse): Directory {
+function ParseDirectoryFromResponse(directory: DirectoryQueryResponse): Directory {
     const files = directory.entries.map(ParseFileFromType);
     return new Directory({ name: directory.data.name, path: directory.data.path, files, loaded: true });
 }
@@ -164,7 +164,7 @@ export class TauriFileManager extends BaseFileManager {
 
         const { directory } = await queryRootDirectory();
         if (!directory) throw new Error("No root directory found");
-        const root = ParseDirectoryFrom(directory);
+        const root = ParseDirectoryFromResponse(directory);
 
         this.#rootDirectory.value = root;
         this.#fileMap.set(root.path, root);
