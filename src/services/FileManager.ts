@@ -228,15 +228,18 @@ export class TauriFileManager extends BaseFileManager {
 
         if (!parent) throw new Error("Parent not found");
         if (parent.type !== 'directory') throw new Error("Parent is not a directory");
-        if (parent.hasfileOfPath(path)) return parent.getFileFromPath(path) as File;
 
         if (directory) {
-            const dir = ParseDirectoryFromResponse(directory);
-            this.#fileMap.set(dir.path, dir);
-            parent.addFile(dir);
-
+            if (parent.hasfileOfPath(path)) {
+                const dir = parent.getFileFromPath(path) as Directory;
+                const entries = directory.entries.map(ParseFileFromType);
+                dir.entries = entries;
+                return dir;
+            }
+            const dir = this.createNewDirectory({ directory, parent });
             return dir;
         } else if (file) {
+            if (parent.hasfileOfPath(path)) return parent.getFileFromPath(path) as File;
             const f = PraseFileFromResponse(file);
             this.#fileMap.set(f.path, f);
             parent.addFile(f);
@@ -245,6 +248,13 @@ export class TauriFileManager extends BaseFileManager {
         } else {
             throw new Error("No file or directory found");
         }
+    }
+
+    private createNewDirectory({ directory, parent }: { directory: DirectoryQueryResponse, parent: Directory }) {
+        const dir = ParseDirectoryFromResponse(directory);
+        this.#fileMap.set(dir.path, dir);
+        parent.addFile(dir);
+        return dir;
     }
 
     private updateFileMap(files: File[]) {
