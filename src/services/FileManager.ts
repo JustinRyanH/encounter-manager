@@ -108,11 +108,11 @@ export class Directory extends File {
         return this.#loaded;
     }
 
-    get files() {
+    get entries() {
         return this.#files.value;
     }
 
-    set files(files: File[]) {
+    set entries(files: File[]) {
         this.updateFileDirectory(files);
         this.#files.value = files;
     }
@@ -168,7 +168,7 @@ export class TauriFileManager extends BaseFileManager {
 
         this.#rootDirectory.value = root;
         this.#fileMap.set(root.path, root);
-        this.rootDirectory?.files
+        root.entries
             .forEach(file => this.#fileMap.set(file.path, file));
     }
 }

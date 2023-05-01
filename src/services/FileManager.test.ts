@@ -59,7 +59,7 @@ describe('FileManager', () => {
 
         const root = rootDirectory.rootDirectory;
         if (!root) throw new Error("Root directory not loaded");
-        expect(root.files.length).toEqual(1);
+        expect(root.entries.length).toEqual(1);
     });
 
     test('files and directories are accessible through getFile', async () => {
