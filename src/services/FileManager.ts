@@ -251,7 +251,7 @@ export class TauriFileManager extends BaseFileManager {
         return dir;
     }
 
-    private getParentDirectory(parentPath: string | undefined) {
+    private getParentDirectory(parentPath?: string) {
         if (!parentPath || !this.#fileMap.has(parentPath)) throw Error("Loaded file without known directory");
 
         const parent = this.#fileMap.get(parentPath) as Directory;
