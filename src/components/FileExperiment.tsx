@@ -9,7 +9,7 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '' }) {
     const name = useWatchValueObserver(file.nameObserver);
-    return (<Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
+    return (<Flex gap="xs" justify="flex-start" align="center" wrap="nowrap">
         <FileIcon />
         <Text pl={spacing} size="sm">{name}</Text>
     </Flex>)
