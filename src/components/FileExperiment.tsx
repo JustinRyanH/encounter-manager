@@ -28,9 +28,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
         <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
             <FolderNotch style={{ minWidth: "1rem" }} />
             <Text style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} size="sm">{name}</Text>
-            <Button px="xs" size="xs" variant="subtle" color="gray" disabled={!files.length}>
-                <Plus />
-            </Button>
+            {!!files.length && <Button px="xs" size="xs" variant="subtle" color="gray"> <Plus /> </Button>}
         </Flex>
         {fileComponents}
     </>);
