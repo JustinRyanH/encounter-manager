@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, Flex, Stack, Text, UnstyledButton, rem } from "@mantine/core";
+import { Collapse, Divider, Flex, Stack, Text, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
 
@@ -15,6 +15,7 @@ function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' |
     </Flex>)
 }
 
+
 function DirectoryLine({ directory }: { directory: Directory }) {
     const name = useWatchValueObserver(directory.nameObserver);
     const files = useWatchValueObserver(directory.filesObserver);
@@ -25,6 +26,15 @@ function DirectoryLine({ directory }: { directory: Directory }) {
         return <FileLine key={file.path} file={file} spacing="xs" />;
     });
 
+    const fileList = (<>
+        <Divider />
+        <Collapse pl={rem(4)} in={opened} transitionDuration={300} transitionTimingFunction="linear">
+            <Stack spacing={rem(4)}>
+                {fileComponents}
+            </Stack>
+        </Collapse>
+    </>);
+
 
     return (<>
         <UnstyledButton onClick={toggle}>
@@ -34,11 +44,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
                 {!!files.length && <Plus onClick={toggle} />}
             </Flex>
         </UnstyledButton>
-        <Collapse pl={rem(4)} in={opened} transitionDuration={300} transitionTimingFunction="linear">
-            <Stack spacing={rem(4)}>
-                {fileComponents}
-            </Stack>
-        </Collapse>
+        {fileList}
     </>);
 }
 
