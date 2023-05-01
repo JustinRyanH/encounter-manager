@@ -49,13 +49,6 @@ const rootMockDirectoryWithoutEntries = {
     }
 };
 
-const mockDirectoryOneResponse = {
-    directory: {
-        data: mockDirectoryOne,
-        entries: []
-    }
-}
-
 describe('FileManager', () => {
     test('load the root Directory', async () => {
         (queryRootDirectory as Mock)
