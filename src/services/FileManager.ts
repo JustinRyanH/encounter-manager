@@ -234,11 +234,7 @@ export class TauriFileManager extends BaseFileManager {
             return dir;
         } else if (file) {
             if (parent.hasfileOfPath(path)) return parent.getFileFromPath(path) as File;
-            const f = PraseFileFromResponse(file);
-            this.#fileMap.set(f.path, f);
-            parent.addFile(f);
-
-            return f;
+            return this.createNewFile({ file, parent });
         } else {
             throw new Error("No file or directory found");
         }
@@ -249,6 +245,13 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(dir.path, dir);
         parent.addFile(dir);
         return dir;
+    }
+
+    private createNewFile({ file, parent }: { file: FileQueryResponse, parent: Directory }) {
+        const f = PraseFileFromResponse(file);
+        this.#fileMap.set(f.path, f);
+        parent.addFile(f);
+        return f;
     }
 
     private getParentDirectory(parentPath?: string) {
