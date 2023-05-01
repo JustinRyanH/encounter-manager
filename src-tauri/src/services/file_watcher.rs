@@ -44,7 +44,7 @@ pub enum FileChangeEvent {
     RenameAny {
         path: PathBuf,
     },
-    RenameBoth {
+    Rename {
         from: PathBuf,
         to: PathBuf,
         data: FileData,
@@ -66,7 +66,7 @@ impl From<&notify::Event> for FileChangeEvent {
             notify::EventKind::Modify(ModifyKind::Name(RenameMode::Both)) => {
                 let paths = value.paths.first().zip(value.paths.last());
                 match paths {
-                    Some((from, to)) => Self::RenameBoth {
+                    Some((from, to)) => Self::Rename {
                         from: from.clone(),
                         to: to.clone(),
                         data: FileData::from(to),

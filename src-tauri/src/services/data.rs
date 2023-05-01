@@ -69,7 +69,7 @@ impl ArcData {
                     FileChangeEvent::RenameAny { path } => {
                         if let Some(FileChangeEvent::RenameAny { path: from }) = last_event {
                             last_event = None;
-                            Some(FileChangeEvent::RenameBoth {
+                            Some(FileChangeEvent::Rename {
                                 from: from.clone(),
                                 to: path.clone(),
                                 data: FileData::from(path),
@@ -79,8 +79,8 @@ impl ArcData {
                             None
                         }
                     }
-                    FileChangeEvent::RenameBoth { from, to, data } => {
-                        Some(FileChangeEvent::RenameBoth { from, to, data })
+                    FileChangeEvent::Rename { from, to, data } => {
+                        Some(FileChangeEvent::Rename { from, to, data })
                     }
                     FileChangeEvent::Ignore => {
                         last_event = None;
