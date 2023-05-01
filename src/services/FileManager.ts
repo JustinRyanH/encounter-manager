@@ -140,11 +140,11 @@ export class Directory extends File {
         return 'directory';
     }
 
-    getFile(path: string): File | null {
+    getFileFromPath(path: string): File | null {
         return this.entries.find(file => file.path === path) || null;
     }
 
-    hasFile(path: string): boolean {
+    hasfileOfPath(path: string): boolean {
         return this.entries.some(file => file.path === path);
     }
 
@@ -228,7 +228,7 @@ export class TauriFileManager extends BaseFileManager {
 
         if (!parent) throw new Error("Parent not found");
         if (parent.type !== 'directory') throw new Error("Parent is not a directory");
-        if (parent.hasFile(path)) return parent.getFile(path) as File;
+        if (parent.hasfileOfPath(path)) return parent.getFileFromPath(path) as File;
 
         if (directory) {
             const dir = ParseDirectoryFromResponse(directory);
