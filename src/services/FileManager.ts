@@ -140,6 +140,14 @@ export class Directory extends File {
         return 'directory';
     }
 
+    getFile(path: string): File | null {
+        return this.entries.find(file => file.path === path) || null;
+    }
+
+    hasFile(path: string): boolean {
+        return this.entries.some(file => file.path === path);
+    }
+
     addFile(file: File) {
         if (this.entryPaths.includes(file.path)) {
             if (!file.parent) return;
@@ -216,6 +224,11 @@ export class TauriFileManager extends BaseFileManager {
         if (!parentPath || !this.#fileMap.has(parentPath)) {
             throw Error("Loaded file without known directory");
         }
+        const parent = this.#fileMap.get(parentPath) as Directory;
+
+        if (!parent) throw new Error("Parent not found");
+        if (parent.type !== 'directory') throw new Error("Parent is not a directory");
+        if (parent.hasFile(path)) return parent.getFile(path) as File;
 
         if (directory) {
             const dir = ParseDirectoryFromResponse(directory);
@@ -225,8 +238,6 @@ export class TauriFileManager extends BaseFileManager {
         } else if (file) {
             const f = PraseFileFromResponse(file);
             this.#fileMap.set(f.path, f);
-            const parent = this.#fileMap.get(parentPath) as Directory;
-            if (parent.type !== 'directory') throw new Error("Parent is not a directory");
             parent.addFile(f);
 
             return f;
