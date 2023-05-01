@@ -7,11 +7,11 @@ import { useFileManager } from "~/components/FileManager";
 import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
-function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '' }) {
+function FileLine({ file }: { file: File }) {
     const name = useWatchValueObserver(file.nameObserver);
     return (<Flex gap="xs" justify="flex-start" align="center" wrap="nowrap">
         <FileIcon />
-        <Text pl={spacing} size="sm">{name}</Text>
+        <Text size="sm">{name}</Text>
     </Flex>)
 }
 
@@ -19,11 +19,12 @@ function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' |
 function DirectoryLine({ directory }: { directory: Directory }) {
     const name = useWatchValueObserver(directory.nameObserver);
     const files = useWatchValueObserver(directory.filesObserver);
+    const hasFiles = !!files.length;
     const [opened, { toggle }] = useDisclosure();
 
     const fileComponents = files.map((file) => {
         if (file.type === 'directory') return <DirectoryLine key={file.path} directory={file as Directory} />;
-        return <FileLine key={file.path} file={file} spacing="xs" />;
+        return <FileLine key={file.path} file={file} />;
     });
 
     const fileList = (<>
@@ -37,14 +38,14 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
 
     return (<>
-        <UnstyledButton onClick={toggle}>
+        <UnstyledButton onClick={toggle} disabled={!hasFiles}>
             <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
                 <FolderNotch style={{ minWidth: "1rem" }} />
                 <Text style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} size="sm">{name}</Text>
-                {!!files.length && <Plus onClick={toggle} />}
+                {hasFiles && <Plus onClick={toggle} />}
             </Flex>
         </UnstyledButton>
-        {fileList}
+        {hasFiles && fileList}
     </>);
 }
 
