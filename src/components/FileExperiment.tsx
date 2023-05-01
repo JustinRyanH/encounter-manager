@@ -29,7 +29,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
     const fileList = (<>
         <Divider />
-        <Collapse pl={rem(4)} in={opened} transitionDuration={300} transitionTimingFunction="linear">
+        <Collapse pl={rem(8)} in={opened} transitionDuration={300} transitionTimingFunction="linear">
             <Stack spacing={rem(4)}>
                 {fileComponents}
             </Stack>
