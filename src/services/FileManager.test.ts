@@ -121,4 +121,21 @@ describe('FileManager', () => {
         expect(rootDir.files.includes(fileTwo as File)).toBeTruthy();
         expect(fileTwo?.parent).toEqual(rootDir);
     });
+
+    test('prevent duplication of files', async () => {
+        (queryRootDirectory as Mock)
+            .mockResolvedValue(rootMockDirectoryWithEntries);
+        (queryPath as Mock).mockResolvedValue({ file: { data: mockFileOne } });
+
+        const rootDirectory = new TauriFileManager();
+        await rootDirectory.loadRootDirectory();
+
+        const rootDir = rootDirectory.findFile('/') as Directory;
+        expect(rootDir).not.toBeNull();
+        expect(rootDirectory.findFile('/file1')).not.toBeNull();
+
+        await rootDirectory.loadPath('/file1');
+
+        expect(rootDir.entries.length).toEqual(1);
+    });
 });

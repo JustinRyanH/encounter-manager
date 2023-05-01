@@ -140,6 +140,11 @@ export class Directory extends File {
     }
 
     addFile(file: File) {
+        if (this.entryPaths.includes(file.path)) {
+            if (!file.parent) return;
+            if (file.parent !== this) throw new Error("Parent Changed is not allowed");
+            return;
+        }
         this.#files.value = [...this.#files.value, file];
         file.parent = this;
     }
@@ -151,6 +156,11 @@ export class Directory extends File {
     private updateFileDirectory(files: File[]) {
         files.forEach(file => file.parent = this);
     }
+
+    private get entryPaths() {
+        return this.entries.map(file => file.path);
+    }
+
 }
 
 export class TauriFileManager extends BaseFileManager {
