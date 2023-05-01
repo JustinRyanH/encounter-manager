@@ -240,18 +240,18 @@ export class TauriFileManager extends BaseFileManager {
         }
     }
 
-    private createNewDirectory({ directory, parent }: { directory: DirectoryQueryResponse, parent: Directory }) {
-        const dir = ParseDirectoryFromResponse(directory);
+    private createNewDirectory({ directory: response, parent }: { directory: DirectoryQueryResponse, parent: Directory }) {
+        const dir = ParseDirectoryFromResponse(response);
         this.#fileMap.set(dir.path, dir);
         parent.addFile(dir);
         return dir;
     }
 
-    private createNewFile({ file, parent }: { file: FileQueryResponse, parent: Directory }) {
-        const f = PraseFileFromResponse(file);
-        this.#fileMap.set(f.path, f);
-        parent.addFile(f);
-        return f;
+    private createNewFile({ file: response, parent }: { file: FileQueryResponse, parent: Directory }) {
+        const file = PraseFileFromResponse(response);
+        this.#fileMap.set(file.path, file);
+        parent.addFile(file);
+        return file;
     }
 
     private getParentDirectory(parentPath?: string) {
