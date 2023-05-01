@@ -189,9 +189,7 @@ export class TauriFileManager extends BaseFileManager {
     constructor() {
         super();
         this.#connection = new TauriConnection<FileChangeEvent>({ name: "file_system:update" });
-        this.#connection.addConnection((event) => {
-            console.log(event);
-        });
+        this.#connection.addConnection(this.handleFileChange);
     }
 
     get rootDirectory() {
@@ -265,7 +263,7 @@ export class TauriFileManager extends BaseFileManager {
         file.path = newPath;
         this.#fileMap.delete(oldPath);
         this.#fileMap.set(newPath, file);
-     }
+    }
 
 
     /**
@@ -324,5 +322,9 @@ export class TauriFileManager extends BaseFileManager {
     private syncFile(dir: File, parent: Directory) {
         this.#fileMap.set(dir.path, dir);
         parent.addFile(dir);
+    }
+
+    private handleFileChange = (event: FileChangeEvent) => {
+        console.log(event);
     }
 }

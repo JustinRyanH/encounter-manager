@@ -1,6 +1,12 @@
-export interface FileSimpleChange {
-    path?: string;
+export interface FileData {
+    fileType: 'directory' | 'file' | 'unknown';
+    path: string;
+    name: string;
+    parentDir?: string;
+    extension?: string;
 }
+
+export type FileSimpleChange = FileData;
 
 export interface FileRename {
     from?: string;
@@ -8,18 +14,10 @@ export interface FileRename {
 }
 
 export interface FileChangeEvent {
-    Create?: FileSimpleChange,
-    Delete?: FileSimpleChange,
-    Modify?: FileSimpleChange,
-    RenameBoth?: FileRename,
-}
-
-export interface FileData {
-    fileType: 'directory' | 'file' | 'unknown';
-    path: string;
-    name: string;
-    parentDir?: string;
-    extension?: string;
+    create?: FileSimpleChange,
+    delete?: FileSimpleChange,
+    modify?: FileSimpleChange,
+    renameBoth?: FileRename,
 }
 
 export interface FsQueryCommmand {
