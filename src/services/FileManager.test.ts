@@ -1,7 +1,7 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, test, vi, Mock, expect } from 'vitest';
 
 import { TauriFileManager } from '~/services/FileManager';
-import { queryRootDirectory } from '~/services/FileCommands'; { }
+import { queryRootDirectory } from '~/services/FileCommands';
 
 vi.mock('~/services/FileCommands');
 
