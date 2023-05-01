@@ -201,6 +201,9 @@ export class TauriFileManager extends BaseFileManager {
         this.#connection.start();
     }
 
+    /**
+     * Loads the root directory and all its subdirectories and files.
+     */
     async loadRootDirectory() {
         if (!this.#rootDirectory) return;
 
@@ -218,6 +221,10 @@ export class TauriFileManager extends BaseFileManager {
         await Promise.all(directoryPromises);
     }
 
+    /**
+     * Loads a file or directory from the path. 
+     * - Updates existing files and directories or creates new ones.
+     */
     async loadPath(path: string): Promise<File> {
         const { directory, file } = await queryPath(path);
         const parentPath = file?.data.parentDir || directory?.data.parentDir;
@@ -240,20 +247,29 @@ export class TauriFileManager extends BaseFileManager {
         }
     }
 
+    /**
+     * Creates a new directory and adds it to the parent directory
+     */
     private createNewDirectory({ directory: response, parent }: { directory: DirectoryQueryResponse, parent: Directory }) {
         const dir = ParseDirectoryFromResponse(response);
-        this.#fileMap.set(dir.path, dir);
-        parent.addFile(dir);
+        this.syncFile(dir, parent);
         return dir;
     }
 
+    /**
+     * Creates a new file and adds it to the parent directory
+     */
     private createNewFile({ file: response, parent }: { file: FileQueryResponse, parent: Directory }) {
         const file = PraseFileFromResponse(response);
-        this.#fileMap.set(file.path, file);
-        parent.addFile(file);
+        this.syncFile(file, parent);
         return file;
     }
 
+    /**
+     * Returns the parent directory of the file if it exists
+     * 
+     * @throws Error if the parent directory does not exist or is not a directory
+     */
     private getParentDirectory(parentPath?: string) {
         if (!parentPath || !this.#fileMap.has(parentPath)) throw Error("Loaded file without known directory");
 
@@ -266,5 +282,13 @@ export class TauriFileManager extends BaseFileManager {
 
     private updateFileMap(files: File[]) {
         files.forEach(file => this.#fileMap.set(file.path, file));
+    }
+
+    /**
+     * Sets the file in the file map and adds it to the parent directory
+     */
+    private syncFile(dir: File, parent: Directory) {
+        this.#fileMap.set(dir.path, dir);
+        parent.addFile(dir);
     }
 }
