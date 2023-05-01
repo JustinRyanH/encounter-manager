@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Flex, Stack, Text } from "@mantine/core";
+import { Button, Collapse, Flex, Stack, Text, UnstyledButton } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/FileManager";
@@ -18,6 +19,7 @@ function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' |
 function DirectoryLine({ directory }: { directory: Directory }) {
     const name = useWatchValueObserver(directory.nameObserver);
     const files = useWatchValueObserver(directory.filesObserver);
+    const [opened, { toggle }] = useDisclosure();
 
     const fileComponents = files.map((file) => {
         if (file.type === 'directory') return <DirectoryLine key={file.path} directory={file as Directory} />;
@@ -25,12 +27,16 @@ function DirectoryLine({ directory }: { directory: Directory }) {
     });
 
     return (<>
-        <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
-            <FolderNotch style={{ minWidth: "1rem" }} />
-            <Text style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} size="sm">{name}</Text>
-            {!!files.length && <Button px="xs" size="xs" variant="subtle" color="gray"> <Plus /> </Button>}
-        </Flex>
-        {fileComponents}
+        <UnstyledButton onClick={toggle}>
+            <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
+                <FolderNotch style={{ minWidth: "1rem" }} />
+                <Text style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} size="sm">{name}</Text>
+                {!!files.length && <Plus onClick={toggle} />}
+            </Flex>
+        </UnstyledButton>
+        <Collapse in={opened}>
+            {fileComponents}
+        </Collapse>
     </>);
 }
 
