@@ -221,13 +221,7 @@ export class TauriFileManager extends BaseFileManager {
     async loadPath(path: string): Promise<File> {
         const { directory, file } = await queryPath(path);
         const parentPath = file?.data.parentDir || directory?.data.parentDir;
-        if (!parentPath || !this.#fileMap.has(parentPath)) {
-            throw Error("Loaded file without known directory");
-        }
-        const parent = this.#fileMap.get(parentPath) as Directory;
-
-        if (!parent) throw new Error("Parent not found");
-        if (parent.type !== 'directory') throw new Error("Parent is not a directory");
+        const parent = this.getParentDirectory(parentPath);
 
         if (directory) {
             if (parent.hasfileOfPath(path)) {
@@ -255,6 +249,16 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(dir.path, dir);
         parent.addFile(dir);
         return dir;
+    }
+
+    private getParentDirectory(parentPath: string | undefined) {
+        if (!parentPath || !this.#fileMap.has(parentPath)) throw Error("Loaded file without known directory");
+
+        const parent = this.#fileMap.get(parentPath) as Directory;
+
+        if (!parent) throw new Error("Parent not found");
+        if (parent.type !== 'directory') throw new Error("Parent is not a directory");
+        return parent;
     }
 
     private updateFileMap(files: File[]) {
