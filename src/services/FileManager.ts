@@ -17,7 +17,7 @@ function ParseFileFromType(file: FileData): File | Directory {
 
 function ParseDirectoryFrom(directory: DirectoryQueryResponse): Directory {
     const files = directory.entries.map(ParseFileFromType);
-    return new Directory({ name: directory.data.name, path: directory.data.path, files });
+    return new Directory({ name: directory.data.name, path: directory.data.path, files, loaded: true });
 }
 
 export class BaseFileManager {
@@ -37,6 +37,7 @@ interface FileDirectoryProps {
     path: string,
     files?: File[];
     parent?: Directory;
+    loaded?: boolean;
 }
 
 export class File {
@@ -92,12 +93,19 @@ export class File {
 }
 
 export class Directory extends File {
+    #loaded = false;
     #files: ValueObserver<File[]>;
 
-    constructor({ name, path, parent, files = [] }: FileDirectoryProps) {
+    constructor({ name, path, parent, files = [], loaded = false }: FileDirectoryProps) {
         super({ name, path, parent });
+        this.#loaded = loaded;
+        if (files.length > 0) this.#loaded = true;
         this.#files = new ValueObserver(files);
         this.updateFileDirectory(files);
+    }
+
+    get loaded() {
+        return this.#loaded;
     }
 
     get files() {

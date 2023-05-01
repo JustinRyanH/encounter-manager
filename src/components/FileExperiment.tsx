@@ -18,6 +18,12 @@ function FileLine({ file, spacing }: { file: File, spacing: 'xs' | 'sm' | 'md' |
 function DirectoryLine({ directory }: { directory: Directory }) {
     const name = useWatchValueObserver(directory.nameObserver);
     const files = useWatchValueObserver(directory.filesObserver);
+
+    const fileComponents = files.map((file) => {
+        if (file.type === 'directory') return <DirectoryLine key={file.path} directory={file as Directory} />;
+        return <FileLine key={file.path} file={file} spacing="xs" />;
+    });
+
     return (<>
         <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
             <FolderNotch style={{ minWidth: "1rem" }} />
@@ -26,7 +32,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
                 <Plus />
             </Button>
         </Flex>
-        {files.map((file) => <FileLine key={file.path} file={file} spacing="xs" />)}
+        {fileComponents}
     </>);
 }
 
