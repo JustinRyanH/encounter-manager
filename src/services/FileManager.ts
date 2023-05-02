@@ -363,6 +363,10 @@ export class TauriFileManager extends BaseFileManager {
             this.removeFile({ path });
             return;
         }
-        console.log(event)
+        if (event.create) {
+            const fileData = event.create;
+            this.addFile(fileData);
+            return;
+        }
     }
 }
