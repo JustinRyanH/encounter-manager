@@ -1,12 +1,12 @@
 import { invoke } from '@tauri-apps/api';
-import { FsQueryCommmand as FsQueryCommand, FsQueryResponse } from '~/BackendTypes';
+import { FsCommand as FsQueryCommand, FsQueryResponse } from '~/BackendTypes';
 
 export function getRootCommand(): FsQueryCommand {
-    return { command: 'root' };
+    return { command: 'queryRoot' };
 }
 
 export function getPathCommand(path: string): FsQueryCommand {
-    return { command: 'path', path };
+    return { command: 'queryPath', path };
 }
 
 async function queryFileSystem(command: FsQueryCommand): Promise<FsQueryResponse> {

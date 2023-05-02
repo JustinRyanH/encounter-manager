@@ -21,8 +21,8 @@ export interface FileChangeEvent {
     rename?: FileRename,
 }
 
-export interface FsQueryCommmand {
-    command: 'root' | 'path';
+export interface FsCommand {
+    command: 'queryRoot' | 'queryPath';
     path?: string,
 }
 

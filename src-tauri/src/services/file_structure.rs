@@ -9,8 +9,8 @@ use super::file::FileData;
 #[serde(tag = "command")]
 #[serde(rename_all = "camelCase")]
 pub enum FsCommand {
-    Root,
-    Path { path: PathBuf },
+    QueryRoot,
+    QueryPath { path: PathBuf },
 }
 
 #[derive(Clone, Debug, Serialize)]
