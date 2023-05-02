@@ -21,9 +21,13 @@ export interface FileChangeEvent {
     rename?: FileRename,
 }
 
+export interface QueryPath {
+    path: string;
+}
+
 export interface FsCommand {
-    command: 'queryRoot' | 'queryPath';
-    path?: string,
+    queryRoot?: null;
+    queryPath?: QueryPath;
 }
 
 export interface FileQueryResponse {

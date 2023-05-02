@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 use super::file::FileData;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(tag = "command")]
 #[serde(rename_all = "camelCase")]
 pub enum FsCommand {
     QueryRoot,
