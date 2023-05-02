@@ -13,5 +13,6 @@ pub async fn query_file_system(
     match command {
         FsCommand::QueryRoot => file_query.query_root(),
         FsCommand::QueryPath { path } => file_query.query_path(&path),
+        FsCommand::TouchFile(_) => Err("'TouchFile' is not implemented yet".to_string()),
     }
 }

@@ -4,9 +4,10 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory } from "./FileCommands";
+import { queryPath, queryRootDirectory, touchFile, touchFileCommand } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
 import { FileQueryResponse } from "~/BackendTypes";
+import { Dir } from "fs";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -265,6 +266,16 @@ export class TauriFileManager extends BaseFileManager {
             return this.createNewFile({ file, parent });
         } else {
             throw new Error("No file or directory found");
+        }
+    }
+
+    async touchFile(directory: Directory, name: string) {
+        try {
+            const { file } = await touchFile(directory.path, name);
+            console.log(file);
+        }
+        catch (e) {
+            console.error(e);
         }
     }
 

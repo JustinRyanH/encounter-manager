@@ -25,9 +25,15 @@ export interface QueryPath {
     path: string;
 }
 
+export interface TouchFile {
+    parentDir: string;
+    fileName: string;
+}
+
 export interface FsCommand {
     queryRoot?: null;
     queryPath?: QueryPath;
+    touchFile?: TouchFile;
 }
 
 export interface FileQueryResponse {
