@@ -200,8 +200,11 @@ describe('FileManager', () => {
             const rootDirectory = new TauriFileManager();
             await rootDirectory.loadRootDirectory();
 
-            expect(rootDirectory.findFile('/directory1/file3')).not.toBeNull();
-            expect(rootDirectory.findFile('/directory1')).not.toBeNull();
+            const file1 = rootDirectory.findFile('/directory1/file3');
+            const directort1 = rootDirectory.findFile('/directory1');
+
+            expect(file1).not.toBeNull();
+            expect(directort1).not.toBeNull();
 
             rootDirectory.removeFile({ path: '/directory1' });
 
