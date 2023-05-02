@@ -265,6 +265,17 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(to, file);
     }
 
+    removeFile({ path }: { path: string }) {
+        const file = this.findFile(path);
+        if (!file) throw new Error("File not found");
+        if (file.type === 'directory') {
+            const directory = file as Directory;
+            directory.entries.forEach(file => this.#fileMap.delete(file.path));
+        }
+        this.#fileMap.delete(path);
+        file.parent?.removeFile(file);
+    }
+
 
     /**
      * Loads all of the Directories and files in the directory, and aggressively queries them until all directories are loaded.

@@ -190,6 +190,25 @@ describe('FileManager', () => {
             rootDirectory.renameFile({ from: '/directory1/file3', to: '/directory1/file4', newName: 'file 4' });
         });
     });
+
+    describe('removeFile', () => {
+        test('removes the given file and all of its children', async () => {
+            (queryRootDirectory as Mock)
+                .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
+            (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
+
+            const rootDirectory = new TauriFileManager();
+            await rootDirectory.loadRootDirectory();
+
+            expect(rootDirectory.findFile('/directory1/file3')).not.toBeNull();
+            expect(rootDirectory.findFile('/directory1')).not.toBeNull();
+
+            rootDirectory.removeFile({ path: '/directory1' });
+
+            expect(rootDirectory.findFile('/directory1')).toBeNull();
+            expect(rootDirectory.findFile('/directory1/file3')).toBeNull();
+        });
+    });
 });
 
 describe('Directory', () => {
