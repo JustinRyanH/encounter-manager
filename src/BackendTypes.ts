@@ -9,15 +9,16 @@ export interface FileData {
 export type FileSimpleChange = FileData;
 
 export interface FileRename {
-    from?: string;
-    to?: string;
+    from: string;
+    to: string;
+    data: FileData;
 }
 
 export interface FileChangeEvent {
     create?: FileSimpleChange,
     delete?: FileSimpleChange,
     modify?: FileSimpleChange,
-    renameBoth?: FileRename,
+    rename?: FileRename,
 }
 
 export interface FsQueryCommmand {

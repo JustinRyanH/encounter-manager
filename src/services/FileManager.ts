@@ -256,13 +256,13 @@ export class TauriFileManager extends BaseFileManager {
         }
     }
 
-    renameFile({ oldPath, newPath, newName }: { oldPath: string, newPath: string, newName: string }) {
-        const file = this.findFile(oldPath);
+    renameFile({ from, to, newName }: { from: string, to: string, newName: string }) {
+        const file = this.findFile(from);
         if (!file) throw new Error("File not found");
         file.name = newName;
-        file.path = newPath;
-        this.#fileMap.delete(oldPath);
-        this.#fileMap.set(newPath, file);
+        file.path = to;
+        this.#fileMap.delete(from);
+        this.#fileMap.set(to, file);
     }
 
 
@@ -325,6 +325,9 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     private handleFileChange = (event: FileChangeEvent) => {
-        console.log(event);
+        if (event.rename) {
+            const { from, to, data } = event.rename;
+            this.renameFile({ from, to, newName: data.name });
+        }
     }
 }

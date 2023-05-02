@@ -29,7 +29,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
     const fileList = (<>
         <Divider />
-        <Collapse pl={rem(8)} in={opened} transitionDuration={100} transitionTimingFunction="linear">
+        <Collapse pl={rem(8)} in={opened} transitionDuration={200} transitionTimingFunction="ease-in">
             <Stack spacing={rem(4)}>
                 {fileComponents}
             </Stack>
@@ -38,7 +38,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
 
     return (<>
-        <UnstyledButton onClick={toggle} disabled={!hasFiles}>
+        <UnstyledButton onClick={toggle} disabled={!hasFiles} w="100%">
             <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
                 <FolderNotch style={{ minWidth: "1rem" }} />
                 <Text style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} size="sm">{name}</Text>
