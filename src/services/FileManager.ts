@@ -7,7 +7,6 @@ import { ValueObserver } from "./ValueObserver";
 import { queryPath, queryRootDirectory, touchFile } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
 import { FileQueryResponse } from "~/BackendTypes";
-import { Dir } from "fs";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {

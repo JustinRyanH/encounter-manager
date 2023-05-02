@@ -14,7 +14,6 @@ export function touchFileCommand(parentDir: string, fileName: string): FsQueryCo
 }
 
 async function queryFileSystem(command: FsQueryCommand): Promise<FsQueryResponse> {
-    console.log(command);
     return await invoke('query_file_system', { command });
 }
 
