@@ -232,6 +232,31 @@ describe('FileManager', () => {
             expect(directort1.getFileFromPath(file1.path)).toBeNull();
         });
     });
+
+    describe('addFile', () => {
+        test('inserts the file into the path', async () => {
+            (queryRootDirectory as Mock)
+                .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
+            (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
+
+            const rootDirectory = new TauriFileManager();
+            await rootDirectory.loadRootDirectory();
+
+            const file3 = rootDirectory.findFile('/directory1/file3') as File;
+            const directort1 = rootDirectory.findFile('/directory1') as Directory;
+
+            expect(file3).not.toBeNull();
+            expect(directort1).not.toBeNull();
+
+            rootDirectory.addFile({
+                fileType: 'file',
+                name: 'file4',
+                path: '/directory1/file4',
+                parentDir: '/directory1',
+            });
+        });
+
+    });
 });
 
 describe('Directory', () => {

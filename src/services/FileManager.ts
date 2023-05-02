@@ -287,6 +287,12 @@ export class TauriFileManager extends BaseFileManager {
         console.log(this);
     }
 
+    addFile(fileData: FileData) {
+        const file = ParseFileFromType(fileData);
+        const parent = this.getParentDirectory(fileData.parentDir);
+        parent.addFile(file);
+        this.#fileMap.set(file.path, file);
+    }
 
     /**
      * Loads all of the Directories and files in the directory, and aggressively queries them until all directories are loaded.
@@ -350,10 +356,13 @@ export class TauriFileManager extends BaseFileManager {
         if (event.rename) {
             const { from, to, data } = event.rename;
             this.renameFile({ from, to, newName: data.name });
+            return;
         }
         if (event.delete) {
             const { path } = event.delete;
             this.removeFile({ path });
+            return;
         }
+        console.log(event)
     }
 }
