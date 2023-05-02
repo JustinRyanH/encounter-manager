@@ -211,6 +211,26 @@ describe('FileManager', () => {
             expect(rootDirectory.findFile('/directory1')).toBeNull();
             expect(rootDirectory.findFile('/directory1/file3')).toBeNull();
         });
+
+        test('orphans all of the files and directories', async () => {
+            (queryRootDirectory as Mock)
+                .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
+            (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
+
+            const rootDirectory = new TauriFileManager();
+            await rootDirectory.loadRootDirectory();
+
+            const file1 = rootDirectory.findFile('/directory1/file3') as File;
+            const directort1 = rootDirectory.findFile('/directory1') as Directory;
+
+            expect(file1).not.toBeNull();
+            expect(directort1).not.toBeNull();
+
+            rootDirectory.removeFile({ path: '/directory1' });
+
+            expect(file1.parent).toBeNull();
+            expect(directort1.getFileFromPath(file1.path)).toBeNull();
+        });
     });
 });
 

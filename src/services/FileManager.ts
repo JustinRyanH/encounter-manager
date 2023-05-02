@@ -93,6 +93,12 @@ export class File {
         this.#parent.value = value;
     }
 
+    delete() {
+        this.#parent.value?.removeFile(this);
+        this.#parent.value = null;
+    }
+
+
     toEqual(file: File) {
         return this.path === file.path;
     }
@@ -168,6 +174,12 @@ export class Directory extends File {
 
     removeFile(file: File) {
         this.#files.value = this.#files.value.filter(f => f.path !== file.path);
+    }
+
+    delete(): void {
+        super.delete();
+        this.#files.value.forEach(file => file.delete());
+        this.#files.value = [];
     }
 
     private updateFileDirectory(files: File[]) {
@@ -267,13 +279,12 @@ export class TauriFileManager extends BaseFileManager {
 
     removeFile({ path }: { path: string }) {
         const file = this.findFile(path);
-        if (!file) throw new Error("File not found");
-        if (file.type === 'directory') {
-            const directory = file as Directory;
-            directory.entries.forEach(file => this.#fileMap.delete(file.path));
-        }
+        if (!file) return;
+        if (file.type === 'directory') (file as Directory).allPaths.forEach(path => this.#fileMap.delete(path));
+
+        file.delete();
         this.#fileMap.delete(path);
-        file.parent?.removeFile(file);
+        console.log(this);
     }
 
 
@@ -339,6 +350,10 @@ export class TauriFileManager extends BaseFileManager {
         if (event.rename) {
             const { from, to, data } = event.rename;
             this.renameFile({ from, to, newName: data.name });
+        }
+        if (event.delete) {
+            const { path } = event.delete;
+            this.removeFile({ path });
         }
     }
 }
