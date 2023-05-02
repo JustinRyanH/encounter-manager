@@ -4,7 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory, touchFile, touchFileCommand } from "./FileCommands";
+import { queryPath, queryRootDirectory, touchFile } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
 import { FileQueryResponse } from "~/BackendTypes";
 import { Dir } from "fs";
