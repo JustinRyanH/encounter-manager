@@ -1,7 +1,7 @@
 import React from "react";
-import { Collapse, Divider, Flex, ScrollArea, Stack, Text, UnstyledButton, rem } from "@mantine/core";
+import { ActionIcon, Collapse, Divider, Flex, ScrollArea, Stack, Text, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
+import { DotsThreeOutlineVertical, File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/FileManager";
 import { Directory, File } from "~/services/FileManager";
@@ -9,10 +9,10 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 function FileLine({ file }: { file: File }) {
     const name = useWatchValueObserver(file.nameObserver);
-    return (<Flex gap="xs" justify="flex-start" align="center" wrap="nowrap">
-        <FileIcon />
-        <Text size="sm">{name}</Text>
-    </Flex>)
+    return (<Flex gap="0" justify="flex-start" align="center" wrap="nowrap">
+        <FileIcon style={{ marginRight: rem(4) }} />
+        <Text size="xs">{name}</Text>
+    </Flex >)
 }
 
 
@@ -38,12 +38,15 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
 
     return (<>
-        <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
-            <FolderNotch style={{ minWidth: "1rem" }} />
+        <Flex gap="0" justify="space-between" align="center" wrap="nowrap">
+            <FolderNotch style={{ minWidth: "1rem", marginRight: rem(4) }} />
             <UnstyledButton onClick={toggle} style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} >
-                <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="sm">{name}</Text>
+                <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="xs">{name}</Text>
             </UnstyledButton>
-            {hasFiles && <UnstyledButton onClick={toggle}><Plus /></UnstyledButton>}
+            <ActionIcon size="xs">
+                <DotsThreeOutlineVertical />
+            </ActionIcon>
+            {hasFiles && <ActionIcon size="xs" onClick={toggle}><Plus /></ActionIcon>}
         </Flex>
         {hasFiles && fileList}
     </>);
