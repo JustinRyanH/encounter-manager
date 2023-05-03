@@ -38,9 +38,11 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
 
     return (<>
-        <Flex gap="xs" justify="space-between" align="center" wrap="nowrap" w="100%">
+        <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
             <FolderNotch style={{ minWidth: "1rem" }} />
-            <UnstyledButton onClick={toggle} style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} ><Text size="sm">{name}</Text></UnstyledButton>
+            <UnstyledButton onClick={toggle} style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} >
+                <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="sm">{name}</Text>
+            </UnstyledButton>
             {hasFiles && <UnstyledButton onClick={toggle}><Plus /></UnstyledButton>}
         </Flex>
         {hasFiles && fileList}
@@ -61,7 +63,7 @@ export function FileExperiment() {
 
     return (
         <ScrollArea h={200} offsetScrollbars scrollbarSize={2}>
-            <Stack spacing={rem(2)}>
+            <Stack spacing={rem(2)} w="13rem">
                 {rootDirectory && <DirectoryLine directory={rootDirectory} />}
             </Stack>
         </ScrollArea>
