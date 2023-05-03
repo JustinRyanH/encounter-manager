@@ -46,7 +46,6 @@ function DirectoryLine({ directory }: { directory: Directory }) {
             <ActionIcon size="xs">
                 <DotsThreeOutlineVertical />
             </ActionIcon>
-            {hasFiles && <ActionIcon size="xs" onClick={toggle}><Plus /></ActionIcon>}
         </Flex>
         {hasFiles && fileList}
     </>);
