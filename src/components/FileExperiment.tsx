@@ -51,8 +51,8 @@ function DirectoryLine({ directory }: { directory: Directory }) {
                 </Menu.Target>
                 <Menu.Dropdown>
                     <Menu.Label>File Actions</Menu.Label>
-                    <Menu.Item icon={<PencilSimpleLine />}>Rename Folder</Menu.Item>
-                    <Menu.Item icon={<TrashSimple />}>Delete Folder</Menu.Item>
+                    <Menu.Item icon={<PencilSimpleLine />}>Rename Directory</Menu.Item>
+                    <Menu.Item icon={<TrashSimple />}>Delete Directory</Menu.Item>
                     <Menu.Item icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
                     <Menu.Divider />
                     <Menu.Item icon={<FilePlus />}>Create File</Menu.Item>
@@ -77,7 +77,7 @@ export function FileExperiment() {
 
     return (
         <ScrollArea h={200} offsetScrollbars scrollbarSize={2}>
-            <Stack spacing={rem(2)} w="13rem">
+            <Stack spacing={rem(2)} w="12.5rem">
                 {rootDirectory && <DirectoryLine directory={rootDirectory} />}
             </Stack>
         </ScrollArea>
