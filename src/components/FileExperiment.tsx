@@ -1,7 +1,7 @@
 import React from "react";
-import { ActionIcon, Collapse, Divider, Flex, ScrollArea, Stack, Text, UnstyledButton, rem } from "@mantine/core";
+import { ActionIcon, Collapse, Divider, Flex, Menu, ScrollArea, Stack, Text, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { DotsThreeOutlineVertical, File as FileIcon, FolderNotch, Plus } from '@phosphor-icons/react';
+import { DotsThreeOutlineVertical, File as FileIcon, FilePlus, FolderNotch, FolderSimplePlus, PencilSimpleLine, TrashSimple } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/FileManager";
 import { Directory, File } from "~/services/FileManager";
@@ -43,9 +43,21 @@ function DirectoryLine({ directory }: { directory: Directory }) {
             <UnstyledButton onClick={toggle} style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} >
                 <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="xs">{name}</Text>
             </UnstyledButton>
-            <ActionIcon size="xs">
-                <DotsThreeOutlineVertical />
-            </ActionIcon>
+            <Menu position="left" withArrow>
+                <Menu.Target>
+                    <ActionIcon size="xs">
+                        <DotsThreeOutlineVertical />
+                    </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                    <Menu.Label>File Actions</Menu.Label>
+                    <Menu.Item icon={<PencilSimpleLine />}>Rename Folder</Menu.Item>
+                    <Menu.Item icon={<TrashSimple />}>Delete Folder</Menu.Item>
+                    <Menu.Item icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item icon={<FilePlus />}>Create File</Menu.Item>
+                </Menu.Dropdown>
+            </Menu>
         </Flex>
         {hasFiles && fileList}
     </>);
