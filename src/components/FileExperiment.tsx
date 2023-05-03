@@ -30,7 +30,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
     const fileList = (<>
         <Divider />
         <Collapse pl={rem(8)} in={opened} transitionDuration={200} transitionTimingFunction="ease-in">
-            <Stack spacing={rem(4)}>
+            <Stack spacing={rem(2)}>
                 {fileComponents}
             </Stack>
         </Collapse>
@@ -38,13 +38,11 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
 
     return (<>
-        <UnstyledButton onClick={toggle} disabled={!hasFiles} w="100%">
-            <Flex gap="xs" justify="space-between" align="center" wrap="nowrap">
-                <FolderNotch style={{ minWidth: "1rem" }} />
-                <Text style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} size="sm">{name}</Text>
-                {hasFiles && <Plus onClick={toggle} />}
-            </Flex>
-        </UnstyledButton>
+        <Flex gap="xs" justify="space-between" align="center" wrap="nowrap" w="100%">
+            <FolderNotch style={{ minWidth: "1rem" }} />
+            <UnstyledButton onClick={toggle} style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', flexGrow: 1, overflow: 'hidden' }} ><Text size="sm">{name}</Text></UnstyledButton>
+            {hasFiles && <UnstyledButton onClick={toggle}><Plus /></UnstyledButton>}
+        </Flex>
         {hasFiles && fileList}
     </>);
 }
@@ -61,9 +59,11 @@ export function FileExperiment() {
 
     const rootDirectory = useWatchValueObserver(fileManager.rootDirectoryObserver);
 
-    return <Stack spacing={rem(4)}>
+    return (
         <ScrollArea h={200} offsetScrollbars scrollbarSize={2}>
-            {rootDirectory && <DirectoryLine directory={rootDirectory} />}
+            <Stack spacing={rem(2)}>
+                {rootDirectory && <DirectoryLine directory={rootDirectory} />}
+            </Stack>
         </ScrollArea>
-    </Stack>
+    )
 }
