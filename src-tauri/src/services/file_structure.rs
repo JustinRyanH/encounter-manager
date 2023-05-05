@@ -41,7 +41,7 @@ pub struct RootDirectory {
 impl RootDirectory {
     pub fn new(root: &Path) -> Result<Self, String> {
         if !root.exists() {
-            create_dir(&root).map_err(|e| e.to_string())?;
+            create_dir(root).map_err(|e| e.to_string())?;
         }
         if !root.is_dir() {
             return Err(format!("{} is not a directory", root.display()));
@@ -129,7 +129,7 @@ impl RootDirectory {
     }
 
     fn build_directory_from_path(path: &Path) -> Result<QueryCommandResponse, String> {
-        let entries = read_dir(&path)
+        let entries = read_dir(path)
             .map_err(|e| e.to_string())?
             .map(|entry| {
                 let entry = entry.unwrap();
@@ -165,7 +165,7 @@ mod tests {
     fn test_query_new_is_file() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let bad_path = tmp_dir.path().join("file");
-        let file = fs::File::create(&bad_path).unwrap();
+        let file = File::create(&bad_path).unwrap();
         assert!(file.metadata().unwrap().is_file(), "bad_path should be a file before new query file in test");
         let result = RootDirectory::new(&bad_path);
         assert!(result.is_err(), "if we set it to file we should error");
