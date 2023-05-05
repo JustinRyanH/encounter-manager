@@ -15,8 +15,6 @@ function ParseFileFromType(file: FileData): File | Directory {
         return new File({ name: file.name, path: file.path });
     }
 }
-
-
 function PraseFileFromResponse(file: FileQueryResponse): File {
     return new File({ name: file.data.name, path: file.data.path });
 }
@@ -25,7 +23,6 @@ function ParseDirectoryFromResponse(directory: DirectoryQueryResponse): Director
     const files = directory.entries.map(ParseFileFromType);
     return new Directory({ name: directory.data.name, path: directory.data.path, files, loaded: true });
 }
-
 export class BaseFileManager {
     #uuid: string;
 
@@ -269,13 +266,9 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     async touchFile(directory: Directory, name: string) {
-        try {
-            const { file } = await touchFile(directory.path, name);
-            console.log(file);
-        }
-        catch (e) {
-            console.error(e);
-        }
+        const { file } = await touchFile(directory.path, name);
+        console.log(file);
+
     }
 
     renameFile({ from, to, newName }: { from: string, to: string, newName: string }) {
