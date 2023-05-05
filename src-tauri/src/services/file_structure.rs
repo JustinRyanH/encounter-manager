@@ -177,4 +177,32 @@ mod tests {
         assert!(result.is_err());
         assert_eq!(result.err(), Some("Root Directory does not exist".to_string()));
     }
+
+    #[test]
+    fn test_query_path() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = FileQuery::new(&root_path).unwrap();
+
+        File::create(root_path.join("fileA")).unwrap();
+        create_dir(root_path.join("dirA")).unwrap();
+
+        let result = file_query.query_path(Path::new("fileA"));
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), QueryCommandResponse::File {
+            data: FileData::from(root_path.join("fileA")),
+        });
+
+        let result = file_query.query_path(Path::new("dirA"));
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), QueryCommandResponse::Directory {
+            data: FileData::from(root_path.join("dirA")),
+            entries: vec![],
+        });
+
+        let missing_path = root_path.join("fileB");
+        let result = file_query.query_path(&missing_path);
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} does not exist", missing_path.display())));
+    }
 }
