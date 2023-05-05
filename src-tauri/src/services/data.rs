@@ -6,12 +6,12 @@ use tokio::sync::{Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
-use super::{file::FileData, file_structure::FileQuery, file_watcher::FileChangeEvent};
+use super::{file::FileData, file_structure::RootDirectory, file_watcher::FileChangeEvent};
 
 pub struct BackgroundData<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
     pub file_watcher: FileWatcher,
-    pub file_query: FileQuery,
+    pub file_query: RootDirectory,
 }
 
 impl<R: Runtime> BackgroundData<R> {
@@ -20,7 +20,7 @@ impl<R: Runtime> BackgroundData<R> {
         let mut document_path = document_dir().ok_or("Failed to get document Path")?;
         document_path.push("Encounter Manager");
 
-        let file_query = FileQuery::new(document_path.as_path())?;
+        let file_query = RootDirectory::new(document_path.as_path())?;
         Ok(Self {
             app_handle,
             file_watcher,

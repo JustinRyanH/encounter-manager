@@ -34,11 +34,11 @@ pub enum QueryCommandResponse {
 }
 
 #[derive(Clone, Debug)]
-pub struct FileQuery {
+pub struct RootDirectory {
     root: PathBuf,
 }
 
-impl FileQuery {
+impl RootDirectory {
     pub fn new(root: &Path) -> Result<Self, String> {
         if !root.exists() {
             create_dir(&root).map_err(|e| e.to_string())?;
@@ -122,7 +122,7 @@ mod tests {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let bad_root = tmp_dir.path().join("bad_path");
         assert!(!bad_root.exists(), "bad_root should not exist before new query file in test");
-        let result = FileQuery::new(&bad_root);
+        let result = RootDirectory::new(&bad_root);
         assert!(result.is_ok(), "FileQuery can handle non-existent path");
         assert!(bad_root.exists(), "FileQuery::new creates a new directory");
     }
@@ -133,7 +133,7 @@ mod tests {
         let bad_path = tmp_dir.path().join("file");
         let file = fs::File::create(&bad_path).unwrap();
         assert!(file.metadata().unwrap().is_file(), "bad_path should be a file before new query file in test");
-        let result = FileQuery::new(&bad_path);
+        let result = RootDirectory::new(&bad_path);
         assert!(result.is_err(), "if we set it to file we should error");
         assert_eq!(result.err(), Some(format!("{} is not a directory", bad_path.display())));
     }
@@ -142,7 +142,7 @@ mod tests {
     fn test_query_root_function() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let root_path = tmp_dir.path().join("root");
-        let file_query = FileQuery::new(&root_path).unwrap();
+        let file_query = RootDirectory::new(&root_path).unwrap();
 
         File::create(root_path.join("fileA")).unwrap();
         File::create(root_path.join("fileB")).unwrap();
@@ -164,7 +164,7 @@ mod tests {
     fn test_query_root_when_deleted() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let root_path = tmp_dir.path().join("root");
-        let file_query = FileQuery::new(&root_path).unwrap();
+        let file_query = RootDirectory::new(&root_path).unwrap();
 
         File::create(root_path.join("fileA")).unwrap();
         File::create(root_path.join("fileB")).unwrap();
@@ -183,7 +183,7 @@ mod tests {
     fn test_query_path() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let root_path = tmp_dir.path().join("root");
-        let file_query = FileQuery::new(&root_path).unwrap();
+        let file_query = RootDirectory::new(&root_path).unwrap();
 
         File::create(root_path.join("fileA")).unwrap();
         create_dir(root_path.join("dirA")).unwrap();
@@ -211,7 +211,7 @@ mod tests {
     fn test_touch_file() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let root_path = tmp_dir.path().join("root");
-        let file_query = FileQuery::new(&root_path).unwrap();
+        let file_query = RootDirectory::new(&root_path).unwrap();
 
 
         let result = file_query.touch_file(&root_path, "fileA").unwrap();
