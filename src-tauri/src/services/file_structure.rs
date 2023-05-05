@@ -88,10 +88,7 @@ impl RootDirectory {
     }
 
     pub fn touch_file(&self, directory: &Path, file_name: &str) -> Result<QueryCommandResponse, String> {
-        let directory = match directory.has_root() {
-            true => directory.to_path_buf(),
-            false => self.root.join(directory),
-        };
+        let directory = self.path_from_root(directory);
         if !directory.exists() {
             create_dir_all(&directory).map_err(|e| e.to_string())?;
         }
@@ -108,6 +105,14 @@ impl RootDirectory {
         }
         fs::File::create(&path).map_err(|e| e.to_string())?;
         return Ok(QueryCommandResponse::File { data: path.into() });
+    }
+
+    fn path_from_root(&self, directory: &Path) -> PathBuf {
+        let directory = match directory.has_root() {
+            true => directory.to_path_buf(),
+            false => self.root.join(directory),
+        };
+        directory
     }
 }
 
