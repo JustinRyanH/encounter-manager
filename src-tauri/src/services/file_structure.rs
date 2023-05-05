@@ -101,7 +101,23 @@ impl RootDirectory {
         Self::build_directory_from_path(&path)
     }
 
+    pub fn delete_path(&self, path: &Path) -> Result<() , String> {
+        self.validate_in_root(path)?;
+        if !path.exists() {
+            return Err(format!("Path {} does not exist", path.display()));
+        }
+        if path.is_dir() {
+            fs::remove_dir_all(path).map_err(|e| e.to_string())?;
+        } else if path.is_file() {
+            fs:: remove_file(path).map_err(|e| e.to_string())?;
+        } else {
+            return Err(format!("Path {} is not a file or directory", path.display()));
+        }
+        return Ok(());
+    }
+
     fn validate_directory(&self, directory: &Path) -> Result<(), String> {
+        self.validate_in_root(directory)?;
         if !directory.exists() {
             create_dir_all(directory).map_err(|e| e.to_string())?;
         }
@@ -109,8 +125,12 @@ impl RootDirectory {
             return Err(format!("Path {} is not a directory", directory.display()));
         }
 
+        Ok(())
+    }
+
+    fn validate_in_root(&self, directory: &Path) -> Result<(), String> {
         if !directory.starts_with(&self.root) {
-            return Err(format!("Path {} is not a subdirectory of {}", directory.display(), self.root.display()));
+            return Err(format!("Path {} is not a child of {}", directory.display(), self.root.display()));
         }
         Ok(())
     }
@@ -267,10 +287,10 @@ mod tests {
         assert!(uncreated_dir.exists());
 
         let out_of_root = tmp_dir.path().join("out_of_root");
-        // Will error if not a subdirectory of root
+        // Will error if a child of root
         let result = file_query.touch_file(&out_of_root, "fileB");
         assert!(result.is_err());
-        assert_eq!(result.err(), Some(format!("Path {} is not a subdirectory of {}", out_of_root.display(), root_path.display())));
+        assert_eq!(result.err(), Some(format!("Path {} is not a child of {}", out_of_root.display(), root_path.display())));
 
         assert!(root_path.join("fileA").exists());
         // Will no-op and return existing file
@@ -312,21 +332,51 @@ mod tests {
         assert!(uncreated_dir.exists());
 
         let out_of_root = tmp_dir.path().join("out_of_root");
-        // Will error if not a subdirectory of root
+        // Will error if a child of root
         let result = file_query.touch_directory(&out_of_root, "newDirB");
         assert!(result.is_err());
-        assert_eq!(result.err(), Some(format!("Path {} is not a subdirectory of {}", out_of_root.display(), root_path.display())));
+        assert_eq!(result.err(), Some(format!("Path {} is not a child of {}", out_of_root.display(), root_path.display())));
 
         assert!(root_path.join("newDirA").exists());
         // Will no-op and return existing file
         let result = file_query.touch_directory(&root_path, "newDirA").unwrap();
-        assert_eq!(result, QueryCommandResponse::File {
+        assert_eq!(result, QueryCommandResponse::Directory {
             data: FileData::from(root_path.join("newDirA")),
+            entries: vec![],
         });
 
         // Will place in root if not a has root inclusive pah
         file_query.touch_directory(Path::new("example"), "newDirA").unwrap();
         assert!(root_path.join("example").exists());
-        assert!(root_path.join("example").join("fileA").exists());
+        assert!(root_path.join("example").join("newDirA").exists());
+    }
+
+    #[test]
+    fn delete_path() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = RootDirectory::new(&root_path).unwrap();
+
+        File::create(root_path.join("fileA")).unwrap();
+        create_dir(root_path.join("dirA")).unwrap();
+
+        let out_of_root = tmp_dir.path().join("out_of_root");
+        // Will error if a child of root
+        let result = file_query.delete_path(&out_of_root.join("fileA"));
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} is not a child of {}", out_of_root.join("fileA").display(), root_path.display())));
+
+        // Will error if path does not exist
+        let result = file_query.delete_path(&root_path.join("fileB"));
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} does not exist", root_path.join("fileB").display())));
+
+        // Will delete file
+        let result = file_query.delete_path(&root_path.join("fileA"));
+        assert!(result.is_ok());
+
+        // Will delete directory
+        let result = file_query.delete_path(&root_path.join("dirA"));
+        assert!(result.is_ok());
     }
 }
