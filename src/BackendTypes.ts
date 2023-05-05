@@ -34,6 +34,7 @@ export interface FsCommand {
     queryRoot?: null;
     queryPath?: QueryPath;
     touchFile?: TouchFile;
+    touchDirectory?: TouchFile;
 }
 
 export interface FileQueryResponse {

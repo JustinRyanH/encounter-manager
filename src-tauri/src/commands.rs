@@ -16,6 +16,9 @@ pub async fn query_file_system(
         FsCommand::QueryPath { path } => file_query.query_path(&path),
         FsCommand::TouchFile(TouchCommand { parent_dir, name: file_name }) => {
             file_query.touch_file(&parent_dir, &file_name)
-        }
+        },
+        FsCommand::TouchDirectory(TouchCommand { parent_dir, name: dir_name }) => {
+            file_query.touch_directory(&parent_dir, &dir_name)
+        },
     }
 }

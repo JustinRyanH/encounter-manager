@@ -19,6 +19,7 @@ pub enum FsCommand {
     QueryRoot,
     QueryPath { path: PathBuf },
     TouchFile(TouchCommand),
+    TouchDirectory(TouchCommand),
 }
 
 #[derive(Clone, Debug, Serialize, PartialEq)]
