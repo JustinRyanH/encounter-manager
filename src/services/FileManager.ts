@@ -1,12 +1,10 @@
 import { v4 } from "uuid";
 
 import { TauriConnection } from "~/services/TauriConnection";
-import { DirectoryQueryResponse, FileChangeEvent } from "~/BackendTypes";
+import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory, touchFile, touchDirectory } from "./FileCommands";
-import { FileData } from "~/BackendTypes";
-import { FileQueryResponse } from "~/BackendTypes";
+import { queryPath, queryRootDirectory, touchDirectory, touchFile } from "./FileCommands";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -231,9 +229,9 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(root.path, root);
         root.entries.forEach(file => this.#fileMap.set(file.path, file));
         this.#updateFileMap(root.entries);
-        let subdirectories = await this.#aggresivelyLoadAllDirectories(root.directories);
+        let subdirectories = await this.#aggressivelyLoadAllDirectories(root.directories);
         while (subdirectories.length > 0) {
-            subdirectories = await this.#aggresivelyLoadAllDirectories(subdirectories);
+            subdirectories = await this.#aggressivelyLoadAllDirectories(subdirectories);
         }
     }
 
@@ -312,16 +310,15 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     /**
-     * Loads all of the Directories and files in the directory, and aggressively queries them until all directories are loaded.
+     * Loads all the Directories and files in the directory, and aggressively queries them until all directories are loaded.
      * @param directories 
      * @returns 
      */
-    async #aggresivelyLoadAllDirectories(directories: Directory[]) {
+    async #aggressivelyLoadAllDirectories(directories: Directory[]) {
         const directoryPromises = directories.map(directory => this.loadPath(directory.path));
         const files = await Promise.all(directoryPromises);
         const loadedDirectories = files.filter(files => files.type === 'directory') as Directory[];
-        const subdirectories = loadedDirectories.flatMap(directory => directory.directories);
-        return subdirectories
+        return loadedDirectories.flatMap(directory => directory.directories)
     }
 
     /**
