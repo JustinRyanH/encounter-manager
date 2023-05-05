@@ -3,7 +3,7 @@ import { ActionIcon, Collapse, Divider, Flex, Menu, ScrollArea, Stack, Text, Uns
 import { useDisclosure } from "@mantine/hooks";
 import { DotsThreeOutlineVertical, File as FileIcon, FilePlus, FolderNotch, FolderSimplePlus, PencilSimpleLine, TrashSimple } from '@phosphor-icons/react';
 
-import { useFileManager } from "~/components/FileManager";
+import { useFileManager } from "~/components/files/FileManager";
 import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
