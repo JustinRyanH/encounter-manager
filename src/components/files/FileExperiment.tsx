@@ -1,11 +1,12 @@
 import React from "react";
-import { ActionIcon, Collapse, Divider, Flex, Menu, ScrollArea, Stack, Text, UnstyledButton, rem } from "@mantine/core";
+import { Modal, ActionIcon, Collapse, Divider, Flex, Menu, ScrollArea, Stack, Text, UnstyledButton, rem, Title, TextInput, Group, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { DotsThreeOutlineVertical, File as FileIcon, FilePlus, FolderNotch, FolderSimplePlus, PencilSimpleLine, TrashSimple } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/files/FileManager";
 import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import { create } from "domain";
 
 function FileLine({ file }: { file: File }) {
     const name = useWatchValueObserver(file.nameObserver);
@@ -16,21 +17,36 @@ function FileLine({ file }: { file: File }) {
 }
 
 function DirectoryMenu({ directory }: { directory: Directory }) {
-    return (<Menu position="left" withArrow>
-        <Menu.Target>
-            <ActionIcon size="xs">
-                <DotsThreeOutlineVertical />
-            </ActionIcon>
-        </Menu.Target>
-        <Menu.Dropdown>
-            <Menu.Label>File Actions</Menu.Label>
-            <Menu.Item icon={<PencilSimpleLine />}>Rename Directory</Menu.Item>
-            <Menu.Item icon={<TrashSimple />}>Delete Directory</Menu.Item>
-            <Menu.Item icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
-            <Menu.Divider />
-            <Menu.Item icon={<FilePlus />}>Create File</Menu.Item>
-        </Menu.Dropdown>
-    </Menu>)
+    const fileManager = useFileManager();
+
+    const [createModal, createHandles] = useDisclosure(false);
+
+
+    return (<>
+        <Modal opened={createModal} onClose={createHandles.close} size="xs" title={`Create file in ${directory.name}`}>
+            <Group noWrap m={rem(4)}>
+                <TextInput placeholder="File Name" withAsterisk />
+                <Button onClick={() => {
+                    fileManager.touchFile(directory, 'test.txt').then(() => createHandles.close());
+                }} variant="light" color="blue">Create</Button>
+            </Group>
+        </Modal>
+        <Menu position="left" withArrow>
+            <Menu.Target>
+                <ActionIcon size="xs">
+                    <DotsThreeOutlineVertical />
+                </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+                <Menu.Label>File Actions</Menu.Label>
+                <Menu.Item icon={<PencilSimpleLine />}>Rename Directory</Menu.Item>
+                <Menu.Item icon={<TrashSimple />}>Delete Directory</Menu.Item>
+                <Menu.Item icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item onClick={createHandles.open} icon={<FilePlus />}>Create File</Menu.Item>
+            </Menu.Dropdown>
+        </Menu>
+    </>)
 }
 
 
