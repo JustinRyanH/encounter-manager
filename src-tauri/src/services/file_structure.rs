@@ -188,12 +188,14 @@ mod tests {
         File::create(root_path.join("fileA")).unwrap();
         create_dir(root_path.join("dirA")).unwrap();
 
+        // Will Return a file if it exists
         let result = file_query.query_path(Path::new("fileA"));
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), QueryCommandResponse::File {
             data: FileData::from(root_path.join("fileA")),
         });
 
+        // Return a directory and it's entries if it exists
         let result = file_query.query_path(Path::new("dirA"));
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), QueryCommandResponse::Directory {
@@ -202,6 +204,7 @@ mod tests {
         });
 
         let missing_path = root_path.join("fileB");
+        // Will error if path does not exist
         let result = file_query.query_path(&missing_path);
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} does not exist", missing_path.display())));
@@ -212,30 +215,38 @@ mod tests {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let root_path = tmp_dir.path().join("root");
         let file_query = RootDirectory::new(&root_path).unwrap();
-
-
+        // Will create file if it doesn't exist
         let result = file_query.touch_file(&root_path, "fileA").unwrap();
         assert_eq!(result, QueryCommandResponse::File {
             data: FileData::from(root_path.join("fileA")),
         });
 
+        // Will error if path is not a directory
         let result = file_query.touch_file(&root_path.join("fileA"), "fileB");
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} is not a directory", root_path.join("fileA").display())));
 
         let uncreated_dir = root_path.join("dirA");
+        // Will create directory if it doesn't exist
         file_query.touch_file(&uncreated_dir, "fileB").unwrap();
         assert!(uncreated_dir.exists());
 
         let out_of_root = tmp_dir.path().join("out_of_root");
+        // Will error if not a subdirectory of root
         let result = file_query.touch_file(&out_of_root, "fileB");
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} is not a subdirectory of {}", out_of_root.display(), root_path.display())));
 
         assert!(root_path.join("fileA").exists());
+        // Will no-op and return existing file
         let result = file_query.touch_file(&root_path, "fileA").unwrap();
         assert_eq!(result, QueryCommandResponse::File {
             data: FileData::from(root_path.join("fileA")),
         });
+
+        // Will place in root if not a has root inclusive pah
+        file_query.touch_file(Path::new("example"), "fileA").unwrap();
+        assert!(root_path.join("example").exists());
+        assert!(root_path.join("example").join("fileA").exists());
     }
 }
