@@ -4,7 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory, touchFile } from "./FileCommands";
+import { queryPath, queryRootDirectory, touchFile, touchDirectory } from "./FileCommands";
 import { FileData } from "~/BackendTypes";
 import { FileQueryResponse } from "~/BackendTypes";
 
@@ -268,12 +268,21 @@ export class TauriFileManager extends BaseFileManager {
     async touchFile(directory: Directory, name: string) {
         if (!name) throw new Error("No name provided");
         const { file } = await touchFile(directory.path, name);
-        console.log(file);
         if (!file) throw new Error("No file returned");
         const newFile = PraseFileFromResponse(file);
         this.#fileMap.set(newFile.path, newFile);
         directory.addFile(newFile);
         return newFile;
+    }
+
+    async touchDirectory(directory: Directory, name: string) {
+        if (!name) throw new Error("No name provided");
+        const { directory: newDirectory } = await touchDirectory(directory.path, name);
+        if (!newDirectory) throw new Error("No directory returned");
+        const dir = ParseDirectoryFromResponse(newDirectory);
+        this.#fileMap.set(dir.path, dir);
+        directory.addFile(dir);
+        return dir;
     }
 
     renameFile({ from, to, newName }: { from: string, to: string, newName: string }) {
