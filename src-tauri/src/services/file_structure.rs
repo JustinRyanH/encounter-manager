@@ -292,16 +292,19 @@ mod tests {
         let root_path = tmp_dir.path().join("root");
         let file_query = RootDirectory::new(&root_path).unwrap();
         // Will create dir if it doesn't exist
-        let result = file_query.touch_directory(&root_path, "fileA").unwrap();
+        let result = file_query.touch_directory(&root_path, "newDirA").unwrap();
         assert_eq!(result, QueryCommandResponse::Directory {
-            data: FileData::from(root_path.join("fileA")),
+            data: FileData::from(root_path.join("newDirA")),
             entries: vec![],
         });
 
+        let file = root_path.join("fileA");
+        fs::File::create(&file).unwrap();
+
         // Will error if path is not a directory
-        let result = file_query.touch_directory(&root_path.join("newDirA"), "newDirB");
+        let result = file_query.touch_directory(&root_path.join("fileA"), "newDirB");
         assert!(result.is_err());
-        assert_eq!(result.err(), Some(format!("Path {} is not a directory", root_path.join("newDirA").display())));
+        assert_eq!(result.err(), Some(format!("Path {} is not a directory", root_path.join("fileA").display())));
 
         let uncreated_dir = root_path.join("dirA");
         // Will create directory if it doesn't exist
