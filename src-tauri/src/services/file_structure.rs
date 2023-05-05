@@ -8,9 +8,9 @@ use super::file::FileData;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TouchFileCommand {
+pub struct TouchCommand {
     pub parent_dir: PathBuf,
-    pub file_name: String,
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -18,7 +18,7 @@ pub struct TouchFileCommand {
 pub enum FsCommand {
     QueryRoot,
     QueryPath { path: PathBuf },
-    TouchFile(TouchFileCommand),
+    TouchFile(TouchCommand),
 }
 
 #[derive(Clone, Debug, Serialize, PartialEq)]

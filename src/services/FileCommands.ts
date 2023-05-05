@@ -9,8 +9,8 @@ export function getPathCommand(path: string): FsQueryCommand {
     return { queryPath: { path } };
 }
 
-export function touchFileCommand(parentDir: string, fileName: string): FsQueryCommand {
-    return { touchFile: { parentDir, fileName } };
+export function touchCommand(parentDir: string, name: string): FsQueryCommand {
+    return { touchFile: { parentDir, name } };
 }
 
 async function queryFileSystem(command: FsQueryCommand): Promise<FsQueryResponse> {
@@ -26,5 +26,5 @@ export function queryPath(path: string): Promise<FsQueryResponse> {
 }
 
 export function touchFile(parentDir: string, fileName: string): Promise<FsQueryResponse> {
-    return queryFileSystem(touchFileCommand(parentDir, fileName));
+    return queryFileSystem(touchCommand(parentDir, fileName));
 }
