@@ -15,6 +15,24 @@ function FileLine({ file }: { file: File }) {
     </Flex >)
 }
 
+function DirectoryMenu({ directory }: { directory: Directory }) {
+    return (<Menu position="left" withArrow>
+        <Menu.Target>
+            <ActionIcon size="xs">
+                <DotsThreeOutlineVertical />
+            </ActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+            <Menu.Label>File Actions</Menu.Label>
+            <Menu.Item icon={<PencilSimpleLine />}>Rename Directory</Menu.Item>
+            <Menu.Item icon={<TrashSimple />}>Delete Directory</Menu.Item>
+            <Menu.Item icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
+            <Menu.Divider />
+            <Menu.Item icon={<FilePlus />}>Create File</Menu.Item>
+        </Menu.Dropdown>
+    </Menu>)
+}
+
 
 function DirectoryLine({ directory }: { directory: Directory }) {
     const name = useWatchValueObserver(directory.nameObserver);
@@ -43,21 +61,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
             <UnstyledButton onClick={toggle} style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} >
                 <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="xs">{name}</Text>
             </UnstyledButton>
-            <Menu position="left" withArrow>
-                <Menu.Target>
-                    <ActionIcon size="xs">
-                        <DotsThreeOutlineVertical />
-                    </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                    <Menu.Label>File Actions</Menu.Label>
-                    <Menu.Item icon={<PencilSimpleLine />}>Rename Directory</Menu.Item>
-                    <Menu.Item icon={<TrashSimple />}>Delete Directory</Menu.Item>
-                    <Menu.Item icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item icon={<FilePlus />}>Create File</Menu.Item>
-                </Menu.Dropdown>
-            </Menu>
+            <DirectoryMenu directory={directory} />
         </Flex>
         {hasFiles && fileList}
     </>);
