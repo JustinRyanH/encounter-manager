@@ -113,7 +113,7 @@ impl RootDirectory {
         } else {
             return Err(format!("Path {} is not a file or directory", path.display()));
         }
-        return Ok(());
+        Ok(())
     }
 
     fn validate_directory(&self, directory: &Path) -> Result<(), String> {
