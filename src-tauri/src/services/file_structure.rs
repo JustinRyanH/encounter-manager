@@ -21,7 +21,7 @@ pub enum FsCommand {
     TouchFile(TouchFileCommand),
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
     Directory {
@@ -112,11 +112,12 @@ impl FileQuery {
 
 #[cfg(test)]
 mod tests {
+    use std::fs::File;
     use super::*;
     use tempdir;
 
     #[test]
-    fn test_query_root_no_directory() {
+    fn test_query_new_no_directory() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let bad_root = tmp_dir.path().join("bad_path");
         assert!(!bad_root.exists(), "bad_root should not exist before new query file in test");
@@ -126,7 +127,7 @@ mod tests {
     }
 
     #[test]
-    fn test_query_root_is_file() {
+    fn test_query_new_is_file() {
         let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
         let bad_path = tmp_dir.path().join("file");
         let file = fs::File::create(&bad_path).unwrap();
@@ -134,5 +135,46 @@ mod tests {
         let result = FileQuery::new(&bad_path);
         assert!(result.is_err(), "if we set it to file we should error");
         assert_eq!(result.err(), Some(format!("{} is not a directory", bad_path.display())));
+    }
+
+    #[test]
+    fn test_query_root_function() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = FileQuery::new(&root_path).unwrap();
+
+        File::create(root_path.join("fileA")).unwrap();
+        File::create(root_path.join("fileB")).unwrap();
+        create_dir(root_path.join("dirA")).unwrap();
+
+        let result = file_query.query_root();
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), QueryCommandResponse::Directory {
+            data: FileData::from(root_path.clone()),
+            entries: vec![
+                FileData::from(root_path.join("dirA")),
+                FileData::from(root_path.join("fileA")),
+                FileData::from(root_path.join("fileB")),
+            ],
+        });
+    }
+
+    #[test]
+    fn test_query_root_when_deleted() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = FileQuery::new(&root_path).unwrap();
+
+        File::create(root_path.join("fileA")).unwrap();
+        File::create(root_path.join("fileB")).unwrap();
+        create_dir(root_path.join("dirA")).unwrap();
+
+        let result = file_query.query_root();
+        assert!(result.is_ok());
+        fs::remove_dir_all(&root_path).unwrap();
+
+        let result = file_query.query_root();
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some("Root Directory does not exist".to_string()));
     }
 }
