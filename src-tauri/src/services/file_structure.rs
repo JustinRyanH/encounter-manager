@@ -20,6 +20,7 @@ pub enum FsCommand {
     QueryPath { path: PathBuf },
     TouchFile(TouchCommand),
     TouchDirectory(TouchCommand),
+    Delete { path: PathBuf },
 }
 
 #[derive(Clone, Debug, Serialize, PartialEq)]
@@ -32,6 +33,7 @@ pub enum QueryCommandResponse {
     File {
         data: FileData,
     },
+    None,
 }
 
 #[derive(Clone, Debug)]
