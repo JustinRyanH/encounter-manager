@@ -19,6 +19,7 @@ function CreateFileModal({ directory, onClose, opened }: { directory: Directory,
     const fileManager = useFileManager();
     const name = useWatchValueObserver(directory.nameObserver);
     const [value, setValue] = React.useState('');
+    React.useEffect(() => setValue(''), [opened]);
 
     const handleSave = () => fileManager.touchFile(directory, 'test.txt').then(() => onClose());
 
