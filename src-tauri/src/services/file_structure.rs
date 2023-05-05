@@ -108,11 +108,10 @@ impl RootDirectory {
     }
 
     fn path_from_root(&self, directory: &Path) -> PathBuf {
-        let directory = match directory.has_root() {
+        match directory.has_root() {
             true => directory.to_path_buf(),
             false => self.root.join(directory),
-        };
-        directory
+        }
     }
 }
 
