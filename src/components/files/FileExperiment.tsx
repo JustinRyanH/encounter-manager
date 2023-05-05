@@ -38,9 +38,7 @@ function CreateFileModal({ directory, onClose, opened }: { directory: Directory,
 }
 
 function DirectoryMenu({ directory }: { directory: Directory }) {
-
     const [createModal, createHandles] = useDisclosure(false);
-
 
     return (<>
         <CreateFileModal directory={directory} onClose={createHandles.close} opened={createModal} />
