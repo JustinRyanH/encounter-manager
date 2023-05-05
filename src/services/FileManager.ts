@@ -201,7 +201,7 @@ export class TauriFileManager extends BaseFileManager {
     constructor() {
         super();
         this.#connection = new TauriConnection<FileChangeEvent>({ name: "file_system:update" });
-        this.#connection.addConnection(this.handleFileChange);
+        this.#connection.addConnection(this.#handleFileChange);
     }
 
     get rootDirectory() {
@@ -233,10 +233,10 @@ export class TauriFileManager extends BaseFileManager {
         this.#rootDirectory.value = root;
         this.#fileMap.set(root.path, root);
         root.entries.forEach(file => this.#fileMap.set(file.path, file));
-        this.updateFileMap(root.entries);
-        let subdirectories = await this.aggresivelyLoadAllDirectories(root.directories);
+        this.#updateFileMap(root.entries);
+        let subdirectories = await this.#aggresivelyLoadAllDirectories(root.directories);
         while (subdirectories.length > 0) {
-            subdirectories = await this.aggresivelyLoadAllDirectories(subdirectories);
+            subdirectories = await this.#aggresivelyLoadAllDirectories(subdirectories);
         }
     }
 
@@ -247,22 +247,22 @@ export class TauriFileManager extends BaseFileManager {
     async loadPath(path: string): Promise<File> {
         const { directory, file } = await queryPath(path);
         const parentPath = file?.data.parentDir || directory?.data.parentDir;
-        const parent = this.getParentDirectory(parentPath);
+        const parent = this.#getParentDirectory(parentPath);
 
         if (directory) {
             if (parent.hasfileOfPath(path)) {
                 const dir = parent.getFileFromPath(path) as Directory;
-                this.syncFile(dir, parent);
+                this.#syncFile(dir, parent);
                 const entries = directory.entries.map(ParseFileFromType);
                 entries.forEach(file => this.#fileMap.set(file.path, file));
                 dir.entries = entries;
                 return dir;
             }
-            const dir = this.createNewDirectory({ directory, parent });
+            const dir = this.#createNewDirectory({ directory, parent });
             return dir;
         } else if (file) {
             if (parent.hasfileOfPath(path)) return parent.getFileFromPath(path) as File;
-            return this.createNewFile({ file, parent });
+            return this.#createNewFile({ file, parent });
         } else {
             throw new Error("No file or directory found");
         }
@@ -299,7 +299,7 @@ export class TauriFileManager extends BaseFileManager {
 
     addFile(fileData: FileData) {
         const file = ParseFileFromType(fileData);
-        const parent = this.getParentDirectory(fileData.parentDir);
+        const parent = this.#getParentDirectory(fileData.parentDir);
         parent.addFile(file);
         this.#fileMap.set(file.path, file);
     }
@@ -309,7 +309,7 @@ export class TauriFileManager extends BaseFileManager {
      * @param directories 
      * @returns 
      */
-    private async aggresivelyLoadAllDirectories(directories: Directory[]) {
+    async #aggresivelyLoadAllDirectories(directories: Directory[]) {
         const directoryPromises = directories.map(directory => this.loadPath(directory.path));
         const files = await Promise.all(directoryPromises);
         const loadedDirectories = files.filter(files => files.type === 'directory') as Directory[];
@@ -320,18 +320,18 @@ export class TauriFileManager extends BaseFileManager {
     /**
      * Creates a new directory and adds it to the parent directory
      */
-    private createNewDirectory({ directory: response, parent }: { directory: DirectoryQueryResponse, parent: Directory }) {
+    #createNewDirectory({ directory: response, parent }: { directory: DirectoryQueryResponse, parent: Directory }) {
         const dir = ParseDirectoryFromResponse(response);
-        this.syncFile(dir, parent);
+        this.#syncFile(dir, parent);
         return dir;
     }
 
     /**
      * Creates a new file and adds it to the parent directory
      */
-    private createNewFile({ file: response, parent }: { file: FileQueryResponse, parent: Directory }) {
+    #createNewFile({ file: response, parent }: { file: FileQueryResponse, parent: Directory }) {
         const file = PraseFileFromResponse(response);
-        this.syncFile(file, parent);
+        this.#syncFile(file, parent);
         return file;
     }
 
@@ -340,7 +340,7 @@ export class TauriFileManager extends BaseFileManager {
      * 
      * @throws Error if the parent directory does not exist or is not a directory
      */
-    private getParentDirectory(parentPath?: string) {
+    #getParentDirectory(parentPath?: string) {
         if (!parentPath || !this.#fileMap.has(parentPath)) throw Error("Loaded file without known directory");
 
         const parent = this.#fileMap.get(parentPath) as Directory;
@@ -350,19 +350,19 @@ export class TauriFileManager extends BaseFileManager {
         return parent;
     }
 
-    private updateFileMap(files: File[]) {
+    #updateFileMap(files: File[]) {
         files.forEach(file => this.#fileMap.set(file.path, file));
     }
 
     /**
      * Sets the file in the file map and adds it to the parent directory
      */
-    private syncFile(dir: File, parent: Directory) {
+    #syncFile(dir: File, parent: Directory) {
         this.#fileMap.set(dir.path, dir);
         parent.addFile(dir);
     }
 
-    private handleFileChange = (event: FileChangeEvent) => {
+    #handleFileChange = (event: FileChangeEvent) => {
         if (event.rename) {
             const { from, to, data } = event.rename;
             this.renameFile({ from, to, newName: data.name });
