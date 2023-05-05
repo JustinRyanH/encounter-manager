@@ -89,8 +89,20 @@ impl RootDirectory {
 
     pub fn touch_file(&self, directory: &Path, file_name: &str) -> Result<QueryCommandResponse, String> {
         let directory = self.path_from_root(directory);
+
+        self.validate_directory(&directory)?;
+
+        let path = directory.join(file_name);
+        if path.exists() {
+            return Ok(QueryCommandResponse::File { data: path.into() });
+        }
+        fs::File::create(&path).map_err(|e| e.to_string())?;
+        return Ok(QueryCommandResponse::File { data: path.into() });
+    }
+
+    fn validate_directory(&self, directory: &Path) -> Result<(), String> {
         if !directory.exists() {
-            create_dir_all(&directory).map_err(|e| e.to_string())?;
+            create_dir_all(directory).map_err(|e| e.to_string())?;
         }
         if !directory.is_dir() {
             return Err(format!("Path {} is not a directory", directory.display()));
@@ -99,12 +111,7 @@ impl RootDirectory {
         if !directory.starts_with(&self.root) {
             return Err(format!("Path {} is not a subdirectory of {}", directory.display(), self.root.display()));
         }
-        let path = directory.join(file_name);
-        if path.exists() {
-            return Ok(QueryCommandResponse::File { data: path.into() });
-        }
-        fs::File::create(&path).map_err(|e| e.to_string())?;
-        return Ok(QueryCommandResponse::File { data: path.into() });
+        Ok(())
     }
 
     fn path_from_root(&self, directory: &Path) -> PathBuf {
