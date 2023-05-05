@@ -81,10 +81,10 @@ impl RootDirectory {
 
         let path = directory.join(file_name);
         if path.exists() {
-            return Ok(QueryCommandResponse::File { data: path.into() });
+            return Self::build_file_from_path(&path);
         }
         fs::File::create(&path).map_err(|e| e.to_string())?;
-        Ok(QueryCommandResponse::File { data: path.into() })
+        Self::build_file_from_path(&path)
     }
 
     pub fn touch_directory(&self, directory: &Path, dir_name: &str) -> Result<QueryCommandResponse, String> {
@@ -119,6 +119,13 @@ impl RootDirectory {
             true => directory.to_path_buf(),
             false => self.root.join(directory),
         }
+    }
+
+    fn build_file_from_path(path: &PathBuf) -> Result<QueryCommandResponse, String> {
+        if !path.is_file() {
+            return Err(format!("{} is not a file", path.display()));
+        }
+        Ok(QueryCommandResponse::File { data: path.into() })
     }
 
     fn build_directory_from_path(path: &Path) -> Result<QueryCommandResponse, String> {
