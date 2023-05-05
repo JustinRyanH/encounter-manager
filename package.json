@@ -17,7 +17,6 @@
     "@mantine/core": "^6.0.10",
     "@mantine/form": "^6.0.10",
     "@mantine/hooks": "^6.0.10",
-    "@mantine/modals": "^6.0.10",
     "@mantine/notifications": "^6.0.10",
     "@phosphor-icons/react": "^2.0.9",
     "@tauri-apps/api": "^1.3.0",
