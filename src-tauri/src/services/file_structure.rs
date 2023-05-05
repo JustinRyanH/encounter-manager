@@ -109,3 +109,30 @@ impl FileQuery {
         return Ok(QueryCommandResponse::File { data: path.into() });
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempdir;
+
+    #[test]
+    fn test_query_root_no_directory() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let bad_root = tmp_dir.path().join("bad_path");
+        assert!(!bad_root.exists(), "bad_root should not exist before new query file in test");
+        let result = FileQuery::new(&bad_root);
+        assert!(result.is_ok(), "FileQuery can handle non-existent path");
+        assert!(bad_root.exists(), "FileQuery::new creates a new directory");
+    }
+
+    #[test]
+    fn test_query_root_is_file() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let bad_path = tmp_dir.path().join("file");
+        let file = fs::File::create(&bad_path).unwrap();
+        assert!(file.metadata().unwrap().is_file(), "bad_path should be a file before new query file in test");
+        let result = FileQuery::new(&bad_path);
+        assert!(result.is_err(), "if we set it to file we should error");
+        assert_eq!(result.err(), Some(format!("{} is not a directory", bad_path.display())));
+    }
+}
