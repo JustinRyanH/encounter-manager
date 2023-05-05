@@ -2,6 +2,7 @@ use crate::services::{
     data::DataState,
     file_structure::{FsCommand, QueryCommandResponse},
 };
+use crate::services::file_structure::TouchFileCommand;
 
 #[tauri::command]
 pub async fn query_file_system(
@@ -13,6 +14,8 @@ pub async fn query_file_system(
     match command {
         FsCommand::QueryRoot => file_query.query_root(),
         FsCommand::QueryPath { path } => file_query.query_path(&path),
-        FsCommand::TouchFile(_) => Err("'TouchFile' is not implemented yet".to_string()),
+        FsCommand::TouchFile(TouchFileCommand { parent_dir, file_name }) => {
+            file_query.touch_file(&parent_dir, &file_name)
+        }
     }
 }

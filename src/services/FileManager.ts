@@ -266,9 +266,14 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     async touchFile(directory: Directory, name: string) {
+        if (!name) throw new Error("No name provided");
         const { file } = await touchFile(directory.path, name);
         console.log(file);
-
+        if (!file) throw new Error("No file returned");
+        const newFile = PraseFileFromResponse(file);
+        this.#fileMap.set(newFile.path, newFile);
+        directory.addFile(newFile);
+        return newFile;
     }
 
     renameFile({ from, to, newName }: { from: string, to: string, newName: string }) {

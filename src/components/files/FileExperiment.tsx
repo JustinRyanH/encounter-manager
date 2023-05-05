@@ -49,7 +49,7 @@ function CreateFileModal({ directory, onClose, opened }: {
     const [value, setValue] = React.useState('');
     React.useEffect(() => setValue(''), [opened]);
 
-    const handleSave = () => fileManager.touchFile(directory, 'test.txt')
+    const handleSave = () => fileManager.touchFile(directory, value)
         .then(() => onClose())
         .catch(e => {
             notifyErrors({ errors: e.toString() });

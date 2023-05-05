@@ -1,3 +1,4 @@
+use std::fs;
 use std::fs::{create_dir, read_dir};
 use std::path::{Path, PathBuf};
 
@@ -27,7 +28,7 @@ pub enum QueryCommandResponse {
         data: FileData,
         entries: Vec<FileData>,
     },
-    Path {
+    File {
         data: FileData,
     },
 }
@@ -54,7 +55,7 @@ impl FileQuery {
         if !self.root.exists() {
             return Err("Root Directory does not exist".to_string());
         }
-        return self.query_path(&self.root);
+        self.query_path(&self.root)
     }
 
     pub fn query_path(&self, path: &Path) -> Result<QueryCommandResponse, String> {
@@ -77,12 +78,34 @@ impl FileQuery {
                 entries,
             })
         } else if path.is_file() {
-            Ok(QueryCommandResponse::Path { data: path.into() })
+            Ok(QueryCommandResponse::File { data: path.into() })
         } else {
             Err(format!(
                 "Path {} is not a file or directory",
                 path.display()
             ))
         }
+    }
+
+    pub fn touch_file(&self, directory: &Path, file_name: &str) -> Result<QueryCommandResponse, String> {
+        if !directory.exists() {
+            return Err(format!("Directory {} does not exist", directory.display()));
+        }
+        if !directory.is_dir() {
+            return Err(format!("Path {} is not a directory", directory.display()));
+        }
+        let directory = match directory.has_root() {
+            true => directory.to_path_buf(),
+            false => self.root.join(directory),
+        };
+        if !directory.starts_with(&self.root) {
+            return Err(format!("Path {} is not a subdirectory of {}", directory.display(), self.root.display()));
+        }
+        let path = directory.join(file_name);
+        if path.exists() {
+            return Ok(QueryCommandResponse::File { data: path.into() });
+        }
+        fs::File::create(&path).map_err(|e| e.to_string())?;
+        return Ok(QueryCommandResponse::File { data: path.into() });
     }
 }
