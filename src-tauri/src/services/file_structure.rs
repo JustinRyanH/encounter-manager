@@ -1,5 +1,5 @@
 use std::fs;
-use std::fs::{create_dir, read_dir};
+use std::fs::{create_dir, create_dir_all, read_dir};
 use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
@@ -88,16 +88,17 @@ impl FileQuery {
     }
 
     pub fn touch_file(&self, directory: &Path, file_name: &str) -> Result<QueryCommandResponse, String> {
-        if !directory.exists() {
-            return Err(format!("Directory {} does not exist", directory.display()));
-        }
-        if !directory.is_dir() {
-            return Err(format!("Path {} is not a directory", directory.display()));
-        }
         let directory = match directory.has_root() {
             true => directory.to_path_buf(),
             false => self.root.join(directory),
         };
+        if !directory.exists() {
+            create_dir_all(&directory).map_err(|e| e.to_string())?;
+        }
+        if !directory.is_dir() {
+            return Err(format!("Path {} is not a directory", directory.display()));
+        }
+
         if !directory.starts_with(&self.root) {
             return Err(format!("Path {} is not a subdirectory of {}", directory.display(), self.root.display()));
         }
@@ -204,5 +205,37 @@ mod tests {
         let result = file_query.query_path(&missing_path);
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} does not exist", missing_path.display())));
+    }
+
+    #[test]
+    fn test_touch_file() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = FileQuery::new(&root_path).unwrap();
+
+
+        let result = file_query.touch_file(&root_path, "fileA").unwrap();
+        assert_eq!(result, QueryCommandResponse::File {
+            data: FileData::from(root_path.join("fileA")),
+        });
+
+        let result = file_query.touch_file(&root_path.join("fileA"), "fileB");
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} is not a directory", root_path.join("fileA").display())));
+
+        let uncreated_dir = root_path.join("dirA");
+        file_query.touch_file(&uncreated_dir, "fileB").unwrap();
+        assert!(uncreated_dir.exists());
+
+        let out_of_root = tmp_dir.path().join("out_of_root");
+        let result = file_query.touch_file(&out_of_root, "fileB");
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} is not a subdirectory of {}", out_of_root.display(), root_path.display())));
+
+        assert!(root_path.join("fileA").exists());
+        let result = file_query.touch_file(&root_path, "fileA").unwrap();
+        assert_eq!(result, QueryCommandResponse::File {
+            data: FileData::from(root_path.join("fileA")),
+        });
     }
 }
