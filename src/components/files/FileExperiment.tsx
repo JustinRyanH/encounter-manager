@@ -6,7 +6,6 @@ import { DotsThreeOutlineVertical, File as FileIcon, FilePlus, FolderNotch, Fold
 import { useFileManager } from "~/components/files/FileManager";
 import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { create } from "domain";
 
 function FileLine({ file }: { file: File }) {
     const name = useWatchValueObserver(file.nameObserver);
@@ -16,21 +15,34 @@ function FileLine({ file }: { file: File }) {
     </Flex >)
 }
 
-function DirectoryMenu({ directory }: { directory: Directory }) {
+function CreateFileModal({ directory, onClose, opened }: { directory: Directory, onClose: () => void, opened: boolean }) {
     const fileManager = useFileManager();
+    const name = useWatchValueObserver(directory.nameObserver);
+    const [value, setValue] = React.useState('');
+
+    const handleSave = () => fileManager.touchFile(directory, 'test.txt').then(() => onClose());
+
+    return (<Modal opened={opened} onClose={onClose} size="xs" title={`Create file in "${name}"`} centered>
+        <Group noWrap m={rem(4)}>
+            <TextInput
+                data-autofocus
+                placeholder="File Name"
+                value={value}
+                onChange={(event) => setValue(event.currentTarget.value)}
+                withAsterisk
+            />
+            <Button onClick={handleSave} variant="light" color="blue">Create</Button>
+        </Group>
+    </Modal>)
+}
+
+function DirectoryMenu({ directory }: { directory: Directory }) {
 
     const [createModal, createHandles] = useDisclosure(false);
 
 
     return (<>
-        <Modal opened={createModal} onClose={createHandles.close} size="xs" title={`Create file in ${directory.name}`}>
-            <Group noWrap m={rem(4)}>
-                <TextInput placeholder="File Name" withAsterisk />
-                <Button onClick={() => {
-                    fileManager.touchFile(directory, 'test.txt').then(() => createHandles.close());
-                }} variant="light" color="blue">Create</Button>
-            </Group>
-        </Modal>
+        <CreateFileModal directory={directory} onClose={createHandles.close} opened={createModal} />
         <Menu position="left" withArrow>
             <Menu.Target>
                 <ActionIcon size="xs">
