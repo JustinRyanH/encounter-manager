@@ -64,19 +64,7 @@ impl RootDirectory {
             return Err(format!("Path {} does not exist", path.display()));
         }
         if path.is_dir() {
-            let entries = read_dir(&path)
-                .map_err(|e| e.to_string())?
-                .map(|entry| {
-                    let entry = entry.unwrap();
-                    let path = entry.path();
-                    path.into()
-                })
-                .collect();
-
-            Ok(QueryCommandResponse::Directory {
-                data: FileData::from(path),
-                entries,
-            })
+            Self::build_directory_from_path(&path)
         } else if path.is_file() {
             Ok(QueryCommandResponse::File { data: path.into() })
         } else {
@@ -89,7 +77,6 @@ impl RootDirectory {
 
     pub fn touch_file(&self, directory: &Path, file_name: &str) -> Result<QueryCommandResponse, String> {
         let directory = self.path_from_root(directory);
-
         self.validate_directory(&directory)?;
 
         let path = directory.join(file_name);
@@ -97,7 +84,20 @@ impl RootDirectory {
             return Ok(QueryCommandResponse::File { data: path.into() });
         }
         fs::File::create(&path).map_err(|e| e.to_string())?;
-        return Ok(QueryCommandResponse::File { data: path.into() });
+        Ok(QueryCommandResponse::File { data: path.into() })
+    }
+
+    pub fn touch_directory(&self, directory: &Path, dir_name: &str) -> Result<QueryCommandResponse, String> {
+        let directory = self.path_from_root(directory);
+        self.validate_directory(&directory)?;
+
+        let path = directory.join(dir_name);
+        if path.exists() {
+            return Self::build_directory_from_path(&path);
+        }
+
+        create_dir_all(&path).map_err(|e| e.to_string())?;
+        Self::build_directory_from_path(&path)
     }
 
     fn validate_directory(&self, directory: &Path) -> Result<(), String> {
@@ -119,6 +119,22 @@ impl RootDirectory {
             true => directory.to_path_buf(),
             false => self.root.join(directory),
         }
+    }
+
+    fn build_directory_from_path(path: &Path) -> Result<QueryCommandResponse, String> {
+        let entries = read_dir(&path)
+            .map_err(|e| e.to_string())?
+            .map(|entry| {
+                let entry = entry.unwrap();
+                let path = entry.path();
+                path.into()
+            })
+            .collect();
+
+        Ok(QueryCommandResponse::Directory {
+            data: FileData::from(path),
+            entries,
+        })
     }
 }
 
@@ -257,6 +273,48 @@ mod tests {
 
         // Will place in root if not a has root inclusive pah
         file_query.touch_file(Path::new("example"), "fileA").unwrap();
+        assert!(root_path.join("example").exists());
+        assert!(root_path.join("example").join("fileA").exists());
+    }
+
+
+    #[test]
+    fn test_touch_dir() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = RootDirectory::new(&root_path).unwrap();
+        // Will create dir if it doesn't exist
+        let result = file_query.touch_directory(&root_path, "fileA").unwrap();
+        assert_eq!(result, QueryCommandResponse::Directory {
+            data: FileData::from(root_path.join("fileA")),
+            entries: vec![],
+        });
+
+        // Will error if path is not a directory
+        let result = file_query.touch_directory(&root_path.join("newDirA"), "newDirB");
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} is not a directory", root_path.join("newDirA").display())));
+
+        let uncreated_dir = root_path.join("dirA");
+        // Will create directory if it doesn't exist
+        file_query.touch_directory(&uncreated_dir, "newDirB").unwrap();
+        assert!(uncreated_dir.exists());
+
+        let out_of_root = tmp_dir.path().join("out_of_root");
+        // Will error if not a subdirectory of root
+        let result = file_query.touch_directory(&out_of_root, "newDirB");
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} is not a subdirectory of {}", out_of_root.display(), root_path.display())));
+
+        assert!(root_path.join("newDirA").exists());
+        // Will no-op and return existing file
+        let result = file_query.touch_directory(&root_path, "newDirA").unwrap();
+        assert_eq!(result, QueryCommandResponse::File {
+            data: FileData::from(root_path.join("newDirA")),
+        });
+
+        // Will place in root if not a has root inclusive pah
+        file_query.touch_directory(Path::new("example"), "newDirA").unwrap();
         assert!(root_path.join("example").exists());
         assert!(root_path.join("example").join("fileA").exists());
     }
