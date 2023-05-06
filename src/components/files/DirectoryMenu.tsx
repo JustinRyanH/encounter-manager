@@ -98,7 +98,6 @@ function DeleteConfirmationModal({ file, onClose, opened } : FileModal) {
                 <Button onClick={handleDelete} variant="light" color="red">Delete</Button>
             </Group>
         </Stack>
-
     </Modal>);
 }
 
