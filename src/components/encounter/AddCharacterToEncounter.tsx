@@ -57,7 +57,7 @@ export function AddCharacterToEncounter({ encounter, onSuccess = () => { } }: Ad
     return (
         <form onSubmit={onSubmit}>
             <Stack>
-                <TextInput styles={{ input, label }} label="Name" withAsterisk {...form.getInputProps('name')} />
+                <TextInput data-autofocus styles={{ input, label }} label="Name" withAsterisk {...form.getInputProps('name')} />
                 <NumberInput styles={{ input, label }} label="Initiative" withAsterisk hideControls {...form.getInputProps('initiative')} />
                 <Group position="apart" align="start" grow>
                     <NumberInput
