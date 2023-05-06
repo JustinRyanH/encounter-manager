@@ -284,10 +284,7 @@ export class TauriFileManager extends BaseFileManager {
     }
 
     async deleteFile(file: File) {
-        const result = await deletePath(file.path);
-        console.log(result);
-        // if (!success) throw new Error("File could not be deleted");
-        // this.removeFile(file);
+        await deletePath(file.path);
     }
 
     handleFileRename({ from, to, newName }: { from: string, to: string, newName: string }) {
