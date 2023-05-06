@@ -206,7 +206,7 @@ describe('FileManager', () => {
             expect(file1).not.toBeNull();
             expect(directort1).not.toBeNull();
 
-            rootDirectory.removeFile({ path: '/directory1' });
+            rootDirectory.handleFileRemove({ path: '/directory1' });
 
             expect(rootDirectory.findFile('/directory1')).toBeNull();
             expect(rootDirectory.findFile('/directory1/file3')).toBeNull();
@@ -226,7 +226,7 @@ describe('FileManager', () => {
             expect(file1).not.toBeNull();
             expect(directort1).not.toBeNull();
 
-            rootDirectory.removeFile({ path: '/directory1' });
+            rootDirectory.handleFileRemove({ path: '/directory1' });
 
             expect(file1.parent).toBeNull();
             expect(directort1.getFileFromPath(file1.path)).toBeNull();
@@ -248,7 +248,7 @@ describe('FileManager', () => {
             expect(file3).not.toBeNull();
             expect(directort1).not.toBeNull();
 
-            rootDirectory.addFile({
+            rootDirectory.handleNewFile({
                 fileType: 'file',
                 name: 'file4',
                 path: '/directory1/file4',

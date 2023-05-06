@@ -296,7 +296,7 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(to, file);
     }
 
-    removeFile({ path }: { path: string }) {
+    handleFileRemove({ path }: { path: string }) {
         const file = this.findFile(path);
         if (!file) return;
         if (file.type === 'directory') (file as Directory).allPaths.forEach(path => this.#fileMap.delete(path));
@@ -306,7 +306,7 @@ export class TauriFileManager extends BaseFileManager {
         console.log(this);
     }
 
-    addFile(fileData: FileData) {
+    handleNewFile(fileData: FileData) {
         const file = ParseFileFromType(fileData);
         const parent = this.#getParentDirectory(fileData.parentDir);
         parent.addFile(file);
@@ -379,12 +379,12 @@ export class TauriFileManager extends BaseFileManager {
         }
         if (event.delete) {
             const { path } = event.delete;
-            this.removeFile({ path });
+            this.handleFileRemove({ path });
             return;
         }
         if (event.create) {
             const fileData = event.create;
-            const file = this.addFile(fileData);
+            const file = this.handleNewFile(fileData);
             if (file.type === 'directory') this.#aggressivelyLoadAllDirectories([file as Directory]).catch(console.error);
             return;
         }
