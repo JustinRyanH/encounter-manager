@@ -25,6 +25,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
     const files = useWatchValueObserver(directory.filesObserver);
     const hasFiles = !!files.length;
     const [opened, { toggle }] = useDisclosure();
+    const [menuOpened, menuHandles] = useDisclosure(false);
 
     const fileComponents = files.map((file) => {
         if (file.type === 'directory') return <DirectoryLine key={file.path} directory={file as Directory} />;
@@ -40,15 +41,23 @@ function DirectoryLine({ directory }: { directory: Directory }) {
         </Collapse>
     </>);
 
+    const onContextMenu = (event: React.MouseEvent) => {
+        event.preventDefault();
+        menuHandles.open();
+    };
+
 
     return (<>
         <Flex gap="0" justify="space-between" align="center" wrap="nowrap">
             <FolderNotch style={{ minWidth: "1rem", marginRight: rem(4) }} />
-            <UnstyledButton onClick={toggle}
-                style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <UnstyledButton
+                onClick={toggle}
+                onContextMenu={onContextMenu}
+                style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+            >
                 <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="xs">{name}</Text>
             </UnstyledButton>
-            <DirectoryMenu directory={directory} />
+            <DirectoryMenu directory={directory} opened={menuOpened} onClose={menuHandles.close} onOpen={menuHandles.open} />
         </Flex>
         {hasFiles && fileList}
     </>);

@@ -55,29 +55,32 @@ function CreateFileModal({ directory, onClose, opened }: DirectoryModal) {
 }
 
 function RenameFileModal({ file, onClose, opened }: FileModal) {
-    const fileManager = useFileManager();
     const name = useWatchValueObserver(file.nameObserver);
-    const [value, setValue] = React.useState('');
-    React.useEffect(() => setValue(name), [opened]);
+    const form = useForm({
+        initialValues: { name },
+    });
+    const fileManager = useFileManager();
 
-    const handleSave = () => fileManager.renameFile(file, value)
+    const onSubmit = form.onSubmit((values: any) => fileManager.renameFile(file, values.name)
         .then(() => onClose())
-        .catch(e => {
+        .catch((e) => {
             notifyErrors({ errors: e.toString() });
             onClose();
-        });
+        }));
 
     return (<Modal opened={opened} onClose={onClose} size="xs" title={`Rename file "${name}"`} centered>
-        <Group noWrap m={rem(4)}>
-            <TextInput
-                data-autofocus
-                placeholder="File Name"
-                value={value}
-                onChange={(event) => setValue(event.currentTarget.value)}
-                withAsterisk
-            />
-            <Button onClick={handleSave} variant="light" color="blue">Rename</Button>
-        </Group>
+        <form onSubmit={onSubmit}>
+            <Group noWrap m={rem(4)}>
+                <TextInput
+                    data-autofocus
+                    placeholder="File Name"
+                    withAsterisk
+                    {...form.getInputProps('name')}
+                />
+                <Button type="submit" variant="light" color="blue">Rename</Button>
+            </Group>
+
+        </form>
     </Modal>)
 }
 
@@ -136,7 +139,7 @@ function CreateDirectoryModal({ directory, onClose, opened }: DirectoryModal) {
     </Modal>)
 }
 
-export function DirectoryMenu({ directory }: { directory: Directory }) {
+export function DirectoryMenu({ directory, opened, onClose, onOpen }: { directory: Directory, opened: boolean, onClose: () => void, onOpen: () => void }) {
     const [createFileModal, createFileHandles] = useDisclosure(false);
     const [createDirectoryModal, createDirectoryHandles] = useDisclosure(false);
     const [fileDeleteModal, fileDeleteHandles] = useDisclosure(false);
@@ -148,7 +151,7 @@ export function DirectoryMenu({ directory }: { directory: Directory }) {
             opened={createDirectoryModal} />
         <DeleteConfirmationModal file={directory} onClose={fileDeleteHandles.close} opened={fileDeleteModal} />
         <RenameFileModal file={directory} onClose={fileRenameHandles.close} opened={fileRenameModal} />
-        <Menu position="left" withArrow>
+        <Menu opened={opened} onClose={onClose} onOpen={onOpen} position="left" withArrow>
             <Menu.Target>
                 <ActionIcon size="xs">
                     <DotsThreeOutlineVertical />
