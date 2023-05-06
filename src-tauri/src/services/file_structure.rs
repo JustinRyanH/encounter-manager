@@ -118,6 +118,26 @@ impl RootDirectory {
         Ok(())
     }
 
+    pub fn rename_path(&self, from: &Path, to: &Path) -> Result<(), String> {
+        let from = self.path_from_root(from);
+        let to = self.path_from_root(to);
+
+        self.validate_in_root(&from)?;
+        self.validate_in_root(&to)?;
+
+        if !from.exists() {
+            return Err(format!("Path {} does not exist", from.display()));
+        }
+
+        if to.exists() {
+            return Err(format!("Path {} already exists", to.display()));
+        }
+
+        fs::rename(&from, &to).map_err(|e| e.to_string())?;
+
+        Ok(())
+    }
+
     fn validate_directory(&self, directory: &Path) -> Result<(), String> {
         self.validate_in_root(directory)?;
         if !directory.exists() {
@@ -380,5 +400,44 @@ mod tests {
         // Will delete directory
         let result = file_query.delete_path(&root_path.join("dirA"));
         assert!(result.is_ok());
+    }
+
+    #[test]
+    fn rename_path() {
+        let tmp_dir = tempdir::TempDir::new("tempdir").unwrap();
+        let root_path = tmp_dir.path().join("root");
+        let file_query = RootDirectory::new(&root_path).unwrap();
+
+        File::create(root_path.join("fileA")).unwrap();
+        File::create(root_path.join("fileZ")).unwrap();
+        create_dir(root_path.join("dirA")).unwrap();
+
+        let out_of_root = tmp_dir.path().join("out_of_root");
+        // Will error if a child of root
+        let result = file_query.rename_path(&out_of_root.join("fileA"), &out_of_root.join("fileB"));
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} is not a child of {}", out_of_root.join("fileA").display(), root_path.display())));
+
+        // Will error if path does not exist
+        let result = file_query.rename_path(&root_path.join("fileB"), &root_path.join("fileC"));
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} does not exist", root_path.join("fileB").display())));
+
+        // Will error if destination exists
+        let result = file_query.rename_path(&root_path.join("fileA"), &root_path.join("fileZ"));
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some(format!("Path {} already exists", root_path.join("fileZ").display())));
+
+        // Will rename file
+        let result = file_query.rename_path(&root_path.join("fileA"), &root_path.join("fileB"));
+        assert!(result.is_ok());
+        assert!(!root_path.join("fileA").exists());
+        assert!(root_path.join("fileB").exists());
+
+        // Will rename directory
+        let result = file_query.rename_path(&root_path.join("dirA"), &root_path.join("dirB"));
+        assert!(result.is_ok());
+        assert!(!root_path.join("dirA").exists());
+        assert!(root_path.join("dirB").exists());
     }
 }
