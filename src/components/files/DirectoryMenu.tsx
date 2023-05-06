@@ -13,6 +13,21 @@ import {
     TrashSimple
 } from "@phosphor-icons/react";
 import { Form, useForm } from "@mantine/form";
+import { F } from "@tauri-apps/api/event-30ea0228";
+
+interface MenuProps {
+    onOpen: () => void,
+    onClose: () => void,
+    opened: boolean
+}
+
+interface FileMenuProps extends MenuProps {
+    file: File
+}
+
+interface DirectoryMenuProps extends MenuProps {
+    directory: Directory
+}
 
 interface Modal {
     opened: boolean,
@@ -139,7 +154,7 @@ function CreateDirectoryModal({ directory, onClose, opened }: DirectoryModal) {
     </Modal>)
 }
 
-export function DirectoryMenu({ directory, opened, onClose, onOpen }: { directory: Directory, opened: boolean, onClose: () => void, onOpen: () => void }) {
+export function DirectoryMenu({ directory, opened, onClose, onOpen }: DirectoryMenuProps) {
     const [createFileModal, createFileHandles] = useDisclosure(false);
     const [createDirectoryModal, createDirectoryHandles] = useDisclosure(false);
     const [fileDeleteModal, fileDeleteHandles] = useDisclosure(false);
@@ -169,14 +184,14 @@ export function DirectoryMenu({ directory, opened, onClose, onOpen }: { director
     </>)
 }
 
-export function FileMenu({ file }: { file: File }) {
+export function FileMenu({ file, opened, onClose, onOpen }: FileMenuProps) {
     const [fileDeleteModal, fileDeleteHandles] = useDisclosure(false);
     const [fileRenameModal, fileRenameHandles] = useDisclosure(false);
 
     return (<>
         <DeleteConfirmationModal file={file} onClose={fileDeleteHandles.close} opened={fileDeleteModal} />
         <RenameFileModal file={file} onClose={fileRenameHandles.close} opened={fileRenameModal} />
-        <Menu position="left" withArrow>
+        <Menu position="left" opened={opened} onClose={onClose} onOpen={onOpen} withArrow>
             <Menu.Target>
                 <ActionIcon size="xs">
                     <DotsThreeOutlineVertical />

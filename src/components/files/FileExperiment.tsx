@@ -9,13 +9,19 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { DirectoryMenu, FileMenu } from "~/components/files/DirectoryMenu";
 
 function FileLine({ file }: { file: File }) {
+    const [menuOpened, menuHandles] = useDisclosure(false);
     const name = useWatchValueObserver(file.nameObserver);
+    const onContextMenu = (event: React.MouseEvent) => {
+        event.preventDefault();
+        menuHandles.open();
+    };
+
     return (<Group position="apart">
-        <Flex gap="0" justify="flex-start" align="center" wrap="nowrap">
+        <Flex gap="0" justify="flex-start" align="center" wrap="nowrap" onContextMenu={onContextMenu}>
             <FileIcon style={{ marginRight: rem(4) }} />
             <Text size="xs">{name}</Text>
         </Flex>
-        <FileMenu file={file} />
+        <FileMenu file={file} opened={menuOpened} onClose={menuHandles.close} onOpen={menuHandles.open} />
     </Group>)
 }
 
