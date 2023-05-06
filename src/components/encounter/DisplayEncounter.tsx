@@ -1,5 +1,6 @@
 import React from "react";
-import { Accordion, Button, Group } from "@mantine/core";
+import { Accordion, ActionIcon, Button, Group } from "@mantine/core";
+import { Play } from '@phosphor-icons/react';
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
@@ -12,7 +13,7 @@ function ManageEncounter() {
 
     return (
         <Group p="1rem" align="center" position="apart">
-            <Button disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}> Start Encounter </Button>
+            <ActionIcon title="Start Encounter" disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}><Play /></ActionIcon>
             <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}> Restart Encounter </Button>
             <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}> Stop Encounter </Button>
         </Group>
