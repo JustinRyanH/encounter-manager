@@ -30,13 +30,6 @@ function App() {
         <Title align="center" order={3}>Encounter Manager</Title>
         <Divider />
         <Accordion>
-          <Accordion.Item value="Add Character">
-            <Accordion.Control>Add Character</Accordion.Control>
-            <Accordion.Panel>
-              <AddCharacterToEncounter encounter={encounter} />
-            </Accordion.Panel>
-          </Accordion.Item>
-
           <Accordion.Item value="Manage Files">
             <Accordion.Control>Files</Accordion.Control>
             <Accordion.Panel><FileExperiment /></Accordion.Panel>

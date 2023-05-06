@@ -1,4 +1,5 @@
 import React from "react";
+import { EncounterModals } from "~/components/encounter/EncounterModals";
 
 import { Encounter } from "~/services/encounter/Encounter";
 
@@ -13,7 +14,9 @@ export function EncounterProvider({ children, encounter: initialEncounter }: Enc
     const encounter = React.useMemo(() => initialEncounter || new Encounter(), [initialEncounter]);
 
     return (<EncounterContext.Provider value={encounter}>
-        {children}
+        <EncounterModals>
+            {children}
+        </EncounterModals>
     </EncounterContext.Provider>);
 }
 

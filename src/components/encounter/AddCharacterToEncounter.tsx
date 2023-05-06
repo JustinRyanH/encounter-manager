@@ -13,7 +13,12 @@ interface EncounterFormProps {
     tempHp: number | '',
 }
 
-export function AddCharacterToEncounter({ encounter }: { encounter: Encounter; }) {
+interface AddCharacterToEncounterProps {
+    encounter: Encounter;
+    onSuccess?: () => void;
+}
+
+export function AddCharacterToEncounter({ encounter, onSuccess = () => { } }: AddCharacterToEncounterProps) {
     const form = useForm<EncounterFormProps>({
         initialValues: {
             name: '',
@@ -42,6 +47,7 @@ export function AddCharacterToEncounter({ encounter }: { encounter: Encounter; }
         });
         encounter.addCharacter(newCharacter);
         form.reset();
+        onSuccess();
     };
     const handleError = () => {
         notifyErrors({ errors: 'some fields are invalid', title: 'Cannot Add Character' });

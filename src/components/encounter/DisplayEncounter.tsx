@@ -1,6 +1,7 @@
 import React from "react";
 import { Accordion, ActionIcon, Group } from "@mantine/core";
-import { ArrowBendRightDown, Play, PlayPause } from '@phosphor-icons/react';
+import { modals } from "@mantine/modals";
+import { ArrowBendRightDown, Play, PlayPause, UserPlus } from '@phosphor-icons/react';
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
@@ -14,13 +15,24 @@ function ManageEncounter() {
 
     const startTopTitle = isCharacterActive ? "Pause Encounter" : "Restart Encounter";
     const startStopAction = isCharacterActive ? encounter.stopEncounter : encounter.restartEncounter;
+    const openAddCharacterModal = () => modals.openContextModal({
+        modal: "addCharacterToEncounter",
+        title: "Add Character",
+        innerProps: {},
+    });
+
     return (
-        <Group p="1rem" align="center" position="right">
-            <ActionIcon title="Start Encounter" disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}> <Play /> </ActionIcon>
-            <ActionIcon title={startTopTitle} onClick={startStopAction}> <PlayPause /> </ActionIcon>
-            <ActionIcon title="Next Turn" disabled={!isCharacterActive} onClick={() => encounter.nextCharacter()}>
-                <ArrowBendRightDown />
+        <Group p="1rem" align="center" position="apart">
+            <ActionIcon title="Add Character" onClick={openAddCharacterModal}>
+                <UserPlus />
             </ActionIcon>
+            <Group align="center" position="right">
+                <ActionIcon title="Start Encounter" disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}> <Play /> </ActionIcon>
+                <ActionIcon title={startTopTitle} onClick={startStopAction}> <PlayPause /> </ActionIcon>
+                <ActionIcon title="Next Turn" disabled={!isCharacterActive} onClick={() => encounter.nextCharacter()}>
+                    <ArrowBendRightDown />
+                </ActionIcon>
+            </Group>
         </Group>
     )
 }
