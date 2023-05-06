@@ -35,6 +35,7 @@ export interface FsCommand {
     queryPath?: QueryPath;
     touchFile?: TouchFile;
     touchDirectory?: TouchFile;
+    deletePath?: QueryPath;
 }
 
 export interface FileQueryResponse {

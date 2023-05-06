@@ -4,7 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory, touchDirectory, touchFile } from "./FileCommands";
+import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath } from "./FileCommands";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -281,6 +281,13 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(dir.path, dir);
         directory.addFile(dir);
         return dir;
+    }
+
+    async deleteFile(file: File) {
+        const result = await deletePath(file.path);
+        console.log(result);
+        // if (!success) throw new Error("File could not be deleted");
+        // this.removeFile(file);
     }
 
     renameFile({ from, to, newName }: { from: string, to: string, newName: string }) {
