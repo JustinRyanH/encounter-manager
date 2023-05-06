@@ -1,10 +1,16 @@
-import { describe, test, vi, Mock, expect } from 'vitest';
+import { beforeEach, describe, expect, Mock, test, vi } from 'vitest';
+import { listen } from "@tauri-apps/api/event";
 
 import { Directory, File, TauriFileManager } from '~/services/FileManager';
-import { queryRootDirectory, queryPath } from '~/services/FileCommands';
+import { queryPath, queryRootDirectory } from '~/services/FileCommands';
+import { FileChangeEvent, FileData } from "~/BackendTypes";
 
+vi.mock('@tauri-apps/api/event');
 vi.mock('~/services/FileCommands');
 
+interface FakeEvent<T> {
+    payload: T;
+}
 
 const mockFileOne = {
     fileType: 'file',
@@ -55,6 +61,20 @@ const rootMockDirectoryWithoutEntries = {
 };
 
 describe('FileManager', () => {
+    type PseudoFileChange = (message: FakeEvent<FileChangeEvent>) => void | null;
+    let signalFileChange: PseudoFileChange | null = null;
+
+    function CallSignal(message: FakeEvent<FileChangeEvent>) {
+        if (!signalFileChange) throw new Error("signalFileChange not set");
+        signalFileChange(message);
+    }
+
+    beforeEach(() => {
+        (listen as Mock).mockImplementation((_, callback) => {
+            signalFileChange = callback as PseudoFileChange;
+        });
+    });
+
     test('load the root Directory', async () => {
         (queryRootDirectory as Mock)
             .mockResolvedValue(rootMockDirectoryWithoutEntries);
@@ -233,29 +253,33 @@ describe('FileManager', () => {
         });
     });
 
-    describe('addFile', () => {
+    describe('create Signal', () => {
+        const file4: FileData = {
+            fileType: 'file',
+            name: 'file4',
+            path: '/directory1/file4',
+            parentDir: '/directory1',
+        }
         test('inserts the file into the path', async () => {
             (queryRootDirectory as Mock)
                 .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
             (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
 
             const rootDirectory = new TauriFileManager();
+            await rootDirectory.startWatching();
             await rootDirectory.loadRootDirectory();
 
             const file3 = rootDirectory.findFile('/directory1/file3') as File;
-            const directort1 = rootDirectory.findFile('/directory1') as Directory;
+            const directory1 = rootDirectory.findFile('/directory1') as Directory;
 
             expect(file3).not.toBeNull();
-            expect(directort1).not.toBeNull();
+            expect(directory1).not.toBeNull();
 
-            rootDirectory.handleNewFile({
-                fileType: 'file',
-                name: 'file4',
-                path: '/directory1/file4',
-                parentDir: '/directory1',
-            });
+            if (!signalFileChange) throw new Error('Never started watching FileEvents');
+            CallSignal({ payload: { create: file4 } });
+
+            expect(rootDirectory.findFile('/directory1/file4')).not.toBeNull();
         });
-
     });
 });
 

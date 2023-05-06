@@ -310,7 +310,7 @@ export class TauriFileManager extends BaseFileManager {
         console.log(this);
     }
 
-    handleNewFile(fileData: FileData) {
+    #handleNewFile(fileData: FileData) {
         const file = ParseFileFromType(fileData);
         const parent = this.#getParentDirectory(fileData.parentDir);
         parent.addFile(file);
@@ -388,7 +388,7 @@ export class TauriFileManager extends BaseFileManager {
         }
         if (event.create) {
             const fileData = event.create;
-            const file = this.handleNewFile(fileData);
+            const file = this.#handleNewFile(fileData);
             if (file.type === 'directory') this.#aggressivelyLoadAllDirectories([file as Directory]).catch(console.error);
             return;
         }
