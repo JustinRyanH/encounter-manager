@@ -21,6 +21,7 @@ pub enum FsCommand {
     TouchFile(TouchCommand),
     TouchDirectory(TouchCommand),
     DeletePath { path: PathBuf },
+    RenamePath { from: PathBuf, to: String },
 }
 
 #[derive(Clone, Debug, Serialize, PartialEq)]
@@ -118,9 +119,11 @@ impl RootDirectory {
         Ok(())
     }
 
-    pub fn rename_path(&self, from: &Path, to: &Path) -> Result<(), String> {
+    pub fn rename_path(&self, from: &Path, to: &str) -> Result<(), String> {
         let from = self.path_from_root(from);
-        let to = self.path_from_root(to);
+        let to = from.parent()
+            .ok_or(format!("Parent does not exist for {}", from.display()))?
+            .join(to);
 
         self.validate_in_root(&from)?;
         self.validate_in_root(&to)?;
@@ -414,28 +417,28 @@ mod tests {
 
         let out_of_root = tmp_dir.path().join("out_of_root");
         // Will error if a child of root
-        let result = file_query.rename_path(&out_of_root.join("fileA"), &out_of_root.join("fileB"));
+        let result = file_query.rename_path(&out_of_root.join("fileA"), "fileB");
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} is not a child of {}", out_of_root.join("fileA").display(), root_path.display())));
 
         // Will error if path does not exist
-        let result = file_query.rename_path(&root_path.join("fileB"), &root_path.join("fileC"));
+        let result = file_query.rename_path(&root_path.join("fileB"), "fileC");
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} does not exist", root_path.join("fileB").display())));
 
         // Will error if destination exists
-        let result = file_query.rename_path(&root_path.join("fileA"), &root_path.join("fileZ"));
+        let result = file_query.rename_path(&root_path.join("fileA"), "fileZ");
         assert!(result.is_err());
         assert_eq!(result.err(), Some(format!("Path {} already exists", root_path.join("fileZ").display())));
 
         // Will rename file
-        let result = file_query.rename_path(&root_path.join("fileA"), &root_path.join("fileB"));
+        let result = file_query.rename_path(&root_path.join("fileA"), "fileB");
         assert!(result.is_ok());
         assert!(!root_path.join("fileA").exists());
         assert!(root_path.join("fileB").exists());
 
         // Will rename directory
-        let result = file_query.rename_path(&root_path.join("dirA"), &root_path.join("dirB"));
+        let result = file_query.rename_path(&root_path.join("dirA"), "dirB");
         assert!(result.is_ok());
         assert!(!root_path.join("dirA").exists());
         assert!(root_path.join("dirB").exists());

@@ -21,5 +21,6 @@ pub async fn query_file_system(
             file_query.touch_directory(&parent_dir, &dir_name)
         }
         FsCommand::DeletePath { path } => file_query.delete_path(&path).map(|_| QueryCommandResponse::None),
+        FsCommand::RenamePath { from, to } => file_query.rename_path(&from, &to).map(|_| QueryCommandResponse::None),
     }
 }
