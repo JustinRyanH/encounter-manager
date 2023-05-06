@@ -12,6 +12,7 @@ import {
     PencilSimpleLine,
     TrashSimple
 } from "@phosphor-icons/react";
+import { Form, useForm } from "@mantine/form";
 
 interface Modal {
     opened: boolean,
@@ -80,7 +81,7 @@ function RenameFileModal({ file, onClose, opened }: FileModal) {
     </Modal>)
 }
 
-function DeleteConfirmationModal({ file, onClose, opened } : FileModal) {
+function DeleteConfirmationModal({ file, onClose, opened }: FileModal) {
     const fileManager = useFileManager();
     const name = useWatchValueObserver(file.nameObserver);
     const handleDelete = () => fileManager.deleteFile(file)
@@ -104,27 +105,34 @@ function DeleteConfirmationModal({ file, onClose, opened } : FileModal) {
 function CreateDirectoryModal({ directory, onClose, opened }: DirectoryModal) {
     const fileManager = useFileManager();
     const name = useWatchValueObserver(directory.nameObserver);
-    const [value, setValue] = React.useState('');
-    React.useEffect(() => setValue(''), [opened]);
 
-    const handleSave = () => fileManager.touchDirectory(directory, value)
-        .then(() => onClose())
-        .catch(e => {
-            notifyErrors({ errors: e.toString() });
-            onClose();
-        });
+    const form = useForm({
+        initialValues: {
+            name: ''
+        }
+    });
+
+    const onSubmit = form.onSubmit((values) => {
+        fileManager.touchDirectory(directory, values.name)
+            .then(() => onClose())
+            .catch(e => {
+                notifyErrors({ errors: e.toString() });
+                onClose();
+            });
+    });
 
     return (<Modal opened={opened} onClose={onClose} size="xs" title={`Create directory in "${name}"`} centered>
-        <Group noWrap m={rem(4)}>
-            <TextInput
-                data-autofocus
-                placeholder="Directory Name"
-                value={value}
-                onChange={(event) => setValue(event.currentTarget.value)}
-                withAsterisk
-            />
-            <Button onClick={handleSave} variant="light" color="blue">Create</Button>
-        </Group>
+        <form onSubmit={onSubmit}>
+            <Group noWrap m={rem(4)}>
+                <TextInput
+                    data-autofocus
+                    placeholder="Directory Name"
+                    {...form.getInputProps('name')}
+                    withAsterisk
+                />
+                <Button type="submit" variant="light" color="blue">Create</Button>
+            </Group>
+        </form>
     </Modal>)
 }
 
@@ -135,24 +143,24 @@ export function DirectoryMenu({ directory }: { directory: Directory }) {
     const [fileRenameModal, fileRenameHandles] = useDisclosure(false);
 
     return (<>
-        <CreateFileModal directory={directory} onClose={createFileHandles.close} opened={createFileModal}/>
+        <CreateFileModal directory={directory} onClose={createFileHandles.close} opened={createFileModal} />
         <CreateDirectoryModal directory={directory} onClose={createDirectoryHandles.close}
-                              opened={createDirectoryModal}/>
-        <DeleteConfirmationModal file={directory} onClose={fileDeleteHandles.close} opened={fileDeleteModal}/>
-        <RenameFileModal file={directory} onClose={fileRenameHandles.close} opened={fileRenameModal}/>
+            opened={createDirectoryModal} />
+        <DeleteConfirmationModal file={directory} onClose={fileDeleteHandles.close} opened={fileDeleteModal} />
+        <RenameFileModal file={directory} onClose={fileRenameHandles.close} opened={fileRenameModal} />
         <Menu position="left" withArrow>
             <Menu.Target>
                 <ActionIcon size="xs">
-                    <DotsThreeOutlineVertical/>
+                    <DotsThreeOutlineVertical />
                 </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
                 <Menu.Label>Directory Actions</Menu.Label>
-                <Menu.Item onClick={fileRenameHandles.open} icon={<PencilSimpleLine/>}>Rename Directory</Menu.Item>
-                <Menu.Item onClick={fileDeleteHandles.open} icon={<TrashSimple/>}>Delete Directory</Menu.Item>
-                <Menu.Item onClick={createDirectoryHandles.open} icon={<FolderSimplePlus/>}>Create Directory</Menu.Item>
-                <Menu.Divider/>
-                <Menu.Item onClick={createFileHandles.open} icon={<FilePlus/>}>Create File</Menu.Item>
+                <Menu.Item onClick={fileRenameHandles.open} icon={<PencilSimpleLine />}>Rename Directory</Menu.Item>
+                <Menu.Item onClick={fileDeleteHandles.open} icon={<TrashSimple />}>Delete Directory</Menu.Item>
+                <Menu.Item onClick={createDirectoryHandles.open} icon={<FolderSimplePlus />}>Create Directory</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item onClick={createFileHandles.open} icon={<FilePlus />}>Create File</Menu.Item>
             </Menu.Dropdown>
         </Menu>
     </>)
