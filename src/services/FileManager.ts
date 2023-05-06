@@ -291,7 +291,7 @@ export class TauriFileManager extends BaseFileManager {
         await renamePath(file.path, newName);
     }
 
-    handleFileRename({ from, to, newName }: { from: string, to: string, newName: string }) {
+    #handleFileRename({ from, to, newName }: { from: string, to: string, newName: string }) {
         const file = this.findFile(from);
         if (!file) throw new Error("File not found");
         file.name = newName;
@@ -300,14 +300,13 @@ export class TauriFileManager extends BaseFileManager {
         this.#fileMap.set(to, file);
     }
 
-    handleFileRemove({ path }: { path: string }) {
+    #handleFileRemove({ path }: { path: string }) {
         const file = this.findFile(path);
         if (!file) return;
         if (file.type === 'directory') (file as Directory).allPaths.forEach(path => this.#fileMap.delete(path));
 
         file.delete();
         this.#fileMap.delete(path);
-        console.log(this);
     }
 
     #handleNewFile(fileData: FileData) {
@@ -378,12 +377,12 @@ export class TauriFileManager extends BaseFileManager {
     #handleFileChange = (event: FileChangeEvent) => {
         if (event.rename) {
             const { from, to, data } = event.rename;
-            this.handleFileRename({ from, to, newName: data.name });
+            this.#handleFileRename({ from, to, newName: data.name });
             return;
         }
         if (event.delete) {
             const { path } = event.delete;
-            this.handleFileRemove({ path });
+            this.#handleFileRemove({ path });
             return;
         }
         if (event.create) {

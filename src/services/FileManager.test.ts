@@ -12,7 +12,7 @@ interface FakeEvent<T> {
     payload: T;
 }
 
-const mockFileOne = {
+const mockFileOne: FileData = {
     fileType: 'file',
     name: 'file1',
     path: '/file1',
@@ -26,21 +26,21 @@ const mockFileTwo = {
     parentDir: '/',
 }
 
-const mockFileThree = {
+const mockFileThree: FileData = {
     fileType: 'file',
     name: 'file3',
     path: '/directory1/file3',
     parentDir: '/directory1',
 }
 
-const mockDirectoryOne = {
+const mockDirectoryOne: FileData = {
     fileType: 'directory',
     name: 'directory1',
     path: '/directory1',
     parentDir: '/',
 }
 
-const mockRootDirectory = {
+const mockRootDirectory: FileData = {
     fileType: 'directory',
     name: 'root',
     path: '/',
@@ -196,37 +196,47 @@ describe('FileManager', () => {
         expect(rootDir.entries.length).toEqual(1);
     });
 
-    describe('renameFile', () => {
+    describe('handles File Rename', () => {
+        const file4: FileData = {
+            fileType: 'file',
+            name: 'file4',
+            path: '/directory1/file4',
+            parentDir: '/directory1',
+        }
         test('renames a file', async () => {
             (queryRootDirectory as Mock)
                 .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
             (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
 
             const rootDirectory = new TauriFileManager();
+            await rootDirectory.startWatching();
             await rootDirectory.loadRootDirectory();
 
             expect(rootDirectory.findFile('/directory1/file3')).not.toBeNull();
 
-            rootDirectory.handleFileRename({ from: '/directory1/file3', to: '/directory1/file4', newName: 'file 4' });
+            CallSignal({ payload: { rename: { from: '/directory1/file3', to: '/directory1/file4', data: file4 } } });
+            expect(rootDirectory.findFile('/directory1/file3')).toBeNull();
+            expect(rootDirectory.findFile('/directory1/file4')).not.toBeNull();
         });
     });
 
-    describe('removeFile', () => {
+    describe('handles File Removal', () => {
         test('removes the given file and all of its children', async () => {
             (queryRootDirectory as Mock)
                 .mockResolvedValue({ directory: { data: mockRootDirectory, entries: [mockFileOne, mockDirectoryOne] } });
             (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
 
             const rootDirectory = new TauriFileManager();
+            await rootDirectory.startWatching();
             await rootDirectory.loadRootDirectory();
 
             const file1 = rootDirectory.findFile('/directory1/file3');
-            const directort1 = rootDirectory.findFile('/directory1');
+            const directory1 = rootDirectory.findFile('/directory1');
 
             expect(file1).not.toBeNull();
-            expect(directort1).not.toBeNull();
+            expect(directory1).not.toBeNull();
 
-            rootDirectory.handleFileRemove({ path: '/directory1' });
+            CallSignal({ payload: { delete: mockDirectoryOne } });
 
             expect(rootDirectory.findFile('/directory1')).toBeNull();
             expect(rootDirectory.findFile('/directory1/file3')).toBeNull();
@@ -238,18 +248,19 @@ describe('FileManager', () => {
             (queryPath as Mock).mockResolvedValue({ directory: { data: mockDirectoryOne, entries: [mockFileThree] } });
 
             const rootDirectory = new TauriFileManager();
+            await rootDirectory.startWatching();
             await rootDirectory.loadRootDirectory();
 
             const file1 = rootDirectory.findFile('/directory1/file3') as File;
-            const directort1 = rootDirectory.findFile('/directory1') as Directory;
+            const directory1 = rootDirectory.findFile('/directory1') as Directory;
 
             expect(file1).not.toBeNull();
-            expect(directort1).not.toBeNull();
+            expect(directory1).not.toBeNull();
 
-            rootDirectory.handleFileRemove({ path: '/directory1' });
+            CallSignal({ payload: { delete: mockDirectoryOne } });
 
             expect(file1.parent).toBeNull();
-            expect(directort1.getFileFromPath(file1.path)).toBeNull();
+            expect(directory1.getFileFromPath(file1.path)).toBeNull();
         });
     });
 
@@ -275,7 +286,6 @@ describe('FileManager', () => {
             expect(file3).not.toBeNull();
             expect(directory1).not.toBeNull();
 
-            if (!signalFileChange) throw new Error('Never started watching FileEvents');
             CallSignal({ payload: { create: file4 } });
 
             expect(rootDirectory.findFile('/directory1/file4')).not.toBeNull();
