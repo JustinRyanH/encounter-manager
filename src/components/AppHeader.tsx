@@ -1,7 +1,7 @@
 import { Accordion, ActionIcon, Drawer, Group, Header } from '@mantine/core';
 import { BugBeetle } from '@phosphor-icons/react';
 import { useDisclosure } from "@mantine/hooks";
-import { FileExperiment } from "~/components/files/FileExperiment";
+import { DebugFileBrowser } from "~/components/files/DebugFileBrowser";
 
 
 interface DebugDrawerProps {
@@ -15,7 +15,7 @@ function DebugDrawer({ opened, onClose }: DebugDrawerProps) {
         <Accordion defaultValue="files">
             <Accordion.Item value="files">
                 <Accordion.Control>Explore Files</Accordion.Control>
-                <Accordion.Panel> <FileExperiment/> </Accordion.Panel>
+                <Accordion.Panel> <DebugFileBrowser/> </Accordion.Panel>
             </Accordion.Item>
         </Accordion>
     </Drawer>)

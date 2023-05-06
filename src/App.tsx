@@ -6,7 +6,7 @@ import { Encounter } from "~/services/encounter/Encounter";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
-import { FileExperiment } from "~/components/files/FileExperiment";
+import { DebugFileBrowser } from "~/components/files/DebugFileBrowser";
 
 import "./App.css";
 import { AppHeader } from "~/components/AppHeader";

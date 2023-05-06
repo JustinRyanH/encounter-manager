@@ -69,7 +69,7 @@ function DirectoryLine({ directory }: { directory: Directory }) {
     </>);
 }
 
-export function FileExperiment() {
+export function DebugFileBrowser() {
     const fileManager = useFileManager();
     React.useEffect(() => {
         const loadFiles = async () => {
