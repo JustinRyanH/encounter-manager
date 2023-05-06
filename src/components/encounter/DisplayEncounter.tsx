@@ -1,6 +1,6 @@
 import React from "react";
-import { Accordion, ActionIcon, Button, Group } from "@mantine/core";
-import { Play } from '@phosphor-icons/react';
+import { Accordion, ActionIcon, Group } from "@mantine/core";
+import { Pause, Play, PlayPause } from '@phosphor-icons/react';
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
@@ -10,12 +10,26 @@ import { useStyles } from "~/components/encounter/DisplayEncounter.styles";
 function ManageEncounter() {
     const encounter = useEncounterContext();
     const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
+    const isCharacterActive = activeCharacter !== null;
+
+    const {
+        playPause,
+        label
+    } = React.useMemo(() => {
+        return {
+            playPause: isCharacterActive ? encounter.stopEncounter : () => { encounter.restartEncounter(); console.log('here'); },
+            label: isCharacterActive ? "Stop Encounter" : "Restart Encounter"
+        }
+    }, [encounter, isCharacterActive]);
 
     return (
-        <Group p="1rem" align="center" position="apart">
-            <ActionIcon title="Start Encounter" disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}><Play /></ActionIcon>
-            <Button disabled={Boolean(activeCharacter)} color="gray" onClick={() => encounter.restartEncounter()}> Restart Encounter </Button>
-            <Button disabled={!activeCharacter} color="gray" onClick={() => encounter.stopEncounter()}> Stop Encounter </Button>
+        <Group p="1rem" align="center" position="right">
+            <ActionIcon title="Start Encounter" disabled={Boolean(activeCharacter)} onClick={() => encounter.startEncounter()}>
+                <Play />
+            </ActionIcon>
+            <ActionIcon title={label} color="gray" onClick={playPause}>
+                {isCharacterActive ? <Pause /> : <PlayPause />}
+            </ActionIcon>
         </Group>
     )
 }
