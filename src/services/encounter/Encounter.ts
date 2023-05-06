@@ -82,7 +82,8 @@ export class Encounter {
      * Sets the active character to the previous character
      * in the initiative order when the encounter has been stopped.
      */
-    restartEncounter() {
+    restartEncounter = () => {
+        console.log("Restart");
         if (!this.#lastActiveCharacter) {
             this.startEncounter();
             return;
