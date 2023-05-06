@@ -30,12 +30,18 @@ export interface TouchFile {
     name: string;
 }
 
+export interface RenamePath {
+    from: string;
+    to: string;
+}
+
 export interface FsCommand {
     queryRoot?: null;
     queryPath?: QueryPath;
     touchFile?: TouchFile;
     touchDirectory?: TouchFile;
     deletePath?: QueryPath;
+    renamePath?: RenamePath;
 }
 
 export interface FileQueryResponse {

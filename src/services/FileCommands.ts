@@ -32,3 +32,7 @@ export function touchDirectory(parentDir: string, dirName: string): Promise<FsQu
 export function deletePath(path: string): Promise<FsQueryResponse> {
     return queryFileSystem({ deletePath: { path } });
 }
+
+export function renamePath(from: string, to: string): Promise<FsQueryResponse> {
+    return queryFileSystem({ renamePath: { from, to } });
+}

@@ -4,7 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/BackendTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath } from "./FileCommands";
+import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath, renamePath } from "./FileCommands";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
@@ -285,6 +285,10 @@ export class TauriFileManager extends BaseFileManager {
 
     async deleteFile(file: File) {
         await deletePath(file.path);
+    }
+
+    async renameFile(file: File, newName: string) {
+        await renamePath(file.path, newName);
     }
 
     handleFileRename({ from, to, newName }: { from: string, to: string, newName: string }) {
