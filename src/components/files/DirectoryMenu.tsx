@@ -165,3 +165,26 @@ export function DirectoryMenu({ directory }: { directory: Directory }) {
         </Menu>
     </>)
 }
+
+export function FileMenu({ file }: { file: File }) {
+    const [fileDeleteModal, fileDeleteHandles] = useDisclosure(false);
+    const [fileRenameModal, fileRenameHandles] = useDisclosure(false);
+
+    return (<>
+        <DeleteConfirmationModal file={file} onClose={fileDeleteHandles.close} opened={fileDeleteModal} />
+        <RenameFileModal file={file} onClose={fileRenameHandles.close} opened={fileRenameModal} />
+        <Menu position="left" withArrow>
+            <Menu.Target>
+                <ActionIcon size="xs">
+                    <DotsThreeOutlineVertical />
+                </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+                <Menu.Label>File Actions</Menu.Label>
+                <Menu.Item onClick={fileRenameHandles.open} icon={<PencilSimpleLine />}>Rename File</Menu.Item>
+                <Menu.Item onClick={fileDeleteHandles.open} icon={<TrashSimple />}>Delete File</Menu.Item>
+            </Menu.Dropdown>
+        </Menu>
+    </>)
+
+}

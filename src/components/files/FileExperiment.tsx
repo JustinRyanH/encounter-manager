@@ -1,19 +1,22 @@
 import React from "react";
-import { Collapse, Divider, Flex, rem, ScrollArea, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Collapse, Divider, Flex, Group, rem, ScrollArea, Stack, Text, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { File as FileIcon, FolderNotch } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/files/FileManager";
 import { Directory, File } from "~/services/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { DirectoryMenu } from "~/components/files/DirectoryMenu";
+import { DirectoryMenu, FileMenu } from "~/components/files/DirectoryMenu";
 
 function FileLine({ file }: { file: File }) {
     const name = useWatchValueObserver(file.nameObserver);
-    return (<Flex gap="0" justify="flex-start" align="center" wrap="nowrap">
-        <FileIcon style={{ marginRight: rem(4) }}/>
-        <Text size="xs">{name}</Text>
-    </Flex>)
+    return (<Group position="apart">
+        <Flex gap="0" justify="flex-start" align="center" wrap="nowrap">
+            <FileIcon style={{ marginRight: rem(4) }} />
+            <Text size="xs">{name}</Text>
+        </Flex>
+        <FileMenu file={file} />
+    </Group>)
 }
 
 
@@ -24,12 +27,12 @@ function DirectoryLine({ directory }: { directory: Directory }) {
     const [opened, { toggle }] = useDisclosure();
 
     const fileComponents = files.map((file) => {
-        if (file.type === 'directory') return <DirectoryLine key={file.path} directory={file as Directory}/>;
-        return <FileLine key={file.path} file={file}/>;
+        if (file.type === 'directory') return <DirectoryLine key={file.path} directory={file as Directory} />;
+        return <FileLine key={file.path} file={file} />;
     });
 
     const fileList = (<>
-        <Divider/>
+        <Divider />
         <Collapse pl={rem(8)} in={opened} transitionDuration={200} transitionTimingFunction="ease-in">
             <Stack spacing={rem(2)}>
                 {fileComponents}
@@ -40,12 +43,12 @@ function DirectoryLine({ directory }: { directory: Directory }) {
 
     return (<>
         <Flex gap="0" justify="space-between" align="center" wrap="nowrap">
-            <FolderNotch style={{ minWidth: "1rem", marginRight: rem(4) }}/>
+            <FolderNotch style={{ minWidth: "1rem", marginRight: rem(4) }} />
             <UnstyledButton onClick={toggle}
-                            style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 <Text style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} size="xs">{name}</Text>
             </UnstyledButton>
-            <DirectoryMenu directory={directory}/>
+            <DirectoryMenu directory={directory} />
         </Flex>
         {hasFiles && fileList}
     </>);
@@ -66,7 +69,7 @@ export function FileExperiment() {
     return (
         <ScrollArea h={200} offsetScrollbars scrollbarSize={2}>
             <Stack spacing={rem(2)} w="12.5rem">
-                {rootDirectory && <DirectoryLine directory={rootDirectory}/>}
+                {rootDirectory && <DirectoryLine directory={rootDirectory} />}
             </Stack>
         </ScrollArea>
     )
