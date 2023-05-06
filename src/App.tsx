@@ -9,6 +9,7 @@ import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEn
 import { FileExperiment } from "~/components/files/FileExperiment";
 
 import "./App.css";
+import { AppHeader } from "~/components/AppHeader";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -18,34 +19,11 @@ const MockCharacters = [
 ]
 
 function App() {
-  const [opened, setOpened] = React.useState(false);
-
   const encounter = React.useMemo(() => new Encounter({
     characters: MockCharacters.map((c) => new ActiveCharacter(c)),
   }), []);
 
-  const navbar = (<Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: '17rem', lg: '20rem' }}>
-    <Navbar.Section>
-      <Stack>
-        <Title align="center" order={3}>Encounter Manager</Title>
-        <Divider />
-        <Accordion>
-          <Accordion.Item value="Manage Files">
-            <Accordion.Control>Files</Accordion.Control>
-            <Accordion.Panel><FileExperiment /></Accordion.Panel>
-          </Accordion.Item>
-        </Accordion>
-      </Stack>
-    </Navbar.Section>
-  </Navbar>);
-
-  const header = (<Header p="xs" height={{ base: '3rem', md: '4rem' }}>
-    <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-      <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" mr="xl" />
-    </MediaQuery>
-  </Header>)
-
-  return (<AppShell navbar={navbar} header={header}>
+  return (<AppShell header={<AppHeader />}>
     <EncounterProvider encounter={encounter}>
       <DisplayEncounter />
     </EncounterProvider>
