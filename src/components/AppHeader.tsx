@@ -1,12 +1,38 @@
-import { ActionIcon, Group, Header } from '@mantine/core';
+import { Accordion, ActionIcon, Drawer, Group, Header } from '@mantine/core';
 import { BugBeetle } from '@phosphor-icons/react';
+import { useDisclosure } from "@mantine/hooks";
+import { FileExperiment } from "~/components/files/FileExperiment";
+
+
+interface DebugDrawerProps {
+    opened: boolean,
+    onClose: () => void
+}
+
+function DebugDrawer({ opened, onClose }: DebugDrawerProps) {
+
+    return (<Drawer size="xs" position="right" opened={opened} onClose={onClose} title="Debug Panel">
+        <Accordion defaultValue="files">
+            <Accordion.Item value="files">
+                <Accordion.Control>Explore Files</Accordion.Control>
+                <Accordion.Panel> <FileExperiment/> </Accordion.Panel>
+            </Accordion.Item>
+        </Accordion>
+    </Drawer>)
+}
 
 export function AppHeader() {
-    return (<Header p="xs" height={{ base: '3rem', md: '4rem' }}>
-        <Group position="right">
-            <ActionIcon title="Debug Panel" variant="outline">
-                <BugBeetle />
-            </ActionIcon>
-        </Group>
-    </Header>)
+    const [opened, debugHandles] = useDisclosure(false);
+
+    return (
+        <>
+            <DebugDrawer opened={opened} onClose={debugHandles.close} />
+            <Header p="xs" height={{ base: '3rem', md: '4rem' }}>
+                <Group position="right">
+                    <ActionIcon title="Debug Panel" variant="outline">
+                        <BugBeetle onClick={debugHandles.open}/>
+                    </ActionIcon>
+                </Group>
+            </Header>
+        </>)
 }

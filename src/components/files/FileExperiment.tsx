@@ -83,7 +83,7 @@ export function FileExperiment() {
 
     return (
         <ScrollArea h={200} offsetScrollbars scrollbarSize={2}>
-            <Stack spacing={rem(2)} w="12.5rem">
+            <Stack spacing={rem(2)}>
                 {rootDirectory && <DirectoryLine directory={rootDirectory} />}
             </Stack>
         </ScrollArea>
