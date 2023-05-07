@@ -4,9 +4,9 @@ use notify::RecursiveMode;
 use tauri::{api::path::document_dir, async_runtime, Manager, Runtime, State, Wry};
 use tokio::sync::{Mutex, MutexGuard};
 
-use crate::services::file_watcher::FileWatcher;
+use crate::services::files::FileWatcher;
 
-use super::{files::FileData, files::file_structure::RootDirectory, file_watcher::FileChangeEvent};
+use super::{files::FileData, files::file_structure::RootDirectory, files::FileChangeEvent};
 
 pub struct FileSystemConnection<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,

@@ -5,7 +5,7 @@ use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
 use tokio::sync::broadcast;
 
-use super::files::FileData;
+use super::FileData;
 
 #[derive(Debug)]
 pub struct FileWatcher {
