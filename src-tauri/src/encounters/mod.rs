@@ -30,6 +30,10 @@ impl Encounter {
         self.characters.sort();
     }
 
+    pub fn find_character(&self, id: String) -> Option<&Character> {
+        self.characters.iter().find(|c| c.id() == id)
+    }
+
     pub fn get_characters(&self) -> Vec<Character> {
         self.characters.clone()
     }
@@ -81,5 +85,16 @@ mod tests {
         encounter.add_character(character1.clone());
         assert_eq!(encounter.get_characters()[0].name, character2.name);
         assert_eq!(encounter.get_characters()[1].name, character1.name);
+    }
+
+    #[test]
+    fn find_character() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = character::Character::new(String::from("Test Character 2"), 10, 20);
+        encounter.add_character(character1.clone());
+
+        assert_eq!(encounter.find_character(character1.id()).unwrap().name, character1.name);
+        assert_eq!(encounter.find_character(character2.id()), None);
     }
 }
