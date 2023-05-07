@@ -5,6 +5,7 @@ extern crate core;
 
 mod commands;
 mod services;
+mod encounters;
 
 use tauri::{generate_context, Manager};
 
