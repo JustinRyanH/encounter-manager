@@ -1,8 +1,12 @@
-use crate::encounters::character::Character;
+use serde::{Deserialize, Serialize};
+use tauri::State;
+pub use crate::encounters::character::Character;
 
-mod character;
+pub mod character;
 
-#[derive(Clone, Debug)]
+pub type EncounterState<'a> = State<'a, Encounter>;
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Encounter {
     id: ulid::Ulid,
     name: String,
@@ -10,10 +14,10 @@ pub struct Encounter {
 }
 
 impl Encounter {
-    pub fn new(name: String) -> Encounter {
+    pub fn new<T: Into<String>>(name: T) -> Encounter {
         Encounter {
             id: ulid::Ulid::new(),
-            name,
+            name: name.into(),
             characters: Vec::new(),
         }
     }

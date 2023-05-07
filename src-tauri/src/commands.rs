@@ -1,8 +1,14 @@
+use crate::encounters::{Encounter, EncounterState};
 use crate::services::{
     file_system_connection::FileSystemState,
     files::file_structure::{FsCommand, QueryCommandResponse},
 };
 use crate::services::files::file_structure::TouchCommand;
+
+#[tauri::command]
+pub fn encounter(state: EncounterState<'_>) -> Encounter {
+    return state.inner().clone();
+}
 
 #[tauri::command]
 pub async fn query_file_system(

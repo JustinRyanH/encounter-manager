@@ -1,12 +1,11 @@
 import React from "react";
-import { Accordion, AppShell, Burger, Divider, Header, MediaQuery, Navbar, Stack, Title } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { Encounter } from "~/services/encounter/Encounter";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
-import { AddCharacterToEncounter } from "~/components/encounter/AddCharacterToEncounter";
-import { DebugFileBrowser } from "~/components/files/DebugFileBrowser";
+import { invoke } from "@tauri-apps/api";
 
 import "./App.css";
 import { AppHeader } from "~/components/AppHeader";
@@ -17,6 +16,10 @@ const MockCharacters = [
   { name: 'Pippin', initiative: 5, hp: 4 },
   { name: 'Merry', initiative: 3, hp: 7 },
 ]
+
+invoke('encounter').then((encounter) => {
+    console.log(encounter);
+});
 
 function App() {
   const encounter = React.useMemo(() => new Encounter({
