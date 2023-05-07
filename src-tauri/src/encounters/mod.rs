@@ -2,11 +2,11 @@ use crate::encounters::character::Character;
 
 mod character;
 
-
+#[derive(Clone, Debug)]
 pub struct Encounter {
     id: ulid::Ulid,
     name: String,
-    characters: Vec<character::Character>,
+    characters: Vec<Character>,
 }
 
 impl Encounter {
@@ -33,6 +33,10 @@ impl Encounter {
     pub fn get_characters(&self) -> Vec<Character> {
         self.characters.clone()
     }
+
+    pub fn remove_character(&mut self, character: Character) {
+        self.characters.retain(|c| !c.is_same_as(&character));
+    }
 }
 
 #[cfg(test)]
@@ -55,6 +59,17 @@ mod tests {
         encounter.add_character(character.clone());
         encounter.add_character(character.clone());
         assert_eq!(encounter.get_characters().len(), 1);
+    }
+
+    #[test]
+    fn remove_character() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character_a = character::Character::new("Character A", 10, 10);
+        let character_b = character::Character::new("Character B", 10, 5);
+        encounter.add_character(character_a.clone());
+        encounter.add_character(character_b.clone());
+        encounter.remove_character(character_a.clone());
+        assert_eq!(encounter.get_characters(), vec![character_b]);
     }
 
     #[test]
