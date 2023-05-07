@@ -29,12 +29,12 @@ impl<R: Runtime> FileSystemConnection<R> {
     }
 }
 
-pub type DataState<'a> = State<'a, ArcData>;
+pub type FileSystemState<'a> = State<'a, ArcFileSystemConnection>;
 
 #[derive(Clone)]
-pub struct ArcData(pub Arc<Mutex<FileSystemConnection<Wry>>>);
+pub struct ArcFileSystemConnection(pub Arc<Mutex<FileSystemConnection<Wry>>>);
 
-impl ArcData {
+impl ArcFileSystemConnection {
     pub fn new(data: FileSystemConnection<Wry>) -> Self {
         Self(Arc::new(Mutex::new(data)))
     }
@@ -124,8 +124,8 @@ fn get_or_create_doc_path(directory: &str) -> std::path::PathBuf {
     path
 }
 
-pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
-    let data_out = ArcData::new(FileSystemConnection::new(app_handle)?);
+pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcFileSystemConnection, String> {
+    let data_out = ArcFileSystemConnection::new(FileSystemConnection::new(app_handle)?);
     data_out.clone().start_main_loop()?;
     Ok(data_out)
 }
