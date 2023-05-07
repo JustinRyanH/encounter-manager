@@ -6,7 +6,7 @@ use tokio::sync::{Mutex, MutexGuard};
 
 use crate::services::file_watcher::FileWatcher;
 
-use super::{files::FileData, file_structure::RootDirectory, file_watcher::FileChangeEvent};
+use super::{files::FileData, files::file_structure::RootDirectory, file_watcher::FileChangeEvent};
 
 pub struct FileSystemConnection<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,

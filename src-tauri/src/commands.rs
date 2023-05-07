@@ -1,8 +1,8 @@
 use crate::services::{
     file_system_connection::FileSystemState,
-    file_structure::{FsCommand, QueryCommandResponse},
+    files::file_structure::{FsCommand, QueryCommandResponse},
 };
-use crate::services::file_structure::TouchCommand;
+use crate::services::files::file_structure::TouchCommand;
 
 #[tauri::command]
 pub async fn query_file_system(
