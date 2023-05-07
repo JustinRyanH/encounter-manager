@@ -74,7 +74,6 @@ impl Ord for Character {
 
 #[cfg(test)]
 mod tests {
-    use serde::de::Unexpected::Char;
     use crate::encounters::character::Character;
 
     #[test]

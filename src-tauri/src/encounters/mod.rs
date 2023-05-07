@@ -1,3 +1,5 @@
+use crate::encounters::character::Character;
+
 mod character;
 
 
@@ -19,6 +21,17 @@ impl Encounter {
     pub fn id(&self) -> String {
         self.id.to_string()
     }
+
+    pub fn add_character(&mut self, new_character: Character) {
+        if self.characters.iter().any(|c| c.is_same_as(&new_character)) {
+            return;
+        }
+        self.characters.push(new_character);
+    }
+
+    pub fn get_characters(&self) -> Vec<Character> {
+        self.characters.clone()
+    }
 }
 
 #[cfg(test)]
@@ -32,5 +45,14 @@ mod tests {
         assert_eq!(encounter.name, name);
         assert_eq!(encounter.characters.len(), 0);
         assert_eq!(encounter.id().len(), 26);
+    }
+
+    #[test]
+    fn add_character() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character = character::Character::new(String::from("Test Character"), 10, 10);
+        encounter.add_character(character.clone());
+        encounter.add_character(character.clone());
+        assert_eq!(encounter.get_characters().len(), 1);
     }
 }
