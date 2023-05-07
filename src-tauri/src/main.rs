@@ -8,12 +8,12 @@ mod services;
 
 use tauri::{generate_context, Manager};
 
-use crate::{commands::query_file_system, services::data};
+use crate::{commands::query_file_system, services::file_system_connection};
 
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let arc_data = data::start(app.handle())?;
+            let arc_data = file_system_connection::start(app.handle())?;
             app.manage(arc_data);
             Ok(())
         })

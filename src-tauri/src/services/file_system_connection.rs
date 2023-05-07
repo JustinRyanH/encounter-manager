@@ -8,13 +8,13 @@ use crate::services::file_watcher::FileWatcher;
 
 use super::{file::FileData, file_structure::RootDirectory, file_watcher::FileChangeEvent};
 
-pub struct BackgroundData<R: Runtime> {
+pub struct FileSystemConnection<R: Runtime> {
     pub app_handle: tauri::AppHandle<R>,
     pub file_watcher: FileWatcher,
     pub file_query: RootDirectory,
 }
 
-impl<R: Runtime> BackgroundData<R> {
+impl<R: Runtime> FileSystemConnection<R> {
     pub fn new(app_handle: tauri::AppHandle<R>) -> Result<Self, String> {
         let file_watcher = FileWatcher::new().map_err(String::from)?;
         let mut document_path = document_dir().ok_or("Failed to get document Path")?;
@@ -32,14 +32,14 @@ impl<R: Runtime> BackgroundData<R> {
 pub type DataState<'a> = State<'a, ArcData>;
 
 #[derive(Clone)]
-pub struct ArcData(pub Arc<Mutex<BackgroundData<Wry>>>);
+pub struct ArcData(pub Arc<Mutex<FileSystemConnection<Wry>>>);
 
 impl ArcData {
-    pub fn new(data: BackgroundData<Wry>) -> Self {
+    pub fn new(data: FileSystemConnection<Wry>) -> Self {
         Self(Arc::new(Mutex::new(data)))
     }
 
-    pub async fn lock(&self) -> MutexGuard<BackgroundData<Wry>> {
+    pub async fn lock(&self) -> MutexGuard<FileSystemConnection<Wry>> {
         self.0.lock().await
     }
 
@@ -125,7 +125,7 @@ fn get_or_create_doc_path(directory: &str) -> std::path::PathBuf {
 }
 
 pub fn start(app_handle: tauri::AppHandle<Wry>) -> Result<ArcData, String> {
-    let data_out = ArcData::new(BackgroundData::new(app_handle)?);
+    let data_out = ArcData::new(FileSystemConnection::new(app_handle)?);
     data_out.clone().start_main_loop()?;
     Ok(data_out)
 }
