@@ -27,6 +27,7 @@ impl Encounter {
             return;
         }
         self.characters.push(new_character);
+        self.characters.sort();
     }
 
     pub fn get_characters(&self) -> Vec<Character> {
@@ -54,5 +55,16 @@ mod tests {
         encounter.add_character(character.clone());
         encounter.add_character(character.clone());
         assert_eq!(encounter.get_characters().len(), 1);
+    }
+
+    #[test]
+    fn auto_sorts_new_characters() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = character::Character::new(String::from("Test Character 2"), 10, 20);
+        encounter.add_character(character2.clone());
+        encounter.add_character(character1.clone());
+        assert_eq!(encounter.get_characters()[0].name, character2.name);
+        assert_eq!(encounter.get_characters()[1].name, character1.name);
     }
 }
