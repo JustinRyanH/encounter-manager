@@ -25,7 +25,9 @@ export interface EncounterCommands {
     listEncounter: null,
 }
 
-export type EncounterListType = Array<EncounterDescriptionType>;
+export interface EncounterListType {
+    [index: string]: EncounterDescriptionType
+}
 
 export interface EncounterResponse {
     encounterList: EncounterListType,

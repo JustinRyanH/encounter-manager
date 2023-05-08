@@ -3,7 +3,7 @@ import { EncounterListType } from "~/types/EncounterTypes";
 import * as Commands from './Commands';
 
 export class EncounterManager {
-    #encounterList = new ValueObserver<EncounterListType>([]);
+    #encounterList = new ValueObserver<EncounterListType>({});
 
     get encounters() {
         return this.#encounterList.value;

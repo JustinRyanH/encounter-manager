@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use tauri::State;
 use serde::{Deserialize, Serialize};
+use ulid::Ulid;
 use crate::encounters::Character;
 
 pub type EncounterCollectionState<'a> = State<'a, EncounterCollection>;
@@ -10,6 +11,15 @@ pub type EncounterCollectionState<'a> = State<'a, EncounterCollection>;
 pub struct EncounterDescription {
     pub id: String,
     pub name: String,
+}
+
+impl From<&Encounter> for EncounterDescription {
+    fn from(encounter: &Encounter) -> Self {
+        Self {
+            id: encounter.id(),
+            name: encounter.name.clone(),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -29,10 +39,10 @@ impl EncounterCollection {
         self.encounters.insert(encounter.id, encounter);
     }
 
-    pub fn list_encounters(&self) -> Vec<EncounterDescription> {
+    pub fn list_encounters(&self) -> HashMap<Ulid, EncounterDescription> {
         self.encounters
             .values()
-            .map(|e| EncounterDescription { id: e.id(), name: e.name.clone() })
+            .map(|e| (e.ulid(), e.into()))
             .collect()
     }
 }
@@ -41,7 +51,7 @@ impl EncounterCollection {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Encounter {
-    id: ulid::Ulid,
+    id: Ulid,
     name: String,
     characters: Vec<Character>,
 }
@@ -57,6 +67,10 @@ impl Encounter {
 
     pub fn id(&self) -> String {
         self.id.to_string()
+    }
+
+    pub fn ulid(&self) -> ulid::Ulid {
+        self.id
     }
 
     pub fn add_character(&mut self, new_character: Character) {

@@ -6,7 +6,6 @@ import { listEncounter } from "~/services/encounter";
 
 import "./App.css";
 import { notifyErrors } from "~/services/notifications";
-import { EncounterListType } from "~/types/EncounterTypes";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
@@ -25,7 +24,7 @@ function EncounterList() {
 
     return (
         <List>
-          {encounters.map((encounter) => (<List.Item> {encounter.name} </List.Item>))}
+          {Object.values(encounters).map((encounter) => (<List.Item> {encounter.name} </List.Item>))}
         </List>
     );
 }
