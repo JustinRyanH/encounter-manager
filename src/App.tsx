@@ -1,14 +1,13 @@
 import React from "react";
 import { AppShell } from "@mantine/core";
-
-import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
-import { Encounter } from "~/services/encounter/Encounter";
-import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
-import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { invoke } from "@tauri-apps/api";
 
-import "./App.css";
 import { AppHeader } from "~/components/AppHeader";
+import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
+import { EncounterProvider } from "~/components/encounter/EncounterContext";
+import { ActiveCharacter, Encounter, listEncounter } from "~/services/encounter";
+
+import "./App.css";
 
 const MockCharacters = [
   { name: 'Frodo', initiative: 18, hp: 8 },
@@ -17,7 +16,7 @@ const MockCharacters = [
   { name: 'Merry', initiative: 3, hp: 7 },
 ]
 
-invoke('encounter', { command: { listEncounter: null }}).then((encounter) => {
+listEncounter().then((encounter) => {
     console.log(encounter);
 });
 
