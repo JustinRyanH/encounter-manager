@@ -6,7 +6,7 @@ import { queryPath, queryRootDirectory } from '~/services/files/Commands';
 import { FileChangeEvent, FileData } from "~/types/FilenameTypes";
 
 vi.mock('@tauri-apps/api/event');
-vi.mock('~/services/FileCommands');
+vi.mock('~/services/files/Commands');
 
 interface FakeEvent<T> {
     payload: T;
