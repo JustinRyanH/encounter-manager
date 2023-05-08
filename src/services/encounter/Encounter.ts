@@ -8,15 +8,24 @@ const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative 
 
 type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
 
+interface EncounterProps {
+    characters?: Array<ActiveCharacter>;
+    name: string,
+    id: string,
+}
+
 export class Encounter {
-    #loaded = false;
+    #id: string;
+    #name: ValueObserver<string> = new ValueObserver<string>('');
     #lastActiveCharacter: ActiveCharacter | null = null;
     #initiativeMap: Map<string, StopObserving> = new Map();
     #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);
     #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<Array<ActiveCharacter>>([]);
     #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
-    constructor({ characters = [] }: { characters?: Array<ActiveCharacter> } = {}) {
+    constructor({ name, id, characters = [] }: EncounterProps) {
+        this.#id = id;
+        this.#name.value = name;
         if (characters) this.setCharacters(characters);
     }
 
