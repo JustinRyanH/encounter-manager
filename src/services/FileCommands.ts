@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api';
-import { FsCommand as FsQueryCommand, FsQueryResponse } from '~/BackendTypes';
+import { FsCommand as FsQueryCommand, FsQueryResponse } from '~/CommandTypes';
 
 export function getRootCommand(): FsQueryCommand {
     return { queryRoot: null };

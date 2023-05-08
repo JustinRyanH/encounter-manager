@@ -3,7 +3,7 @@ import { listen } from "@tauri-apps/api/event";
 
 import { Directory, File, TauriFileManager } from '~/services/FileManager';
 import { queryPath, queryRootDirectory } from '~/services/FileCommands';
-import { FileChangeEvent, FileData } from "~/BackendTypes";
+import { FileChangeEvent, FileData } from "~/CommandTypes";
 
 vi.mock('@tauri-apps/api/event');
 vi.mock('~/services/FileCommands');
