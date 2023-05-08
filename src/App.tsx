@@ -7,18 +7,21 @@ import { listEncounter } from "~/services/encounter";
 import "./App.css";
 import { notifyErrors } from "~/services/notifications";
 import { EncounterListType } from "~/types/EncounterTypes";
+import { EncounterProvider } from "~/components/encounter/EncounterContext";
+import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 listEncounter().then((encounter) => {
     console.log(encounter);
 });
 
 function EncounterList() {
-  const [encounters, setEncounters] = React.useState<EncounterListType>([]);
+    const encounterManager = useEncounterManager();
+    const encounters = useWatchValueObserver(encounterManager.encountersObserver);
     React.useEffect(() => {
-        listEncounter()
-            .then((encounters) => setEncounters(encounters))
-            .catch(e => notifyErrors({ errors: e.toString(), title: "Failed to Load Encounters" }));
-    }, []);
+        encounterManager.refreshList().catch(notifyErrors);
+    }, [encounterManager]);
+
 
     return (
         <List>
@@ -29,7 +32,9 @@ function EncounterList() {
 
 function App() {
   return (<AppShell header={<AppHeader />}>
-    <EncounterList />
+      <EncounterProvider>
+          <EncounterList />
+      </EncounterProvider>
   </AppShell>);
 }
 

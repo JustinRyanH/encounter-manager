@@ -8,10 +8,11 @@ export function useEncounterManager() {
 }
 
 interface EncounterManagerProviderProps {
-    manager: EncounterManager;
+    manager?: EncounterManager;
     children: React.ReactNode,
 }
 
 export function EncounterManagerProvider({ children, manager }: EncounterManagerProviderProps) {
-    return <EncounterManagerContext.Provider value={manager}> {children} </EncounterManagerContext.Provider>;
+    const encounterManager = React.useMemo(() => manager || new EncounterManager(), []);
+    return <EncounterManagerContext.Provider value={encounterManager}> {children} </EncounterManagerContext.Provider>;
 }
