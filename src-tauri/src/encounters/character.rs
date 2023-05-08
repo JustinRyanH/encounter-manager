@@ -14,7 +14,7 @@ pub struct Character {
     pub name: String,
     pub hp: Hitpoints,
     pub initiative: i32,
-    pub initiative_match_score: i32,
+    pub initiative_modifier: i32,
 }
 
 impl Character {
@@ -29,7 +29,7 @@ impl Character {
             name: name.into(),
             hp,
             initiative,
-            initiative_match_score: 0,
+            initiative_modifier: 0,
         }
     }
 
@@ -46,7 +46,7 @@ impl Character {
     }
 
     pub fn set_initiative_match_score(&mut self, score: i32) {
-        self.initiative_match_score = score;
+        self.initiative_modifier = score;
     }
 }
 
@@ -55,8 +55,8 @@ impl PartialOrd for Character {
     fn partial_cmp(&self, other: &Character) -> Option<std::cmp::Ordering> {
         match other.initiative.partial_cmp(&self.initiative) {
             Some(std::cmp::Ordering::Equal) => other
-                .initiative_match_score
-                .partial_cmp(&self.initiative_match_score),
+                .initiative_modifier
+                .partial_cmp(&self.initiative_modifier),
             Some(ordering) => Some(ordering),
             None => None,
         }
@@ -87,7 +87,7 @@ mod tests {
         assert_eq!(character.hp.max, max_hp);
         assert_eq!(character.hp.temporary, 0);
         assert_eq!(character.initiative, initiative);
-        assert_eq!(character.initiative_match_score, 0);
+        assert_eq!(character.initiative_modifier, 0);
         assert_eq!(character.id().len(), 26);
     }
 
