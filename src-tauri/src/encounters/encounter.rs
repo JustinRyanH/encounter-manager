@@ -26,7 +26,7 @@ impl EncounterCollection {
     }
 
     pub fn add_encounter(&mut self, encounter: Encounter) {
-        self.encounters.insert(encounter.id.clone(), encounter);
+        self.encounters.insert(encounter.id, encounter);
     }
 
     pub fn list_encounters(&self) -> Vec<EncounterDescription> {
