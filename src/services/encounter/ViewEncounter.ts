@@ -4,7 +4,7 @@ import { ReadonlyValueObserver, ValueChangeMessageProps, ValueObserver } from "~
 
 export class ViewEncounter {
     #encounter: Encounter;
-    #openededCharacters = new ValueObserver<string[]>([]);
+    #openedCharacters = new ValueObserver<string[]>([]);
 
     constructor({ encounter }: { encounter: Encounter }) {
         this.#encounter = encounter;
@@ -12,22 +12,22 @@ export class ViewEncounter {
     }
 
     get openedCharacters(): Array<string> {
-        return this.#openededCharacters.value;
+        return this.#openedCharacters.value;
     }
 
     get openedCharactersObserver(): ReadonlyValueObserver<string[]> {
-        return this.#openededCharacters.readonly;
+        return this.#openedCharacters.readonly;
     }
 
     open(characterId: string): void {
         const id = this.#encounter.characters.find(char => char.id === characterId)?.id;
         if (id) {
-            this.#openededCharacters.value = [...this.openedCharacters, id];
+            this.#openedCharacters.value = [...this.openedCharacters, id];
         }
     }
 
     close(characterId: string): void {
-        this.#openededCharacters.value = this.openedCharacters.filter(character => character !== characterId);
+        this.#openedCharacters.value = this.openedCharacters.filter(character => character !== characterId);
     }
 
     toggle(characterId: string): void {
@@ -48,9 +48,9 @@ export class ViewEncounter {
             oldValues = oldValues.filter(character => character !== oldValue.id);
         }
         if (newValue) {
-            this.#openededCharacters.updateValue([newValue.id, ...oldValues]);
+            this.#openedCharacters.updateValue([newValue.id, ...oldValues]);
         } else {
-            this.#openededCharacters.updateValue(oldValues);
+            this.#openedCharacters.updateValue(oldValues);
         }
     }
 }
