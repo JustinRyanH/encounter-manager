@@ -29,8 +29,8 @@ export function AppHeader() {
             <DebugDrawer opened={opened} onClose={debugHandles.close} />
             <Header p="xs" height={{ base: '3rem', md: '4rem' }}>
                 <Group position="right">
-                    <ActionIcon title="Debug Panel" variant="outline">
-                        <BugBeetle onClick={debugHandles.open}/>
+                    <ActionIcon onClick={debugHandles.open} title="Debug Panel" variant="outline">
+                        <BugBeetle />
                     </ActionIcon>
                 </Group>
             </Header>
