@@ -9,7 +9,7 @@ mod encounters;
 
 use tauri::{generate_context, Manager};
 
-use crate::{commands::{query_file_system, encounter}, services::file_system_connection};
+use crate::{commands::{encounter, query_file_system}, services::file_system_connection};
 
 fn main() {
     tauri::Builder::default()

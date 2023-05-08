@@ -1,4 +1,4 @@
-use crate::encounters::{Encounter, EncounterState};
+use crate::encounters::encounter::{Encounter, EncounterState};
 use crate::services::{
     file_system_connection::FileSystemState,
     files::file_structure::{FsCommand, QueryCommandResponse},
