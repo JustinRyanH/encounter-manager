@@ -4,7 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { File as FileIcon, FolderNotch } from '@phosphor-icons/react';
 
 import { useFileManager } from "~/components/files/FileManager";
-import { Directory, File } from "~/services/FileManager";
+import { Directory, File } from "~/services/files/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { DirectoryMenu, FileMenu } from "~/components/files/DirectoryMenu";
 

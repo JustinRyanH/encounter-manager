@@ -1,5 +1,5 @@
 import React from "react";
-import { TauriFileManager } from "~/services/FileManager";
+import { TauriFileManager } from "~/services/files/FileManager";
 
 
 type FileManager = TauriFileManager;

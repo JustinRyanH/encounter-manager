@@ -7,7 +7,7 @@ import { Notifications } from '@mantine/notifications';
 import { FileManagerProvider } from "~/components/files/FileManager";
 
 import App from "./App";
-import { TauriFileManager } from "~/services/FileManager";
+import { TauriFileManager } from "~/services/files/FileManager";
 
 const fileManager = new TauriFileManager();
 

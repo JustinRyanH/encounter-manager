@@ -1,4 +1,4 @@
-import { Directory, File } from "~/services/FileManager";
+import { Directory, File } from "~/services/files/FileManager";
 import { useFileManager } from "~/components/files/FileManager";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import React from "react";
@@ -12,8 +12,7 @@ import {
     PencilSimpleLine,
     TrashSimple
 } from "@phosphor-icons/react";
-import { Form, useForm } from "@mantine/form";
-import { F } from "@tauri-apps/api/event-30ea0228";
+import { useForm } from "@mantine/form";
 
 interface MenuProps {
     onOpen: () => void,

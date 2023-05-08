@@ -1,9 +1,9 @@
 import { v4 } from "uuid";
 
 import { TauriConnection } from "~/services/TauriConnection";
+import { ValueObserver } from "~/services/ValueObserver";
 import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/types/FilenameTypes";
 
-import { ValueObserver } from "./ValueObserver";
 import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath, renamePath } from "./Commands";
 
 function ParseFileFromType(file: FileData): File | Directory {

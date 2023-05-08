@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, Mock, test, vi } from 'vitest';
 import { listen } from "@tauri-apps/api/event";
 
-import { Directory, File, TauriFileManager } from '~/services/FileManager';
-import { queryPath, queryRootDirectory } from '~/services/FileCommands';
+import { Directory, File, TauriFileManager } from '~/services/files/FileManager';
+import { queryPath, queryRootDirectory } from '~/services/files/Commands';
 import { FileChangeEvent, FileData } from "~/types/FilenameTypes";
 
 vi.mock('@tauri-apps/api/event');
