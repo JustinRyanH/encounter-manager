@@ -8,24 +8,8 @@ pub type EncounterCollectionState<'a> = State<'a, EncounterCollection>;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct EncounterDescription {
-    pub id: String,
-    pub name: String,
-}
-
-impl From<&Encounter> for EncounterDescription {
-    fn from(encounter: &Encounter) -> Self {
-        Self {
-            id: encounter.id(),
-            name: encounter.name.clone(),
-        }
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct EncounterCollection {
-    pub encounters: HashMap<ulid::Ulid, Encounter>,
+    pub encounters: HashMap<Ulid, Encounter>,
 }
 
 impl EncounterCollection {
@@ -39,11 +23,8 @@ impl EncounterCollection {
         self.encounters.insert(encounter.id, encounter);
     }
 
-    pub fn list_encounters(&self) -> HashMap<Ulid, EncounterDescription> {
-        self.encounters
-            .values()
-            .map(|e| (e.ulid(), e.into()))
-            .collect()
+    pub fn list_encounters(&self) -> HashMap<Ulid, Encounter> {
+        self.encounters.clone()
     }
 }
 

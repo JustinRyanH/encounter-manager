@@ -15,5 +15,6 @@ export class EncounterManager {
 
     async refreshList() {
         this.#encounterList.value = await Commands.listEncounter();
+        console.log(this.#encounterList.value);
     }
 }
