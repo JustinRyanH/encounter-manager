@@ -27,6 +27,5 @@ export class EncounterManager {
             if (this.#encounterMap.has(encounter.id)) return;
             this.#encounterMap.set(encounter.id, new Encounter(encounter));
         });
-        console.log(this.#encounterMap.values());
     }
 }

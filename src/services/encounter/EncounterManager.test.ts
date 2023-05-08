@@ -20,6 +20,26 @@ describe('EncounterManager', function () {
         expect(manager.encounters).toEqual([{ id: '300', name: 'Test' }]);
     });
 
+    test('adds new encounters to the list', async () => {
+        (Commands.listEncounter as Mock).mockResolvedValueOnce([{ id: '300', name: 'Test' }]);
+
+        const manager = new EncounterManager();
+        await manager.refreshList();
+
+        const encounter_a = manager.getEncounter('300');
+        expect(encounter_a?.id).toEqual('300');
+
+        (Commands.listEncounter as Mock).mockResolvedValueOnce([
+            { id: '300', name: 'Test' },
+            { id: '400', name: 'Test Two' },
+        ]);
+        await manager.refreshList();
+
+        const encounter_b = manager.getEncounter('400');
+        expect(encounter_b?.id).toEqual('400');
+        expect(manager.getEncounter('300')).toBe(encounter_a);
+    });
+
     test('get encounter', async () => {
         (Commands.listEncounter as Mock).mockResolvedValueOnce([{ id: '300', name: 'Test' }]);
 

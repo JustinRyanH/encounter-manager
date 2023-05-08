@@ -65,6 +65,10 @@ export class Encounter {
         return this.#name.value;
     }
 
+    get id() {
+        return this.#id;
+    }
+
 
     /**
      * Adds a character to the encounter and sorts the characters by initiative.
