@@ -4,7 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/types/FilenameTypes";
 
 import { ValueObserver } from "./ValueObserver";
-import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath, renamePath } from "./FileCommands";
+import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath, renamePath } from "./Commands";
 
 function ParseFileFromType(file: FileData): File | Directory {
     if (file.fileType === 'directory') {
