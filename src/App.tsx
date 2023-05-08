@@ -17,7 +17,7 @@ const MockCharacters = [
   { name: 'Merry', initiative: 3, hp: 7 },
 ]
 
-invoke('encounter').then((encounter) => {
+invoke('encounter', { command: { listEncounter: null }}).then((encounter) => {
     console.log(encounter);
 });
 

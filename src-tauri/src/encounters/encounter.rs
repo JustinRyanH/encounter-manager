@@ -6,6 +6,14 @@ use crate::encounters::Character;
 pub type EncounterCollectionState<'a> = State<'a, EncounterCollection>;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EncounterDescription {
+    pub id: String,
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct EncounterCollection {
     pub encounters: HashMap<ulid::Ulid, Encounter>,
 }
@@ -19,6 +27,13 @@ impl EncounterCollection {
 
     pub fn add_encounter(&mut self, encounter: Encounter) {
         self.encounters.insert(encounter.id.clone(), encounter);
+    }
+
+    pub fn list_encounters(&self) -> Vec<EncounterDescription> {
+        self.encounters
+            .values()
+            .map(|e| EncounterDescription { id: e.id(), name: e.name.clone() })
+            .collect()
     }
 }
 

@@ -4,10 +4,13 @@ use crate::services::{
     files::file_structure::{FsCommand, QueryCommandResponse},
 };
 use crate::services::files::file_structure::TouchCommand;
+use crate::encounters::commands::{EncounterCommandResponse, EncounterCommands};
 
 #[tauri::command]
-pub fn encounter(state: EncounterCollectionState<'_>) -> Option<Encounter> {
-    return state.inner().encounters.values().next().cloned();
+pub fn encounter(state: EncounterCollectionState<'_>, command: EncounterCommands) -> EncounterCommandResponse {
+    match command {
+        EncounterCommands::ListEncounter => EncounterCommandResponse::list_from_collection(&state),
+    }
 }
 
 #[tauri::command]

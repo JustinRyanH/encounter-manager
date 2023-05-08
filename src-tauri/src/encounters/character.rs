@@ -2,24 +2,26 @@ use std::cmp::Ordering;
 use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
-pub struct Hitpoints {
+#[serde(rename_all = "camelCase")]
+pub struct HitPoints {
     pub current: i32,
     pub max: i32,
     pub temporary: i32,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
+#[serde(rename_all = "camelCase")]
 pub struct Character {
     id: ulid::Ulid,
     pub name: String,
-    pub hp: Hitpoints,
+    pub hp: HitPoints,
     pub initiative: i32,
     pub initiative_modifier: i32,
 }
 
 impl Character {
     pub fn new<T: Into<String>>(name: T, max_hp: i32, initiative: i32) -> Character {
-        let hp = Hitpoints {
+        let hp = HitPoints {
             current: max_hp,
             max: max_hp,
             temporary: 0,
