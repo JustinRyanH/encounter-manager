@@ -24,7 +24,7 @@ function EncounterList() {
 
     return (
         <List>
-          {Object.values(encounters).map((encounter) => (<List.Item> {encounter.name} </List.Item>))}
+          {Object.values(encounters).map((encounter) => (<List.Item key={encounter.id}> {encounter.name} </List.Item>))}
         </List>
     );
 }

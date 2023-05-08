@@ -3,17 +3,15 @@ import { EncounterModals } from "~/components/encounter/EncounterModals";
 
 import { Encounter } from "~/services/encounter/Encounter";
 
-const EncounterContext = React.createContext(new Encounter())
+const EncounterContext = React.createContext<Encounter | null>(null)
 
 interface EncounterProviderProps {
     children: React.ReactNode;
     encounter?: Encounter;
 }
 
-export function EncounterProvider({ children, encounter: initialEncounter }: EncounterProviderProps): JSX.Element {
-    const encounter = React.useMemo(() => initialEncounter || new Encounter(), [initialEncounter]);
-
-    return (<EncounterContext.Provider value={encounter}>
+export function EncounterProvider({ children, encounter }: EncounterProviderProps): JSX.Element {
+    return (<EncounterContext.Provider value={encounter || null}>
         <EncounterModals>
             {children}
         </EncounterModals>
@@ -21,5 +19,7 @@ export function EncounterProvider({ children, encounter: initialEncounter }: Enc
 }
 
 export function useEncounterContext(): Encounter {
-    return React.useContext(EncounterContext);
+    const encounter = React.useContext(EncounterContext);
+    if (!encounter) throw new Error("Encounter context not found");
+    return encounter;
 }

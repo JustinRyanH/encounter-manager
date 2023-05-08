@@ -61,6 +61,11 @@ export class Encounter {
         return this.#activeCharacter.readonly;
     }
 
+    get name() {
+        return this.#name.value;
+    }
+
+
     /**
      * Adds a character to the encounter and sorts the characters by initiative.
      * @param initiativeCharacter
