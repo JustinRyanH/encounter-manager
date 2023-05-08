@@ -15,7 +15,7 @@ pub enum EncounterCommandResponse {
 }
 
 impl EncounterCommandResponse{
-    pub fn list_from_collection(collection: &EncounterCollection) -> Self {
-        Self::EncounterList(collection.list_encounters())
+    pub fn list_from_collection(collection: &EncounterCollection) -> Result<Self, String> {
+        Ok(Self::EncounterList(collection.list_encounters()))
     }
 }

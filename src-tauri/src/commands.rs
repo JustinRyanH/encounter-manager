@@ -7,7 +7,7 @@ use crate::services::files::file_structure::TouchCommand;
 use crate::encounters::commands::{EncounterCommandResponse, EncounterCommands};
 
 #[tauri::command]
-pub fn encounter(state: EncounterCollectionState<'_>, command: EncounterCommands) -> EncounterCommandResponse {
+pub fn encounter(state: EncounterCollectionState<'_>, command: EncounterCommands) -> Result<EncounterCommandResponse, String> {
     match command {
         EncounterCommands::ListEncounter => EncounterCommandResponse::list_from_collection(&state),
     }
