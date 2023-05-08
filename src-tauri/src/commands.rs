@@ -1,4 +1,4 @@
-use crate::encounters::encounter::{Encounter, EncounterState};
+use crate::encounters::encounter::{Encounter, EncounterCollectionState};
 use crate::services::{
     file_system_connection::FileSystemState,
     files::file_structure::{FsCommand, QueryCommandResponse},
@@ -6,8 +6,8 @@ use crate::services::{
 use crate::services::files::file_structure::TouchCommand;
 
 #[tauri::command]
-pub fn encounter(state: EncounterState<'_>) -> Encounter {
-    return state.inner().clone();
+pub fn encounter(state: EncounterCollectionState<'_>) -> Option<Encounter> {
+    return state.inner().encounters.values().next().cloned();
 }
 
 #[tauri::command]

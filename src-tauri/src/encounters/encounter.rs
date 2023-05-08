@@ -1,8 +1,28 @@
+use std::collections::HashMap;
 use tauri::State;
 use serde::{Deserialize, Serialize};
 use crate::encounters::Character;
 
-pub type EncounterState<'a> = State<'a, Encounter>;
+pub type EncounterCollectionState<'a> = State<'a, EncounterCollection>;
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct EncounterCollection {
+    pub encounters: HashMap<ulid::Ulid, Encounter>,
+}
+
+impl EncounterCollection {
+    pub fn new() -> EncounterCollection {
+        EncounterCollection {
+            encounters: HashMap::new(),
+        }
+    }
+
+    pub fn add_encounter(&mut self, encounter: Encounter) {
+        self.encounters.insert(encounter.id.clone(), encounter);
+    }
+}
+
+
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Encounter {

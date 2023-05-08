@@ -23,10 +23,12 @@ fn main() {
             encounter.add_character(sam);
             encounter.add_character(pippin);
             encounter.add_character(merry);
+            let mut encounter_collection = encounters::EncounterCollection::new();
+            encounter_collection.add_encounter(encounter);
 
             let arc_data = file_system_connection::start(app.handle())?;
             app.manage(arc_data);
-            app.manage(encounter);
+            app.manage(encounter_collection);
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![query_file_system, encounter])
