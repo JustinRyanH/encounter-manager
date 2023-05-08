@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 
 import { TauriConnection } from "~/services/TauriConnection";
-import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/CommandTypes";
+import { DirectoryQueryResponse, FileChangeEvent, FileData, FileQueryResponse } from "~/FilenameTypes";
 
 import { ValueObserver } from "./ValueObserver";
 import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath, renamePath } from "./FileCommands";
