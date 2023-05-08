@@ -10,7 +10,7 @@ pub struct Hitpoints {
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub struct Character {
-    ulid: ulid::Ulid,
+    id: ulid::Ulid,
     pub name: String,
     pub hp: Hitpoints,
     pub initiative: i32,
@@ -25,7 +25,7 @@ impl Character {
             temporary: 0,
         };
         Character {
-            ulid: ulid::Ulid::new(),
+            id: ulid::Ulid::new(),
             name: name.into(),
             hp,
             initiative,
@@ -34,7 +34,7 @@ impl Character {
     }
 
     pub fn id(&self) -> String {
-        self.ulid.to_string()
+        self.id.to_string()
     }
 
     pub fn is_same_as(&self, other: &Character) -> bool {
