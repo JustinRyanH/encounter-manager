@@ -2,20 +2,11 @@ import React from "react";
 import { AppShell, List } from "@mantine/core";
 
 import { AppHeader } from "~/components/AppHeader";
-import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
-import { EncounterProvider } from "~/components/encounter/EncounterContext";
-import { ActiveCharacter, Encounter, listEncounter } from "~/services/encounter";
+import { listEncounter } from "~/services/encounter";
 
 import "./App.css";
 import { notifyErrors } from "~/services/notifications";
-import { EncounterListType, EncounterType } from "~/types/EncounterTypes";
-
-const MockCharacters = [
-  { name: 'Frodo', initiative: 18, hp: 8 },
-  { name: 'Sam', initiative: 19, hp: 6 },
-  { name: 'Pippin', initiative: 5, hp: 4 },
-  { name: 'Merry', initiative: 3, hp: 7 },
-]
+import { EncounterListType } from "~/types/EncounterTypes";
 
 listEncounter().then((encounter) => {
     console.log(encounter);
@@ -37,14 +28,8 @@ function EncounterList() {
 }
 
 function App() {
-  const encounter = React.useMemo(() => new Encounter({
-    characters: MockCharacters.map((c) => new ActiveCharacter(c)),
-  }), []);
-
   return (<AppShell header={<AppHeader />}>
-    <EncounterProvider encounter={encounter}>
-      <EncounterList />
-    </EncounterProvider>
+    <EncounterList />
   </AppShell>);
 }
 
