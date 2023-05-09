@@ -2,7 +2,7 @@ import { notifications } from "@mantine/notifications";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { notifyErrors } from "~/services/notifications";
 
-interface HitPointsProps {
+export interface HitPointsProps {
     total?: number;
     current?: number;
     temp?: number;

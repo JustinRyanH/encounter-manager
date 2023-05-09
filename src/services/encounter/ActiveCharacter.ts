@@ -1,4 +1,4 @@
-import { HitPoints } from "~/services/encounter/HitPoints";
+import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
 
@@ -8,6 +8,7 @@ interface InitiativeCharacterProps {
     initiative: number;
     maxHp?: number;
     tempHp?: number | null;
+    hp?: HitPointsProps;
 }
 
 /**
@@ -34,12 +35,16 @@ export class ActiveCharacter {
     #hp: HitPoints = new HitPoints();
     #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-    constructor({ id, name, initiative, maxHp = 10 }: InitiativeCharacterProps) {
+    constructor({ id, name, initiative, maxHp = 10, hp }: InitiativeCharacterProps) {
         this.#id = id;
         this.#initiative = new ValueObserver(initiative);
         this.#name = new ValueObserver(name);
-        this.#hp.total = maxHp;
-        this.#hp.current = maxHp;
+        if (hp) {
+            this.#hp = new HitPoints(hp);
+        } else {
+            this.#hp.total = maxHp;
+            this.#hp.current = maxHp;
+        }
     }
 
     /**
