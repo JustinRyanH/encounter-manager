@@ -22,7 +22,7 @@ describe('Encounter', function () {
     });
 
     test('newCharacter', () => {
-        const result = ActiveCharacter.newCharacter({ id: 'test-a', name: 'A', initiative: 1, hp: 10 });
+        const result = ActiveCharacter.newCharacter({ id: 'test-a', name: 'A', initiative: 1, maxHp: 10 });
 
         expect(result.name).toEqual('A');
         expect(result.initiative).toEqual(1);

@@ -44,7 +44,7 @@ export function AddCharacterToEncounter({ encounter, onSuccess = () => { } }: Ad
             id: v4(),
             name: values.name,
             initiative: values.initiative,
-            hp: values.totalHp,
+            maxHp: values.totalHp,
             tempHp: values.tempHp || null,
         });
         encounter.addCharacter(newCharacter);

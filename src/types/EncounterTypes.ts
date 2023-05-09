@@ -15,6 +15,7 @@ interface CharacterType {
 export interface EncounterDescriptionType {
     id: string,
     name: string,
+    characters: CharacterType[],
 }
 
 export interface EncounterType extends EncounterDescriptionType {

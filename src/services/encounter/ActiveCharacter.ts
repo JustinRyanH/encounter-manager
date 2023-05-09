@@ -6,7 +6,7 @@ interface InitiativeCharacterProps {
     id: string,
     name: string;
     initiative: number;
-    hp?: number;
+    maxHp?: number;
     tempHp?: number | null;
 }
 
@@ -34,12 +34,12 @@ export class ActiveCharacter {
     #hp: HitPoints = new HitPoints();
     #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-    constructor({ id, name, initiative, hp = 10 }: InitiativeCharacterProps) {
+    constructor({ id, name, initiative, maxHp = 10 }: InitiativeCharacterProps) {
         this.#id = id;
         this.#initiative = new ValueObserver(initiative);
         this.#name = new ValueObserver(name);
-        this.#hp.total = hp;
-        this.#hp.current = hp;
+        this.#hp.total = maxHp;
+        this.#hp.current = maxHp;
     }
 
     /**
