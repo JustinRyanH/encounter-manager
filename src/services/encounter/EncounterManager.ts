@@ -1,8 +1,9 @@
 import { ValueObserver } from "~/services";
-import { EncounterListType } from "~/types/EncounterTypes";
+import { CharacterType, EncounterListType, EncounterType } from "~/types/EncounterTypes";
 import { Encounter } from "~/services/encounter/Encounter";
 
 import * as Commands from './Commands';
+import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 
 
 export class EncounterManager {
@@ -23,10 +24,15 @@ export class EncounterManager {
 
     async refreshList() {
         this.#encounterList.value = await Commands.listEncounter();
-        Object.values(this.encounters).forEach(({ id, name }) => {
+        Object.values(this.encounters).forEach(({ id, name, characters }) => {
             if (this.#encounterMap.has(id)) return;
-            const encounter = new Encounter({ id, name });
-            this.#encounterMap.set(id, encounter);
+            this.createNewEncounter({ id, name, characters });
         });
+    }
+
+    private createNewEncounter({ id, name, characters }: EncounterType) {
+        const encounter = new Encounter({ id, name });
+        this.#encounterMap.set(id, encounter);
+        encounter.characters = characters.map((serverChar) => ActiveCharacter.newCharacter(serverChar));
     }
 }

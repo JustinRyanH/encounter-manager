@@ -40,6 +40,10 @@ export class Encounter {
         return this.#characters.value;
     }
 
+    set characters(value: Array<ActiveCharacter>) {
+        this.setCharacters(value);
+    }
+
     /**
      * Returns a readonly observer for the characters.
      */
@@ -136,20 +140,7 @@ export class Encounter {
     }
 
     private setCharacters = (characters: Array<ActiveCharacter>) => {
-        this.#characters.value = [...characters].sort(sortInitiative);
-        this.characters.forEach((character) => {
-            const { id } = character;
-            const messageCallback = () => this.resortCharacters();
-            if (!this.#initiativeMap.has(id)) {
-                this.#initiativeMap.set(id, character.observeInitiative(messageCallback));
-            }
-        });
-        this.#initiativeMap.forEach((stopObserving, id) => {
-            if (!this.characters.find((character) => character.id === id)) {
-                stopObserving();
-                this.#initiativeMap.delete(id);
-            }
-        });
+        this.#characters.value = [...characters];
     }
 
     private resortCharacters = () => {

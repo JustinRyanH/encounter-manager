@@ -1,10 +1,10 @@
-interface HitPointType {
+export interface HitPointType {
     current: number,
     max: number,
     temporary: number,
 }
 
-interface CharacterType {
+export interface CharacterType {
     id: string,
     name: string,
     initiative: number,
@@ -12,14 +12,10 @@ interface CharacterType {
     hitPoints: HitPointType,
 }
 
-export interface EncounterDescriptionType {
+export interface EncounterType {
     id: string,
     name: string,
     characters: CharacterType[],
-}
-
-export interface EncounterType extends EncounterDescriptionType {
-    characters: Array<CharacterType>,
 }
 
 export interface EncounterCommands {
@@ -27,7 +23,7 @@ export interface EncounterCommands {
 }
 
 export interface EncounterListType {
-    [index: string]: EncounterDescriptionType
+    [index: string]: EncounterType
 }
 
 export interface EncounterResponse {
