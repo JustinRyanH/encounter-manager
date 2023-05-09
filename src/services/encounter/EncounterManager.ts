@@ -23,9 +23,9 @@ export class EncounterManager {
 
     async refreshList() {
         this.#encounterList.value = await Commands.listEncounter();
-        Object.values(this.encounters).forEach((encounter) => {
-            if (this.#encounterMap.has(encounter.id)) return;
-            this.#encounterMap.set(encounter.id, new Encounter(encounter));
+        Object.values(this.encounters).forEach(({ id, name }) => {
+            if (this.#encounterMap.has(id)) return;
+            this.#encounterMap.set(id, new Encounter({ id, name }));
         });
     }
 }
