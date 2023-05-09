@@ -25,7 +25,8 @@ export class EncounterManager {
         this.#encounterList.value = await Commands.listEncounter();
         Object.values(this.encounters).forEach(({ id, name }) => {
             if (this.#encounterMap.has(id)) return;
-            this.#encounterMap.set(id, new Encounter({ id, name }));
+            const encounter = new Encounter({ id, name });
+            this.#encounterMap.set(id, encounter);
         });
     }
 }
