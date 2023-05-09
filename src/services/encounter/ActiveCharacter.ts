@@ -1,10 +1,9 @@
-import { v4 as uuidv4 } from "uuid";
-
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
 
 interface InitiativeCharacterProps {
+    id: string,
     name: string;
     initiative: number;
     hp?: number;
@@ -29,13 +28,14 @@ export class ActiveCharacter {
         return new ActiveCharacter(param);
     }
 
-    #id: string = uuidv4();
+    #id: string;
     #name: ValueObserver<string>;
     #initiative: ValueObserver<number>;
     #hp: HitPoints = new HitPoints();
     #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-    constructor({ name, initiative, hp = 10 }: InitiativeCharacterProps) {
+    constructor({ id, name, initiative, hp = 10 }: InitiativeCharacterProps) {
+        this.#id = id;
         this.#initiative = new ValueObserver(initiative);
         this.#name = new ValueObserver(name);
         this.#hp.total = hp;

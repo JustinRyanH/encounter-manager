@@ -1,4 +1,5 @@
 import { Button, CSSObject, Group, NumberInput, Stack, TextInput } from "@mantine/core";
+import { v4 } from "uuid";
 import { useForm } from "@mantine/form";
 
 import { Encounter } from "~/services/encounter/Encounter";
@@ -40,6 +41,7 @@ export function AddCharacterToEncounter({ encounter, onSuccess = () => { } }: Ad
     const handleSuccess = (values: EncounterFormProps) => {
         if (!values.initiative || !values.totalHp) return;
         const newCharacter = ActiveCharacter.newCharacter({
+            id: v4(),
             name: values.name,
             initiative: values.initiative,
             hp: values.totalHp,

@@ -9,8 +9,8 @@ describe('Encounter', function () {
     });
 
     test('can be initialized with characters', function () {
-        const characterA = new ActiveCharacter({ name: 'A', initiative: 1 });
-        const characterB = new ActiveCharacter({ name: 'B', initiative: 2 });
+        const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 1 });
+        const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 2 });
 
         const encounters = new Encounter({
             name: 'Test Encounter',
@@ -22,7 +22,7 @@ describe('Encounter', function () {
     });
 
     test('newCharacter', () => {
-        const result = ActiveCharacter.newCharacter({ name: 'A', initiative: 1, hp: 10 });
+        const result = ActiveCharacter.newCharacter({ id: 'test-a', name: 'A', initiative: 1, hp: 10 });
 
         expect(result.name).toEqual('A');
         expect(result.initiative).toEqual(1);
@@ -30,8 +30,8 @@ describe('Encounter', function () {
     });
 
     test('orders characters by initiative', function () {
-        const characterA = new ActiveCharacter({ name: 'A', initiative: 1 });
-        const characterB = new ActiveCharacter({ name: 'B', initiative: 2 });
+        const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 1 });
+        const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 2 });
 
         const encounters = new Encounter({
             name: 'Test Encounter',
@@ -46,14 +46,14 @@ describe('Encounter', function () {
         test('adds a character to the encounter', function () {
             const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
 
-            encounters.addCharacter(new ActiveCharacter({ name: 'A', initiative: 1 }));
+            encounters.addCharacter(new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 1 }));
 
             expect(encounters.characters.map(c => c.name)).toEqual(['A']);
         });
 
         test('sorts the characters by initiative', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 5 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 15 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 5 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 15 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -61,16 +61,16 @@ describe('Encounter', function () {
                 characters: [characterA, characterB]
             });
 
-            encounters.addCharacter(new ActiveCharacter({ name: 'C', initiative: 20 }));
-            encounters.addCharacter(new ActiveCharacter({ name: 'D', initiative: 1 }));
+            encounters.addCharacter(new ActiveCharacter({ id: 'test-c', name: 'C', initiative: 20 }));
+            encounters.addCharacter(new ActiveCharacter({ id: 'test-d', name: 'D', initiative: 1 }));
 
             expect(encounters.characters.map(c => c.name)).toEqual(['C', 'B', 'A', 'D']);
         });
 
         test('notifies the `characterAdded` signal', function () {
             const observer = vi.fn();
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 5 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 15 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 5 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 15 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -80,7 +80,7 @@ describe('Encounter', function () {
             encounters.onCharacterAdded(observer);
 
 
-            const newCharacter = new ActiveCharacter({ name: 'C', initiative: 20 });
+            const newCharacter = new ActiveCharacter({ id: 'test-c', name: 'C', initiative: 20 });
             encounters.addCharacter(newCharacter);
 
             expect(observer).toHaveBeenCalledWith({ character: newCharacter });
@@ -89,8 +89,8 @@ describe('Encounter', function () {
 
     describe('auto sorting characters', function () {
         test('sorts characters when initiative changes', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -108,8 +108,8 @@ describe('Encounter', function () {
 
     describe('current character', function () {
         test('starting with character on top of the initiative list', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -123,8 +123,8 @@ describe('Encounter', function () {
         });
 
         test('moves to next character when nextCharacter is called', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -151,8 +151,8 @@ describe('Encounter', function () {
 
         test('signaling when the current character changes', function () {
             const listener = vi.fn();
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -171,8 +171,8 @@ describe('Encounter', function () {
 
     describe('startEncounter', function () {
         test('sets the active character to the first character', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -189,8 +189,8 @@ describe('Encounter', function () {
         });
 
         test('no-ops if the character is already active character', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -220,8 +220,8 @@ describe('Encounter', function () {
 
     describe('stopEncounter', function () {
         test('clears the active character', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',
@@ -240,8 +240,8 @@ describe('Encounter', function () {
 
     describe('restartEncounter', function () {
         test('picks up encounter where it left off', function () {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
 
             const encounters = new Encounter({
                 name: 'Test Encounter',

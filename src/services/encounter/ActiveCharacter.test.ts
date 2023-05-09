@@ -12,6 +12,7 @@ describe('ActiveCharacter', () => {
 
     test('constructor', () => {
         const character = new ActiveCharacter({
+            id: 'test-id',
             name: 'Test',
             initiative: 10,
         });
@@ -22,6 +23,7 @@ describe('ActiveCharacter', () => {
     describe('name', () => {
         test('return the name', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -30,6 +32,7 @@ describe('ActiveCharacter', () => {
 
         test('can set the name', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -39,6 +42,7 @@ describe('ActiveCharacter', () => {
 
         test('can subscribe to name changes', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -55,6 +59,7 @@ describe('ActiveCharacter', () => {
     describe('initiative', () => {
         test('return the initiative', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -63,6 +68,7 @@ describe('ActiveCharacter', () => {
 
         test('can set the initiative', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -72,6 +78,7 @@ describe('ActiveCharacter', () => {
 
         test('can subscribe to initiative changes', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -88,6 +95,7 @@ describe('ActiveCharacter', () => {
     describe('updateInitiative', () => {
         test('can update initiative', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -97,6 +105,7 @@ describe('ActiveCharacter', () => {
 
         test('if the initiative is not a number, it does not update', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -106,6 +115,7 @@ describe('ActiveCharacter', () => {
 
         test('if the initiative is not a number, it broadcasts a notification', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -121,6 +131,7 @@ describe('ActiveCharacter', () => {
     describe('updateName', () => {
         test('can update name', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -130,6 +141,7 @@ describe('ActiveCharacter', () => {
 
         test('reverts name if empty', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -139,6 +151,7 @@ describe('ActiveCharacter', () => {
 
         test('notififies if name is empty', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -154,6 +167,7 @@ describe('ActiveCharacter', () => {
     describe('observeInitiative', function () {
         test('can subscribe to initiative changes', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -168,6 +182,7 @@ describe('ActiveCharacter', () => {
 
         test('can unsubscribe from initiative changes', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -182,6 +197,7 @@ describe('ActiveCharacter', () => {
     describe('inPlay', () => {
         test('defaults to  false', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -190,6 +206,7 @@ describe('ActiveCharacter', () => {
 
         test('inPlay can be updated', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });
@@ -199,6 +216,7 @@ describe('ActiveCharacter', () => {
 
         test('changing inPlay will notify observers', () => {
             const character = new ActiveCharacter({
+                id: 'test-id',
                 name: 'Test',
                 initiative: 10,
             });

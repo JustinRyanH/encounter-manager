@@ -8,8 +8,8 @@ import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 describe('ViewEncounter', () => {
     describe('openedCharacters', () => {
         test('returns the active character', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
@@ -23,8 +23,8 @@ describe('ViewEncounter', () => {
         });
 
         test('returns an empty array if there is no active character', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
@@ -38,8 +38,8 @@ describe('ViewEncounter', () => {
         });
 
         test('allows adding new characters be opened', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
@@ -59,8 +59,8 @@ describe('ViewEncounter', () => {
         });
 
         test('removes the previous character from opened when active character changes', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
@@ -77,8 +77,8 @@ describe('ViewEncounter', () => {
         });
 
         test('allows closing a character', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
@@ -95,8 +95,8 @@ describe('ViewEncounter', () => {
         });
 
         test('allows toggling a character', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
@@ -115,8 +115,8 @@ describe('ViewEncounter', () => {
 
     describe('isOpened', () => {
         test('returns true if the character is opened', () => {
-            const characterA = new ActiveCharacter({ name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ name: 'B', initiative: 5 });
+            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
+            const characterB = new ActiveCharacter({ id :'test-b', name: 'B', initiative: 5 });
 
             const encounter = new Encounter({
                 name: 'Test Encounter',
