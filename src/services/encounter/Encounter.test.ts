@@ -123,6 +123,17 @@ describe('Encounter', function () {
         });
     });
 
+    describe('updateCharacters', () => {
+        test('loads in characters from server', () => {
+            const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
+            encounters.updateCharacters([buildMockCharacter({ id: 'test-a', name: 'A', initiative: 1 })]);
+            const characterA = encounters.findCharacter('test-a') as ActiveCharacter
+            expect(characterA).toBeTruthy();
+            expect(characterA.name).toEqual('A');
+            expect(characterA.id).toEqual('test-a');
+        });
+    });
+
     describe('startEncounter', function () {
         test('sets the active character to the first character', function () {
             const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
