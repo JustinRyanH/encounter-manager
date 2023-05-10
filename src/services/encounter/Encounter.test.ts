@@ -124,6 +124,9 @@ describe('Encounter', function () {
     });
 
     describe('updateCharacters', () => {
+        const originalCharacterA = buildMockCharacter({ id: 'test-a', name: 'A', initiative: 1 });
+        const updatedCharacterA = buildMockCharacter({ id: 'test-a', name: 'A', initiative: 2 });
+
         test('loads in characters from server', () => {
             const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
             encounters.updateCharacters([buildMockCharacter({ id: 'test-a', name: 'A', initiative: 1 })]);
@@ -134,8 +137,6 @@ describe('Encounter', function () {
         });
 
         test('keeps existing instances of characters if they exist', () => {
-            const originalCharacterA = buildMockCharacter({ id: 'test-a', name: 'A', initiative: 1 });
-            const updatedCharacterA = buildMockCharacter({ id: 'test-a', name: 'A', initiative: 2 });
             const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
             encounters.updateCharacters([originalCharacterA]);
             const characterA = encounters.findCharacter('test-a') as ActiveCharacter
@@ -145,6 +146,18 @@ describe('Encounter', function () {
             encounters.updateCharacters([updatedCharacterA]);
             const characterAReload = encounters.findCharacter('test-a');
             expect(characterAReload).toBe(characterA);
+        });
+
+        test('updates the active character if it is updated', () => {
+            const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
+            encounters.updateCharacters([originalCharacterA]);
+            const characterA = encounters.findCharacter('test-a') as ActiveCharacter
+            expect(characterA).toBeTruthy();
+            expect(characterA.initiative).toEqual(1);
+
+            encounters.updateCharacters([updatedCharacterA]);
+
+            expect(characterA.initiative).toEqual(2);
         });
     });
 

@@ -167,6 +167,7 @@ export class Encounter {
     private updateOrCreateCharacter = (character: CharacterType) => {
         const existingCharacter = this.findCharacter(character.id);
         if (!existingCharacter) return ActiveCharacter.newCharacter(character);
+        existingCharacter.update(character);
         return existingCharacter;
     };
 }
