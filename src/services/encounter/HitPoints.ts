@@ -52,6 +52,9 @@ export class HitPoints {
      */
     set total(total: number) {
         this.#total.value = total;
+        if (this.current > total) {
+            this.current = total;
+        }
     }
 
     /**

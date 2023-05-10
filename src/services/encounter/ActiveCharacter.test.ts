@@ -72,6 +72,26 @@ describe('ActiveCharacter', () => {
             character.update({ id: 'test-id', hp: { current: 5 }});
             expect(character.hp.current).toEqual(5);
             expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
+
+        });
+
+        test('updates the total hit points', () => {
+            const observer = vi.fn();
+            const character = new ActiveCharacter({
+                id: 'test-id',
+                name: 'Test',
+                initiative: 10,
+                hp: {
+                    total: 10,
+                    current: 10,
+                    temp: 0,
+                }
+            });
+            character.hp.totalObserver.add(observer);
+            character.update({ id: 'test-id', hp: { total: 5 }});
+            expect(character.hp.total).toEqual(5);
+            expect(character.hp.current).toEqual(5);
+            expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
         });
     });
 
