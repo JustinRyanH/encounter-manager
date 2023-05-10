@@ -144,6 +144,10 @@ export class ActiveCharacter {
         if (values.id !== this.id) throw new Error('Id Mismatch for character');
         if (values.name && values.name !== this.name) this.name = values.name;
         if (values.initiative && values.initiative !== this.initiative) this.initiative = values.initiative;
+        if (values.hp) {
+            const { current } = values.hp;
+            if (current !== undefined && current !== this.hp.current) this.hp.current = current;
+        }
     }
 
     /**
