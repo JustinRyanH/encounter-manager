@@ -8,16 +8,11 @@ import { notifyErrors } from "~/services/notifications";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Encounter } from "~/services/encounter";
 
 function EncounterList() {
     const encounterManager = useEncounterManager();
     const encounterIds = useWatchValueObserver(encounterManager.encountersObserver);
-    const encounters = React.useMemo(() => {
-        return encounterIds
-            .map(id => encounterManager.getEncounter(id))
-            .filter(encounter => Boolean(encounter)) as Encounter[];
-    }, [encounterIds]);
+    const encounters = React.useMemo(() => encounterManager.encounters, [encounterIds]);
     React.useEffect(() => {
         encounterManager.refreshList().catch(notifyErrors);
     }, [encounterManager]);
