@@ -1,5 +1,5 @@
 import { ValueObserver } from "~/services";
-import { EncounterListType, EncounterType } from "~/types/EncounterTypes";
+import { EncounterType } from "~/types/EncounterTypes";
 import { Encounter } from "~/services/encounter/Encounter";
 
 import * as Commands from './Commands';
@@ -7,10 +7,12 @@ import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 
 export class EncounterManager {
     #encounterMap = new Map<string, Encounter>();
-    #encounterList = new ValueObserver<EncounterListType>({});
+    #encounterList = new ValueObserver<string[]>([]);
 
-    get encounters() {
-        return this.#encounterList.value;
+    get encounters(): Encounter[] {
+        return this.#encounterList.value
+            .map((id) => this.#encounterMap.get(id))
+            .filter((e) => e !== undefined) as Encounter[];
     }
 
     get encountersObserver() {
@@ -22,8 +24,9 @@ export class EncounterManager {
     }
 
     async refreshList() {
-        this.#encounterList.value = await Commands.listEncounter();
-        Object.values(this.encounters).forEach(({ id, name, characters }) => {
+        const encounters = await Commands.listEncounter();
+        this.#encounterList.value = Object.values(encounters).map(({ id }) => id);
+        Object.values(encounters).forEach(({ id, name, characters }) => {
             if (this.#encounterMap.has(id)) return;
             this.createNewEncounter({ id, name, characters });
         });
