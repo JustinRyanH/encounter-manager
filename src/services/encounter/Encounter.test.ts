@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { Encounter } from "~/services/encounter/Encounter";
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
+import { buildMockCharacter } from "~/services/encounter/mocks.test";
 
 describe('Encounter', function () {
     test('does not have any characters by default', function () {
@@ -18,7 +19,8 @@ describe('Encounter', function () {
             characters: [characterA, characterB]
         });
 
-        expect(encounters.characters).toEqual([characterB, characterA]);
+        expect(encounters.findCharacter('test-a')).toBe(characterA);
+        expect(encounters.findCharacter('test-b')).toBe(characterB);
     });
 
     test('newCharacter', () => {
@@ -29,19 +31,6 @@ describe('Encounter', function () {
         expect(result.hp.total).toEqual(10);
     });
 
-    test('orders characters by initiative', function () {
-        const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 1 });
-        const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 2 });
-
-        const encounters = new Encounter({
-            name: 'Test Encounter',
-            id: 'encounter-a',
-            characters: [characterA, characterB]
-        });
-
-        expect(encounters.characters.map(c => c.name)).toEqual(['B', 'A']);
-    });
-
     describe('addCharacter', function () {
         test('adds a character to the encounter', function () {
             const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
@@ -49,22 +38,6 @@ describe('Encounter', function () {
             encounters.addCharacter(new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 1 }));
 
             expect(encounters.characters.map(c => c.name)).toEqual(['A']);
-        });
-
-        test('sorts the characters by initiative', function () {
-            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 5 });
-            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 15 });
-
-            const encounters = new Encounter({
-                name: 'Test Encounter',
-                id: 'encounter-a',
-                characters: [characterA, characterB]
-            });
-
-            encounters.addCharacter(new ActiveCharacter({ id: 'test-c', name: 'C', initiative: 20 }));
-            encounters.addCharacter(new ActiveCharacter({ id: 'test-d', name: 'D', initiative: 1 }));
-
-            expect(encounters.characters.map(c => c.name)).toEqual(['C', 'B', 'A', 'D']);
         });
 
         test('notifies the `characterAdded` signal', function () {
@@ -84,25 +57,6 @@ describe('Encounter', function () {
             encounters.addCharacter(newCharacter);
 
             expect(observer).toHaveBeenCalledWith({ character: newCharacter });
-        });
-    });
-
-    describe('auto sorting characters', function () {
-        test('sorts characters when initiative changes', function () {
-            const characterA = new ActiveCharacter({ id: 'test-a', name: 'A', initiative: 10 });
-            const characterB = new ActiveCharacter({ id: 'test-b', name: 'B', initiative: 5 });
-
-            const encounters = new Encounter({
-                name: 'Test Encounter',
-                id: 'encounter-a',
-                characters: [characterA, characterB]
-            });
-
-            expect(encounters.characters.map(c => c.name)).toEqual(['A', 'B']);
-
-            characterB.initiative = 20;
-
-            expect(encounters.characters.map(c => c.name)).toEqual(['B', 'A']);
         });
     });
 

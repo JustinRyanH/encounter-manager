@@ -5,8 +5,6 @@ import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import { CharacterType } from "~/types/EncounterTypes";
 
-const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative - a.initiative;
-
 type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
 
 interface EncounterProps {
@@ -74,6 +72,13 @@ export class Encounter {
         return this.#id;
     }
 
+    /**
+     * Returns a character from the list of characters in the encounter.
+     * @param id
+     */
+    findCharacter(id: string) {
+        return this.characters.find((c) => c.id === id) || null;
+    }
 
     /**
      * Adds a character to the encounter and sorts the characters by initiative.
@@ -146,10 +151,6 @@ export class Encounter {
 
     private setCharacters = (characters: Array<ActiveCharacter>) => {
         this.#characters.value = [...characters];
-    }
-
-    private resortCharacters = () => {
-        this.#characters.value = [...this.characters].sort(sortInitiative);
     }
 
     private setActiveCharacter = (character: ActiveCharacter | null) => {
