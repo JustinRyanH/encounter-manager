@@ -27,14 +27,15 @@ export class EncounterManager {
         const encounters = await Commands.listEncounter();
         this.#encounterList.value = Object.values(encounters).map(({ id }) => id);
         Object.values(encounters).forEach(({ id, name, characters }) => {
-            if (this.#encounterMap.has(id)) return;
-            this.createNewEncounter({ id, name, characters });
+            const encounter = this.getEncounter(id) || this.createNewEncounter({ id, name });
+            encounter.updateCharacters(characters);
+
         });
     }
 
-    private createNewEncounter({ id, name, characters }: EncounterType) {
+    private createNewEncounter({ id, name }: { id: string, name: string }) {
         const encounter = new Encounter({ id, name });
         this.#encounterMap.set(id, encounter);
-        encounter.characters = characters.map((serverChar) => ActiveCharacter.newCharacter(serverChar));
+        return encounter;
     }
 }

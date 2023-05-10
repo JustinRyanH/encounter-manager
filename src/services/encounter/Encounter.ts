@@ -3,6 +3,7 @@ import { Signal, SignalConnection } from "typed-signals";
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
+import { CharacterType } from "~/types/EncounterTypes";
 
 const sortInitiative = (a: ActiveCharacter, b: ActiveCharacter) => b.initiative - a.initiative;
 
@@ -81,6 +82,10 @@ export class Encounter {
     addCharacter = (initiativeCharacter: ActiveCharacter) => {
         this.setCharacters([...this.characters, initiativeCharacter]);
         this.#characterAddedSignal.emit({ character: initiativeCharacter });
+    }
+
+    updateCharacters = (characters: CharacterType[]) => {
+        this.characters = characters.map((serverChar) => ActiveCharacter.newCharacter(serverChar))
     }
 
     /**

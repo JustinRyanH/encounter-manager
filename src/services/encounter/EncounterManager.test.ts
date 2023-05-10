@@ -92,6 +92,26 @@ describe('EncounterManager', function () {
 
             expect(manager.getEncounter('300')?.characters.map(c => c.id)).toEqual(['100', '200']);
         });
+
+        test('updates characters', async () => {
+            const mockCharacterA = buildMockCharacter({ id: '100', name: 'Test A', current: 5 });
+            const mockCharacterB = buildMockCharacter({ id: '200', name: 'Test B' });
+            (Commands.listEncounter as Mock).mockResolvedValueOnce([
+                buildMockEncounter({ characters: [mockCharacterA, mockCharacterB] }),
+            ]);
+
+            const manager = new EncounterManager();
+            await manager.refreshList();
+
+            expect(manager.getEncounter('300')?.characters.map(c => c.id)).toEqual(['100', '200']);
+
+            (Commands.listEncounter as Mock).mockResolvedValueOnce([
+                buildMockEncounter({ characters: [mockCharacterA] }),
+            ]);
+            await manager.refreshList();
+
+            expect(manager.getEncounter('300')?.characters.map(c => c.id)).toEqual(['100']);
+        });
     });
 
     describe('getEncounter', () => {
