@@ -132,6 +132,20 @@ describe('Encounter', function () {
             expect(characterA.name).toEqual('A');
             expect(characterA.id).toEqual('test-a');
         });
+
+        test('keeps existing instances of characters if they exist', () => {
+            const originalCharacterA = buildMockCharacter({ id: 'test-a', name: 'A', initiative: 1 });
+            const updatedCharacterA = buildMockCharacter({ id: 'test-a', name: 'A', initiative: 2 });
+            const encounters = new Encounter({ name: 'Test Encounter', id: 'encounter-a' });
+            encounters.updateCharacters([originalCharacterA]);
+            const characterA = encounters.findCharacter('test-a') as ActiveCharacter
+            expect(characterA).toBeTruthy();
+            expect(characterA.initiative).toEqual(1);
+
+            encounters.updateCharacters([updatedCharacterA]);
+            const characterAReload = encounters.findCharacter('test-a');
+            expect(characterAReload).toBe(characterA);
+        });
     });
 
     describe('startEncounter', function () {

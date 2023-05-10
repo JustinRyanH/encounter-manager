@@ -90,7 +90,7 @@ export class Encounter {
     }
 
     updateCharacters = (characters: CharacterType[]) => {
-        this.characters = characters.map((serverChar) => ActiveCharacter.newCharacter(serverChar))
+        this.characters = characters.map(this.updateOrCreateCharacter)
     }
 
     /**
@@ -163,4 +163,10 @@ export class Encounter {
             if (character !== this.activeCharacter) character.inPlay = false;
         });
     }
+
+    private updateOrCreateCharacter = (character: CharacterType) => {
+        const existingCharacter = this.findCharacter(character.id);
+        if (!existingCharacter) return ActiveCharacter.newCharacter(character);
+        return existingCharacter;
+    };
 }
