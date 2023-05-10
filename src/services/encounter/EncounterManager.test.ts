@@ -1,49 +1,11 @@
-import { describe, test, expect, vi, Mock } from "vitest";
+import { describe, expect, Mock, test, vi } from "vitest";
 
 import { EncounterManager } from "~/services/encounter/EncounterManager";
 import * as Commands from './Commands';
 import { Encounter } from "~/services/encounter/Encounter";
-import { CharacterType } from "~/types/EncounterTypes";
+import { buildMockCharacter, buildMockEncounter } from "~/services/encounter/mocks.test";
 
 vi.mock('./Commands');
-
-interface MockCharacterProps {
-    id?: string;
-    name?: string;
-    initiative?: number;
-    initiativeModifier?: number;
-    total?: number;
-    current?: number;
-    temporary?: number;
-}
-
-function buildMockCharacter(props: MockCharacterProps): CharacterType {
-    return {
-        id: props.id || '100',
-        name: props.name || 'Test',
-        initiative: props.initiative || 10,
-        initiativeModifier: props.initiativeModifier || 0,
-        hitPoints: {
-            current: props.current || 10,
-            max: props.total || 10,
-            temporary: props.temporary || 0,
-        }
-    }
-}
-
-interface MockEncounterProps {
-    id?: string;
-    name?: string;
-    characters?: any[],
-}
-
-function buildMockEncounter(props: MockEncounterProps = {}) {
-    return {
-        id: props.id || '300',
-        name: props.name || 'Test',
-        characters: props.characters || [],
-    };
-}
 
 describe('EncounterManager', function () {
     test('starts with empty list of encounters', () => {
