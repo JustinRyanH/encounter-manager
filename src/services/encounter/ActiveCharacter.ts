@@ -141,6 +141,7 @@ export class ActiveCharacter {
     }
 
     update(values: CharacterUpdateProps) {
+        if (values.id !== this.id) throw new Error('Id Mismatch for character');
         if (values.name && values.name !== this.name) this.name = values.name;
     }
 

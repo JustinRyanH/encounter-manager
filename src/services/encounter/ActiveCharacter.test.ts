@@ -21,6 +21,15 @@ describe('ActiveCharacter', () => {
     });
 
     describe('update', () => {
+        test('fails if the id is not the same as the character', () => {
+            const character = new ActiveCharacter({
+                id: 'test-id',
+                name: 'Test',
+                initiative: 10,
+            });
+            expect(() => character.update({ id: 'bad-id' })).toThrow('Id Mismatch for character');
+        });
+
         test('updates the name if it changes', () => {
             const observer = vi.fn();
             const character = new ActiveCharacter({
