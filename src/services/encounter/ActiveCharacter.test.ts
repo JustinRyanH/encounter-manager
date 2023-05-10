@@ -93,6 +93,24 @@ describe('ActiveCharacter', () => {
             expect(character.hp.current).toEqual(5);
             expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
         });
+
+        test('updates the temp hit points', () => {
+            const observer = vi.fn();
+            const character = new ActiveCharacter({
+                id: 'test-id',
+                name: 'Test',
+                initiative: 10,
+                hp: {
+                    total: 10,
+                    current: 10,
+                    temp: 0,
+                }
+            });
+            character.hp.tempObserver.add(observer);
+            character.update({ id: 'test-id', hp: { temp: 5 }});
+            expect(character.hp.temp).toEqual(5);
+            expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
+        });
     });
 
     describe('name', () => {

@@ -145,9 +145,10 @@ export class ActiveCharacter {
         if (values.name && values.name !== this.name) this.name = values.name;
         if (values.initiative && values.initiative !== this.initiative) this.initiative = values.initiative;
         if (values.hp) {
-            const { current, total } = values.hp;
+            const { current, total, temp } = values.hp;
             if (current !== undefined && current !== this.hp.current) this.hp.current = current;
             if (total !== undefined && total !== this.hp.total) this.hp.total = total;
+            if (temp !== undefined && temp !== this.hp.temp) this.hp.temp = temp;
         }
     }
 
