@@ -111,6 +111,47 @@ describe('ActiveCharacter', () => {
             expect(character.hp.temp).toEqual(5);
             expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
         });
+
+        test('no-ops if there are no differences', () => {
+            const nameObserver = vi.fn();
+            const initiativeObserver = vi.fn();
+            const currentObserver = vi.fn();
+            const totalObserver = vi.fn();
+            const tempObserver = vi.fn();
+
+            const character = new ActiveCharacter({
+                id: 'test-id',
+                name: 'Test',
+                initiative: 10,
+                hp: {
+                    total: 7,
+                    current: 10,
+                    temp: 3,
+                }
+            });
+            character.nameObserver.add(nameObserver);
+            character.initiativeObserver.add(initiativeObserver);
+            character.hp.currentObserver.add(currentObserver);
+            character.hp.totalObserver.add(totalObserver);
+            character.hp.tempObserver.add(tempObserver);
+
+            character.update({
+                id: 'test-id',
+                name: 'Test',
+                initiative: 10,
+                hp: {
+                    total: 7,
+                    current: 10,
+                    temp: 3,
+                }
+            });
+
+            expect(nameObserver).not.toHaveBeenCalled();
+            expect(initiativeObserver).not.toHaveBeenCalled();
+            expect(currentObserver).not.toHaveBeenCalled();
+            expect(totalObserver).not.toHaveBeenCalled();
+            expect(tempObserver).not.toHaveBeenCalled();
+        });
     });
 
     describe('name', () => {
