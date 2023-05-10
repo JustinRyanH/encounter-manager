@@ -53,7 +53,9 @@ describe('EncounterManager', function () {
             expect(encounter_b?.id).toEqual('400');
             expect(manager.getEncounter('300')).toBe(encounter_a);
         });
+    });
 
+    describe('getEncounter', () => {
         test('get encounter', async () => {
             (Commands.listEncounter as Mock).mockResolvedValueOnce([
                 buildMockEncounter({ id: '300', name: 'Test' }),
