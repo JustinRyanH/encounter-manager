@@ -1,11 +1,21 @@
 import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
+import { CharacterType } from "~/types/EncounterTypes";
 
 interface InitiativeCharacterProps {
     id: string,
     name: string;
     initiative: number;
+    maxHp?: number;
+    tempHp?: number | null;
+    hp?: HitPointsProps;
+}
+
+interface CharacterUpdateProps {
+    id: string;
+    name?: string;
+    initiative?: number;
     maxHp?: number;
     tempHp?: number | null;
     hp?: HitPointsProps;
@@ -128,6 +138,10 @@ export class ActiveCharacter {
      */
     get hp(): HitPoints {
         return this.#hp;
+    }
+
+    update(values: CharacterUpdateProps) {
+        if (values.name && values.name !== this.name) this.name = values.name;
     }
 
     /**

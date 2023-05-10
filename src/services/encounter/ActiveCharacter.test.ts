@@ -20,6 +20,21 @@ describe('ActiveCharacter', () => {
         expect(character.initiative).toEqual(10);
     });
 
+    describe('update', () => {
+        test('updates the name if it changes', () => {
+            const observer = vi.fn();
+            const character = new ActiveCharacter({
+                id: 'test-id',
+                name: 'Test',
+                initiative: 10,
+            });
+            character.nameObserver.add(observer);
+            character.update({ id: 'test-id', name: 'New Name'});
+            expect(character.name).toEqual('New Name');
+            expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 'New Name' }));
+        });
+    });
+
     describe('name', () => {
         test('return the name', () => {
             const character = new ActiveCharacter({
