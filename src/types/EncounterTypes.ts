@@ -1,6 +1,6 @@
 export interface HitPointType {
   current: number;
-  max: number;
+  total: number;
   temporary: number;
 }
 

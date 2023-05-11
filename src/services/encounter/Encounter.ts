@@ -105,6 +105,7 @@ export class Encounter {
   };
 
   updateCharacters = (characters: CharacterType[]) => {
+    console.log(characters);
     this.characters = characters.map(this.updateOrCreateCharacter);
   };
 

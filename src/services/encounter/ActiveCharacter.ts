@@ -11,7 +11,7 @@ interface InitiativeCharacterProps {
   id: string;
   name: string;
   initiative: number;
-  maxHp?: number;
+  totalHp?: number;
   tempHp?: number | null;
   hp?: HitPointsProps;
 }
@@ -20,7 +20,7 @@ interface CharacterUpdateProps {
   id: string;
   name?: string;
   initiative?: number;
-  maxHp?: number;
+  totalHp?: number;
   tempHp?: number | null;
   hp?: HitPointsProps;
 }
@@ -53,7 +53,7 @@ export class ActiveCharacter {
     id,
     name,
     initiative,
-    maxHp = 10,
+    totalHp: totalHp = 10,
     hp,
   }: InitiativeCharacterProps) {
     this.#id = id;
@@ -62,8 +62,8 @@ export class ActiveCharacter {
     if (hp) {
       this.#hp = new HitPoints(hp);
     } else {
-      this.#hp.total = maxHp;
-      this.#hp.current = maxHp;
+      this.#hp.total = totalHp;
+      this.#hp.current = totalHp;
     }
   }
 

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct HitPoints {
     pub current: i32,
-    pub max: i32,
+    pub total: i32,
     pub temporary: i32,
 }
 
@@ -20,10 +20,10 @@ pub struct Character {
 }
 
 impl Character {
-    pub fn new<T: Into<String>>(name: T, max_hp: i32, initiative: i32) -> Character {
+    pub fn new<T: Into<String>>(name: T, total_hp: i32, initiative: i32) -> Character {
         let hp = HitPoints {
-            current: max_hp,
-            max: max_hp,
+            current: total_hp,
+            total: total_hp,
             temporary: 0,
         };
         Character {
@@ -81,12 +81,12 @@ mod tests {
     #[test]
     fn test_new_character() {
         let name = String::from("Test Character");
-        let max_hp = 10;
+        let total_hp = 10;
         let initiative = 10;
-        let character = Character::new(name.clone(), max_hp, initiative);
+        let character = Character::new(name.clone(), total_hp, initiative);
         assert_eq!(character.name, name);
-        assert_eq!(character.hp.current, max_hp);
-        assert_eq!(character.hp.max, max_hp);
+        assert_eq!(character.hp.current, total_hp);
+        assert_eq!(character.hp.total, total_hp);
         assert_eq!(character.hp.temporary, 0);
         assert_eq!(character.initiative, initiative);
         assert_eq!(character.initiative_modifier, 0);
@@ -96,10 +96,10 @@ mod tests {
     #[test]
     fn test_is_same_as() {
         let name = String::from("Test Character");
-        let max_hp = 10;
+        let total_hp = 10;
         let initiative = 10;
-        let character = Character::new(name.clone(), max_hp, initiative);
-        let other_character = Character::new(name.clone(), max_hp, initiative);
+        let character = Character::new(name.clone(), total_hp, initiative);
+        let other_character = Character::new(name.clone(), total_hp, initiative);
         let cloned_character = character.clone();
         assert_eq!(character.is_same_as(&other_character), false);
         assert_eq!(character.is_same_as(&cloned_character), true);
@@ -108,10 +108,10 @@ mod tests {
     #[test]
     fn test_is_similar_to() {
         let name = String::from("Test Character");
-        let max_hp = 10;
+        let total_hp = 10;
         let initiative = 10;
-        let character = Character::new(name.clone(), max_hp, initiative);
-        let other_character = Character::new(name.clone(), max_hp, initiative);
+        let character = Character::new(name.clone(), total_hp, initiative);
+        let other_character = Character::new(name.clone(), total_hp, initiative);
         let cloned_character = character.clone();
         assert_eq!(character.is_similar_to(&other_character), true);
         assert_eq!(character.is_similar_to(&cloned_character), true);
@@ -119,12 +119,12 @@ mod tests {
 
     #[test]
     fn test_partial_ordering() {
-        let max_hp = 10;
-        let character_a = Character::new("character a", max_hp, 10);
-        let character_b = Character::new("character b", max_hp, 9);
-        let character_c = Character::new("character c", max_hp, 11);
-        let mut character_d = Character::new("character d", max_hp, 10);
-        let mut character_e = Character::new("character e", max_hp, 10);
+        let total_hp = 10;
+        let character_a = Character::new("character a", total_hp, 10);
+        let character_b = Character::new("character b", total_hp, 9);
+        let character_c = Character::new("character c", total_hp, 11);
+        let mut character_d = Character::new("character d", total_hp, 10);
+        let mut character_e = Character::new("character e", total_hp, 10);
         character_d.set_initiative_match_score(18);
         character_e.set_initiative_match_score(5);
 

@@ -18,7 +18,7 @@ export function buildMockCharacter(props: MockCharacterProps): CharacterType {
     initiativeModifier: props.initiativeModifier || 0,
     hitPoints: {
       current: props.current || 10,
-      max: props.total || 10,
+      total: props.total || 10,
       temporary: props.temporary || 0,
     },
   };

@@ -39,7 +39,7 @@ describe("Encounter", function () {
       id: "test-a",
       name: "A",
       initiative: 1,
-      maxHp: 10,
+      totalHp: 10,
     });
 
     expect(result.name).toEqual("A");
