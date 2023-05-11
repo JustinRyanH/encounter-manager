@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 import { FileManagerProvider } from "~/components/files/FileManager";
+import { TauriFileManager } from "~/services/files/FileManager";
 
 import App from "./App";
-import { TauriFileManager } from "~/services/files/FileManager";
 
 const fileManager = new TauriFileManager();
 
