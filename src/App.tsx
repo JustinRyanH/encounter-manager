@@ -5,26 +5,40 @@ import { AppHeader } from "~/components/AppHeader";
 
 import "./App.css";
 import { EncounterProvider } from "~/components/encounter/EncounterContext";
-import { createMemoryRouter,RouterProvider } from "react-router-dom";
+import { createMemoryRouter, RouterProvider, Outlet } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
+import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
+
+function RootApp() {
+  return (
+    <AppShell header={<AppHeader/>}>
+      <EncounterProvider>
+        <Outlet/>
+      </EncounterProvider>
+    </AppShell>
+  )
+}
+
 
 const router = createMemoryRouter([
   {
     path: "/",
-    element: <EncounterList/>
+    element: <RootApp/>,
+    children: [
+      {
+        path: "/",
+        element: <EncounterList/>,
+      },
+      {
+        path: "/encounter/:encounterId",
+        element: <DisplayEncounter/>
+      },
+    ],
   },
-  {
-    path: "/encounter/:encounterId",
-    element: <div>Encounter</div>
-  }
 ]);
 
 function App() {
-  return (<AppShell header={<AppHeader/>}>
-    <EncounterProvider>
-      <RouterProvider router={router}/>
-    </EncounterProvider>
-  </AppShell>);
+  return (<RouterProvider router={router}/>);
 }
 
 export default App;
