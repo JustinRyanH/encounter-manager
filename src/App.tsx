@@ -9,15 +9,16 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
 
 function App() {
-    return (<AppShell header={<AppHeader/>}>
-        <EncounterProvider>
-            <MemoryRouter initialEntries={['/encounters']}>
-                <Routes>
-                    <Route path="/encounters" element={<EncounterList/>}/>
-                </Routes>
-            </MemoryRouter>
-        </EncounterProvider>
-    </AppShell>);
+  return (<AppShell header={<AppHeader/>}>
+    <EncounterProvider>
+      <MemoryRouter initialEntries={['/encounters']}>
+        <Routes>
+          <Route path="/encounters" element={<EncounterList/>}/>
+          <Route path="/encounters/:id" element={<div>Encounter</div>}/>
+        </Routes>
+      </MemoryRouter>
+    </EncounterProvider>
+  </AppShell>);
 }
 
 export default App;

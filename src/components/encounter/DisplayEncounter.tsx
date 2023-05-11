@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, ActionIcon, Group } from "@mantine/core";
+import { Accordion, ActionIcon, Group, Loader } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { ArrowBendRightDown, Play, PlayPause, UserPlus } from '@phosphor-icons/react';
 
@@ -39,19 +39,20 @@ function ManageEncounter() {
 
 
 export function DisplayEncounter() {
-    const encounter = useEncounterContext();
-    const characters = useWatchValueObserver(encounter.charactersObserver);
-    const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
-    const ids = useWatchValueObserver(viewEncounter.openedCharactersObserver);
-
-    const { classes } = useStyles();
-
-    return (
-        <>
-            <ManageEncounter />
-            <Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
-                {characters.map((c) => <EncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />)}
-            </Accordion>
-        </>
-    );
+    return <Loader size="xl" />;
+    // const encounter = useEncounterContext();
+    // const characters = useWatchValueObserver(encounter.charactersObserver);
+    // const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
+    // const ids = useWatchValueObserver(viewEncounter.openedCharactersObserver);
+    //
+    // const { classes } = useStyles();
+    //
+    // return (
+    //     <>
+    //         <ManageEncounter />
+    //         <Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
+    //             {characters.map((c) => <EncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />)}
+    //         </Accordion>
+    //     </>
+    // );
 }
