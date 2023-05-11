@@ -19,7 +19,7 @@ interface AddCharacterToEncounterProps {
     onSuccess?: () => void;
 }
 
-export function AddCharacterToEncounter({ encounter, onSuccess = () => { } }: AddCharacterToEncounterProps) {
+export function AddCharacterToEncounter({ encounter, onSuccess }: AddCharacterToEncounterProps) {
     const form = useForm<EncounterFormProps>({
         initialValues: {
             name: '',
@@ -49,7 +49,7 @@ export function AddCharacterToEncounter({ encounter, onSuccess = () => { } }: Ad
         });
         encounter.addCharacter(newCharacter);
         form.reset();
-        onSuccess();
+        onSuccess && onSuccess();
     };
     const handleError = () => {
         notifyErrors({ errors: 'some fields are invalid', title: 'Cannot Add Character' });

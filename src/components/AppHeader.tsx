@@ -15,7 +15,7 @@ function DebugDrawer({ opened, onClose }: DebugDrawerProps) {
         <Accordion defaultValue="files">
             <Accordion.Item value="files">
                 <Accordion.Control>Explore Files</Accordion.Control>
-                <Accordion.Panel> <DebugFileBrowser/> </Accordion.Panel>
+                <Accordion.Panel> <DebugFileBrowser /> </Accordion.Panel>
             </Accordion.Item>
         </Accordion>
     </Drawer>)

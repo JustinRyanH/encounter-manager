@@ -11,6 +11,7 @@ interface TestEvent {
 
 describe('TauriConnection', function () {
     const stopListening = vi.fn();
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     let outerCallback: (message: TestEvent) => void = () => { };
     beforeEach(() => {
         (listen as Mock).mockImplementation((_name, cb) => {

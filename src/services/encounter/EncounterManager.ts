@@ -1,9 +1,7 @@
 import { ValueObserver } from "~/services";
-import { EncounterType } from "~/types/EncounterTypes";
 import { Encounter } from "~/services/encounter/Encounter";
 
 import * as Commands from './Commands';
-import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 
 export class EncounterManager {
     #encounterMap = new Map<string, Encounter>();
