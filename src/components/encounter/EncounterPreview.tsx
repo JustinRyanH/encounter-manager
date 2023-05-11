@@ -1,7 +1,24 @@
 import { ActiveCharacter, Encounter } from "~/services/encounter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Accordion, Avatar, Badge, Group } from "@mantine/core";
+import { Accordion, AccordionControlProps, ActionIcon, Avatar, Badge, Box, Group } from "@mantine/core";
+import { BookOpen } from '@phosphor-icons/react';
 import React from "react";
+
+interface ControlProps extends AccordionControlProps {
+  encounter: Encounter;
+}
+
+function AccordionControl(props: ControlProps) {
+  const encounterName = useWatchValueObserver(props.encounter.nameObserver);
+
+  return (<Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Accordion.Control {...props} />
+        <ActionIcon variant="outline" size="lg" color="grape" title={`Open ${encounterName} Encounter`}>
+          <BookOpen  size="1rem" />
+        </ActionIcon>
+      </Box>
+  )
+}
 
 function EncounterPreviewCharacter({ character }: { character: ActiveCharacter }) {
     const name = useWatchValueObserver(character.nameObserver);
@@ -17,7 +34,7 @@ export function EncounterPreview({ encounter }: { encounter: Encounter }) {
                                                                                       key={character.id}/>);
     return <div>
         <Accordion.Item value={encounter.id}>
-            <Accordion.Control>{name}</Accordion.Control>
+            <AccordionControl encounter={encounter}>{name}</AccordionControl>
             <Accordion.Panel>
                 <Group spacing="xs">
                     {listedCharacters}
