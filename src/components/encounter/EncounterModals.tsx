@@ -9,6 +9,8 @@ const CreateCharacterModal = ({ context, id }: ContextModalProps<{}>) => {
 }
 
 export function EncounterModals({ children }: { children: React.ReactNode }): JSX.Element {
+    const encounter = useEncounterContext();
+    console.log(encounter);
     return (<>
         <ModalsProvider modals={{ addCharacterToEncounter: CreateCharacterModal }}>
             {children}
