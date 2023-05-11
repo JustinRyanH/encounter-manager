@@ -1,7 +1,15 @@
-import { Accordion, ActionIcon, Drawer, Group, Header } from "@mantine/core";
+import {
+  Accordion,
+  ActionIcon,
+  Button,
+  Drawer,
+  Group,
+  Header,
+} from "@mantine/core";
 import { BugBeetle } from "@phosphor-icons/react";
 import { useDisclosure } from "@mantine/hooks";
 import { DebugFileBrowser } from "~/components/files/DebugFileBrowser";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface DebugDrawerProps {
   opened: boolean;
@@ -30,20 +38,34 @@ function DebugDrawer({ opened, onClose }: DebugDrawerProps) {
 }
 
 export function AppHeader() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [opened, debugHandles] = useDisclosure(false);
+
+  const disabledBack = location.pathname === "/";
 
   return (
     <>
       <DebugDrawer opened={opened} onClose={debugHandles.close} />
       <Header p="xs" height={{ base: "3rem", md: "4rem" }}>
-        <Group position="right">
-          <ActionIcon
-            onClick={debugHandles.open}
-            title="Debug Panel"
-            variant="outline"
+        <Group position="apart" align="center" h="100%">
+          <Button
+            size="xs"
+            disabled={disabledBack}
+            onClick={() => navigate(-1)}
           >
-            <BugBeetle />
-          </ActionIcon>
+            Back
+          </Button>
+
+          <Group position="right" align="center">
+            <ActionIcon
+              onClick={debugHandles.open}
+              title="Debug Panel"
+              variant="outline"
+            >
+              <BugBeetle />
+            </ActionIcon>
+          </Group>
         </Group>
       </Header>
     </>

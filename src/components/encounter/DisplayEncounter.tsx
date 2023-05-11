@@ -77,7 +77,7 @@ export function DisplayEncounter() {
   if (!encounter) {
     return (
       <Center h="100%">
-        <Loader size="xl" />
+        <Loader variant="bars" size="xl" />
       </Center>
     );
   }

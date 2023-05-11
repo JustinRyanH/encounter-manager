@@ -4,7 +4,7 @@ import { AppShell } from "@mantine/core";
 import { AppHeader } from "~/components/AppHeader";
 
 import "./App.css";
-import { createMemoryRouter, RouterProvider, Outlet } from "react-router-dom";
+import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
 import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
 
@@ -16,7 +16,7 @@ function RootApp() {
   );
 }
 
-const router = createMemoryRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <RootApp />,
