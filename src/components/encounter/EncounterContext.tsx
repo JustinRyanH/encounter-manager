@@ -11,7 +11,6 @@ interface EncounterProviderProps {
 }
 
 export function EncounterProvider({ children, encounter }: EncounterProviderProps): JSX.Element {
-    console.trace(encounter);
     return (<EncounterContext.Provider value={encounter || null}>
         <EncounterModals>
             {children}
