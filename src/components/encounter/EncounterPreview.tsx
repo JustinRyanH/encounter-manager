@@ -17,7 +17,7 @@ function AccordionControl({ encounter, ...props }: ControlProps) {
       <Accordion.Control {...props} />
       <ActionIcon onClick={() => {
         console.log('click');
-        navigate(`${encounter.id}`);
+        navigate(`encounter/${encounter.id}`);
       }} variant="outline" size="lg" color="grape" title={`Open ${encounterName} Encounter`}>
         <BookOpen size="1rem"/>
       </ActionIcon>
