@@ -6,7 +6,6 @@ import {
   ValueObserver,
 } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
-import { CharacterType } from "~/types/EncounterTypes";
 
 interface InitiativeCharacterProps {
   id: string;

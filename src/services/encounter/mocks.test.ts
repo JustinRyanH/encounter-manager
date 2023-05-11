@@ -27,7 +27,7 @@ export function buildMockCharacter(props: MockCharacterProps): CharacterType {
 interface MockEncounterProps {
   id?: string;
   name?: string;
-  characters?: any[];
+  characters?: MockCharacterProps[];
 }
 
 export function buildMockEncounter(props: MockEncounterProps = {}) {
