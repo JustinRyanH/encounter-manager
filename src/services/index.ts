@@ -1,1 +1,1 @@
-export { ValueObserver, ReadonlyValueObserver } from './ValueObserver';
+export { ValueObserver, ReadonlyValueObserver } from "./ValueObserver";

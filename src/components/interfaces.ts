@@ -1,5 +1,3 @@
-
-
 export interface DisclousreHandles {
-    readonly close: () => void;
+  readonly close: () => void;
 }

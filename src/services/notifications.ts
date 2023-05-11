@@ -6,8 +6,14 @@ import { notifications } from "@mantine/notifications";
  * @param title
  * @return true if there are errors
  */
-export function notifyErrors({ errors, title = 'Error' }: { errors: string, title?: string, }): boolean {
-    if (!errors) return false;
-    notifications.show({ title, message: errors, color: 'red' });
-    return true
+export function notifyErrors({
+  errors,
+  title = "Error",
+}: {
+  errors: string;
+  title?: string;
+}): boolean {
+  if (!errors) return false;
+  notifications.show({ title, message: errors, color: "red" });
+  return true;
 }
