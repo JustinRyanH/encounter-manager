@@ -68,6 +68,10 @@ export class Encounter {
         return this.#name.value;
     }
 
+    get nameObserver() {
+        return this.#name.readonly;
+    }
+
     get id() {
         return this.#id;
     }
