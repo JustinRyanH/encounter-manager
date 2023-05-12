@@ -52,6 +52,14 @@ impl Character {
         self.name == other.name
     }
 
+    pub fn set_name<T>(&mut self, name: T) where T: Into<String> {
+        let name = name.into();
+        if name.is_empty() {
+            return;
+        }
+        self.name = name;
+    }
+
     pub fn heal(&mut self, value: i32) {
         self.set_current_hp(self.hp.current + value);
     }
@@ -255,5 +263,19 @@ mod tests {
 
         character_a.set_initiative_modifier(-21);
         assert_eq!(character_a.initiative_modifier, -20);
+    }
+
+    #[test]
+    fn test_set_name() {
+        let total_hp = 10;
+        let mut character_a = Character::new("character a", total_hp, 10);
+
+        assert_eq!(character_a.name, "character a");
+
+        character_a.set_name("character b");
+        assert_eq!(character_a.name, "character b");
+
+        character_a.set_name("");
+        assert_eq!(character_a.name, "character b");
     }
 }
