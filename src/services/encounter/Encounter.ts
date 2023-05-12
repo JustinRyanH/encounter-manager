@@ -5,6 +5,7 @@ import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import { CharacterType } from "~/types/EncounterTypes";
 import { updateCharacterName } from "~/services/encounter/Commands";
+import { handleError, notifyErrors } from "~/services/notifications";
 
 type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
@@ -150,7 +151,12 @@ export class Encounter {
   async updateCharacterName(id: string, name: string) {
     const existingCharacter = this.findCharacter(id);
     if (!existingCharacter) return;
-    const result = await updateCharacterName({ encounterId: this.id, characterId: id, name });
+    try {
+      const { name: newName } = await updateCharacterName({ encounterId: this.id, characterId: id, name });
+      existingCharacter.name = newName;
+    } catch (error: unknown) {
+      handleError({ error, title: "Failed to update Character Name" });
+    }
   }
 
   private setCharacters = (characters: Array<EncounterCharacter>) => {

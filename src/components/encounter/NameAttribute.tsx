@@ -23,10 +23,7 @@ export function NameAttribute({ character }: { character: EncounterCharacter }):
       >
         <UpdateString
           width="10rem"
-          updateAttribute={(name) => {
-            encounter.updateCharacterName(character.id, name).catch((e) => console.error(e));
-            character.updateName(name);
-          }}
+          updateAttribute={(name) => encounter.updateCharacterName(character.id, name)}
           placeholder="Name"
         />
       </EditPopover>

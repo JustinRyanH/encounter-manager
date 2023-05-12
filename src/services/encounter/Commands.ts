@@ -8,6 +8,7 @@ import {
   CharacterType,
   CharacterResponse,
 } from "~/types/EncounterTypes";
+import { notifyErrors } from "~/services/notifications";
 
 export async function queryEncounter(command: EncounterCommands): Promise<EncounterResponse> {
   return await invoke("encounter", { command });

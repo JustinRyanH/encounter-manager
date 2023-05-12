@@ -178,14 +178,6 @@ export class EncounterCharacter {
   };
 
   /**
-   * Update total hit points, and notify observers
-   * @param name
-   */
-  updateName = (name: string) => {
-    this.name = name;
-  };
-
-  /**
    * Observer for the initiative of the character
    * @param message
    * @return unsubscribe function
