@@ -81,11 +81,12 @@ export class Encounter {
 
   /**
    * Adds a character to the encounter and sorts the characters by initiative.
-   * @param initiativeCharacter
+   * @param character
    */
-  addCharacter = (initiativeCharacter: EncounterCharacter) => {
-    this.setCharacters([...this.characters, initiativeCharacter]);
-    this.#characterAddedSignal.emit({ character: initiativeCharacter });
+  addCharacter = (character: EncounterCharacter) => {
+    character.encounter = this;
+    this.setCharacters([...this.characters, character]);
+    this.#characterAddedSignal.emit({ character: character });
   };
 
   updateCharacters = (characters: CharacterType[]) => {

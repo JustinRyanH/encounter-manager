@@ -1,9 +1,11 @@
 import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
 import { notifyErrors } from "~/services/notifications";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
+import { Encounter } from "~/services/encounter/Encounter";
 
 interface EncounterCharacterProps {
   id: string;
+  encounter?: Encounter;
   name: string;
   initiative: number;
   totalHp?: number;
@@ -38,13 +40,15 @@ export class EncounterCharacter {
     return new EncounterCharacter(param);
   }
 
+  #encounter: Encounter | null;
   #id: string;
   #name: ValueObserver<string>;
   #initiative: ValueObserver<number>;
   #hp: HitPoints = new HitPoints();
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-  constructor({ id, name, initiative, totalHp: totalHp = 10, hp }: EncounterCharacterProps) {
+  constructor({ encounter, id, name, initiative, totalHp: totalHp = 10, hp }: EncounterCharacterProps) {
+    this.#encounter = encounter || null;
     this.#id = id;
     this.#initiative = new ValueObserver(initiative);
     this.#name = new ValueObserver(name);
@@ -61,6 +65,18 @@ export class EncounterCharacter {
    */
   get id() {
     return this.#id;
+  }
+
+  /**
+   * The encounter this character is a part of
+   */
+  get encounter() {
+    return this.#encounter;
+  }
+
+  set encounter(value) {
+    if (!value) throw new Error("Encounter cannot be null");
+    this.#encounter = value;
   }
 
   /**
