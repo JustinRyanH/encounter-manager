@@ -10,7 +10,7 @@ mod services;
 use tauri::{generate_context, Manager};
 
 use crate::{
-    commands::{encounter, query_file_system},
+    commands::{encounter, query_file_system, update_encounter_character},
     services::file_system_connection,
 };
 use crate::encounters::encounter::EncounterManager;
@@ -29,7 +29,7 @@ fn main() {
             app.manage(EncounterManager::from(encounter_collection));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![query_file_system, encounter])
+        .invoke_handler(tauri::generate_handler![query_file_system, encounter, update_encounter_character])
         .run(generate_context!())
         .expect("error while running tauri application");
 }
