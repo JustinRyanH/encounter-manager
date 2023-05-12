@@ -1,3 +1,5 @@
+use ulid::Ulid;
+use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::encounter::EncounterManagerState;
 use crate::services::{
     file_system_connection::FileSystemState,
@@ -15,8 +17,10 @@ pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterComma
 }
 
 #[tauri::command]
-pub async fn update_encounter_character(state: EncounterManagerState<'_>, encounterId: String, character: crate::encounters::character::Character) -> Result<EncounterCommandResponse, String> {
-    return Err("Not implemented".to_string());
+pub async fn update_encounter_character(state: EncounterManagerState<'_>, encounter_id: Ulid, command: CharacterCommand) -> Result<CharacterCommandResponse, String> {
+    let mut manager = state.lock().await;
+    let encounter = manager.find_encounter_mut(encounter_id).ok_or("Encounter not found")?;
+    encounter.update_character(command)
 }
 
 #[tauri::command]

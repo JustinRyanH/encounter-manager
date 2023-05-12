@@ -3,13 +3,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::encounters::Character;
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum CharacterCommand {
     UpdateName { id: Ulid, name: String },
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum CharacterCommandResponse {
     UpdatedCharacter(Character),
