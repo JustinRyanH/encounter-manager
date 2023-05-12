@@ -13,6 +13,7 @@ use crate::{
     commands::{encounter, query_file_system},
     services::file_system_connection,
 };
+use crate::encounters::encounter::EncounterManager;
 
 fn main() {
     tauri::Builder::default()
@@ -25,7 +26,7 @@ fn main() {
 
             let arc_data = file_system_connection::start(app.handle())?;
             app.manage(arc_data);
-            app.manage(encounter_collection);
+            app.manage(EncounterManager::from(encounter_collection));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![query_file_system, encounter])

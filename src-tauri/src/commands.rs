@@ -1,4 +1,4 @@
-use crate::encounters::encounter::EncounterCollectionState;
+use crate::encounters::encounter::EncounterManagerState;
 use crate::services::{
     file_system_connection::FileSystemState,
     files::file_structure::{FsCommand, QueryCommandResponse},
@@ -7,14 +7,15 @@ use crate::services::files::file_structure::TouchCommand;
 use crate::encounters::commands::{EncounterCommandResponse, EncounterCommands};
 
 #[tauri::command]
-pub fn encounter(state: EncounterCollectionState<'_>, command: EncounterCommands) -> Result<EncounterCommandResponse, String> {
+pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterCommands) -> Result<EncounterCommandResponse, String> {
+    let encounter = state.lock().await;
     match command {
-        EncounterCommands::ListEncounter => EncounterCommandResponse::list_from_collection(&state),
+        EncounterCommands::ListEncounter => EncounterCommandResponse::list_from_collection(&encounter),
     }
 }
 
 #[tauri::command]
-pub fn update_encounter_character(state: EncounterCollectionState<'_>, encounterId: String, character: crate::encounters::character::Character) -> Result<EncounterCommandResponse, String> {
+pub async fn update_encounter_character(state: EncounterManagerState<'_>, encounterId: String, character: crate::encounters::character::Character) -> Result<EncounterCommandResponse, String> {
     return Err("Not implemented".to_string());
 }
 

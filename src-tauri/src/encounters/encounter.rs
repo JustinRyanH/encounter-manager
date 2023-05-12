@@ -1,10 +1,29 @@
 use std::collections::HashMap;
+use std::sync::{Arc, LockResult};
+
+use tokio::sync::{Mutex, MutexGuard};
 use tauri::State;
 use serde::{Deserialize, Serialize};
+use tauri::utils::assets::phf::PhfHash;
 use ulid::Ulid;
 use crate::encounters::Character;
 
-pub type EncounterCollectionState<'a> = State<'a, EncounterCollection>;
+pub type EncounterManagerState<'a> = State<'a, EncounterManager>;
+
+#[derive(Clone, Debug)]
+pub struct EncounterManager(Arc<Mutex<EncounterCollection>>);
+
+impl EncounterManager {
+    pub async fn lock(&self) -> MutexGuard<'_, EncounterCollection> {
+        self.0.lock().await
+    }
+}
+
+impl From<EncounterCollection> for EncounterManager {
+    fn from(encounter_collection: EncounterCollection) -> Self {
+        Self(Arc::new(Mutex::new(encounter_collection)))
+    }
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -27,7 +46,6 @@ impl EncounterCollection {
         self.encounters.clone()
     }
 }
-
 
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
