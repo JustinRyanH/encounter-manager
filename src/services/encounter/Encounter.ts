@@ -1,7 +1,7 @@
 import { Signal, SignalConnection } from "typed-signals";
 
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
-import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/ValueObserver";
+import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import { CharacterType } from "~/types/EncounterTypes";
 import { updateCharacterName } from "~/services/encounter/Commands";
@@ -15,7 +15,7 @@ interface EncounterProps {
 }
 
 export class Encounter {
-  #id: string;
+  readonly id: string;
   #name: ValueObserver<string> = new ValueObserver<string>("");
   #lastActiveCharacter: EncounterCharacter | null = null;
   #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
@@ -23,7 +23,7 @@ export class Encounter {
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
   constructor({ name, id }: EncounterProps) {
-    this.#id = id;
+    this.id = id;
     this.#name.value = name;
   }
 
@@ -69,10 +69,6 @@ export class Encounter {
 
   get nameObserver() {
     return this.#name.readonly;
-  }
-
-  get id() {
-    return this.#id;
   }
 
   /**
