@@ -105,7 +105,7 @@ impl Encounter {
 
         match cmd {
             CharacterCommand::UpdateName {  name, .. } => {
-                character.name = name;
+                character.set_name(name);
                 Ok(CharacterCommandResponse::updated(character))
             }
             CharacterCommand::UpdateInitiative {  initiative, .. } => {
