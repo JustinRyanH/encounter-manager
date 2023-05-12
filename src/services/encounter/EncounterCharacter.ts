@@ -41,30 +41,24 @@ export class EncounterCharacter {
   }
 
   #encounter: Encounter | null;
-  #id: string;
+  readonly id: string;
+  readonly hp: HitPoints = new HitPoints();
+
   #name: ValueObserver<string>;
   #initiative: ValueObserver<number>;
-  #hp: HitPoints = new HitPoints();
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
   constructor({ encounter, id, name, initiative, totalHp: totalHp = 10, hp }: EncounterCharacterProps) {
     this.#encounter = encounter || null;
-    this.#id = id;
+    this.id = id;
     this.#initiative = new ValueObserver(initiative);
     this.#name = new ValueObserver(name);
     if (hp) {
-      this.#hp = new HitPoints(hp);
+      this.hp = new HitPoints(hp);
     } else {
-      this.#hp.total = totalHp;
-      this.#hp.current = totalHp;
+      this.hp.total = totalHp;
+      this.hp.current = totalHp;
     }
-  }
-
-  /**
-   * Returns a globally unique identifier for this character instance
-   */
-  get id() {
-    return this.#id;
   }
 
   /**
@@ -148,13 +142,6 @@ export class EncounterCharacter {
     return this.#initiative.readonly;
   }
 
-  /**
-   * The hit points of the character
-   */
-  get hp(): HitPoints {
-    return this.#hp;
-  }
-
   update(values: EncounterCharacterUpdateProps) {
     if (values.id !== this.id) throw new Error("Id Mismatch for character");
     if (values.name && values.name !== this.name) this.name = values.name;
@@ -175,6 +162,14 @@ export class EncounterCharacter {
     const errors = this.#validateInitiative(initiative).join(", ");
     if (notifyErrors({ errors, title: "Invalid Initiative" })) return;
     this.initiative = initiative || 0;
+  };
+
+  /**
+   * Update total hit points, and notify observers
+   * @param name
+   */
+  updateName = async (name: string) => {
+    this.encounter?.updateCharacterName(this.id, name);
   };
 
   /**
