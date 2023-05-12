@@ -5,7 +5,7 @@ import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import { CharacterType } from "~/types/EncounterTypes";
 import { updateCharacterName } from "~/services/encounter/Commands";
-import { handleError, notifyErrors } from "~/services/notifications";
+import { handleError } from "~/services/notifications";
 
 type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
