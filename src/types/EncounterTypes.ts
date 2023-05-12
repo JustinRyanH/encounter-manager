@@ -29,3 +29,14 @@ export interface EncounterListType {
 export interface EncounterResponse {
   encounterList: EncounterListType;
 }
+
+export interface BaseCharacterCommand {
+  id: string;
+}
+
+export interface UpdateCharacterName extends BaseCharacterCommand {
+  name: string;
+}
+export interface CharacterCommand {
+  updateName: UpdateCharacterName;
+}

@@ -14,6 +14,11 @@ pub fn encounter(state: EncounterCollectionState<'_>, command: EncounterCommands
 }
 
 #[tauri::command]
+pub fn update_encounter_character(state: EncounterCollectionState<'_>, encounterId: String, character: crate::encounters::character::Character) -> Result<EncounterCommandResponse, String> {
+    return Err("Not implemented".to_string());
+}
+
+#[tauri::command]
 pub async fn query_file_system(
     state: FileSystemState<'_>,
     command: FsCommand,

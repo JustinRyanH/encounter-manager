@@ -6,12 +6,10 @@ import { Attribute } from "~/components/systems/Attribute";
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateString } from "~/components/systems/UpdateAttribute";
+import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
-export function NameAttribute({
-  character,
-}: {
-  character: ActiveCharacter;
-}): JSX.Element {
+export function NameAttribute({ character }: { character: ActiveCharacter }): JSX.Element {
+  const encounter = useEncounterContext();
   const name = useWatchValueObserver(character.nameObserver);
 
   return (
@@ -25,7 +23,10 @@ export function NameAttribute({
       >
         <UpdateString
           width="10rem"
-          updateAttribute={character.updateName}
+          updateAttribute={(name) => {
+            encounter.updateCharacterName(character.id, name).catch((e) => console.error(e));
+            character.updateName(name);
+          }}
           placeholder="Name"
         />
       </EditPopover>

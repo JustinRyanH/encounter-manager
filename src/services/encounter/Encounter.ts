@@ -1,19 +1,12 @@
 import { Signal, SignalConnection } from "typed-signals";
 
 import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
-import {
-  ReadonlyValueObserver,
-  StopObserving,
-  ValueObserver,
-} from "~/services/ValueObserver";
+import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import { CharacterType } from "~/types/EncounterTypes";
+import { updateCharacterName } from "~/services/encounter/Commands";
 
-type CharacterAddedMessage = ({
-  character,
-}: {
-  character: ActiveCharacter;
-}) => void;
+type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
 
 interface EncounterProps {
   characters?: Array<ActiveCharacter>;
@@ -26,11 +19,8 @@ export class Encounter {
   #name: ValueObserver<string> = new ValueObserver<string>("");
   #lastActiveCharacter: ActiveCharacter | null = null;
   #initiativeMap: Map<string, StopObserving> = new Map();
-  #activeCharacter: ValueObserver<ActiveCharacter | null> =
-    new ValueObserver<ActiveCharacter | null>(null);
-  #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<
-    Array<ActiveCharacter>
-  >([]);
+  #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);
+  #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<Array<ActiveCharacter>>([]);
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
   constructor({ name, id, characters = [] }: EncounterProps) {
@@ -122,10 +112,7 @@ export class Encounter {
     const activeCharacterIndex = this.characters.indexOf(this.activeCharacter);
     if (activeCharacterIndex === -1) return;
 
-    const nextCharacterIndex =
-      activeCharacterIndex + 1 === this.characters.length
-        ? 0
-        : activeCharacterIndex + 1;
+    const nextCharacterIndex = activeCharacterIndex + 1 === this.characters.length ? 0 : activeCharacterIndex + 1;
     this.setActiveCharacter(this.characters[nextCharacterIndex]);
   };
 
@@ -165,6 +152,13 @@ export class Encounter {
    */
   onCharacterAdded(observer: CharacterAddedMessage): SignalConnection {
     return this.#characterAddedSignal.connect(observer);
+  }
+
+  async updateCharacterName(id: string, name: string) {
+    const existingCharacter = this.findCharacter(id);
+    if (!existingCharacter) return;
+    const result = await updateCharacterName({ encounterId: this.id, characterId: id, name });
+    console.log(result);
   }
 
   private setCharacters = (characters: Array<ActiveCharacter>) => {

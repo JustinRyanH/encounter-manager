@@ -1,5 +1,8 @@
 use std::cmp::Ordering;
+use std::process::Command;
 use serde::{Deserialize, Serialize};
+use commands::{CharacterCommand, CharacterCommandResponse};
+use crate::encounters::character::commands;
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -49,6 +52,10 @@ impl Character {
 
     pub fn set_initiative_match_score(&mut self, score: i32) {
         self.initiative_modifier = score;
+    }
+
+    pub fn update(&mut self, _command: CharacterCommand) -> Result<CharacterCommandResponse, String> {
+        Ok(CharacterCommandResponse::updated(self))
     }
 }
 
