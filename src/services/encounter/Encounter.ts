@@ -152,8 +152,8 @@ export class Encounter {
     const existingCharacter = this.findCharacter(id);
     if (!existingCharacter) return;
     try {
-      const { name: newName } = await updateCharacterName({ encounterId: this.id, characterId: id, name });
-      existingCharacter.name = newName;
+      const { character } = await updateCharacterName({ encounterId: this.id, characterId: id, name });
+      existingCharacter.name = character.name;
     } catch (error: unknown) {
       handleError({ error, title: "Failed to update Character Name" });
     }

@@ -1,3 +1,8 @@
+export interface FrontendMessage {
+  type: string;
+  message: string;
+}
+
 export interface HitPointType {
   current: number;
   total: number;
@@ -34,6 +39,12 @@ export interface BaseCharacterCommand {
   id: string;
 }
 
+export interface CharacterChangeMessagesType {
+  name?: CharacterType;
+  initiative?: CharacterType;
+  hp?: CharacterType;
+}
+
 export interface UpdateCharacterName extends BaseCharacterCommand {
   name: string;
 }
@@ -41,6 +52,11 @@ export interface CharacterCommand {
   updateName?: UpdateCharacterName;
 }
 
+export interface UpdatedCharacter {
+  character: CharacterType,
+  messages: CharacterChangeMessagesType,
+}
+
 export interface CharacterResponse {
-  updatedCharacter?: CharacterType;
+  updatedCharacter?: UpdatedCharacter;
 }

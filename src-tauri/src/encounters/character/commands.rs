@@ -28,18 +28,53 @@ impl CharacterCommand {
             CharacterCommand::Heal { id, .. } => { *id }
             CharacterCommand::Damage { id, .. } => { *id }
         }
+    }
+}
 
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub enum FrontendMessageType {
+    Success,
+    Error,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct FrontendMessage {
+    #[serde(rename = "type")]
+    pub message_type: FrontendMessageType,
+    pub message: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct CharacterChangeMessages {
+    pub name: Option<Vec<FrontendMessage>>,
+    pub initiative: Option<Vec<FrontendMessage>>,
+    pub hp: Option<Vec<FrontendMessage>>,
+}
+
+impl CharacterChangeMessages {
+    pub fn none() -> Self {
+        Self {
+            name: None,
+            initiative: None,
+            hp: None,
+        }
     }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum CharacterCommandResponse {
-    UpdatedCharacter(Character),
+    UpdatedCharacter {
+        character: Character,
+        messages: CharacterChangeMessages,
+    },
 }
 
 impl CharacterCommandResponse {
     pub fn updated(character: &Character) -> Self {
-        Self::UpdatedCharacter(character.clone())
+        Self::UpdatedCharacter { character: character.clone(), messages: CharacterChangeMessages::none() }
     }
 }

@@ -7,6 +7,7 @@ import {
   CharacterCommand,
   CharacterType,
   CharacterResponse,
+  UpdatedCharacter,
 } from "~/types/EncounterTypes";
 import { notifyErrors } from "~/services/notifications";
 
@@ -29,13 +30,14 @@ export async function updateCharacterName({
   encounterId,
   characterId,
   name,
-}: UpdateCharacterNameProps): Promise<CharacterType> {
+}: UpdateCharacterNameProps): Promise<UpdatedCharacter> {
   const command: CharacterCommand = {
     updateName: {
       id: characterId,
       name,
     },
   };
-  const response = await updateCharacter(encounterId, command);
-  return response.updatedCharacter as CharacterType;
+  const result = await updateCharacter(encounterId, command);
+  if (!result.updatedCharacter) throw new Error("Bad Server Response");
+  return result.updatedCharacter;
 }
