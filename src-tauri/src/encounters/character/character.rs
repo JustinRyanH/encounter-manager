@@ -69,6 +69,10 @@ impl Character {
         self.hp.current = value.max(0);
         self.hp.current = self.hp.current.min(self.hp.total);
     }
+
+    pub fn set_temporary_hp(&mut self, value: i32) {
+        self.hp.temporary = value.max(0);
+    }
 }
 
 
@@ -208,5 +212,12 @@ mod tests {
 
         character_a.set_total_hp(-1);
         assert_eq!(character_a.hp.total, 1);
+
+        character_a.set_temporary_hp(5);
+        assert_eq!(character_a.hp.temporary, 5);
+
+
+        character_a.set_temporary_hp(-5);
+        assert_eq!(character_a.hp.temporary, 0);
     }
 }
