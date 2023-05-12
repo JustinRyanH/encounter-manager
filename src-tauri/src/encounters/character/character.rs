@@ -53,22 +53,20 @@ impl Character {
     }
 
     pub fn heal(&mut self, value: i32) {
-        self.hp.current += value;
-        self.hp.current = self.hp.current.min(self.hp.total);
+        self.set_current_hp(self.hp.current + value);
     }
 
     pub fn damage(&mut self, value: i32) {
-        self.hp.current -= value;
-        self.hp.current = self.hp.current.max(0);
+        self.set_current_hp(self.hp.current - value);
     }
 
     pub fn set_total_hp(&mut self, value: i32) {
-        self.hp.total = value;
+        self.hp.total = value.max(1);
         self.hp.current = self.hp.current.min(self.hp.total);
     }
 
     pub fn set_current_hp(&mut self, value: i32) {
-        self.hp.current = value;
+        self.hp.current = value.max(0);
         self.hp.current = self.hp.current.min(self.hp.total);
     }
 }
@@ -204,5 +202,11 @@ mod tests {
 
         character_a.set_current_hp(10);
         assert_eq!(character_a.hp.current, 5);
+
+        character_a.set_current_hp(-1);
+        assert_eq!(character_a.hp.current, 0);
+
+        character_a.set_total_hp(-1);
+        assert_eq!(character_a.hp.total, 1);
     }
 }
