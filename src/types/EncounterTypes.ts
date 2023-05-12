@@ -38,5 +38,9 @@ export interface UpdateCharacterName extends BaseCharacterCommand {
   name: string;
 }
 export interface CharacterCommand {
-  updateName: UpdateCharacterName;
+  updateName?: UpdateCharacterName;
+}
+
+export interface CharacterResponse {
+  updatedCharacter?: CharacterType;
 }

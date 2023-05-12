@@ -6,6 +6,7 @@ import {
   EncounterListType,
   CharacterCommand,
   CharacterType,
+  CharacterResponse,
 } from "~/types/EncounterTypes";
 
 export async function queryEncounter(command: EncounterCommands): Promise<EncounterResponse> {
@@ -17,16 +18,23 @@ export async function listEncounter(): Promise<EncounterListType> {
   return result.encounterList || {};
 }
 
-export async function updateCharacter(encounterId: string, command: CharacterCommand) {
+export async function updateCharacter(encounterId: string, command: CharacterCommand): Promise<CharacterResponse> {
   return await invoke("update_encounter_character", { encounterId, command });
 }
 
-export async function updateCharacterName({ encounterId, characterId, name }: { encounterId: string, characterId: string, name: string }) {
+type UpdateCharacterNameProps = { encounterId: string; characterId: string; name: string };
+
+export async function updateCharacterName({
+  encounterId,
+  characterId,
+  name,
+}: UpdateCharacterNameProps): Promise<CharacterType> {
   const command: CharacterCommand = {
     updateName: {
       id: characterId,
       name,
     },
   };
-  return await updateCharacter(encounterId, command);
+  const response = await updateCharacter(encounterId, command);
+  return response.updatedCharacter as CharacterType;
 }
