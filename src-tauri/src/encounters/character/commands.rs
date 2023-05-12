@@ -16,6 +16,22 @@ pub enum CharacterCommand {
     Damage { id: Ulid, hp: i32 },
 }
 
+impl CharacterCommand {
+    pub fn id(&self) -> Ulid {
+        match self {
+            CharacterCommand::UpdateName { id, .. } => { *id }
+            CharacterCommand::UpdateInitiative { id, .. } => { *id }
+            CharacterCommand::UpdateInitiativeModifier { id, .. } => { *id }
+            CharacterCommand::UpdateCurrentHp { id, .. } => { *id }
+            CharacterCommand::UpdateTotalHp { id, .. } => { *id }
+            CharacterCommand::UpdateTemporaryHp { id, .. } => { *id }
+            CharacterCommand::Heal { id, .. } => { *id }
+            CharacterCommand::Damage { id, .. } => { *id }
+        }
+
+    }
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum CharacterCommandResponse {

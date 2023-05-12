@@ -101,71 +101,40 @@ impl Encounter {
     }
 
     pub fn update_character(&mut self, cmd: CharacterCommand) -> Result<CharacterCommandResponse, String> {
-        
+        let character = self.find_character_mut(cmd.id()).ok_or(format!("Character with id {} not found", cmd.id()))?;
+
         match cmd {
-            CharacterCommand::UpdateName { id, name } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.name = name;
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::UpdateName {  name, .. } => {
+                character.name = name;
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateInitiative { id, initiative } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.set_initiative(initiative);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::UpdateInitiative {  initiative, .. } => {
+                character.set_initiative(initiative);
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateInitiativeModifier { id, modifier } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.set_initiative_modifier(modifier);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::UpdateInitiativeModifier {  modifier, .. } => {
+                character.set_initiative_modifier(modifier);
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateCurrentHp { id, hp } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.set_current_hp(hp);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::UpdateCurrentHp {  hp, .. } => {
+                character.set_current_hp(hp);
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateTotalHp { id, hp  } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.set_total_hp(hp);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::UpdateTotalHp {  hp, ..  } => {
+                character.set_total_hp(hp);
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateTemporaryHp { id, hp } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.set_temporary_hp(hp);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::UpdateTemporaryHp {  hp, .. } => {
+                character.set_temporary_hp(hp);
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::Heal { id, hp } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.heal(hp);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::Heal {  hp, .. } => {
+                character.heal(hp);
+                Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::Damage { id, hp } => {
-                if let Some(character) = self.find_character_mut(id) {
-                    character.damage(hp);
-                    Ok(CharacterCommandResponse::updated(character))
-                } else {
-                    Err(format!("Character with id {} not found", id))
-                }
+            CharacterCommand::Damage {  hp, .. } => {
+                character.damage(hp);
+                Ok(CharacterCommandResponse::updated(character))
             }
         }
     }
