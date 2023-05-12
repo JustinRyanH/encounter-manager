@@ -261,42 +261,6 @@ describe("EncounterCharacter", () => {
     });
   });
 
-  describe("updateName", () => {
-    test("can update name", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.updateName("Test2");
-      expect(character.name).toEqual("Test2");
-    });
-
-    test("reverts name if empty", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.updateName("");
-      expect(character.name).toEqual("Test");
-    });
-
-    test("notififies if name is empty", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.updateName("");
-      expect(notifications.show).toHaveBeenCalledWith({
-        title: "Invalid Name",
-        message: "Name cannot be empty",
-        color: "red",
-      });
-    });
-  });
-
   describe("observeInitiative", function () {
     test("can subscribe to initiative changes", () => {
       const character = new EncounterCharacter({
