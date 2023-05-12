@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use std::process::Command;
 use serde::{Deserialize, Serialize};
+use ulid::Ulid;
 use commands::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::character::commands;
 
@@ -15,7 +16,7 @@ pub struct HitPoints {
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Character {
-    id: ulid::Ulid,
+    id: Ulid,
     pub name: String,
     pub hp: HitPoints,
     pub initiative: i32,
@@ -42,6 +43,10 @@ impl Character {
         self.id.to_string()
     }
 
+    pub fn ulid(&self) -> Ulid  {
+     self.id
+    }
+
     pub fn is_same_as(&self, other: &Character) -> bool {
         self.id() == other.id()
     }
@@ -54,8 +59,8 @@ impl Character {
         self.initiative_modifier = score;
     }
 
-    pub fn update(&mut self, _command: CharacterCommand) -> Result<CharacterCommandResponse, String> {
-        Ok(CharacterCommandResponse::updated(self))
+    pub fn update_name(&mut self, name: String) {
+        self.name = name;
     }
 }
 

@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use tauri::utils::assets::phf::PhfHash;
 use ulid::Ulid;
 use crate::encounters::Character;
+use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 
 pub type EncounterManagerState<'a> = State<'a, EncounterManager>;
 
@@ -44,6 +45,10 @@ impl EncounterCollection {
 
     pub fn list_encounters(&self) -> HashMap<Ulid, Encounter> {
         self.encounters.clone()
+    }
+
+    pub fn find_encounter_mut(&mut self, id: Ulid) -> Option<&mut Encounter> {
+        self.encounters.get_mut(&id)
     }
 }
 
@@ -84,6 +89,10 @@ impl Encounter {
         self.characters.iter().find(|c| c.id() == id)
     }
 
+    pub fn find_character_mut(&mut self, id: Ulid) -> Option<&mut Character> {
+        self.characters.iter_mut().find(|c| c.ulid() == id)
+    }
+
     pub fn get_characters(&self) -> Vec<Character> {
         self.characters.clone()
     }
@@ -91,11 +100,25 @@ impl Encounter {
     pub fn remove_character(&mut self, character: Character) {
         self.characters.retain(|c| !c.is_same_as(&character));
     }
+
+    pub fn update_character(&mut self, cmd: CharacterCommand) -> Result<CharacterCommandResponse, String> {
+        match cmd {
+            CharacterCommand::UpdateName { id, name } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.update_name(name);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::encounters::*;
+    use crate::encounters::character::CharacterCommandResponse;
     use crate::encounters::encounter::Encounter;
 
     #[test]
@@ -147,5 +170,21 @@ mod tests {
 
         assert_eq!(encounter.find_character(character1.id()).unwrap().name, character1.name);
         assert_eq!(encounter.find_character(character2.id()), None);
+    }
+
+    #[test]
+    fn update_character_command() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
+        encounter.add_character(character1.clone());
+
+        let cmd = character::CharacterCommand::UpdateName {
+            id: character1.ulid(),
+            name: String::from("New Name"),
+        };
+
+        let response = encounter.update_character(cmd).unwrap();
+        let updated_character = encounter.find_character(character1.id()).unwrap();
+        assert_eq!(response, CharacterCommandResponse::UpdatedCharacter(updated_character.clone()));
     }
 }
