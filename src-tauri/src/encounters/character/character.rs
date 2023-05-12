@@ -66,6 +66,11 @@ impl Character {
         self.hp.total = value;
         self.hp.current = self.hp.current.min(self.hp.total);
     }
+
+    pub fn set_current_hp(&mut self, value: i32) {
+        self.hp.current = value;
+        self.hp.current = self.hp.current.min(self.hp.total);
+    }
 }
 
 
@@ -192,6 +197,12 @@ mod tests {
         assert_eq!(character_a.hp.current, 10);
 
         character_a.set_total_hp(5);
+        assert_eq!(character_a.hp.current, 5);
+
+        character_a.set_current_hp(0);
+        assert_eq!(character_a.hp.current, 0);
+
+        character_a.set_current_hp(10);
         assert_eq!(character_a.hp.current, 5);
     }
 }
