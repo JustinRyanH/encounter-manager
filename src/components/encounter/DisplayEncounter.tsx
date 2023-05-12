@@ -4,7 +4,7 @@ import { modals } from "@mantine/modals";
 import { ArrowBendRightDown, Play, PlayPause, UserPlus } from "@phosphor-icons/react";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { EncounterCharacter } from "~/components/encounter/EncounterCharacter";
+import { DisplayEncounterCharacter } from "~/components/encounter/DisplayEncounterCharacter";
 import { EncounterProvider, useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useStyles } from "~/components/encounter/DisplayEncounter.styles";
 import { useParams } from "react-router-dom";
@@ -68,7 +68,7 @@ export function DisplayEncounter() {
       <ManageEncounter />
       <Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
         {characters.map((c) => (
-          <EncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />
+          <DisplayEncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />
         ))}
       </Accordion>
     </EncounterProvider>
