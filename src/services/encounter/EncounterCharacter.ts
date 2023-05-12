@@ -1,6 +1,6 @@
 import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
-import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
+import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
 
 interface EncounterCharacterProps {
   id: string;
