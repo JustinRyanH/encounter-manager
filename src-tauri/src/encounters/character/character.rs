@@ -1,8 +1,6 @@
 use std::cmp::Ordering;
-use std::process::Command;
 use serde::{Deserialize, Serialize};
 use ulid::Ulid;
-use commands::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::character::commands;
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
@@ -55,12 +53,14 @@ impl Character {
         self.name == other.name
     }
 
-    pub fn set_initiative_match_score(&mut self, score: i32) {
-        self.initiative_modifier = score;
+    pub fn heal(&mut self, value: i32) {
+        self.hp.current += value;
+        self.hp.current = self.hp.current.min(self.hp.total);
     }
 
-    pub fn update_name(&mut self, name: String) {
-        self.name = name;
+    pub(crate) fn damage(&mut self, value: i32) {
+        self.hp.current -= value;
+        self.hp.current = self.hp.current.max(0);
     }
 }
 
@@ -137,8 +137,8 @@ mod tests {
         let character_c = Character::new("character c", total_hp, 11);
         let mut character_d = Character::new("character d", total_hp, 10);
         let mut character_e = Character::new("character e", total_hp, 10);
-        character_d.set_initiative_match_score(18);
-        character_e.set_initiative_match_score(5);
+        character_d.initiative_modifier = 18;
+        character_e.initiative_modifier = 5;
 
         let expected_order: [Character; 5] = [
             character_c.clone(),
@@ -157,5 +157,21 @@ mod tests {
         ];
         characters.sort();
         assert_eq!(characters, expected_order.to_vec());
+    }
+
+    #[test]
+    fn test_damage_and_heal() {
+        let total_hp = 10;
+        let mut character_a = Character::new("character a", total_hp, 10);
+
+        character_a.damage(5);
+        assert_eq!(character_a.hp.current, 5);
+        character_a.damage(10);
+        assert_eq!(character_a.hp.current, 0);
+
+        character_a.heal(5);
+        assert_eq!(character_a.hp.current, 5);
+        character_a.heal(10);
+        assert_eq!(character_a.hp.current, 10);
     }
 }
