@@ -85,13 +85,13 @@ export class Encounter {
    * @param character
    */
   addCharacter = (character: EncounterCharacter) => {
-    character.encounter = this;
     this.setCharacters([...this.characters, character]);
+    this.addEncounterToCharacters();
     this.#characterAddedSignal.emit({ character: character });
   };
 
   updateCharacters = (characters: CharacterType[]) => {
-    this.characters = characters.map(this.updateOrCreateCharacter);
+    this.setCharacters(characters.map(this.updateOrCreateCharacter));
   };
 
   /**
@@ -161,6 +161,7 @@ export class Encounter {
 
   private setCharacters = (characters: Array<EncounterCharacter>) => {
     this.#characters.value = [...characters];
+    this.addEncounterToCharacters();
   };
 
   private setActiveCharacter = (character: EncounterCharacter | null) => {
@@ -179,5 +180,9 @@ export class Encounter {
     if (!existingCharacter) return EncounterCharacter.newCharacter(character);
     existingCharacter.update(character);
     return existingCharacter;
+  };
+
+  private addEncounterToCharacters = () => {
+    this.characters.filter((c) => !c.encounter).forEach((c) => (c.encounter = this));
   };
 }

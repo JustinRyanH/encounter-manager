@@ -212,6 +212,16 @@ describe("Encounter", function () {
       expect(characterA.id).toEqual("test-a");
     });
 
+    test("adds the encounter to the character", () => {
+      const encounters = new Encounter({
+        name: "Test Encounter",
+        id: "encounter-a",
+      });
+      encounters.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
+      const characterA = encounters.findCharacter("test-a") as EncounterCharacter;
+      expect(characterA.encounter).toEqual(encounters);
+    });
+
     test("keeps existing instances of characters if they exist", () => {
       const encounters = new Encounter({
         name: "Test Encounter",
