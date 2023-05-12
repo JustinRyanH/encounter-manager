@@ -23,10 +23,9 @@ export class Encounter {
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
-  constructor({ name, id, characters = [] }: EncounterProps) {
+  constructor({ name, id }: EncounterProps) {
     this.#id = id;
     this.#name.value = name;
-    if (characters) this.setCharacters(characters);
   }
 
   get newViewEncounter() {
@@ -95,7 +94,6 @@ export class Encounter {
   };
 
   updateCharacters = (characters: CharacterType[]) => {
-    console.log(characters);
     this.characters = characters.map(this.updateOrCreateCharacter);
   };
 
@@ -121,7 +119,6 @@ export class Encounter {
    * in the initiative order when the encounter has been stopped.
    */
   restartEncounter = () => {
-    console.log("Restart");
     if (!this.#lastActiveCharacter) {
       this.startEncounter();
       return;
@@ -158,7 +155,6 @@ export class Encounter {
     const existingCharacter = this.findCharacter(id);
     if (!existingCharacter) return;
     const result = await updateCharacterName({ encounterId: this.id, characterId: id, name });
-    console.log(result);
   }
 
   private setCharacters = (characters: Array<EncounterCharacter>) => {

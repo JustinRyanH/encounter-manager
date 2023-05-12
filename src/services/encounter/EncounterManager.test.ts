@@ -3,10 +3,7 @@ import { describe, expect, Mock, test, vi } from "vitest";
 import { EncounterManager } from "~/services/encounter/EncounterManager";
 import * as Commands from "./Commands";
 import { Encounter } from "~/services/encounter/Encounter";
-import {
-  buildMockCharacter,
-  buildMockEncounter,
-} from "~/services/encounter/mocks.test";
+import { buildMockCharacter, buildMockEncounter } from "~/services/encounter/mocks";
 
 vi.mock("./Commands");
 
@@ -18,9 +15,7 @@ describe("EncounterManager", function () {
 
   describe("refreshList", function () {
     test("can refresh list of encounters", async () => {
-      (Commands.listEncounter as Mock).mockResolvedValueOnce([
-        buildMockEncounter(),
-      ]);
+      (Commands.listEncounter as Mock).mockResolvedValueOnce([buildMockEncounter()]);
 
       const manager = new EncounterManager();
       await manager.refreshList();
@@ -28,9 +23,7 @@ describe("EncounterManager", function () {
     });
 
     test("adds new encounters to the list", async () => {
-      (Commands.listEncounter as Mock).mockResolvedValueOnce([
-        buildMockEncounter(),
-      ]);
+      (Commands.listEncounter as Mock).mockResolvedValueOnce([buildMockEncounter()]);
 
       const manager = new EncounterManager();
       await manager.refreshList();
@@ -59,10 +52,7 @@ describe("EncounterManager", function () {
       const manager = new EncounterManager();
       await manager.refreshList();
 
-      expect(manager.getEncounter("300")?.characters.map((c) => c.id)).toEqual([
-        "100",
-        "200",
-      ]);
+      expect(manager.getEncounter("300")?.characters.map((c) => c.id)).toEqual(["100", "200"]);
     });
 
     test("updates characters", async () => {
@@ -79,27 +69,18 @@ describe("EncounterManager", function () {
       const manager = new EncounterManager();
       await manager.refreshList();
 
-      expect(manager.getEncounter("300")?.characters.map((c) => c.id)).toEqual([
-        "100",
-        "200",
-      ]);
+      expect(manager.getEncounter("300")?.characters.map((c) => c.id)).toEqual(["100", "200"]);
 
-      (Commands.listEncounter as Mock).mockResolvedValueOnce([
-        buildMockEncounter({ characters: [mockCharacterA] }),
-      ]);
+      (Commands.listEncounter as Mock).mockResolvedValueOnce([buildMockEncounter({ characters: [mockCharacterA] })]);
       await manager.refreshList();
 
-      expect(manager.getEncounter("300")?.characters.map((c) => c.id)).toEqual([
-        "100",
-      ]);
+      expect(manager.getEncounter("300")?.characters.map((c) => c.id)).toEqual(["100"]);
     });
   });
 
   describe("getEncounter", () => {
     test("get encounter", async () => {
-      (Commands.listEncounter as Mock).mockResolvedValueOnce([
-        buildMockEncounter({ id: "300", name: "Test" }),
-      ]);
+      (Commands.listEncounter as Mock).mockResolvedValueOnce([buildMockEncounter({ id: "300", name: "Test" })]);
 
       const manager = new EncounterManager();
       await manager.refreshList();

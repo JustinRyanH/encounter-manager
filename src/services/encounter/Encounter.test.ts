@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from "vitest";
 import { Encounter } from "~/services/encounter/Encounter";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
-import { buildMockCharacter } from "~/services/encounter/mocks.test";
+import { buildMockCharacter } from "~/services/encounter/mocks";
 
 describe("Encounter", function () {
   test("does not have any characters by default", function () {
@@ -27,8 +27,9 @@ describe("Encounter", function () {
     const encounters = new Encounter({
       name: "Test Encounter",
       id: "encounter-a",
-      characters: [characterA, characterB],
     });
+    encounters.addCharacter(characterA);
+    encounters.addCharacter(characterB);
 
     expect(encounters.findCharacter("test-a")).toBe(characterA);
     expect(encounters.findCharacter("test-b")).toBe(characterB);
@@ -75,8 +76,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.onCharacterAdded(observer);
 
       const newCharacter = new EncounterCharacter({
@@ -106,8 +109,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.nextCharacter();
 
       expect(encounters.activeCharacter).toEqual(characterA);
@@ -129,8 +134,9 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
 
       expect(encounters.activeCharacter).toEqual(null);
       expect(characterA.inPlay).toEqual(false);
@@ -165,8 +171,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.startEncounter();
 
       encounters.activeCharacterObserver.add(listener);
@@ -251,8 +259,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.stopEncounter();
 
       expect(encounters.activeCharacter).toEqual(null);
@@ -277,8 +287,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.startEncounter();
       encounters.nextCharacter();
 
@@ -319,8 +331,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.startEncounter();
 
       expect(encounters.activeCharacter).toEqual(characterA);
@@ -347,8 +361,10 @@ describe("Encounter", function () {
       const encounters = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounters.addCharacter(characterA);
+      encounters.addCharacter(characterB);
+
       encounters.startEncounter();
       encounters.nextCharacter();
 

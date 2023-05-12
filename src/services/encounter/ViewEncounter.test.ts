@@ -21,8 +21,10 @@ describe("ViewEncounter", () => {
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
+
       const viewEncounter = new ViewEncounter({ encounter });
 
       encounter.startEncounter();
@@ -44,8 +46,9 @@ describe("ViewEncounter", () => {
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
       const viewEncounter = new ViewEncounter({ encounter });
 
       expect(encounter.activeCharacter).toEqual(null);
@@ -67,8 +70,9 @@ describe("ViewEncounter", () => {
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
       const viewEncounter = new ViewEncounter({ encounter });
 
       expect(viewEncounter.openedCharacters).toEqual([]);
@@ -96,8 +100,9 @@ describe("ViewEncounter", () => {
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
       const viewEncounter = new ViewEncounter({ encounter });
 
       encounter.startEncounter();
@@ -122,8 +127,9 @@ describe("ViewEncounter", () => {
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
-        characters: [characterA, characterB],
       });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
       const viewEncounter = new ViewEncounter({ encounter });
 
       encounter.startEncounter();
@@ -145,11 +151,9 @@ describe("ViewEncounter", () => {
         initiative: 5,
       });
 
-      const encounter = new Encounter({
-        name: "Test Encounter",
-        id: "encounter-a",
-        characters: [characterA, characterB],
-      });
+      const encounter = new Encounter({ name: "Test Encounter", id: "encounter-a" });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
       const viewEncounter = new ViewEncounter({ encounter });
 
       viewEncounter.toggle(characterA.id);
@@ -173,11 +177,10 @@ describe("ViewEncounter", () => {
         initiative: 5,
       });
 
-      const encounter = new Encounter({
-        name: "Test Encounter",
-        id: "encounter-a",
-        characters: [characterA, characterB],
-      });
+      const encounter = new Encounter({ name: "Test Encounter", id: "encounter-a" });
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
+
       const viewEncounter = new ViewEncounter({ encounter });
 
       encounter.startEncounter();
