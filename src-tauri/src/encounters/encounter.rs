@@ -1,10 +1,9 @@
 use std::collections::HashMap;
-use std::sync::{Arc, LockResult};
+use std::sync::{Arc};
 
 use tokio::sync::{Mutex, MutexGuard};
 use tauri::State;
 use serde::{Deserialize, Serialize};
-use tauri::utils::assets::phf::PhfHash;
 use ulid::Ulid;
 use crate::encounters::Character;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
@@ -102,10 +101,67 @@ impl Encounter {
     }
 
     pub fn update_character(&mut self, cmd: CharacterCommand) -> Result<CharacterCommandResponse, String> {
+        
         match cmd {
             CharacterCommand::UpdateName { id, name } => {
                 if let Some(character) = self.find_character_mut(id) {
-                    character.update_name(name);
+                    character.name = name;
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::UpdateInitiative { id, initiative } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.set_initiative(initiative);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::UpdateInitiativeModifier { id, modifier } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.set_initiative_modifier(modifier);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::UpdateCurrentHp { id, hp } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.set_current_hp(hp);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::UpdateTotalHp { id, hp  } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.set_total_hp(hp);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::UpdateTemporaryHp { id, hp } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.set_temporary_hp(hp);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::Heal { id, hp } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.heal(hp);
+                    Ok(CharacterCommandResponse::updated(character))
+                } else {
+                    Err(format!("Character with id {} not found", id))
+                }
+            }
+            CharacterCommand::Damage { id, hp } => {
+                if let Some(character) = self.find_character_mut(id) {
+                    character.damage(hp);
                     Ok(CharacterCommandResponse::updated(character))
                 } else {
                     Err(format!("Character with id {} not found", id))
@@ -181,6 +237,15 @@ mod tests {
         let cmd = character::CharacterCommand::UpdateName {
             id: character1.ulid(),
             name: String::from("New Name"),
+        };
+
+        let response = encounter.update_character(cmd).unwrap();
+        let updated_character = encounter.find_character(character1.id()).unwrap();
+        assert_eq!(response, CharacterCommandResponse::UpdatedCharacter(updated_character.clone()));
+
+        let cmd = character::CharacterCommand::UpdateInitiative {
+            id: character1.ulid(),
+            initiative: 20,
         };
 
         let response = encounter.update_character(cmd).unwrap();

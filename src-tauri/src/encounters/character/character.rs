@@ -73,6 +73,14 @@ impl Character {
     pub fn set_temporary_hp(&mut self, value: i32) {
         self.hp.temporary = value.max(0);
     }
+
+    pub fn set_initiative(&mut self, value: i32) {
+        self.initiative = value.max(-20);
+    }
+
+    pub fn set_initiative_modifier(&mut self, value: i32) {
+        self.initiative_modifier = value.max(-20);
+    }
 }
 
 
@@ -219,5 +227,33 @@ mod tests {
 
         character_a.set_temporary_hp(-5);
         assert_eq!(character_a.hp.temporary, 0);
+    }
+
+    #[test]
+    fn test_set_initiative() {
+        let total_hp = 10;
+        let mut character_a = Character::new("character a", total_hp, 10);
+
+        assert_eq!(character_a.initiative, 10);
+
+        character_a.set_initiative(5);
+        assert_eq!(character_a.initiative, 5);
+
+        character_a.set_initiative(-21);
+        assert_eq!(character_a.initiative, -20);
+    }
+
+    #[test]
+    fn test_set_initiative_modifier() {
+        let total_hp = 10;
+        let mut character_a = Character::new("character a", total_hp, 10);
+
+        assert_eq!(character_a.initiative_modifier, 0);
+
+        character_a.set_initiative_modifier(5);
+        assert_eq!(character_a.initiative_modifier, 5);
+
+        character_a.set_initiative_modifier(-21);
+        assert_eq!(character_a.initiative_modifier, -20);
     }
 }
