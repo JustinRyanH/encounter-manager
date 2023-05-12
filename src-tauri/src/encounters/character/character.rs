@@ -1,7 +1,6 @@
 use std::cmp::Ordering;
 use serde::{Deserialize, Serialize};
 use ulid::Ulid;
-use crate::encounters::character::commands;
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -41,8 +40,8 @@ impl Character {
         self.id.to_string()
     }
 
-    pub fn ulid(&self) -> Ulid  {
-     self.id
+    pub fn ulid(&self) -> Ulid {
+        self.id
     }
 
     pub fn is_same_as(&self, other: &Character) -> bool {
@@ -58,9 +57,14 @@ impl Character {
         self.hp.current = self.hp.current.min(self.hp.total);
     }
 
-    pub(crate) fn damage(&mut self, value: i32) {
+    pub fn damage(&mut self, value: i32) {
         self.hp.current -= value;
         self.hp.current = self.hp.current.max(0);
+    }
+
+    pub fn set_total_hp(&mut self, value: i32) {
+        self.hp.total = value;
+        self.hp.current = self.hp.current.min(self.hp.total);
     }
 }
 
@@ -173,5 +177,21 @@ mod tests {
         assert_eq!(character_a.hp.current, 5);
         character_a.heal(10);
         assert_eq!(character_a.hp.current, 10);
+    }
+
+    #[test]
+    fn test_hp_values() {
+        let total_hp = 10;
+        let mut character_a = Character::new("character a", total_hp, 10);
+
+        assert_eq!(character_a.hp.current, 10);
+        assert_eq!(character_a.hp.total, 10);
+        assert_eq!(character_a.hp.temporary, 0);
+
+        character_a.set_total_hp(20);
+        assert_eq!(character_a.hp.current, 10);
+
+        character_a.set_total_hp(5);
+        assert_eq!(character_a.hp.current, 5);
     }
 }
