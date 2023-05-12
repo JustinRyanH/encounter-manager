@@ -1,15 +1,15 @@
 import { Signal, SignalConnection } from "typed-signals";
 
-import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
+import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, StopObserving, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import { CharacterType } from "~/types/EncounterTypes";
 import { updateCharacterName } from "~/services/encounter/Commands";
 
-type CharacterAddedMessage = ({ character }: { character: ActiveCharacter }) => void;
+type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
 interface EncounterProps {
-  characters?: Array<ActiveCharacter>;
+  characters?: Array<EncounterCharacter>;
   name: string;
   id: string;
 }
@@ -17,10 +17,10 @@ interface EncounterProps {
 export class Encounter {
   #id: string;
   #name: ValueObserver<string> = new ValueObserver<string>("");
-  #lastActiveCharacter: ActiveCharacter | null = null;
+  #lastActiveCharacter: EncounterCharacter | null = null;
   #initiativeMap: Map<string, StopObserving> = new Map();
-  #activeCharacter: ValueObserver<ActiveCharacter | null> = new ValueObserver<ActiveCharacter | null>(null);
-  #characters: ValueObserver<Array<ActiveCharacter>> = new ValueObserver<Array<ActiveCharacter>>([]);
+  #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
+  #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
   constructor({ name, id, characters = [] }: EncounterProps) {
@@ -36,32 +36,32 @@ export class Encounter {
   /**
    * Returns the characters in the encounter.
    */
-  get characters(): Array<ActiveCharacter> {
+  get characters(): Array<EncounterCharacter> {
     return this.#characters.value;
   }
 
-  set characters(value: Array<ActiveCharacter>) {
+  set characters(value: Array<EncounterCharacter>) {
     this.setCharacters(value);
   }
 
   /**
    * Returns a readonly observer for the characters.
    */
-  get charactersObserver(): ReadonlyValueObserver<Array<ActiveCharacter>> {
+  get charactersObserver(): ReadonlyValueObserver<Array<EncounterCharacter>> {
     return this.#characters.readonly;
   }
 
   /**
    * The active character in the encounter.
    */
-  get activeCharacter(): ActiveCharacter | null {
+  get activeCharacter(): EncounterCharacter | null {
     return this.#activeCharacter.value;
   }
 
   /**
    * Returns a readonly observer for the active character.
    */
-  get activeCharacterObserver(): ReadonlyValueObserver<ActiveCharacter | null> {
+  get activeCharacterObserver(): ReadonlyValueObserver<EncounterCharacter | null> {
     return this.#activeCharacter.readonly;
   }
 
@@ -89,7 +89,7 @@ export class Encounter {
    * Adds a character to the encounter and sorts the characters by initiative.
    * @param initiativeCharacter
    */
-  addCharacter = (initiativeCharacter: ActiveCharacter) => {
+  addCharacter = (initiativeCharacter: EncounterCharacter) => {
     this.setCharacters([...this.characters, initiativeCharacter]);
     this.#characterAddedSignal.emit({ character: initiativeCharacter });
   };
@@ -161,11 +161,11 @@ export class Encounter {
     console.log(result);
   }
 
-  private setCharacters = (characters: Array<ActiveCharacter>) => {
+  private setCharacters = (characters: Array<EncounterCharacter>) => {
     this.#characters.value = [...characters];
   };
 
-  private setActiveCharacter = (character: ActiveCharacter | null) => {
+  private setActiveCharacter = (character: EncounterCharacter | null) => {
     this.#lastActiveCharacter = this.activeCharacter;
     this.#activeCharacter.value = character;
     if (character) {
@@ -178,7 +178,7 @@ export class Encounter {
 
   private updateOrCreateCharacter = (character: CharacterType) => {
     const existingCharacter = this.findCharacter(character.id);
-    if (!existingCharacter) return ActiveCharacter.newCharacter(character);
+    if (!existingCharacter) return EncounterCharacter.newCharacter(character);
     existingCharacter.update(character);
     return existingCharacter;
   };

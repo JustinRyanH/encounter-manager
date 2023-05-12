@@ -1,10 +1,6 @@
 import { Encounter } from "~/services/encounter/Encounter";
-import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
-import {
-  ReadonlyValueObserver,
-  ValueChangeMessageProps,
-  ValueObserver,
-} from "~/services/ValueObserver";
+import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
+import { ReadonlyValueObserver, ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
 
 export class ViewEncounter {
   #encounter: Encounter;
@@ -24,18 +20,14 @@ export class ViewEncounter {
   }
 
   open(characterId: string): void {
-    const id = this.#encounter.characters.find(
-      (char) => char.id === characterId
-    )?.id;
+    const id = this.#encounter.characters.find((char) => char.id === characterId)?.id;
     if (id) {
       this.#openedCharacters.value = [...this.openedCharacters, id];
     }
   }
 
   close(characterId: string): void {
-    this.#openedCharacters.value = this.openedCharacters.filter(
-      (character) => character !== characterId
-    );
+    this.#openedCharacters.value = this.openedCharacters.filter((character) => character !== characterId);
   }
 
   toggle(characterId: string): void {
@@ -50,10 +42,7 @@ export class ViewEncounter {
     return this.openedCharacters.some((character) => character === characterId);
   }
 
-  private onChangeActiveCharacter = ({
-    oldValue,
-    newValue,
-  }: ValueChangeMessageProps<ActiveCharacter | null>) => {
+  private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<EncounterCharacter | null>) => {
     let oldValues: Array<string> = this.openedCharacters;
     if (oldValue) {
       oldValues = oldValues.filter((character) => character !== oldValue.id);

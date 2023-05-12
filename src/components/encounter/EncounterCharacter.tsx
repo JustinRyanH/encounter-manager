@@ -12,7 +12,7 @@ import {
   Text,
 } from "@mantine/core";
 
-import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
+import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { HpAttribute } from "~/components/encounter/HpAttribute";
@@ -25,26 +25,19 @@ import { useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useDisclosure } from "@mantine/hooks";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
-function InitiativeAttribute({ character }: { character: ActiveCharacter }) {
+function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
   const initiative = useWatchValueObserver(character.initiativeObserver);
 
   return (
     <Attribute title="INITIATIVE">
       <EditPopover titleComponent={<Text size="sm">{initiative}</Text>}>
-        <UpdateNumber
-          placeholder="Initiative"
-          updateAttribute={character.updateInitiative}
-        />
+        <UpdateNumber placeholder="Initiative" updateAttribute={character.updateInitiative} />
       </EditPopover>
     </Attribute>
   );
 }
 
-function EncounterCharacterControl({
-  character,
-}: {
-  character: ActiveCharacter;
-}): JSX.Element {
+function EncounterCharacterControl({ character }: { character: EncounterCharacter }): JSX.Element {
   const name = useWatchValueObserver(character.nameObserver);
   const current = useWatchValueObserver(character.hp.currentObserver);
   const total = useWatchValueObserver(character.hp.totalObserver);
@@ -66,11 +59,7 @@ function EncounterCharacterControl({
       <Group spacing="xs">
         <Popover position="top" opened={opened}>
           <Popover.Target>
-            <Text
-              onMouseEnter={() => temp && open()}
-              onMouseLeave={close}
-              color={color}
-            >
+            <Text onMouseEnter={() => temp && open()} onMouseLeave={close} color={color}>
               {current + temp}
             </Text>
           </Popover.Target>
@@ -109,11 +98,7 @@ interface EncounterControlProps extends AccordionControlProps {
   nextTurn: () => void;
 }
 
-function EncounterControl({
-  inPlay,
-  nextTurn,
-  ...props
-}: EncounterControlProps) {
+function EncounterControl({ inPlay, nextTurn, ...props }: EncounterControlProps) {
   return (
     <Paper radius="md">
       <Box
@@ -141,14 +126,11 @@ function EncounterControl({
 }
 
 interface EncounterCharacterProps {
-  character: ActiveCharacter;
+  character: EncounterCharacter;
   viewEncounter: ViewEncounter;
 }
 
-export function EncounterCharacter({
-  character,
-  viewEncounter,
-}: EncounterCharacterProps): JSX.Element {
+export function EncounterCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
   const encounter = useEncounterContext();
 
   const inPlay = useWatchValueObserver(character.inPlayObserver);

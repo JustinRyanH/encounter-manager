@@ -1,18 +1,18 @@
 import { describe, expect, test } from "vitest";
 
-import { ActiveCharacter } from "~/services/encounter/ActiveCharacter";
+import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { Encounter } from "~/services/encounter/Encounter";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
 describe("ViewEncounter", () => {
   describe("openedCharacters", () => {
     test("returns the active character", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,
@@ -30,12 +30,12 @@ describe("ViewEncounter", () => {
     });
 
     test("returns an empty array if there is no active character", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,
@@ -53,12 +53,12 @@ describe("ViewEncounter", () => {
     });
 
     test("allows adding new characters be opened", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,
@@ -78,19 +78,16 @@ describe("ViewEncounter", () => {
 
       viewEncounter.open(characterB.id);
 
-      expect(viewEncounter.openedCharacters).toEqual([
-        characterA.id,
-        characterB.id,
-      ]);
+      expect(viewEncounter.openedCharacters).toEqual([characterA.id, characterB.id]);
     });
 
     test("removes the previous character from opened when active character changes", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,
@@ -111,12 +108,12 @@ describe("ViewEncounter", () => {
     });
 
     test("allows closing a character", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,
@@ -137,12 +134,12 @@ describe("ViewEncounter", () => {
     });
 
     test("allows toggling a character", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,
@@ -165,12 +162,12 @@ describe("ViewEncounter", () => {
 
   describe("isOpened", () => {
     test("returns true if the character is opened", () => {
-      const characterA = new ActiveCharacter({
+      const characterA = new EncounterCharacter({
         id: "test-a",
         name: "A",
         initiative: 10,
       });
-      const characterB = new ActiveCharacter({
+      const characterB = new EncounterCharacter({
         id: "test-b",
         name: "B",
         initiative: 5,

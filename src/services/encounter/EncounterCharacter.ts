@@ -1,13 +1,8 @@
 import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
-import {
-  ReadonlyValueObserver,
-  StopObserving,
-  ValueChangeMessage,
-  ValueObserver,
-} from "../ValueObserver";
+import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "../ValueObserver";
 import { notifyErrors } from "~/services/notifications";
 
-interface InitiativeCharacterProps {
+interface EncounterCharacterProps {
   id: string;
   name: string;
   initiative: number;
@@ -16,7 +11,7 @@ interface InitiativeCharacterProps {
   hp?: HitPointsProps;
 }
 
-interface CharacterUpdateProps {
+interface EncounterCharacterUpdateProps {
   id: string;
   name?: string;
   initiative?: number;
@@ -28,7 +23,7 @@ interface CharacterUpdateProps {
 /**
  * A Tracked Character
  */
-export class ActiveCharacter {
+export class EncounterCharacter {
   static ValidateName = (name: string | null): string[] => {
     if (!name) return ["Name cannot be empty"];
     return [];
@@ -39,8 +34,8 @@ export class ActiveCharacter {
     return [];
   }
 
-  static newCharacter(param: InitiativeCharacterProps): ActiveCharacter {
-    return new ActiveCharacter(param);
+  static newCharacter(param: EncounterCharacterProps): EncounterCharacter {
+    return new EncounterCharacter(param);
   }
 
   #id: string;
@@ -49,13 +44,7 @@ export class ActiveCharacter {
   #hp: HitPoints = new HitPoints();
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-  constructor({
-    id,
-    name,
-    initiative,
-    totalHp: totalHp = 10,
-    hp,
-  }: InitiativeCharacterProps) {
+  constructor({ id, name, initiative, totalHp: totalHp = 10, hp }: EncounterCharacterProps) {
     this.#id = id;
     this.#initiative = new ValueObserver(initiative);
     this.#name = new ValueObserver(name);
@@ -150,15 +139,13 @@ export class ActiveCharacter {
     return this.#hp;
   }
 
-  update(values: CharacterUpdateProps) {
+  update(values: EncounterCharacterUpdateProps) {
     if (values.id !== this.id) throw new Error("Id Mismatch for character");
     if (values.name && values.name !== this.name) this.name = values.name;
-    if (values.initiative && values.initiative !== this.initiative)
-      this.initiative = values.initiative;
+    if (values.initiative && values.initiative !== this.initiative) this.initiative = values.initiative;
     if (values.hp) {
       const { current, total, temp } = values.hp;
-      if (current !== undefined && current !== this.hp.current)
-        this.hp.current = current;
+      if (current !== undefined && current !== this.hp.current) this.hp.current = current;
       if (total !== undefined && total !== this.hp.total) this.hp.total = total;
       if (temp !== undefined && temp !== this.hp.temp) this.hp.temp = temp;
     }
@@ -192,8 +179,6 @@ export class ActiveCharacter {
     return () => this.#initiative.remove(message);
   };
 
-  #validateName = (name: string | null): string[] =>
-    ActiveCharacter.ValidateName(name);
-  #validateInitiative = (value: number | null): string[] =>
-    ActiveCharacter.ValidateInitiative(value);
+  #validateName = (name: string | null): string[] => EncounterCharacter.ValidateName(name);
+  #validateInitiative = (value: number | null): string[] => EncounterCharacter.ValidateInitiative(value);
 }
