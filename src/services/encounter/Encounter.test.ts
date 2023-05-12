@@ -5,11 +5,11 @@ import { buildMockCharacter } from "~/services/encounter/mocks";
 
 describe("Encounter", function () {
   test("does not have any characters by default", function () {
-    const encounters = new Encounter({
+    const encounter = new Encounter({
       name: "Test Encounter",
       id: "encounter-a",
     });
-    expect(encounters.characters).toEqual([]);
+    expect(encounter.characters).toEqual([]);
   });
 
   test("can be initialized with characters", function () {
@@ -24,15 +24,15 @@ describe("Encounter", function () {
       initiative: 2,
     });
 
-    const encounters = new Encounter({
+    const encounter = new Encounter({
       name: "Test Encounter",
       id: "encounter-a",
     });
-    encounters.addCharacter(characterA);
-    encounters.addCharacter(characterB);
+    encounter.addCharacter(characterA);
+    encounter.addCharacter(characterB);
 
-    expect(encounters.findCharacter("test-a")).toBe(characterA);
-    expect(encounters.findCharacter("test-b")).toBe(characterB);
+    expect(encounter.findCharacter("test-a")).toBe(characterA);
+    expect(encounter.findCharacter("test-b")).toBe(characterB);
   });
 
   test("newCharacter", () => {
@@ -50,14 +50,14 @@ describe("Encounter", function () {
 
   describe("addCharacter", function () {
     test("adds a character to the encounter", function () {
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
 
-      encounters.addCharacter(new EncounterCharacter({ id: "test-a", name: "A", initiative: 1 }));
+      encounter.addCharacter(new EncounterCharacter({ id: "test-a", name: "A", initiative: 1 }));
 
-      expect(encounters.characters.map((c) => c.name)).toEqual(["A"]);
+      expect(encounter.characters.map((c) => c.name)).toEqual(["A"]);
     });
 
     test("notifies the `characterAdded` signal", function () {
@@ -73,21 +73,21 @@ describe("Encounter", function () {
         initiative: 15,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.onCharacterAdded(observer);
+      encounter.onCharacterAdded(observer);
 
       const newCharacter = new EncounterCharacter({
         id: "test-c",
         name: "C",
         initiative: 20,
       });
-      encounters.addCharacter(newCharacter);
+      encounter.addCharacter(newCharacter);
 
       expect(observer).toHaveBeenCalledWith({ character: newCharacter });
     });
@@ -106,16 +106,16 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.nextCharacter();
+      encounter.nextCharacter();
 
-      expect(encounters.activeCharacter).toEqual(characterA);
+      expect(encounter.activeCharacter).toEqual(characterA);
       expect(characterA.inPlay).toEqual(true);
     });
 
@@ -131,26 +131,26 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      expect(encounters.activeCharacter).toEqual(null);
+      expect(encounter.activeCharacter).toEqual(null);
       expect(characterA.inPlay).toEqual(false);
       expect(characterB.inPlay).toEqual(false);
 
-      encounters.nextCharacter();
+      encounter.nextCharacter();
 
-      expect(encounters.activeCharacter).toEqual(characterA);
+      expect(encounter.activeCharacter).toEqual(characterA);
       expect(characterA.inPlay).toEqual(true);
       expect(characterB.inPlay).toEqual(false);
 
-      encounters.nextCharacter();
+      encounter.nextCharacter();
 
-      expect(encounters.activeCharacter).toEqual(characterB);
+      expect(encounter.activeCharacter).toEqual(characterB);
       expect(characterA.inPlay).toEqual(false);
       expect(characterB.inPlay).toEqual(true);
     });
@@ -168,18 +168,18 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.startEncounter();
+      encounter.startEncounter();
 
-      encounters.activeCharacterObserver.add(listener);
+      encounter.activeCharacterObserver.add(listener);
 
-      encounters.nextCharacter();
+      encounter.nextCharacter();
 
       expect(listener).toHaveBeenCalledWith({
         oldValue: characterA,
@@ -201,53 +201,53 @@ describe("Encounter", function () {
     });
 
     test("loads in characters from server", () => {
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
-      const characterA = encounters.findCharacter("test-a") as EncounterCharacter;
+      encounter.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterA.name).toEqual("A");
       expect(characterA.id).toEqual("test-a");
     });
 
     test("adds the encounter to the character", () => {
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
-      const characterA = encounters.findCharacter("test-a") as EncounterCharacter;
-      expect(characterA.encounter).toEqual(encounters);
+      encounter.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      expect(characterA.encounter).toEqual(encounter);
     });
 
     test("keeps existing instances of characters if they exist", () => {
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.updateCharacters([originalCharacterA]);
-      const characterA = encounters.findCharacter("test-a") as EncounterCharacter;
+      encounter.updateCharacters([originalCharacterA]);
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterA.initiative).toEqual(1);
 
-      encounters.updateCharacters([updatedCharacterA]);
-      const characterAReload = encounters.findCharacter("test-a");
+      encounter.updateCharacters([updatedCharacterA]);
+      const characterAReload = encounter.findCharacter("test-a");
       expect(characterAReload).toBe(characterA);
     });
 
     test("updates the active character if it is updated", () => {
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.updateCharacters([originalCharacterA]);
-      const characterA = encounters.findCharacter("test-a") as EncounterCharacter;
+      encounter.updateCharacters([originalCharacterA]);
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterA.initiative).toEqual(1);
 
-      encounters.updateCharacters([updatedCharacterA]);
+      encounter.updateCharacters([updatedCharacterA]);
 
       expect(characterA.initiative).toEqual(2);
     });
@@ -266,20 +266,20 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.stopEncounter();
+      encounter.stopEncounter();
 
-      expect(encounters.activeCharacter).toEqual(null);
+      expect(encounter.activeCharacter).toEqual(null);
 
-      encounters.startEncounter();
+      encounter.startEncounter();
 
-      expect(encounters.activeCharacter).toEqual(characterA);
+      expect(encounter.activeCharacter).toEqual(characterA);
     });
 
     test("no-ops if the character is already active character", function () {
@@ -294,34 +294,34 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.startEncounter();
-      encounters.nextCharacter();
+      encounter.startEncounter();
+      encounter.nextCharacter();
 
-      expect(encounters.activeCharacter).toEqual(characterB);
+      expect(encounter.activeCharacter).toEqual(characterB);
 
-      encounters.startEncounter();
+      encounter.startEncounter();
 
-      expect(encounters.activeCharacter).toEqual(characterB);
+      expect(encounter.activeCharacter).toEqual(characterB);
     });
 
     test("no-ops if there are no characters", function () {
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
 
-      expect(encounters.activeCharacter).toEqual(null);
+      expect(encounter.activeCharacter).toEqual(null);
 
-      encounters.startEncounter();
+      encounter.startEncounter();
 
-      expect(encounters.activeCharacter).toEqual(null);
+      expect(encounter.activeCharacter).toEqual(null);
     });
   });
 
@@ -338,20 +338,20 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.startEncounter();
+      encounter.startEncounter();
 
-      expect(encounters.activeCharacter).toEqual(characterA);
+      expect(encounter.activeCharacter).toEqual(characterA);
 
-      encounters.stopEncounter();
+      encounter.stopEncounter();
 
-      expect(encounters.activeCharacter).toEqual(null);
+      expect(encounter.activeCharacter).toEqual(null);
     });
   });
 
@@ -368,25 +368,25 @@ describe("Encounter", function () {
         initiative: 5,
       });
 
-      const encounters = new Encounter({
+      const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounters.addCharacter(characterA);
-      encounters.addCharacter(characterB);
+      encounter.addCharacter(characterA);
+      encounter.addCharacter(characterB);
 
-      encounters.startEncounter();
-      encounters.nextCharacter();
+      encounter.startEncounter();
+      encounter.nextCharacter();
 
-      expect(encounters.activeCharacter).toEqual(characterB);
+      expect(encounter.activeCharacter).toEqual(characterB);
 
-      encounters.stopEncounter();
+      encounter.stopEncounter();
 
-      expect(encounters.activeCharacter).toEqual(null);
+      expect(encounter.activeCharacter).toEqual(null);
 
-      encounters.restartEncounter();
+      encounter.restartEncounter();
 
-      expect(encounters.activeCharacter).toEqual(characterB);
+      expect(encounter.activeCharacter).toEqual(characterB);
     });
   });
 });
