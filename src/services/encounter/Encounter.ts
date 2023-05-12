@@ -18,7 +18,6 @@ export class Encounter {
   #id: string;
   #name: ValueObserver<string> = new ValueObserver<string>("");
   #lastActiveCharacter: EncounterCharacter | null = null;
-  #initiativeMap: Map<string, StopObserving> = new Map();
   #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
