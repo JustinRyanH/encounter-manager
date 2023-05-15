@@ -24,6 +24,8 @@ serde_yaml = "0.9.21"
 
 tempdir = "0.3.7"
 ulid = { version = "1.0.0", features = ["serde"] }
+specta = "1.0.4"
+tauri-specta = { version = "1.0.0", features = ["javascript", "typescript"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
