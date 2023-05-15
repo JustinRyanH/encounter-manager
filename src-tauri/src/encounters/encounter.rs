@@ -143,7 +143,7 @@ impl Encounter {
 #[cfg(test)]
 mod tests {
     use crate::encounters::*;
-    use crate::encounters::character::CharacterCommandResponse;
+    use crate::encounters::character::{CharacterChangeMessages, CharacterCommandResponse};
     use crate::encounters::encounter::Encounter;
 
     #[test]
@@ -210,7 +210,7 @@ mod tests {
 
         let response = encounter.update_character(cmd).unwrap();
         let updated_character = encounter.find_character(character1.id()).unwrap();
-        assert_eq!(response, CharacterCommandResponse::UpdatedCharacter(updated_character.clone()));
+        assert_eq!(response, CharacterCommandResponse::UpdatedCharacter { character: updated_character.clone(), messages: CharacterChangeMessages::none() });
 
         let cmd = character::CharacterCommand::UpdateInitiative {
             id: character1.ulid(),
@@ -219,6 +219,6 @@ mod tests {
 
         let response = encounter.update_character(cmd).unwrap();
         let updated_character = encounter.find_character(character1.id()).unwrap();
-        assert_eq!(response, CharacterCommandResponse::UpdatedCharacter(updated_character.clone()));
+        assert_eq!(response, CharacterCommandResponse::UpdatedCharacter { character: updated_character.clone(), messages: CharacterChangeMessages::none() });
     }
 }
