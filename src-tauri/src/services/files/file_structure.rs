@@ -27,15 +27,37 @@ pub enum FsCommand {
 
 #[derive(Clone, Debug, Serialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
+pub struct DirectoryResponse {
+    pub data: FileData,
+    pub entries: Vec<FileData>,
+}
+
+#[derive(Clone, Debug, Serialize, PartialEq, Type)]
+#[serde(rename_all = "camelCase")]
+pub struct FileResponse {
+    pub data: FileData,
+}
+
+#[derive(Clone, Debug, Serialize, PartialEq, Type)]
+#[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
-    Directory {
-        data: FileData,
-        entries: Vec<FileData>,
-    },
-    File {
-        data: FileData,
-    },
+    Directory(DirectoryResponse),
+    File(FileResponse),
     None,
+}
+
+impl QueryCommandResponse {
+    pub fn file<T: Into<FileData>>(data: T) -> QueryCommandResponse {
+        Self::File(FileResponse { data: data.into() })
+    }
+
+    pub fn directory<T: Into<FileData>>(data: T, entries: Vec<FileData>) -> QueryCommandResponse {
+        Self::Directory(DirectoryResponse { data: data.into(), entries })
+    }
+
+    pub fn none() -> QueryCommandResponse {
+        Self::None
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -71,7 +93,7 @@ impl RootDirectory {
         if path.is_dir() {
             Self::build_directory_from_path(&path)
         } else if path.is_file() {
-            Ok(QueryCommandResponse::File { data: path.into() })
+            Ok(QueryCommandResponse::file(path))
         } else {
             Err(format!(
                 "Path {} is not a file or directory",
@@ -105,7 +127,7 @@ impl RootDirectory {
         Self::build_directory_from_path(&path)
     }
 
-    pub fn delete_path(&self, path: &Path) -> Result<() , String> {
+    pub fn delete_path(&self, path: &Path) -> Result<(), String> {
         self.validate_in_root(path)?;
         if !path.exists() {
             return Err(format!("Path {} does not exist", path.display()));
@@ -113,7 +135,7 @@ impl RootDirectory {
         if path.is_dir() {
             fs::remove_dir_all(path).map_err(|e| e.to_string())?;
         } else if path.is_file() {
-            fs:: remove_file(path).map_err(|e| e.to_string())?;
+            fs::remove_file(path).map_err(|e| e.to_string())?;
         } else {
             return Err(format!("Path {} is not a file or directory", path.display()));
         }
@@ -172,7 +194,7 @@ impl RootDirectory {
         if !path.is_file() {
             return Err(format!("{} is not a file", path.display()));
         }
-        Ok(QueryCommandResponse::File { data: path.into() })
+        Ok(QueryCommandResponse::file(path))
     }
 
     fn build_directory_from_path(path: &Path) -> Result<QueryCommandResponse, String> {
@@ -185,10 +207,7 @@ impl RootDirectory {
             })
             .collect();
 
-        Ok(QueryCommandResponse::Directory {
-            data: FileData::from(path),
-            entries,
-        })
+        Ok(QueryCommandResponse::directory(path, entries))
     }
 }
 
@@ -231,14 +250,11 @@ mod tests {
 
         let result = file_query.query_root();
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), QueryCommandResponse::Directory {
-            data: FileData::from(root_path.clone()),
-            entries: vec![
-                FileData::from(root_path.join("dirA")),
-                FileData::from(root_path.join("fileA")),
-                FileData::from(root_path.join("fileB")),
-            ],
-        });
+        assert_eq!(result.unwrap(), QueryCommandResponse::directory(root_path.clone(), vec![
+            FileData::from(root_path.join("dirA")),
+            FileData::from(root_path.join("fileA")),
+            FileData::from(root_path.join("fileB")),
+        ]));
     }
 
     #[test]
@@ -272,17 +288,12 @@ mod tests {
         // Will Return a file if it exists
         let result = file_query.query_path(Path::new("fileA"));
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), QueryCommandResponse::File {
-            data: FileData::from(root_path.join("fileA")),
-        });
+        assert_eq!(result.unwrap(), QueryCommandResponse::file(root_path.join("fileA")));
 
         // Return a directory and it's entries if it exists
         let result = file_query.query_path(Path::new("dirA"));
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), QueryCommandResponse::Directory {
-            data: FileData::from(root_path.join("dirA")),
-            entries: vec![],
-        });
+        assert_eq!(result.unwrap(), QueryCommandResponse::directory(root_path.join("dirA"), vec![]));
 
         let missing_path = root_path.join("fileB");
         // Will error if path does not exist
@@ -298,9 +309,7 @@ mod tests {
         let file_query = RootDirectory::new(&root_path).unwrap();
         // Will create file if it doesn't exist
         let result = file_query.touch_file(&root_path, "fileA").unwrap();
-        assert_eq!(result, QueryCommandResponse::File {
-            data: FileData::from(root_path.join("fileA")),
-        });
+        assert_eq!(result, QueryCommandResponse::file(root_path.join("fileA")));
 
         // Will error if path is not a directory
         let result = file_query.touch_file(&root_path.join("fileA"), "fileB");
@@ -321,9 +330,7 @@ mod tests {
         assert!(root_path.join("fileA").exists());
         // Will no-op and return existing file
         let result = file_query.touch_file(&root_path, "fileA").unwrap();
-        assert_eq!(result, QueryCommandResponse::File {
-            data: FileData::from(root_path.join("fileA")),
-        });
+        assert_eq!(result, QueryCommandResponse::file(root_path.join("fileA")));
 
         // Will place in root if not a has root inclusive pah
         file_query.touch_file(Path::new("example"), "fileA").unwrap();
@@ -339,13 +346,10 @@ mod tests {
         let file_query = RootDirectory::new(&root_path).unwrap();
         // Will create dir if it doesn't exist
         let result = file_query.touch_directory(&root_path, "newDirA").unwrap();
-        assert_eq!(result, QueryCommandResponse::Directory {
-            data: FileData::from(root_path.join("newDirA")),
-            entries: vec![],
-        });
+        assert_eq!(result, QueryCommandResponse::directory(root_path.join("newDirA"), vec![]));
 
         let file = root_path.join("fileA");
-        fs::File::create(&file).unwrap();
+        File::create(file).unwrap();
 
         // Will error if path is not a directory
         let result = file_query.touch_directory(&root_path.join("fileA"), "newDirB");
@@ -366,10 +370,7 @@ mod tests {
         assert!(root_path.join("newDirA").exists());
         // Will no-op and return existing file
         let result = file_query.touch_directory(&root_path, "newDirA").unwrap();
-        assert_eq!(result, QueryCommandResponse::Directory {
-            data: FileData::from(root_path.join("newDirA")),
-            entries: vec![],
-        });
+        assert_eq!(result, QueryCommandResponse::directory(root_path.join("newDirA"), vec![]));
 
         // Will place in root if not a has root inclusive pah
         file_query.touch_directory(Path::new("example"), "newDirA").unwrap();
