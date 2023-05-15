@@ -43,7 +43,6 @@ pub struct FileResponse {
 pub enum QueryCommandResponse {
     Directory(DirectoryResponse),
     File(FileResponse),
-    None,
 }
 
 impl QueryCommandResponse {
@@ -53,10 +52,6 @@ impl QueryCommandResponse {
 
     pub fn directory<T: Into<FileData>>(data: T, entries: Vec<FileData>) -> QueryCommandResponse {
         Self::Directory(DirectoryResponse { data: data.into(), entries })
-    }
-
-    pub fn none() -> QueryCommandResponse {
-        Self::None
     }
 }
 

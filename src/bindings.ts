@@ -9,7 +9,7 @@ declare global {
 const invoke = window.__TAURI_INVOKE__;
 
 export function queryFileSystem(command: FsCommand) {
-    return invoke<QueryCommandResponse>("query_file_system", { command })
+    return invoke<QueryCommandResponse | null>("query_file_system", { command })
 }
 
 export function notifyFileChange(event: FileChangeEvent) {
@@ -23,4 +23,4 @@ export type FileData = { fileType: FileType; name: string; parentDir: string | n
 export type FsCommand = "queryRoot" | { queryPath: { path: string } } | { touchFile: TouchCommand } | { touchDirectory: TouchCommand } | { deletePath: { path: string } } | { renamePath: { from: string; to: string } }
 export type TouchCommand = { parentDir: string; name: string }
 export type FileType = "directory" | "file" | "unknown"
-export type QueryCommandResponse = { directory: DirectoryResponse } | { file: FileResponse } | "none"
+export type QueryCommandResponse = { directory: DirectoryResponse } | { file: FileResponse }
