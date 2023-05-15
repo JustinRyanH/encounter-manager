@@ -2,7 +2,8 @@ use std::path::{Path, PathBuf};
 
 use notify::event::{MetadataKind, ModifyKind, RenameMode};
 use notify::{RecursiveMode, Watcher};
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
+use specta::Type;
 use tokio::sync::broadcast;
 
 use super::FileData;
@@ -26,7 +27,7 @@ impl FileWatcher {
                 Err(e) => println!("watch error: {:?}", e),
             };
         })
-        .map_err(|e| e.to_string())?;
+            .map_err(|e| e.to_string())?;
         Ok(Self { watcher, sender })
     }
 
@@ -35,7 +36,7 @@ impl FileWatcher {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum FileChangeEvent {
     Create(FileData),
@@ -105,3 +106,6 @@ impl From<&notify::Event> for FileChangeEvent {
         }
     }
 }
+
+#[specta::specta]
+pub fn notify_file_change(_event: FileChangeEvent) {}
