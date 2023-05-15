@@ -1,49 +1,65 @@
-import { invoke } from "@tauri-apps/api";
-import {
-  FsCommand as FsQueryCommand,
-  FsQueryResponse,
-} from "~/types/FilenameTypes";
+import { DirectoryResponse, FileResponse, FsCommand, QueryCommandResponse, queryFileSystem } from "~/bindings";
 
-export function getRootCommand(): FsQueryCommand {
-  return { queryRoot: null };
+type UnknownFileType = { file?: FileResponse; directory?: DirectoryResponse };
+function expectNoNull(response: QueryCommandResponse | null) {
+  if (response === null) {
+    throw new Error("Unexpected null response from queryFileSystem");
+  }
+  return response;
 }
 
-export function getPathCommand(path: string): FsQueryCommand {
+function expectNull(response: QueryCommandResponse | null) {
+  if (response !== null) {
+    throw new Error(`Unexpected response from queryFileSystem: ${JSON.stringify(response)}`);
+  }
+  return null;
+}
+function handleUnknownFileType(result: QueryCommandResponse): UnknownFileType {
+  if ("directory" in result) {
+    return { directory: result.directory as DirectoryResponse, file: undefined };
+  }
+  if ("file" in result) {
+    return { directory: undefined, file: result.file as FileResponse };
+  }
+  return result;
+}
+
+export function getRootCommand(): FsCommand {
+  return "queryRoot";
+}
+
+export function getPathCommand(path: string): FsCommand {
   return { queryPath: { path } };
 }
 
-async function queryFileSystem(
-  command: FsQueryCommand
-): Promise<FsQueryResponse> {
-  return await invoke("query_file_system", { command });
+export async function queryRootDirectory(): Promise<{ directory: DirectoryResponse }> {
+  const result = await queryFileSystem(getRootCommand()).then(expectNoNull);
+  if ("directory" in result) {
+    return { directory: result.directory as DirectoryResponse };
+  }
+  throw new Error("Expected directory response for root query");
 }
 
-export function queryRootDirectory(): Promise<FsQueryResponse> {
-  return queryFileSystem(getRootCommand());
+export async function queryPath(path: string): Promise<UnknownFileType> {
+  return await queryFileSystem(getPathCommand(path)).then(expectNoNull).then(handleUnknownFileType);
 }
 
-export function queryPath(path: string): Promise<FsQueryResponse> {
-  return queryFileSystem(getPathCommand(path));
+export function touchFile(parentDir: string, fileName: string): Promise<UnknownFileType> {
+  return queryFileSystem({ touchFile: { parentDir, name: fileName } })
+    .then(expectNoNull)
+    .then(handleUnknownFileType);
 }
 
-export function touchFile(
-  parentDir: string,
-  fileName: string
-): Promise<FsQueryResponse> {
-  return queryFileSystem({ touchFile: { parentDir, name: fileName } });
+export function touchDirectory(parentDir: string, dirName: string): Promise<UnknownFileType> {
+  return queryFileSystem({ touchDirectory: { parentDir, name: dirName } })
+    .then(expectNoNull)
+    .then(handleUnknownFileType);
 }
 
-export function touchDirectory(
-  parentDir: string,
-  dirName: string
-): Promise<FsQueryResponse> {
-  return queryFileSystem({ touchDirectory: { parentDir, name: dirName } });
+export function deletePath(path: string): Promise<null> {
+  return queryFileSystem({ deletePath: { path } }).then(expectNull);
 }
 
-export function deletePath(path: string): Promise<FsQueryResponse> {
-  return queryFileSystem({ deletePath: { path } });
-}
-
-export function renamePath(from: string, to: string): Promise<FsQueryResponse> {
-  return queryFileSystem({ renamePath: { from, to } });
+export function renamePath(from: string, to: string): Promise<null> {
+  return queryFileSystem({ renamePath: { from, to } }).then(expectNull);
 }

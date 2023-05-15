@@ -7,7 +7,6 @@ import {
   TauriFileManager,
 } from "~/services/files/FileManager";
 import { queryPath, queryRootDirectory } from "~/services/files/Commands";
-import { FileChangeEvent, FileData } from "~/types/FilenameTypes";
 
 vi.mock("@tauri-apps/api/event");
 vi.mock("~/services/files/Commands");
