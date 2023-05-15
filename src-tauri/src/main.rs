@@ -7,6 +7,8 @@ mod commands;
 mod encounters;
 mod services;
 
+use specta::collect_types;
+use tauri_specta::ts;
 use tauri::{generate_context, Manager};
 
 use crate::{
@@ -56,4 +58,9 @@ fn harry_potter_mock() -> encounters::Encounter {
     encounter.add_character(ron);
     encounter.add_character(hermione);
     encounter
+}
+
+#[test]
+fn export_bindings() {
+    ts::export(collect_types![query_file_system], "../src/bindings.ts").unwrap();
 }

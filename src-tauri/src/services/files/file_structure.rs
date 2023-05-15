@@ -2,18 +2,19 @@ use std::fs;
 use std::fs::{create_dir, create_dir_all, read_dir};
 use std::path::{Path, PathBuf};
 
+use specta::Type;
 use serde::{Deserialize, Serialize};
 
 use super::FileData;
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct TouchCommand {
     pub parent_dir: PathBuf,
     pub name: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum FsCommand {
     QueryRoot,
@@ -24,7 +25,7 @@ pub enum FsCommand {
     RenamePath { from: PathBuf, to: String },
 }
 
-#[derive(Clone, Debug, Serialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum QueryCommandResponse {
     Directory {

@@ -1,3 +1,4 @@
+use specta::specta;
 use ulid::Ulid;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::encounter::EncounterManagerState;
@@ -24,6 +25,7 @@ pub async fn update_encounter_character(state: EncounterManagerState<'_>, encoun
 }
 
 #[tauri::command]
+#[specta::specta]
 pub async fn query_file_system(
     state: FileSystemState<'_>,
     command: FsCommand,

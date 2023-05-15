@@ -1,8 +1,9 @@
 use std::path::{Path, PathBuf};
 
+use specta::Type;
 use serde::Serialize;
 
-#[derive(Clone, Debug, PartialEq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum FileType {
     Directory,
@@ -22,7 +23,7 @@ impl From<&PathBuf> for FileType {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct FileData {
     file_type: FileType,
