@@ -17,7 +17,14 @@ use crate::{
 };
 use crate::encounters::encounter::EncounterManager;
 
+fn export_bindings() {
+    ts::export(collect_types![query_file_system], "../src/bindings.ts").unwrap();
+}
+
 fn main() {
+    #[cfg(debug_assertions)]
+    export_bindings();
+
     tauri::Builder::default()
         .setup(|app| {
             let lotr = load_of_rings_mock();
@@ -61,6 +68,6 @@ fn harry_potter_mock() -> encounters::Encounter {
 }
 
 #[test]
-fn export_bindings() {
-    ts::export(collect_types![query_file_system], "../src/bindings.ts").unwrap();
+fn test_export_bindings() {
+    export_bindings();
 }

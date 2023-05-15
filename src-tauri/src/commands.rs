@@ -1,4 +1,3 @@
-use specta::specta;
 use ulid::Ulid;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::encounter::EncounterManagerState;
