@@ -43,7 +43,6 @@ pub struct FileResponse {
 pub enum QueryCommandResponse {
     Directory(DirectoryResponse),
     File(FileResponse),
-    #[serde(skip_serializing)]
     None,
 }
 

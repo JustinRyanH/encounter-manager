@@ -50,7 +50,6 @@ pub enum FileChangeEvent {
         to: PathBuf,
         data: FileData,
     },
-    #[serde(skip_serializing)]
     Ignore,
 }
 
