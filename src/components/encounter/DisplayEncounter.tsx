@@ -1,6 +1,5 @@
 import React from "react";
 import { Accordion, ActionIcon, Center, Group, Loader } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { ArrowBendRightDown, Play, PlayPause, UserPlus } from "@phosphor-icons/react";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
