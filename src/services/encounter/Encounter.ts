@@ -3,9 +3,9 @@ import { Signal, SignalConnection } from "typed-signals";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
-import { CharacterType } from "~/types/EncounterTypes";
 import { updateCharacterName } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
+import { Character as CharacterType } from "~/encounterBindings";
 
 type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 

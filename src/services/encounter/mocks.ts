@@ -1,4 +1,4 @@
-import { CharacterType } from "~/types/EncounterTypes";
+import { Character as CharacterType } from "~/encounterBindings";
 
 interface MockCharacterProps {
   id?: string;
@@ -16,7 +16,7 @@ export function buildMockCharacter(props: MockCharacterProps): CharacterType {
     name: props.name || "Test",
     initiative: props.initiative || 10,
     initiativeModifier: props.initiativeModifier || 0,
-    hitPoints: {
+    hp: {
       current: props.current || 10,
       total: props.total || 10,
       temporary: props.temporary || 0,

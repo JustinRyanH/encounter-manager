@@ -1,27 +1,26 @@
-import { invoke } from "@tauri-apps/api";
-
 import {
-  EncounterCommands,
-  EncounterResponse,
-  EncounterListType,
+  Character,
+  CharacterChangeMessages,
   CharacterCommand,
-  CharacterType,
-  CharacterResponse,
-  UpdatedCharacter,
-} from "~/types/EncounterTypes";
-import { notifyErrors } from "~/services/notifications";
+  CharacterCommandResponse,
+  Encounter,
+  encounter,
+  EncounterCommandResponse,
+  updateEncounterCharacter,
+} from "~/encounterBindings";
 
-export async function queryEncounter(command: EncounterCommands): Promise<EncounterResponse> {
-  return await invoke("encounter", { command });
+interface UpdatedCharacter {
+  character: Character;
+  messages: CharacterChangeMessages;
 }
 
-export async function listEncounter(): Promise<EncounterListType> {
-  const result = await queryEncounter({ listEncounter: null });
+interface EncounterList {
+  [key: string]: Encounter;
+}
+
+export async function listEncounter(): Promise<EncounterList> {
+  const result = await encounter("listEncounter");
   return result.encounterList || {};
-}
-
-export async function updateCharacter(encounterId: string, command: CharacterCommand): Promise<CharacterResponse> {
-  return await invoke("update_encounter_character", { encounterId, command });
 }
 
 type UpdateCharacterNameProps = { encounterId: string; characterId: string; name: string };
@@ -37,7 +36,7 @@ export async function updateCharacterName({
       name,
     },
   };
-  const result = await updateCharacter(encounterId, command);
+  const result = await updateEncounterCharacter(encounterId, command);
   if (!result.updatedCharacter) throw new Error("Bad Server Response");
   return result.updatedCharacter;
 }
