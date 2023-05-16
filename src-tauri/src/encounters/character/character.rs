@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 use serde::{Deserialize, Serialize};
-use ulid::Ulid;
+use uuid::Uuid;
 
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -13,7 +13,7 @@ pub struct HitPoints {
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Character {
-    id: Ulid,
+    id: Uuid,
     pub name: String,
     pub hp: HitPoints,
     pub initiative: i32,
@@ -28,7 +28,7 @@ impl Character {
             temporary: 0,
         };
         Character {
-            id: ulid::Ulid::new(),
+            id: Uuid::new_v4(),
             name: name.into(),
             hp,
             initiative,
@@ -40,7 +40,7 @@ impl Character {
         self.id.to_string()
     }
 
-    pub fn ulid(&self) -> Ulid {
+    pub fn uuid(&self) -> Uuid {
         self.id
     }
 
@@ -129,7 +129,7 @@ mod tests {
         assert_eq!(character.hp.temporary, 0);
         assert_eq!(character.initiative, initiative);
         assert_eq!(character.initiative_modifier, 0);
-        assert_eq!(character.id().len(), 26);
+        assert_eq!(character.id().len(), 36);
     }
 
     #[test]

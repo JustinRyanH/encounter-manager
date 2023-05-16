@@ -1,4 +1,4 @@
-use ulid::Ulid;
+use uuid::Uuid;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::encounter::EncounterManagerState;
 use crate::services::{
@@ -17,7 +17,7 @@ pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterComma
 }
 
 #[tauri::command]
-pub async fn update_encounter_character(state: EncounterManagerState<'_>, encounter_id: Ulid, command: CharacterCommand) -> Result<CharacterCommandResponse, String> {
+pub async fn update_encounter_character(state: EncounterManagerState<'_>, encounter_id: Uuid, command: CharacterCommand) -> Result<CharacterCommandResponse, String> {
     let mut manager = state.lock().await;
     let encounter = manager.find_encounter_mut(encounter_id).ok_or("Encounter not found")?;
     encounter.update_character(command)

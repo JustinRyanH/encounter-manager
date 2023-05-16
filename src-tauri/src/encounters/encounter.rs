@@ -4,7 +4,7 @@ use std::sync::{Arc};
 use tokio::sync::{Mutex, MutexGuard};
 use tauri::State;
 use serde::{Deserialize, Serialize};
-use ulid::Ulid;
+use uuid::Uuid;
 use crate::encounters::Character;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 
@@ -28,7 +28,7 @@ impl From<EncounterCollection> for EncounterManager {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EncounterCollection {
-    pub encounters: HashMap<Ulid, Encounter>,
+    pub encounters: HashMap<Uuid, Encounter>,
 }
 
 impl EncounterCollection {
@@ -42,11 +42,11 @@ impl EncounterCollection {
         self.encounters.insert(encounter.id, encounter);
     }
 
-    pub fn list_encounters(&self) -> HashMap<Ulid, Encounter> {
+    pub fn list_encounters(&self) -> HashMap<Uuid, Encounter> {
         self.encounters.clone()
     }
 
-    pub fn find_encounter_mut(&mut self, id: Ulid) -> Option<&mut Encounter> {
+    pub fn find_encounter_mut(&mut self, id: Uuid) -> Option<&mut Encounter> {
         self.encounters.get_mut(&id)
     }
 }
@@ -54,7 +54,7 @@ impl EncounterCollection {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Encounter {
-    id: Ulid,
+    id: Uuid,
     name: String,
     characters: Vec<Character>,
 }
@@ -62,7 +62,7 @@ pub struct Encounter {
 impl Encounter {
     pub fn new<T: Into<String>>(name: T) -> Encounter {
         Encounter {
-            id: ulid::Ulid::new(),
+            id: Uuid::new_v4(),
             name: name.into(),
             characters: Vec::new(),
         }
@@ -72,7 +72,7 @@ impl Encounter {
         self.id.to_string()
     }
 
-    pub fn ulid(&self) -> ulid::Ulid {
+    pub fn uuid(&self) -> Uuid {
         self.id
     }
 
@@ -88,8 +88,8 @@ impl Encounter {
         self.characters.iter().find(|c| c.id() == id)
     }
 
-    pub fn find_character_mut(&mut self, id: Ulid) -> Option<&mut Character> {
-        self.characters.iter_mut().find(|c| c.ulid() == id)
+    pub fn find_character_mut(&mut self, id: Uuid) -> Option<&mut Character> {
+        self.characters.iter_mut().find(|c| c.uuid() == id)
     }
 
     pub fn get_characters(&self) -> Vec<Character> {
@@ -152,7 +152,7 @@ mod tests {
         let encounter = Encounter::new(name.clone());
         assert_eq!(encounter.name, name);
         assert_eq!(encounter.characters.len(), 0);
-        assert_eq!(encounter.id().len(), 26);
+        assert_eq!(encounter.id().len(), 36);
     }
 
     #[test]
@@ -204,7 +204,7 @@ mod tests {
         encounter.add_character(character1.clone());
 
         let cmd = character::CharacterCommand::UpdateName {
-            id: character1.ulid(),
+            id: character1.uuid(),
             name: String::from("New Name"),
         };
 
@@ -213,7 +213,7 @@ mod tests {
         assert_eq!(response, CharacterCommandResponse::UpdatedCharacter { character: updated_character.clone(), messages: CharacterChangeMessages::none() });
 
         let cmd = character::CharacterCommand::UpdateInitiative {
-            id: character1.ulid(),
+            id: character1.uuid(),
             initiative: 20,
         };
 

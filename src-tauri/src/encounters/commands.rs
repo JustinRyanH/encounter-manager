@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use ulid::Ulid;
+use uuid::Uuid;
 
 use crate::encounters::{Encounter, EncounterCollection};
 
@@ -13,7 +13,7 @@ pub enum EncounterCommands {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum EncounterCommandResponse {
-    EncounterList(HashMap<Ulid, Encounter>),
+    EncounterList(HashMap<Uuid, Encounter>),
 }
 
 impl EncounterCommandResponse{
