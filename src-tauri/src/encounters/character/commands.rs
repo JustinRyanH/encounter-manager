@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use specta::Type;
 
 use crate::encounters::Character;
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum CharacterCommand {
     UpdateName { id: Uuid, name: String },
@@ -31,14 +32,14 @@ impl CharacterCommand {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum FrontendMessageType {
     Success,
     Error,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct FrontendMessage {
     #[serde(rename = "type")]
@@ -46,7 +47,7 @@ pub struct FrontendMessage {
     pub message: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct CharacterChangeMessages {
     pub name: Option<Vec<FrontendMessage>>,
@@ -64,7 +65,7 @@ impl CharacterChangeMessages {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum CharacterCommandResponse {
     UpdatedCharacter {

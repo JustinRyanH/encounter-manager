@@ -12,8 +12,17 @@ export function encounter(command: EncounterCommands) {
     return invoke<EncounterCommandResponse>("encounter", { command })
 }
 
+export function updateEncounterCharacter(encounterId: string, command: CharacterCommand) {
+    return invoke<CharacterCommandResponse>("update_encounter_character", { encounterId,command })
+}
+
 export type EncounterCommands = "listEncounter"
+export type FrontendMessageType = "success" | "error"
 export type Character = { id: string; name: string; hp: HitPoints; initiative: number; initiativeModifier: number }
 export type Encounter = { id: string; name: string; characters: Character[] }
+export type FrontendMessage = { type: FrontendMessageType; message: string }
 export type EncounterCommandResponse = { encounterList: { [key: string]: Encounter } }
+export type CharacterChangeMessages = { name: FrontendMessage[] | null; initiative: FrontendMessage[] | null; hp: FrontendMessage[] | null }
+export type CharacterCommand = { updateName: { id: string; name: string } } | { updateInitiative: { id: string; initiative: number } } | { updateInitiativeModifier: { id: string; modifier: number } } | { updateCurrentHp: { id: string; hp: number } } | { updateTotalHp: { id: string; hp: number } } | { updateTemporaryHp: { id: string; hp: number } } | { heal: { id: string; hp: number } } | { damage: { id: string; hp: number } }
 export type HitPoints = { current: number; total: number; temporary: number }
+export type CharacterCommandResponse = { updatedCharacter: { character: Character; messages: CharacterChangeMessages } }
