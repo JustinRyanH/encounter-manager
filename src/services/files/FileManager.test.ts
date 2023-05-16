@@ -1,12 +1,9 @@
 import { beforeEach, describe, expect, Mock, test, vi } from "vitest";
 import { listen } from "@tauri-apps/api/event";
 
-import {
-  Directory,
-  File,
-  TauriFileManager,
-} from "~/services/files/FileManager";
+import { Directory, File, TauriFileManager } from "~/services/files/FileManager";
 import { queryPath, queryRootDirectory } from "~/services/files/Commands";
+import { FileChangeEvent, FileData } from "~/fileBindings";
 
 vi.mock("@tauri-apps/api/event");
 vi.mock("~/services/files/Commands");
@@ -16,6 +13,7 @@ interface FakeEvent<T> {
 }
 
 const mockFileOne: FileData = {
+  extension: null,
   fileType: "file",
   name: "file1",
   path: "/file1",
@@ -23,6 +21,7 @@ const mockFileOne: FileData = {
 };
 
 const mockFileTwo = {
+  extension: null,
   fileType: "file",
   name: "file2",
   path: "/file2",
@@ -30,6 +29,7 @@ const mockFileTwo = {
 };
 
 const mockFileThree: FileData = {
+  extension: null,
   fileType: "file",
   name: "file3",
   path: "/directory1/file3",
@@ -37,6 +37,7 @@ const mockFileThree: FileData = {
 };
 
 const mockDirectoryOne: FileData = {
+  extension: null,
   fileType: "directory",
   name: "directory1",
   path: "/directory1",
@@ -44,6 +45,8 @@ const mockDirectoryOne: FileData = {
 };
 
 const mockRootDirectory: FileData = {
+  extension: null,
+  parentDir: null,
   fileType: "directory",
   name: "root",
   path: "/",
@@ -79,9 +82,7 @@ describe("FileManager", () => {
   });
 
   test("load the root Directory", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithoutEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithoutEntries);
     const rootDirectory = new TauriFileManager();
 
     expect(rootDirectory.rootDirectory).toBeNull();
@@ -95,9 +96,7 @@ describe("FileManager", () => {
   });
 
   test("loads the entries of the root directory", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithEntries);
     const rootDirectory = new TauriFileManager();
 
     expect(rootDirectory.rootDirectory).toBeNull();
@@ -110,9 +109,7 @@ describe("FileManager", () => {
   });
 
   test("files and directories are accessible through getFile", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithEntries);
     const rootDirectory = new TauriFileManager();
 
     expect(rootDirectory.findFile("/")).toBeNull();
@@ -128,9 +125,7 @@ describe("FileManager", () => {
   });
 
   test("files are set to their directory", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithEntries);
     const rootDirectory = new TauriFileManager();
     await rootDirectory.loadRootDirectory();
 
@@ -141,9 +136,7 @@ describe("FileManager", () => {
   });
 
   test("load path loads files, and inserts them into their directory", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithEntries);
     (queryPath as Mock).mockResolvedValue({ file: { data: mockFileTwo } });
 
     const rootDirectory = new TauriFileManager();
@@ -163,9 +156,7 @@ describe("FileManager", () => {
   });
 
   test("load path loads directories, and inserts them into their directory", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithEntries);
     (queryPath as Mock).mockResolvedValue({
       directory: { data: mockDirectoryOne, entries: [] },
     });
@@ -190,9 +181,7 @@ describe("FileManager", () => {
   });
 
   test("prevent duplication of files", async () => {
-    (queryRootDirectory as Mock).mockResolvedValue(
-      rootMockDirectoryWithEntries
-    );
+    (queryRootDirectory as Mock).mockResolvedValue(rootMockDirectoryWithEntries);
     (queryPath as Mock).mockResolvedValue({ file: { data: mockFileOne } });
 
     const rootDirectory = new TauriFileManager();
@@ -210,6 +199,7 @@ describe("FileManager", () => {
   describe("signals", () => {
     describe("signal File Rename", () => {
       const file4: FileData = {
+        extension: null,
         fileType: "file",
         name: "file4",
         path: "/directory1/file4",
@@ -304,6 +294,7 @@ describe("FileManager", () => {
 
     describe("signal File Create", () => {
       const file4: FileData = {
+        extension: null,
         fileType: "file",
         name: "file4",
         path: "/directory1/file4",
@@ -355,11 +346,6 @@ describe("Directory", () => {
     directory.addFile(innerDirectory);
     innerDirectory.addFile(innerDirectoryFile);
 
-    expect(directory.allPaths).toEqual([
-      "/",
-      "/file1",
-      "/directory1",
-      "/directory1/file2",
-    ]);
+    expect(directory.allPaths).toEqual(["/", "/file1", "/directory1", "/directory1/file2"]);
   });
 });
