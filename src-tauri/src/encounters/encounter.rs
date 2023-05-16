@@ -5,6 +5,8 @@ use tokio::sync::{Mutex, MutexGuard};
 use tauri::State;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use specta::Type;
+
 use crate::encounters::Character;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 
@@ -52,7 +54,7 @@ impl EncounterCollection {
 }
 
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Type)]
 pub struct Encounter {
     id: Uuid,
     name: String,

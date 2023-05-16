@@ -1,3 +1,4 @@
+use specta::specta;
 use uuid::Uuid;
 use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
 use crate::encounters::encounter::EncounterManagerState;
@@ -9,6 +10,7 @@ use crate::services::files::file_structure::TouchCommand;
 use crate::encounters::commands::{EncounterCommandResponse, EncounterCommands};
 
 #[tauri::command]
+#[specta::specta]
 pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterCommands) -> Result<EncounterCommandResponse, String> {
     let encounter = state.lock().await;
     match command {
@@ -17,6 +19,7 @@ pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterComma
 }
 
 #[tauri::command]
+#[specta::specta]
 pub async fn update_encounter_character(state: EncounterManagerState<'_>, encounter_id: Uuid, command: CharacterCommand) -> Result<CharacterCommandResponse, String> {
     let mut manager = state.lock().await;
     let encounter = manager.find_encounter_mut(encounter_id).ok_or("Encounter not found")?;
