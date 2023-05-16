@@ -4,7 +4,7 @@ import { TauriConnection } from "~/services/TauriConnection";
 import { ValueObserver } from "~/services/ValueObserver";
 
 import { queryPath, queryRootDirectory, touchDirectory, touchFile, deletePath, renamePath } from "./Commands";
-import { FileData, FileResponse, DirectoryResponse, FileChangeEvent } from "~/bindings";
+import { FileData, FileResponse, DirectoryResponse, FileChangeEvent } from "~/fileBindings";
 
 function ParseFileFromType(file: FileData): File | Directory {
   if (file.fileType === "directory") {

@@ -1,4 +1,4 @@
-import { DirectoryResponse, FileResponse, FsCommand, QueryCommandResponse, queryFileSystem } from "~/bindings";
+import { DirectoryResponse, FileResponse, FsCommand, QueryCommandResponse, queryFileSystem } from "~/fileBindings";
 
 type UnknownFileType = { file?: FileResponse; directory?: DirectoryResponse };
 function expectNoNull(response: QueryCommandResponse | null) {

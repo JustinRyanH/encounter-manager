@@ -19,7 +19,7 @@ use crate::encounters::encounter::EncounterManager;
 use crate::services::files::notify_file_change;
 
 fn export_bindings() {
-    ts::export(collect_types![query_file_system, notify_file_change], "../src/bindings.ts").unwrap();
+    ts::export(collect_types![query_file_system, notify_file_change], "../src/fileBindings.ts").unwrap();
 }
 
 fn main() {
