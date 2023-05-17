@@ -21,7 +21,17 @@ export async function listEncounter(): Promise<EncounterList> {
   return result.encounterList || {};
 }
 
-type UpdateCharacterNameProps = { encounterId: string; characterId: string; name: string };
+export function getCommandId(cmd: CharacterCommand): string {
+  if ("updateName" in cmd) return cmd.updateName.id;
+  if ("updateInitiative" in cmd) return cmd.updateInitiative.id;
+  if ("updateInitiativeModifier" in cmd) return cmd.updateInitiativeModifier.id;
+  if ("updateCurrentHp" in cmd) return cmd.updateCurrentHp.id;
+  if ("updateTotalHp" in cmd) return cmd.updateTotalHp.id;
+  if ("updateTemporaryHp" in cmd) return cmd.updateTemporaryHp.id;
+  if ("heal" in cmd) return cmd.heal.id;
+  if ("damage" in cmd) return cmd.damage.id;
+  throw new Error("Invalid CharacterCommand");
+}
 
 export function updateNameCommand(characterId: string, name: string) {
   return {
@@ -74,7 +84,7 @@ export function damageCharacterCmd(characterId: string, hp: number) {
   };
 }
 
-export async function updateCharacter(encounterId: string, command: { updateName: { name: string; id: string } }) {
+export async function updateCharacter(encounterId: string, command: CharacterCommand) {
   const result = await updateEncounterCharacter(encounterId, command);
   if (!result.updatedCharacter) throw new Error("Bad Server Response");
   return result.updatedCharacter;

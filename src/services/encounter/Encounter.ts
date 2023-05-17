@@ -3,9 +3,9 @@ import { Signal, SignalConnection } from "typed-signals";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
-import { updateNameCommand, updateCharacter } from "~/services/encounter/Commands";
+import { getCommandId, updateCharacter, updateNameCommand } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { Character as CharacterType } from "~/encounterBindings";
+import { Character as CharacterType, CharacterCommand } from "~/encounterBindings";
 
 type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
@@ -149,15 +149,7 @@ export class Encounter {
   }
 
   async updateCharacterName(id: string, name: string) {
-    const existingCharacter = this.findCharacter(id);
-    if (!existingCharacter) return;
-    try {
-      const cmd = updateNameCommand(id, name);
-      const { character } = await updateCharacter(this.id, cmd);
-      existingCharacter.name = character.name;
-    } catch (error: unknown) {
-      handleError({ error, title: "Failed to update Character Name" });
-    }
+    return await this.updateCharacter(updateNameCommand(id, name));
   }
 
   private setCharacters = (characters: Array<EncounterCharacter>) => {
@@ -185,5 +177,18 @@ export class Encounter {
 
   private addEncounterToCharacters = () => {
     this.characters.filter((c) => !c.encounter).forEach((c) => (c.encounter = this));
+  };
+
+  private updateCharacter = async (cmd: CharacterCommand) => {
+    const id = getCommandId(cmd);
+    const existingCharacter = this.findCharacter(id);
+    if (!existingCharacter) return;
+    try {
+      const { character } = await updateCharacter(this.id, cmd);
+      existingCharacter.name = character.name;
+      existingCharacter.initiative = character.initiative;
+    } catch (error: unknown) {
+      handleError({ error, title: "Failed to update Character" });
+    }
   };
 }
