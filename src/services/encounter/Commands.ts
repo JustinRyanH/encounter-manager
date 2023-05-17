@@ -23,17 +23,22 @@ export async function listEncounter(): Promise<EncounterList> {
 
 type UpdateCharacterNameProps = { encounterId: string; characterId: string; name: string };
 
-export async function updateCharacterName({
-  encounterId,
-  characterId,
-  name,
-}: UpdateCharacterNameProps): Promise<UpdatedCharacter> {
+function updateCharacterNameCommand(characterId: string, name: string) {
   const command: CharacterCommand = {
     updateName: {
       id: characterId,
       name,
     },
   };
+  return command;
+}
+
+export async function updateCharacterName({
+  encounterId,
+  characterId,
+  name,
+}: UpdateCharacterNameProps): Promise<UpdatedCharacter> {
+  const command = updateCharacterNameCommand(characterId, name);
   const result = await updateEncounterCharacter(encounterId, command);
   if (!result.updatedCharacter) throw new Error("Bad Server Response");
   return result.updatedCharacter;
