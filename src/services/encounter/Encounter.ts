@@ -3,7 +3,7 @@ import { Signal, SignalConnection } from "typed-signals";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
-import { updateCharacterName } from "~/services/encounter/Commands";
+import { updateNameCommand, updateCharacter } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
 import { Character as CharacterType } from "~/encounterBindings";
 
@@ -152,7 +152,8 @@ export class Encounter {
     const existingCharacter = this.findCharacter(id);
     if (!existingCharacter) return;
     try {
-      const { character } = await updateCharacterName({ encounterId: this.id, characterId: id, name });
+      const cmd = updateNameCommand(id, name);
+      const { character } = await updateCharacter(this.id, cmd);
       existingCharacter.name = character.name;
     } catch (error: unknown) {
       handleError({ error, title: "Failed to update Character Name" });

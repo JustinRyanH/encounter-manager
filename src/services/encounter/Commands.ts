@@ -23,7 +23,7 @@ export async function listEncounter(): Promise<EncounterList> {
 
 type UpdateCharacterNameProps = { encounterId: string; characterId: string; name: string };
 
-function updateNameCommand(characterId: string, name: string) {
+export function updateNameCommand(characterId: string, name: string) {
   return {
     updateName: {
       id: characterId,
@@ -32,54 +32,49 @@ function updateNameCommand(characterId: string, name: string) {
   };
 }
 
-function updateInitiativeCmd(characterId: string, initiative: number) {
+export function updateInitiativeCmd(characterId: string, initiative: number) {
   return {
     updateInitiative: { id: characterId, initiative },
   };
 }
 
-function updateInitiativeModifierCmd(characterId: string, modifier: number) {
+export function updateInitiativeModifierCmd(characterId: string, modifier: number) {
   return {
     updateInitiativeModifier: { id: characterId, modifier },
   };
 }
 
-function updateCurrentHpCmd(characterId: string, hp: number) {
+export function updateCurrentHpCmd(characterId: string, hp: number) {
   return {
     updateCurrentHp: { id: characterId, hp },
   };
 }
 
-function updateTotalHpCmd(characterId: string, hp: number) {
+export function updateTotalHpCmd(characterId: string, hp: number) {
   return {
     updateTotalHp: { id: characterId, hp },
   };
 }
 
-function updateTemporaryHpCmd(characterId: string, hp: number) {
+export function updateTemporaryHpCmd(characterId: string, hp: number) {
   return {
     updateTemporaryHp: { id: characterId, hp },
   };
 }
 
-function healCharacterCmd(characterId: string, hp: number) {
+export function healCharacterCmd(characterId: string, hp: number) {
   return {
     heal: { id: characterId, hp },
   };
 }
 
-function damageCharacterCmd(characterId: string, hp: number) {
+export function damageCharacterCmd(characterId: string, hp: number) {
   return {
     damage: { id: characterId, hp },
   };
 }
 
-export async function updateCharacterName({
-  encounterId,
-  characterId,
-  name,
-}: UpdateCharacterNameProps): Promise<UpdatedCharacter> {
-  const command = updateNameCommand(characterId, name);
+export async function updateCharacter(encounterId: string, command: { updateName: { name: string; id: string } }) {
   const result = await updateEncounterCharacter(encounterId, command);
   if (!result.updatedCharacter) throw new Error("Bad Server Response");
   return result.updatedCharacter;
