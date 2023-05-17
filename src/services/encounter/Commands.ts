@@ -32,43 +32,43 @@ function updateNameCommand(characterId: string, name: string) {
   };
 }
 
-function updateInitiative(characterId: string, initiative: number) {
+function updateInitiativeCmd(characterId: string, initiative: number) {
   return {
     updateInitiative: { id: characterId, initiative },
   };
 }
 
-function updateInitiativeModifier(characterId: string, modifier: number) {
+function updateInitiativeModifierCmd(characterId: string, modifier: number) {
   return {
     updateInitiativeModifier: { id: characterId, modifier },
   };
 }
 
-function updateCurrentHp(characterId: string, hp: number) {
+function updateCurrentHpCmd(characterId: string, hp: number) {
   return {
     updateCurrentHp: { id: characterId, hp },
   };
 }
 
-function updateTotalHp(characterId: string, hp: number) {
+function updateTotalHpCmd(characterId: string, hp: number) {
   return {
     updateTotalHp: { id: characterId, hp },
   };
 }
 
-function updateTemporaryHp(characterId: string, hp: number) {
+function updateTemporaryHpCmd(characterId: string, hp: number) {
   return {
     updateTemporaryHp: { id: characterId, hp },
   };
 }
 
-function healCharacter(characterId: string, hp: number) {
+function healCharacterCmd(characterId: string, hp: number) {
   return {
     heal: { id: characterId, hp },
   };
 }
 
-function damageCharacter(characterId: string, hp: number) {
+function damageCharacterCmd(characterId: string, hp: number) {
   return {
     damage: { id: characterId, hp },
   };
