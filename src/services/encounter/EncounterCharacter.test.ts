@@ -1,17 +1,32 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
 
 import { EncounterCharacter } from "./EncounterCharacter";
-import { notifications } from "@mantine/notifications";
+import { Encounter } from "~/services/encounter/Encounter";
+import { updateCharacter } from "~/services/encounter/Commands";
+import { buildMockCharacter } from "~/services/encounter/mocks";
 
 vi.mock("@mantine/notifications");
+vi.mock("~/services/encounter/Commands", async (importOriginal) => {
+  const original = (await importOriginal()) as object;
+  return {
+    ...original,
+    updateCharacter: vi.fn(),
+  };
+});
 
+let encounter: Encounter;
 describe("EncounterCharacter", () => {
+  beforeEach(() => {
+    encounter = new Encounter({ name: "Test", id: "test-id" });
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   test("constructor", () => {
     const character = new EncounterCharacter({
+      encounter,
       id: "test-id",
       name: "Test",
       initiative: 10,
@@ -23,6 +38,7 @@ describe("EncounterCharacter", () => {
   describe("update", () => {
     test("fails if the id is not the same as the character", () => {
       const character = new EncounterCharacter({
+        encounter,
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -288,6 +304,28 @@ describe("EncounterCharacter", () => {
         newValue: true,
         oldValue: false,
       });
+    });
+  });
+
+  describe("external updates", () => {
+    test("update the name", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          name: "New Name",
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+      });
+      encounter.addCharacter(character);
+
+      expect(character.name).toEqual("Test");
+      await character.updateName("New Name");
+      expect(character.name).toEqual("New Name");
     });
   });
 });
