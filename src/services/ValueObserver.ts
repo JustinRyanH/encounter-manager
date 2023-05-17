@@ -70,12 +70,11 @@ export class ValueObserver<T> {
   /**
    * Sets the value of the publisher and notifies all subscribers.
    */
-  set value(value: T) {
+  set value(newValue: T) {
     const oldValue = this.#value;
-    this.#value = value;
-    this.#subscribers.forEach((subscriber) =>
-      subscriber({ newValue: value, oldValue })
-    );
+    if (newValue === oldValue) return;
+    this.#value = newValue;
+    this.#subscribers.forEach((subscriber) => subscriber({ newValue, oldValue }));
   }
 
   /**

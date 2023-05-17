@@ -18,4 +18,12 @@ describe("SingleValuePublisher", () => {
     observer.updateValue(1);
     expect(subscriber).not.toBeCalled();
   });
+
+  test("does not publish if the same value", () => {
+    const observer = new ValueObserver(500);
+    const subscriber = vi.fn();
+    observer.add(subscriber);
+    observer.updateValue(500);
+    expect(subscriber).not.toHaveBeenCalled();
+  });
 });
