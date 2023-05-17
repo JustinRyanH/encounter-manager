@@ -159,9 +159,7 @@ export class EncounterCharacter {
    * @param initiative
    */
   updateInitiative = (initiative: number | null): void => {
-    const errors = this.#validateInitiative(initiative).join(", ");
-    if (notifyErrors({ errors, title: "Invalid Initiative" })) return;
-    this.initiative = initiative || 0;
+    this.encounter?.updateCharacterInitiative(this.id, initiative || 0);
   };
 
   /**
@@ -170,6 +168,26 @@ export class EncounterCharacter {
    */
   updateName = async (name: string) => {
     this.encounter?.updateCharacterName(this.id, name);
+  };
+
+  updateTotalHp = async (total: number) => {
+    this.encounter?.updateCharacterTotalHp(this.id, total);
+  };
+
+  updateCurrentHp = async (current: number) => {
+    this.encounter?.updateCharacterCurrentHp(this.id, current);
+  };
+
+  updateTempHp = async (temp: number | null) => {
+    this.encounter?.updateCharacterTemporaryHp(this.id, temp || 0);
+  };
+
+  heal = async (amount: number) => {
+    this.encounter?.healCharacter(this.id, amount);
+  };
+
+  damage = async (amount: number) => {
+    this.encounter?.damageCharacter(this.id, amount);
   };
 
   /**

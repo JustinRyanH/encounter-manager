@@ -1,24 +1,14 @@
 import React, { KeyboardEvent, MouseEventHandler } from "react";
 import { useClickOutside } from "@mantine/hooks";
-import {
-  Button,
-  Divider,
-  Flex,
-  NumberInput,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Button, Divider, Flex, NumberInput, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Minus, Plus } from "@phosphor-icons/react";
 
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
-import {
-  EditPopover,
-  useEditPopoverContext,
-} from "~/components/systems/EditPopover";
+import { EditPopover, useEditPopoverContext } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/systems/UpdateAttribute";
+import { EncounterCharacter } from "~/services/encounter";
 
 interface HealthButtonProps {
   icon?: React.ReactNode;
@@ -27,7 +17,8 @@ interface HealthButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
+function UpdateHealth({ character }: { character: EncounterCharacter }): JSX.Element {
+  const hp = character.hp;
   const { handles } = useEditPopoverContext();
   const current = useWatchValueObserver(hp.currentObserver);
   const temp = useWatchValueObserver(hp.tempObserver);
@@ -48,13 +39,9 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     handles.close();
   };
 
-  const onEscape = (e: KeyboardEvent<HTMLElement>) =>
-    e.key === "Escape" && handles.close();
+  const onEscape = (e: KeyboardEvent<HTMLElement>) => e.key === "Escape" && handles.close();
 
-  const ref = useClickOutside(
-    () => handles.close(),
-    ["mousedown", "touchstart"]
-  );
+  const ref = useClickOutside(() => handles.close(), ["mousedown", "touchstart"]);
 
   return (
     <Flex ref={ref} align="center" gap="xs" onKeyDown={onEscape}>
@@ -86,12 +73,7 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
     </Flex>
   );
 
-  function HealthButton({
-    icon,
-    color,
-    children,
-    onClick,
-  }: HealthButtonProps): JSX.Element {
+  function HealthButton({ icon, color, children, onClick }: HealthButtonProps): JSX.Element {
     return (
       <Button
         size="xs"
@@ -109,7 +91,8 @@ function UpdateHealth({ hp }: { hp: HitPoints }): JSX.Element {
   }
 }
 
-export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
+export function HpAttribute({ character }: { character: EncounterCharacter }): JSX.Element {
+  const hp = character.hp;
   const current = useWatchValueObserver(hp.currentObserver);
   const total = useWatchValueObserver(hp.totalObserver);
   const temporary = useWatchValueObserver(hp.tempObserver);
@@ -126,7 +109,7 @@ export function HpAttribute({ hp }: { hp: HitPoints }): JSX.Element {
           </Text>
         }
       >
-        <UpdateHealth hp={hp} />
+        <UpdateHealth character={character} />
       </EditPopover>
       <Text size="sm">/</Text>
       <EditPopover titleComponent={<Text size="sm">{total}</Text>}>

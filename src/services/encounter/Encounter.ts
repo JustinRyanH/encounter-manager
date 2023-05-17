@@ -3,7 +3,17 @@ import { Signal, SignalConnection } from "typed-signals";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
-import { getCommandId, updateCharacter, updateNameCommand } from "~/services/encounter/Commands";
+import {
+  getCommandId,
+  updateCharacter,
+  updateNameCommand,
+  updateInitiativeCmd,
+  updateTotalHpCmd,
+  updateCurrentHpCmd,
+  updateTemporaryHpCmd,
+  healCharacterCmd,
+  damageCharacterCmd,
+} from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
 import { Character as CharacterType, CharacterCommand } from "~/encounterBindings";
 
@@ -150,6 +160,30 @@ export class Encounter {
 
   async updateCharacterName(id: string, name: string) {
     return await this.updateCharacter(updateNameCommand(id, name));
+  }
+
+  async updateCharacterInitiative(id: string, initiative: number) {
+    return await this.updateCharacter(updateInitiativeCmd(id, initiative));
+  }
+
+  async updateCharacterTotalHp(id: string, totalHp: number) {
+    return await this.updateCharacter(updateTotalHpCmd(id, totalHp));
+  }
+
+  async updateCharacterCurrentHp(id: string, currentHp: number) {
+    return await this.updateCharacter(updateCurrentHpCmd(id, currentHp));
+  }
+
+  async updateCharacterTemporaryHp(id: string, temporaryHp: number) {
+    return await this.updateCharacter(updateTemporaryHpCmd(id, temporaryHp));
+  }
+
+  async healCharacter(id: string, amount: number) {
+    return await this.updateCharacter(healCharacterCmd(id, amount));
+  }
+
+  async damageCharacter(id: string, amount: number) {
+    return await this.updateCharacter(damageCharacterCmd(id, amount));
   }
 
   private setCharacters = (characters: Array<EncounterCharacter>) => {

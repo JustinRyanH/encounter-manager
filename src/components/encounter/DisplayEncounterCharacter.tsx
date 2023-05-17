@@ -151,7 +151,7 @@ export function DisplayEncounterCharacter({ character, viewEncounter }: Encounte
             </Center>
             <NameAttribute character={character} />
             <InitiativeAttribute character={character} />
-            <HpAttribute hp={character.hp} />
+            <HpAttribute character={character} />
           </Group>
         </Paper>
       </Accordion.Panel>

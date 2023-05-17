@@ -225,42 +225,6 @@ describe("EncounterCharacter", () => {
     });
   });
 
-  describe("updateInitiative", () => {
-    test("can update initiative", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.updateInitiative(20);
-      expect(character.initiative).toEqual(20);
-    });
-
-    test("if the initiative is not a number, it does not update", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.updateInitiative(null);
-      expect(character.initiative).toEqual(10);
-    });
-
-    test("if the initiative is not a number, it broadcasts a notification", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.updateInitiative(null);
-      expect(notifications.show).toHaveBeenCalledWith({
-        title: "Invalid Initiative",
-        message: "Initiative cannot be empty",
-        color: "red",
-      });
-    });
-  });
-
   describe("observeInitiative", function () {
     test("can subscribe to initiative changes", () => {
       const character = new EncounterCharacter({
