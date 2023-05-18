@@ -4,6 +4,7 @@ use std::sync::{Arc};
 use tokio::sync::{Mutex, MutexGuard};
 use tauri::State;
 use serde::{Deserialize, Serialize};
+use specta::PrimitiveType::char;
 use uuid::Uuid;
 use specta::Type;
 
@@ -103,10 +104,9 @@ impl Encounter {
 
         match cmd {
             CharacterCommand::UpdateName {  name, .. } => {
-                match character.set_name(name) {
-                    Ok(_) => Ok(CharacterCommandResponse::updated(character)),
-                    Err(_) => Ok(CharacterCommandResponse::updated_with_messages(character, CharacterChangeMessages::none()))
-                }
+                character.set_name(name)
+                    .map(|_| CharacterCommandResponse::updated(character))
+                    .or_else(|e| Ok(CharacterCommandResponse::updated_with_messages(character, CharacterChangeMessages::default().with_name_error_message(e))) )
             }
             CharacterCommand::UpdateInitiative {  initiative, .. } => {
                 character.set_initiative(initiative);
