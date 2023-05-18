@@ -8,6 +8,8 @@ import { EncounterProvider, useEncounterContext } from "~/components/encounter/E
 import { useStyles } from "~/components/encounter/DisplayEncounter.styles";
 import { Navigate, redirect, useParams } from "react-router-dom";
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
+import { notifyErrors } from "~/services/notifications";
+import { Encounter } from "~/services/encounter";
 
 function ManageEncounter() {
   const encounter = useEncounterContext();
@@ -41,18 +43,7 @@ function ManageEncounter() {
   );
 }
 
-function DisplayEncounter({ encounterId }: { encounterId: string }) {
-  const encounterManager = useEncounterManager();
-  const encounterObserver = encounterManager.getEncounter(encounterId);
-  const encounter = useWatchValueObserver(encounterObserver.readonly);
-
-  if (!encounter) {
-    return (
-      <Center h="100%">
-        <Loader variant="bars" size="xl" />
-      </Center>
-    );
-  }
+function DisplayEncounter({ encounter }: { encounter: Encounter }) {
   const characters = useWatchValueObserver(encounter.charactersObserver);
   const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
   const ids = useWatchValueObserver(viewEncounter.openedCharactersObserver);
@@ -71,10 +62,29 @@ function DisplayEncounter({ encounterId }: { encounterId: string }) {
   );
 }
 
+function LoadEncounter({ encounterId }: { encounterId: string }) {
+  const encounterManager = useEncounterManager();
+  const encounterObserver = encounterManager.getEncounter(encounterId);
+  const encounter = useWatchValueObserver(encounterObserver.readonly);
+
+  React.useEffect(() => {
+    if (!encounter) encounterManager.refreshList().catch(notifyErrors);
+  }, [encounter]);
+
+  if (!encounter) {
+    return (
+      <Center h="100%">
+        <Loader variant="bars" size="xl" />
+      </Center>
+    );
+  }
+  return <DisplayEncounter encounter={encounter} />;
+}
+
 export function DisplayEncounterRoute() {
   const { encounterId } = useParams();
   if (!encounterId) {
     return <Navigate to="/" />;
   }
-  return <DisplayEncounter encounterId={encounterId} />;
+  return <LoadEncounter encounterId={encounterId} />;
 }

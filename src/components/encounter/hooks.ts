@@ -7,4 +7,5 @@ export function useRefreshEncounter() {
   React.useEffect(() => {
     encounterManager.refreshList().catch(notifyErrors);
   }, [encounterManager]);
+  return encounterManager;
 }

@@ -6,7 +6,7 @@ import { AppHeader } from "~/components/AppHeader";
 import "./App.css";
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
-import { DisplayEncounterRoute } from "~/components/encounter/DisplayEncounterRoute";
+import { DisplayEncounterRoute } from "~/components/encounter/DisplayEncounter";
 
 function RootApp() {
   return (
