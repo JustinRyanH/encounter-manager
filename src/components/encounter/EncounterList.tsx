@@ -7,13 +7,18 @@ import { notifyErrors } from "~/services/notifications";
 import { EncounterPreview } from "~/components/encounter/EncounterPreview";
 import { Encounter } from "~/services/encounter";
 
-export function EncounterList() {
+function useRefreshEncounter() {
   const encounterManager = useEncounterManager();
-  const encounterIds = useWatchValueObserver(encounterManager.encountersObserver);
-  const encounters = React.useMemo(() => encounterManager.encounters, [encounterIds]);
   React.useEffect(() => {
     encounterManager.refreshList().catch(notifyErrors);
   }, [encounterManager]);
+}
+
+export function EncounterList() {
+  useRefreshEncounter();
+  const encounterManager = useEncounterManager();
+  const encounterIds = useWatchValueObserver(encounterManager.encountersObserver);
+  const encounters = React.useMemo(() => encounterManager.encounters, [encounterIds]);
 
   const formatPreview = (encounter: Encounter) => <EncounterPreview encounter={encounter} key={encounter.id} />;
   const previews = encounters.map(formatPreview);
