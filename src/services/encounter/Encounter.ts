@@ -221,6 +221,9 @@ export class Encounter {
       const { character } = await updateCharacter(this.id, cmd);
       existingCharacter.name = character.name;
       existingCharacter.initiative = character.initiative;
+      existingCharacter.hp.current = character.hp.current;
+      existingCharacter.hp.total = character.hp.total;
+      existingCharacter.hp.temp = character.hp.temporary;
     } catch (error: unknown) {
       handleError({ error, title: "Failed to update Character" });
     }

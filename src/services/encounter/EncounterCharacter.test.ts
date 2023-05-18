@@ -327,5 +327,150 @@ describe("EncounterCharacter", () => {
       await character.updateName("New Name");
       expect(character.name).toEqual("New Name");
     });
+
+    test("update their initiative", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          initiative: 20,
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+      });
+      encounter.addCharacter(character);
+
+      expect(character.initiative).toEqual(10);
+      await character.updateInitiative(20);
+      expect(character.initiative).toEqual(20);
+    });
+
+    test("update current hp", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          current: 5,
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+        hp: {
+          total: 10,
+          current: 10,
+          temp: 0,
+        },
+      });
+      encounter.addCharacter(character);
+
+      expect(character.hp.current).toEqual(10);
+      await character.updateCurrentHp(5);
+      expect(character.hp.current).toEqual(5);
+    });
+
+    test("update total hp", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          total: 20,
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+        hp: {
+          total: 10,
+          current: 10,
+          temp: 0,
+        },
+      });
+      encounter.addCharacter(character);
+
+      expect(character.hp.total).toEqual(10);
+      await character.updateTotalHp(20);
+      expect(character.hp.total).toEqual(20);
+    });
+
+    test("update temp hp", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          temporary: 5,
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+        hp: {
+          total: 10,
+          current: 10,
+          temp: 0,
+        },
+      });
+      encounter.addCharacter(character);
+
+      expect(character.hp.temp).toEqual(0);
+      await character.updateTempHp(5);
+      expect(character.hp.temp).toEqual(5);
+    });
+
+    test("can heal", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          current: 10,
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+        hp: {
+          total: 10,
+          current: 5,
+          temp: 0,
+        },
+      });
+      encounter.addCharacter(character);
+
+      expect(character.hp.current).toEqual(5);
+      await character.heal(5);
+      expect(character.hp.current).toEqual(10);
+    });
+
+    test("can damage", async () => {
+      (updateCharacter as Mock).mockReturnValue({
+        character: buildMockCharacter({
+          id: "test-id",
+          current: 5,
+        }),
+      });
+
+      const character = new EncounterCharacter({
+        id: "test-id",
+        name: "Test",
+        initiative: 10,
+        hp: {
+          total: 10,
+          current: 10,
+          temp: 0,
+        },
+      });
+      encounter.addCharacter(character);
+
+      expect(character.hp.current).toEqual(10);
+      await character.damage(5);
+      expect(character.hp.current).toEqual(5);
+    });
   });
 });

@@ -147,7 +147,7 @@ describe("HitPoints", () => {
         current: 10,
         temp: 0,
       });
-      expect(hitPoints.temp).toEqual(0);
+      expect(hitPoints.temporary).toEqual(0);
     });
 
     test("can set the temp", () => {
@@ -156,8 +156,8 @@ describe("HitPoints", () => {
         current: 10,
         temp: 0,
       });
-      hitPoints.temp = 20;
-      expect(hitPoints.temp).toEqual(20);
+      hitPoints.temporary = 20;
+      expect(hitPoints.temporary).toEqual(20);
     });
 
     test("can subscribe to temp changes", () => {
@@ -168,7 +168,7 @@ describe("HitPoints", () => {
       });
       const observer = vi.fn();
       hitPoints.tempObserver.add(observer);
-      hitPoints.temp = 20;
+      hitPoints.temporary = 20;
       expect(observer).toHaveBeenCalledWith({
         newValue: 20,
         oldValue: 0,
@@ -182,7 +182,7 @@ describe("HitPoints", () => {
         temp: 3,
       });
       hitPoints.setTemp(null);
-      expect(hitPoints.temp).toEqual(0);
+      expect(hitPoints.temporary).toEqual(0);
     });
 
     test("if incoming temp is negative, no-ops, and notifies the user", () => {
@@ -192,7 +192,7 @@ describe("HitPoints", () => {
         temp: 3,
       });
       hitPoints.setTemp(-1);
-      expect(hitPoints.temp).toEqual(3);
+      expect(hitPoints.temporary).toEqual(3);
       expect(notifications.show).toHaveBeenCalledWith({
         title: "Invalid Temporary Hit Points",
         message: "Temporary hit points cannot be negative",
@@ -246,7 +246,7 @@ describe("HitPoints", () => {
       });
       hitPoints.damage(6);
       expect(hitPoints.current).toEqual(9);
-      expect(hitPoints.temp).toEqual(0);
+      expect(hitPoints.temporary).toEqual(0);
     });
 
     test("if damage is less than temp, only damage temp", () => {
@@ -257,7 +257,7 @@ describe("HitPoints", () => {
       });
       hitPoints.damage(3);
       expect(hitPoints.current).toEqual(10);
-      expect(hitPoints.temp).toEqual(2);
+      expect(hitPoints.temporary).toEqual(2);
     });
   });
 
@@ -290,7 +290,7 @@ describe("HitPoints", () => {
       });
       hitPoints.heal(6);
       expect(hitPoints.current).toEqual(10);
-      expect(hitPoints.temp).toEqual(5);
+      expect(hitPoints.temporary).toEqual(5);
     });
   });
 });
