@@ -26,16 +26,6 @@ interface EncounterCharacterUpdateProps {
  * A Tracked Character
  */
 export class EncounterCharacter {
-  static ValidateName = (name: string | null): string[] => {
-    if (!name) return ["Name cannot be empty"];
-    return [];
-  };
-
-  static ValidateInitiative(value: number | null) {
-    if (!value) return ["Initiative cannot be empty"];
-    return [];
-  }
-
   static newCharacter(param: EncounterCharacterProps): EncounterCharacter {
     return new EncounterCharacter(param);
   }
@@ -85,9 +75,6 @@ export class EncounterCharacter {
    * @param name
    */
   set name(name: string) {
-    const errors = this.#validateName(name).join(", ");
-    if (notifyErrors({ errors, title: "Invalid Name" })) return;
-
     this.#name.value = name;
   }
 
@@ -199,7 +186,4 @@ export class EncounterCharacter {
     this.#initiative.add(message);
     return () => this.#initiative.remove(message);
   };
-
-  #validateName = (name: string | null): string[] => EncounterCharacter.ValidateName(name);
-  #validateInitiative = (value: number | null): string[] => EncounterCharacter.ValidateInitiative(value);
 }
