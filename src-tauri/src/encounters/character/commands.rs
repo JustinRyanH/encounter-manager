@@ -47,6 +47,22 @@ pub struct FrontendMessage {
     pub message: String,
 }
 
+impl FrontendMessage {
+    pub fn success<T: Into<String>>(message: T) -> Self {
+        Self {
+            message_type: FrontendMessageType::Success,
+            message: message.into(),
+        }
+    }
+
+    pub fn error<T: Into<String>>(message: T) -> Self {
+        Self {
+            message_type: FrontendMessageType::Error,
+            message: message.into(),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct CharacterChangeMessages {
@@ -58,6 +74,22 @@ pub struct CharacterChangeMessages {
 impl CharacterChangeMessages {
     pub fn none() -> Self {
         Self::default()
+    }
+
+    pub fn with_name_error_message<T: Into<String>>(self, message: T) -> Self {
+        let message = FrontendMessage::error(message);
+        let name = match self.name {
+            Some(mut messages) => {
+                messages.push(message);
+                Some(messages)
+            }
+            None => Some(vec![message]),
+        };
+
+        Self {
+            name,
+            ..self
+        }
     }
 }
 
