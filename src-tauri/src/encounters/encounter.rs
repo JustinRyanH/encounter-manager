@@ -4,7 +4,6 @@ use std::sync::{Arc};
 use tokio::sync::{Mutex, MutexGuard};
 use tauri::State;
 use serde::{Deserialize, Serialize};
-use specta::PrimitiveType::char;
 use uuid::Uuid;
 use specta::Type;
 
