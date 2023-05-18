@@ -3,7 +3,6 @@ import { useClickOutside } from "@mantine/hooks";
 import { Button, Divider, Flex, NumberInput, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Minus, Plus } from "@phosphor-icons/react";
 
-import { HitPoints } from "~/services/encounter/HitPoints";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { EditPopover, useEditPopoverContext } from "~/components/systems/EditPopover";
@@ -25,16 +24,17 @@ function UpdateHealth({ character }: { character: EncounterCharacter }): JSX.Ele
 
   const [change, setChange] = React.useState<number | "">("");
 
-  const handleHeal = () => {
+  const handleHeal = async () => {
     if (change === "") return;
+    await character.heal(change);
     hp.heal(change);
     setChange("");
     handles.close();
   };
 
-  const handleDamage = () => {
+  const handleDamage = async () => {
     if (change === "") return;
-    hp.damage(change);
+    await character.damage(change);
     setChange("");
     handles.close();
   };
@@ -113,11 +113,11 @@ export function HpAttribute({ character }: { character: EncounterCharacter }): J
       </EditPopover>
       <Text size="sm">/</Text>
       <EditPopover titleComponent={<Text size="sm">{total}</Text>}>
-        <UpdateNumber placeholder="Total HP" updateAttribute={hp.setTotal} />
+        <UpdateNumber placeholder="Total HP" updateAttribute={(v) => v && character.updateTotalHp(v)} />
       </EditPopover>
       <Divider orientation="vertical" />
       <EditPopover titleComponent={<Text size="sm">{temporary || "--"}</Text>}>
-        <UpdateNumber updateAttribute={hp.setTemp} placeholder="Temp HP" />
+        <UpdateNumber updateAttribute={character.updateTempHp} placeholder="Temp HP" />
       </EditPopover>
     </Attribute>
   );
