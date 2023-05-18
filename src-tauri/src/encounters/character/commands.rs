@@ -47,7 +47,7 @@ pub struct FrontendMessage {
     pub message: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct CharacterChangeMessages {
     pub name: Option<Vec<FrontendMessage>>,
@@ -57,11 +57,7 @@ pub struct CharacterChangeMessages {
 
 impl CharacterChangeMessages {
     pub fn none() -> Self {
-        Self {
-            name: None,
-            initiative: None,
-            hp: None,
-        }
+        Self::default()
     }
 }
 
