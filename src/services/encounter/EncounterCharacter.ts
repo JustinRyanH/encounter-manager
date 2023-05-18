@@ -150,7 +150,7 @@ export class EncounterCharacter {
       const { current, total, temp } = values.hp;
       if (current !== undefined && current !== this.hp.current) this.hp.current = current;
       if (total !== undefined && total !== this.hp.total) this.hp.total = total;
-      if (temp !== undefined && temp !== this.hp.temp) this.hp.temp = temp;
+      if (temp !== undefined && temp !== this.hp.temporary) this.hp.temporary = temp;
     }
   }
 

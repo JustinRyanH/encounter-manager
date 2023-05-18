@@ -123,7 +123,7 @@ describe("EncounterCharacter", () => {
       });
       character.hp.tempObserver.add(observer);
       character.update({ id: "test-id", hp: { temp: 5 } });
-      expect(character.hp.temp).toEqual(5);
+      expect(character.hp.temporary).toEqual(5);
       expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
     });
 
@@ -418,9 +418,9 @@ describe("EncounterCharacter", () => {
       });
       encounter.addCharacter(character);
 
-      expect(character.hp.temp).toEqual(0);
+      expect(character.hp.temporary).toEqual(0);
       await character.updateTempHp(5);
-      expect(character.hp.temp).toEqual(5);
+      expect(character.hp.temporary).toEqual(5);
     });
 
     test("can heal", async () => {

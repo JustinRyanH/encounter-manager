@@ -88,7 +88,7 @@ export class HitPoints {
   /**
    * Temporary hit points.
    */
-  get temp(): number {
+  get temporary(): number {
     return this.#temp.value;
   }
 
@@ -96,7 +96,7 @@ export class HitPoints {
    * Update temporary hit points, and notify observers
    * @param temp
    */
-  set temp(temp: number) {
+  set temporary(temp: number) {
     this.#temp.value = temp;
   }
 
@@ -138,8 +138,8 @@ export class HitPoints {
     if (notifyErrors({ errors, title: "Invalid Temporary Hit Points" })) return;
 
     if (value === null) {
-      if (this.temp === 0) return;
-      this.temp = 0;
+      if (this.temporary === 0) return;
+      this.temporary = 0;
       notifications.show({
         title: "Reset Temporary Hit Points",
         message: "Zeroed out temporary hit points",
@@ -147,7 +147,7 @@ export class HitPoints {
       });
       return;
     }
-    this.temp = Math.max(0, value);
+    this.temporary = Math.max(0, value);
   };
 
   /**
@@ -157,13 +157,13 @@ export class HitPoints {
    * @param amount
    */
   damage = (amount: number) => {
-    const leftOver = this.temp - amount;
+    const leftOver = this.temporary - amount;
     if (leftOver >= 0) {
-      this.temp -= amount;
+      this.temporary -= amount;
       return;
     }
 
-    this.temp = 0;
+    this.temporary = 0;
     this.current = Math.max(this.current - Math.abs(leftOver), 0);
   };
 

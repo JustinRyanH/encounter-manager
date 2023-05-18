@@ -223,7 +223,7 @@ export class Encounter {
       existingCharacter.initiative = character.initiative;
       existingCharacter.hp.current = character.hp.current;
       existingCharacter.hp.total = character.hp.total;
-      existingCharacter.hp.temp = character.hp.temporary;
+      existingCharacter.hp.temporary = character.hp.temporary;
     } catch (error: unknown) {
       handleError({ error, title: "Failed to update Character" });
     }
