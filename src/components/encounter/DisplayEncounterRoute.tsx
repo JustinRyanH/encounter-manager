@@ -6,7 +6,7 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { DisplayEncounterCharacter } from "~/components/encounter/DisplayEncounterCharacter";
 import { EncounterProvider, useEncounterContext } from "~/components/encounter/EncounterContext";
 import { useStyles } from "~/components/encounter/DisplayEncounter.styles";
-import { useParams } from "react-router-dom";
+import { Navigate, redirect, useParams } from "react-router-dom";
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
 
 function ManageEncounter() {
@@ -41,8 +41,7 @@ function ManageEncounter() {
   );
 }
 
-export function DisplayEncounter() {
-  const { encounterId } = useParams();
+function DisplayEncounter({ encounterId }: { encounterId: string }) {
   const encounterManager = useEncounterManager();
   const encounter = React.useMemo(() => {
     if (!encounterId) return null;
@@ -72,4 +71,12 @@ export function DisplayEncounter() {
       </Accordion>
     </EncounterProvider>
   );
+}
+
+export function DisplayEncounterRoute() {
+  const { encounterId } = useParams();
+  if (!encounterId) {
+    return <Navigate to="/" />;
+  }
+  return <DisplayEncounter encounterId={encounterId} />;
 }

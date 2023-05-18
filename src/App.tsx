@@ -6,7 +6,7 @@ import { AppHeader } from "~/components/AppHeader";
 import "./App.css";
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
-import { DisplayEncounter } from "~/components/encounter/DisplayEncounter";
+import { DisplayEncounterRoute } from "~/components/encounter/DisplayEncounterRoute";
 
 function RootApp() {
   return (
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/encounter/:encounterId",
-        element: <DisplayEncounter />,
+        element: <DisplayEncounterRoute />,
       },
     ],
   },
