@@ -67,6 +67,17 @@ impl Character {
     }
 
     pub fn damage(&mut self, value: i32) {
+        if self.hp.temporary > 0 {
+            let change = self.hp.temporary - value;
+            if change > 0 {
+                self.set_temporary_hp(change);
+                return;
+            } else {
+                self.set_temporary_hp(0);
+                self.damage(-change);
+                return;
+            }
+        }
         self.set_current_hp(self.hp.current - value);
     }
 
@@ -202,6 +213,18 @@ mod tests {
         assert_eq!(character_a.hp.current, 5);
         character_a.heal(10);
         assert_eq!(character_a.hp.current, 10);
+
+        character_a.set_temporary_hp(10);
+        assert_eq!(character_a.hp.current, 10);
+        assert_eq!(character_a.hp.temporary, 10);
+
+        character_a.damage(5);
+        assert_eq!(character_a.hp.current, 10);
+        assert_eq!(character_a.hp.temporary, 5);
+
+        character_a.damage(10);
+        assert_eq!(character_a.hp.current, 5);
+        assert_eq!(character_a.hp.temporary, 0);
     }
 
     #[test]
