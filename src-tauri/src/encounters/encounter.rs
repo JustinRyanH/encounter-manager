@@ -74,10 +74,6 @@ impl Encounter {
         self.id.to_string()
     }
 
-    pub fn uuid(&self) -> Uuid {
-        self.id
-    }
-
     pub fn add_character(&mut self, new_character: Character) {
         if self.characters.iter().any(|c| c.is_same_as(&new_character)) {
             return;
