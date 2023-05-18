@@ -50,16 +50,14 @@ impl Character {
         self.id() == other.id()
     }
 
-    pub fn is_similar_to(&self, other: &Character) -> bool {
-        self.name == other.name
-    }
-
-    pub fn set_name<T>(&mut self, name: T) where T: Into<String> {
+    pub fn set_name<T>(&mut self, name: T) -> Result<(), String>
+        where T: Into<String> {
         let name = name.into();
         if name.is_empty() {
-            return;
+            return Err("Name cannot be empty".to_string());
         }
         self.name = name;
+        Ok(())
     }
 
     pub fn heal(&mut self, value: i32) {
@@ -155,18 +153,6 @@ mod tests {
         let cloned_character = character.clone();
         assert_eq!(character.is_same_as(&other_character), false);
         assert_eq!(character.is_same_as(&cloned_character), true);
-    }
-
-    #[test]
-    fn test_is_similar_to() {
-        let name = String::from("Test Character");
-        let total_hp = 10;
-        let initiative = 10;
-        let character = Character::new(name.clone(), total_hp, initiative);
-        let other_character = Character::new(name.clone(), total_hp, initiative);
-        let cloned_character = character.clone();
-        assert_eq!(character.is_similar_to(&other_character), true);
-        assert_eq!(character.is_similar_to(&cloned_character), true);
     }
 
     #[test]
@@ -297,10 +283,13 @@ mod tests {
 
         assert_eq!(character_a.name, "character a");
 
-        character_a.set_name("character b");
+        let result = character_a.set_name("character b");
+        assert!(result.is_ok());
         assert_eq!(character_a.name, "character b");
 
-        character_a.set_name("");
+        let result = character_a.set_name("");
+        assert!(result.is_err());
         assert_eq!(character_a.name, "character b");
+        assert_eq!(result.err().unwrap(), "Name cannot be empty");
     }
 }
