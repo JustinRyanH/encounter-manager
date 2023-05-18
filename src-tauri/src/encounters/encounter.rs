@@ -8,7 +8,7 @@ use uuid::Uuid;
 use specta::Type;
 
 use crate::encounters::Character;
-use crate::encounters::character::{CharacterCommand, CharacterCommandResponse};
+use crate::encounters::character::{CharacterChangeMessages, CharacterCommand, CharacterCommandResponse};
 
 pub type EncounterManagerState<'a> = State<'a, EncounterManager>;
 
@@ -103,8 +103,10 @@ impl Encounter {
 
         match cmd {
             CharacterCommand::UpdateName {  name, .. } => {
-                character.set_name(name);
-                Ok(CharacterCommandResponse::updated(character))
+                match character.set_name(name) {
+                    Ok(_) => Ok(CharacterCommandResponse::updated(character)),
+                    Err(_) => Ok(CharacterCommandResponse::updated_with_messages(character, CharacterChangeMessages::none()))
+                }
             }
             CharacterCommand::UpdateInitiative {  initiative, .. } => {
                 character.set_initiative(initiative);

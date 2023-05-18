@@ -78,4 +78,8 @@ impl CharacterCommandResponse {
     pub fn updated(character: &Character) -> Self {
         Self::UpdatedCharacter { character: character.clone(), messages: CharacterChangeMessages::none() }
     }
+
+    pub fn updated_with_messages(character: &Character, messages: CharacterChangeMessages) -> Self {
+        Self::UpdatedCharacter { character: character.clone(), messages }
+    }
 }
