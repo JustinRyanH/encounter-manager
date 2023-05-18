@@ -30,7 +30,6 @@ export class EncounterManager {
 
   async refreshList() {
     const encounters = await Commands.listEncounter();
-    console.log("refreshing list", { encounters });
     this.#encounterList.value = Object.values(encounters).map(({ id }) => id);
     Object.values(encounters).forEach(({ id, name, characters }) => {
       const encounterObserver = this.getEncounter(id);
@@ -38,7 +37,6 @@ export class EncounterManager {
         encounterObserver.value = this.createNewEncounter({ id, name });
       }
       const encounter = encounterObserver.value;
-      console.log(characters);
       encounter.updateCharacters(characters);
     });
   }

@@ -1,10 +1,9 @@
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
+import { HitPoints as ServerHitPoints } from "~/encounterBindings";
 
-export interface HitPointsProps {
-  total?: number;
-  current?: number;
-  temp?: number;
-}
+export type HitPointsProps = {
+  [K in keyof ServerHitPoints]?: ServerHitPoints[K];
+};
 
 /**
  * A class that represents a character's hit points.
@@ -14,10 +13,10 @@ export class HitPoints {
   #current: ValueObserver<number> = new ValueObserver(0);
   #temp: ValueObserver<number> = new ValueObserver<number>(0);
 
-  constructor({ total = 0, current = 0, temp = 0 }: HitPointsProps = {}) {
+  constructor({ total = 0, current = 0, temporary = 0 }: HitPointsProps = {}) {
     this.#total.value = total;
     this.#current.value = current;
-    this.#temp.value = temp;
+    this.#temp.value = temporary;
   }
 
   /**

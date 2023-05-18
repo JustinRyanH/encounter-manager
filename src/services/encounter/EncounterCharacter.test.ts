@@ -81,7 +81,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       character.hp.currentObserver.add(observer);
@@ -99,7 +99,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       character.hp.totalObserver.add(observer);
@@ -118,11 +118,11 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       character.hp.tempObserver.add(observer);
-      character.update({ id: "test-id", hp: { temp: 5 } });
+      character.update({ id: "test-id", hp: { temporary: 5 } });
       expect(character.hp.temporary).toEqual(5);
       expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
     });
@@ -141,7 +141,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 7,
           current: 10,
-          temp: 3,
+          temporary: 3,
         },
       });
       character.nameObserver.add(nameObserver);
@@ -157,7 +157,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 7,
           current: 10,
-          temp: 3,
+          temporary: 3,
         },
       });
 
@@ -363,7 +363,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       encounter.addCharacter(character);
@@ -388,7 +388,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       encounter.addCharacter(character);
@@ -413,7 +413,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       encounter.addCharacter(character);
@@ -438,7 +438,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 5,
-          temp: 0,
+          temporary: 0,
         },
       });
       encounter.addCharacter(character);
@@ -463,7 +463,7 @@ describe("EncounterCharacter", () => {
         hp: {
           total: 10,
           current: 10,
-          temp: 0,
+          temporary: 0,
         },
       });
       encounter.addCharacter(character);
