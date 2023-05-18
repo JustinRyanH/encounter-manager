@@ -1,6 +1,4 @@
-import { notifications } from "@mantine/notifications";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
-import { notifyErrors } from "~/services/notifications";
 
 export interface HitPointsProps {
   total?: number;

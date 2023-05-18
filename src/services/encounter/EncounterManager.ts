@@ -38,6 +38,7 @@ export class EncounterManager {
         encounterObserver.value = this.createNewEncounter({ id, name });
       }
       const encounter = encounterObserver.value;
+      console.log(characters);
       encounter.updateCharacters(characters);
     });
   }

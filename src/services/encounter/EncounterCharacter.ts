@@ -1,7 +1,7 @@
 import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
-import { notifyErrors } from "~/services/notifications";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
 import { Encounter } from "~/services/encounter/Encounter";
+import { HitPoints as ServerHitPoints } from "~/encounterBindings";
 
 interface EncounterCharacterProps {
   id: string;
@@ -19,7 +19,7 @@ interface EncounterCharacterUpdateProps {
   initiative?: number;
   totalHp?: number;
   tempHp?: number | null;
-  hp?: HitPointsProps;
+  hp?: ServerHitPoints;
 }
 
 /**
@@ -134,10 +134,11 @@ export class EncounterCharacter {
     if (values.name && values.name !== this.name) this.name = values.name;
     if (values.initiative && values.initiative !== this.initiative) this.initiative = values.initiative;
     if (values.hp) {
-      const { current, total, temp } = values.hp;
+      console.log({ name: this.name, hp: values.hp });
+      const { current, total, temporary } = values.hp;
       if (current !== undefined && current !== this.hp.current) this.hp.current = current;
       if (total !== undefined && total !== this.hp.total) this.hp.total = total;
-      if (temp !== undefined && temp !== this.hp.temporary) this.hp.temporary = temp;
+      if (temporary !== undefined && temporary !== this.hp.temporary) this.hp.temporary = temporary;
     }
   }
 
