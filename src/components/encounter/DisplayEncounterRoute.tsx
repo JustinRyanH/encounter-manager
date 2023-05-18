@@ -43,10 +43,8 @@ function ManageEncounter() {
 
 function DisplayEncounter({ encounterId }: { encounterId: string }) {
   const encounterManager = useEncounterManager();
-  const encounter = React.useMemo(() => {
-    if (!encounterId) return null;
-    return encounterManager.getEncounter(encounterId);
-  }, [encounterManager, encounterId]);
+  const encounterObserver = encounterManager.getEncounter(encounterId);
+  const encounter = useWatchValueObserver(encounterObserver.readonly);
 
   if (!encounter) {
     return (
