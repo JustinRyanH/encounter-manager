@@ -3,16 +3,9 @@ import { Accordion } from "@mantine/core";
 
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { notifyErrors } from "~/services/notifications";
 import { EncounterPreview } from "~/components/encounter/EncounterPreview";
 import { Encounter } from "~/services/encounter";
-
-function useRefreshEncounter() {
-  const encounterManager = useEncounterManager();
-  React.useEffect(() => {
-    encounterManager.refreshList().catch(notifyErrors);
-  }, [encounterManager]);
-}
+import { useRefreshEncounter } from "~/components/encounter/hooks";
 
 export function EncounterList() {
   useRefreshEncounter();
