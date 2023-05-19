@@ -60,23 +60,19 @@ describe("Encounter", function () {
     });
 
     test("moves to next character when nextCharacter is called", function () {
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
-
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      expect(characterA).toBeTruthy();
+      expect(characterB).toBeTruthy();
 
       expect(encounter.activeCharacter).toEqual(null);
       expect(characterA.inPlay).toEqual(false);
@@ -97,23 +93,18 @@ describe("Encounter", function () {
 
     test("signaling when the current character changes", function () {
       const listener = vi.fn();
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
 
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
 
       encounter.startEncounter();
 
