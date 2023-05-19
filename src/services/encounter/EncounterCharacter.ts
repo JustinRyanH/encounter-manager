@@ -15,7 +15,7 @@ export interface OptionalCharacterProps extends Omit<MajorCharacterProps, "hp"> 
   hp?: OptionalHitPoints;
 }
 
-interface EncounterCreateProps extends OptionalCharacterProps {
+export interface EncounterCreateProps extends OptionalCharacterProps {
   id: string;
   name: string;
   initiative: number;

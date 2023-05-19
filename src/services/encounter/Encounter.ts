@@ -1,6 +1,6 @@
 import { Signal, SignalConnection } from "typed-signals";
 
-import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
+import { EncounterCharacter, EncounterCreateProps } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import {
@@ -15,7 +15,7 @@ import {
   damageCharacterCmd,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { Character as CharacterType, CharacterCommand, Encounter as ServerEncounter } from "~/encounterBindings";
+import { CharacterCommand, Encounter as ServerEncounter } from "~/encounterBindings";
 
 type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
@@ -102,7 +102,7 @@ export class Encounter {
     this.#characterAddedSignal.emit({ character: character });
   };
 
-  updateCharacters = (characters: CharacterType[]) => {
+  updateCharacters = (characters: EncounterCreateProps[]) => {
     this.setCharacters(characters.map(this.updateOrCreateCharacter));
   };
 
@@ -204,7 +204,7 @@ export class Encounter {
     });
   };
 
-  private updateOrCreateCharacter = (character: CharacterType) => {
+  private updateOrCreateCharacter = (character: EncounterCreateProps) => {
     const existingCharacter = this.findCharacter(character.id);
     if (!existingCharacter) return EncounterCharacter.newCharacter(character);
     existingCharacter.update(character);
