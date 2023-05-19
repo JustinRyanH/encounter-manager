@@ -11,19 +11,19 @@ import {
   Skeleton,
   Text,
 } from "@mantine/core";
+import { ArrowBendRightDown } from "@phosphor-icons/react";
+import { useDisclosure } from "@mantine/hooks";
 
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
-import { HpAttribute } from "~/components/encounter/display/HpAttribute";
-import { NameAttribute } from "~/components/encounter/display/NameAttribute";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/systems/UpdateAttribute";
-
-import { ArrowBendRightDown } from "@phosphor-icons/react";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
-import { useDisclosure } from "@mantine/hooks";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
+
+import { HpAttribute } from "./HpAttribute";
+import { NameAttribute } from "./NameAttribute";
 
 function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
   const initiative = useWatchValueObserver(character.initiativeObserver);
