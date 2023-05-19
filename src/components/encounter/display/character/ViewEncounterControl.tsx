@@ -2,8 +2,14 @@ import { ArrowBendRightDown } from "@phosphor-icons/react";
 import { Accordion, AccordionControlProps, ActionIcon, Box, Paper } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { Encounter, EncounterCharacter, ViewEncounter } from "~/services/encounter";
+import { EncounterCharacter, ViewEncounter } from "~/services/encounter";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
+
+const ViewSx = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+};
 
 const NextButtonSx = {
   "&[data-disabled]": {
@@ -18,8 +24,9 @@ interface EncounterControlProps extends AccordionControlProps {
   view: ViewEncounter;
 }
 
-function NextCharacterButton({ inPlay }: { inPlay: boolean }) {
+function NextCharacterButton({ character }: { character: EncounterCharacter }) {
   const encounter = useEncounterContext();
+  const inPlay = useWatchValueObserver(character.inPlayObserver);
 
   return (
     <ActionIcon
@@ -38,19 +45,11 @@ function NextCharacterButton({ inPlay }: { inPlay: boolean }) {
 
 export function ViewEncounterControl({ view, character, ...props }: EncounterControlProps) {
   const onClick = () => view.toggle(character.id);
-  const inPlay = useWatchValueObserver(character.inPlayObserver);
-
   return (
     <Paper radius="md">
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <Box sx={ViewSx}>
         <Accordion.Control onClick={onClick} {...props} />
-        <NextCharacterButton inPlay={inPlay} />
+        <NextCharacterButton character={character} />
       </Box>
     </Paper>
   );
