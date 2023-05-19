@@ -1,6 +1,11 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.eslint.json",
+    "tsconfigRootDir": "./"
+  },
   "plugins": [
     "@typescript-eslint",
     "import"
@@ -8,7 +13,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "import/no-unresolved": [2, { "commonjs": true, "amd": true }]
@@ -18,8 +23,7 @@
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
-      "typescript": true,
-
+      "typescript": true
     }
   }
 }
