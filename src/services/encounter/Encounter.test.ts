@@ -186,23 +186,20 @@ describe("Encounter", function () {
 
   describe("startEncounter", function () {
     test("sets the active character to the first character", function () {
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
-
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      expect(characterA).toBeTruthy();
+      expect(characterB).toBeTruthy();
 
       encounter.stopEncounter();
 
@@ -214,23 +211,20 @@ describe("Encounter", function () {
     });
 
     test("no-ops if the character is already active character", function () {
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
-
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      expect(characterA).toBeTruthy();
+      expect(characterB).toBeTruthy();
 
       encounter.startEncounter();
       encounter.nextCharacter();
@@ -258,23 +252,20 @@ describe("Encounter", function () {
 
   describe("stopEncounter", function () {
     test("clears the active character", function () {
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
-
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      expect(characterA).toBeTruthy();
+      expect(characterB).toBeTruthy();
 
       encounter.startEncounter();
 
@@ -288,23 +279,20 @@ describe("Encounter", function () {
 
   describe("restartEncounter", function () {
     test("picks up encounter where it left off", function () {
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
-
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      expect(characterA).toBeTruthy();
+      expect(characterB).toBeTruthy();
 
       encounter.startEncounter();
       encounter.nextCharacter();
