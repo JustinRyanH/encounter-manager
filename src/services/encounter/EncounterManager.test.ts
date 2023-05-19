@@ -97,7 +97,10 @@ describe("EncounterManager", function () {
       await manager.refreshList();
 
       expect(manager.getEncounter("300").value).toBeInstanceOf(Encounter);
-      expect(manager.getEncounter("301").value).toBeNull();
+      expect(manager.getEncounter("300").value.isStub).toBe(false);
+
+      expect(manager.getEncounter("301").value).toBeInstanceOf(Encounter);
+      expect(manager.getEncounter("301").value.isStub).toBe(true);
     });
   });
 });

@@ -68,7 +68,7 @@ function LoadEncounter({ encounterId }: { encounterId: string }) {
   const encounter = useWatchValueObserver(encounterObserver.readonly);
 
   React.useEffect(() => {
-    if (!encounter) encounterManager.refreshList().catch(notifyErrors);
+    if (encounter.isStub) encounterManager.refreshList().catch(notifyErrors);
   }, [encounter]);
 
   if (!encounter) {
