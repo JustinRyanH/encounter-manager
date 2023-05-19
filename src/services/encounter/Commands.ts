@@ -1,16 +1,4 @@
-import {
-  Character,
-  CharacterChangeMessages,
-  CharacterCommand,
-  Encounter,
-  encounter,
-  updateEncounterCharacter,
-} from "~/encounterBindings";
-
-interface UpdatedCharacter {
-  character: Character;
-  messages: CharacterChangeMessages;
-}
+import { CharacterCommand, Encounter, encounter, updateEncounterCharacter } from "~/encounterBindings";
 
 interface EncounterList {
   [key: string]: Encounter;

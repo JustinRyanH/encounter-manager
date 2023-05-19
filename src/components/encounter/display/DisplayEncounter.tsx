@@ -72,6 +72,7 @@ function StubEncounter() {
   return <DisplayEncounter encounter={encounter} />;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function LoadEncounter({ encounterId }: { encounterId: string }) {
   const encounterManager = useEncounterManager();
   const encounterObserver = encounterManager.getEncounter(encounterId);

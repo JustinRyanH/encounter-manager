@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { notifications } from "@mantine/notifications";
 
 import { HitPoints } from "~/services/encounter/HitPoints";
 
@@ -15,7 +14,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 10,
         current: 10,
-        temp: 0,
+        temporary: 0,
       });
       expect(hitPoints.current).toEqual(10);
     });
@@ -24,7 +23,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 10,
         current: 0,
-        temp: 0,
+        temporary: 0,
       });
       hitPoints.current = 10;
       expect(hitPoints.current).toEqual(10);
@@ -34,7 +33,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 10,
         current: 10,
-        temp: 0,
+        temporary: 0,
       });
       hitPoints.current = 20;
       expect(hitPoints.current).toEqual(10);
@@ -44,7 +43,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 20,
         current: 10,
-        temp: 0,
+        temporary: 0,
       });
       const observer = vi.fn();
       hitPoints.currentObserver.add(observer);
@@ -61,7 +60,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 10,
         current: 10,
-        temp: 0,
+        temporary: 0,
       });
       expect(hitPoints.temporary).toEqual(0);
     });
@@ -70,7 +69,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 10,
         current: 10,
-        temp: 0,
+        temporary: 0,
       });
       hitPoints.temporary = 20;
       expect(hitPoints.temporary).toEqual(20);
@@ -80,7 +79,7 @@ describe("HitPoints", () => {
       const hitPoints = new HitPoints({
         total: 10,
         current: 10,
-        temp: 0,
+        temporary: 0,
       });
       const observer = vi.fn();
       hitPoints.tempObserver.add(observer);
