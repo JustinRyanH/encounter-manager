@@ -15,8 +15,8 @@ import {
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
-import { HpAttribute } from "~/components/encounter/HpAttribute";
-import { NameAttribute } from "~/components/encounter/NameAttribute";
+import { HpAttribute } from "~/components/encounter/display/HpAttribute";
+import { NameAttribute } from "~/components/encounter/display/NameAttribute";
 import { EditPopover } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/systems/UpdateAttribute";
 
