@@ -1,7 +1,9 @@
-import { EncounterCharacter } from "~/services/encounter";
-import { useWatchValueObserver } from "~/hooks/watchValueObserver";
+import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Center, Group, Popover, SimpleGrid, Skeleton, Text } from "@mantine/core";
+
+import { EncounterCharacter } from "~/services/encounter";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 interface SummaryViewProps {
   character: EncounterCharacter;
@@ -9,7 +11,11 @@ interface SummaryViewProps {
 
 function CharacterName({ character }: SummaryViewProps) {
   const name = useWatchValueObserver(character.nameObserver);
-  return <Text fz="lg">{name}</Text>;
+  return (
+    <Skeleton height="1.5rem" width="16rem" visible={character.isStub}>
+      <Text fz="lg">{name}</Text>;
+    </Skeleton>
+  );
 }
 
 export function SummaryCharacterView({ character }: { character: EncounterCharacter }): JSX.Element {
@@ -25,7 +31,7 @@ export function SummaryCharacterView({ character }: { character: EncounterCharac
   return (
     <Group spacing="sm">
       <Center maw={75}>
-        <Skeleton circle width={25} height={25} animate={false} />
+        <Skeleton circle width={25} height={25} animate={character.isStub} />
       </Center>
       <CharacterName character={character} />
       <Group spacing="xs">
