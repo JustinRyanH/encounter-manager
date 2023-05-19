@@ -37,7 +37,7 @@ function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
   );
 }
 
-function EncounterCharacterControl({ character }: { character: EncounterCharacter }): JSX.Element {
+function SummaryCharacterView({ character }: { character: EncounterCharacter }): JSX.Element {
   const name = useWatchValueObserver(character.nameObserver);
   const current = useWatchValueObserver(character.hp.currentObserver);
   const total = useWatchValueObserver(character.hp.totalObserver);
@@ -145,7 +145,7 @@ export function DisplayCharacter({ character, viewEncounter }: EncounterCharacte
         inPlay={inPlay}
         nextTurn={encounter.nextCharacter}
       >
-        <EncounterCharacterControl character={character} />
+        <SummaryCharacterView character={character} />
       </CharacterControl>
       <Accordion.Panel sx={{ padding: 0 }}>
         <Paper radius="md" p="sm">
