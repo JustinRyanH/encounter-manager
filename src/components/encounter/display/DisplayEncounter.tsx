@@ -3,13 +3,14 @@ import { Accordion, ActionIcon, Group } from "@mantine/core";
 import { ArrowBendRightDown, Play, PlayPause, UserPlus } from "@phosphor-icons/react";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { DisplayEncounterCharacter } from "~/components/encounter/display/DisplayEncounterCharacter";
 import { EncounterProvider, useEncounterContext } from "~/components/encounter/EncounterContext";
-import { useStyles } from "~/components/encounter/display/DisplayEncounter.styles";
 import { Navigate, useParams } from "react-router-dom";
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
 import { notifyErrors } from "~/services/notifications";
 import { Encounter } from "~/services/encounter";
+
+import { DisplayEncounterCharacter } from "./DisplayEncounterCharacter";
+import { useStyles } from "./DisplayEncounter.styles";
 
 function ManageEncounter() {
   const encounter = useEncounterContext();
