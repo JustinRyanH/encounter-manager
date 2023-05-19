@@ -22,21 +22,25 @@ function ManageEncounter() {
 
   return (
     <Group p="1rem" align="center" position="apart">
-      <ActionIcon title="Add Character" disabled>
+      <ActionIcon title="Add Character" disabled={encounter.isStub || true}>
         <UserPlus />
       </ActionIcon>
       <Group align="center" position="right">
         <ActionIcon
           title="Start Encounter"
-          disabled={Boolean(activeCharacter)}
+          disabled={encounter.isStub || Boolean(activeCharacter)}
           onClick={() => encounter.startEncounter()}
         >
           <Play />
         </ActionIcon>
-        <ActionIcon title={startTopTitle} onClick={startStopAction}>
+        <ActionIcon title={startTopTitle} disabled={encounter.isStub} onClick={startStopAction}>
           <PlayPause />
         </ActionIcon>
-        <ActionIcon title="Next Turn" disabled={!isCharacterActive} onClick={() => encounter.nextCharacter()}>
+        <ActionIcon
+          title="Next Turn"
+          disabled={encounter.isStub || !isCharacterActive}
+          onClick={() => encounter.nextCharacter()}
+        >
           <ArrowBendRightDown />
         </ActionIcon>
       </Group>
