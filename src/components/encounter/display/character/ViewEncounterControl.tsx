@@ -18,7 +18,9 @@ interface EncounterControlProps extends AccordionControlProps {
   view: ViewEncounter;
 }
 
-function NextCharacterButton({ inPlay, encounter }: { inPlay: boolean; encounter: Encounter }) {
+function NextCharacterButton({ inPlay }: { inPlay: boolean }) {
+  const encounter = useEncounterContext();
+
   return (
     <ActionIcon
       color="dark"
@@ -35,8 +37,6 @@ function NextCharacterButton({ inPlay, encounter }: { inPlay: boolean; encounter
 }
 
 export function ViewEncounterControl({ view, character, ...props }: EncounterControlProps) {
-  const encounter = useEncounterContext();
-
   const onClick = () => view.toggle(character.id);
   const inPlay = useWatchValueObserver(character.inPlayObserver);
 
@@ -50,7 +50,7 @@ export function ViewEncounterControl({ view, character, ...props }: EncounterCon
         }}
       >
         <Accordion.Control onClick={onClick} {...props} />
-        <NextCharacterButton inPlay={inPlay} encounter={encounter} />
+        <NextCharacterButton inPlay={inPlay} />
       </Box>
     </Paper>
   );
