@@ -92,16 +92,6 @@ export class Encounter {
     return this.characters.find((c) => c.id === id) || null;
   }
 
-  /**
-   * Adds a character to the encounter and sorts the characters by initiative.
-   * @param character
-   */
-  addCharacter = (character: EncounterCharacter) => {
-    this.setCharacters([...this.characters, character]);
-    this.addEncounterToCharacters();
-    this.#characterAddedSignal.emit({ character: character });
-  };
-
   updateCharacters = (characters: EncounterCreateProps[]) => {
     this.setCharacters(characters.map(this.updateOrCreateCharacter));
   };
