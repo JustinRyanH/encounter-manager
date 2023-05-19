@@ -67,12 +67,6 @@ export function DisplayEncounter({ encounter }: { encounter: Encounter }) {
   );
 }
 
-function StubEncounter() {
-  const encounter = React.useMemo(() => Encounter.StubEncounter("4000"), []);
-  return <DisplayEncounter encounter={encounter} />;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function LoadEncounter({ encounterId }: { encounterId: string }) {
   const encounterManager = useEncounterManager();
   const encounterObserver = encounterManager.getEncounter(encounterId);
@@ -90,6 +84,5 @@ export function DisplayEncounterRoute() {
   if (!encounterId) {
     return <Navigate to="/" />;
   }
-  return <StubEncounter />;
-  // return <LoadEncounter encounterId={encounterId} />;
+  return <LoadEncounter encounterId={encounterId} />;
 }
