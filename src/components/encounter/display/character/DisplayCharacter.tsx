@@ -22,8 +22,8 @@ import { UpdateNumber } from "~/components/systems/UpdateAttribute";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
-import { HpAttribute } from "./HpAttribute";
-import { NameAttribute } from "./NameAttribute";
+import { HpAttribute } from "../HpAttribute";
+import { NameAttribute } from "../NameAttribute";
 
 function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
   const initiative = useWatchValueObserver(character.initiativeObserver);
