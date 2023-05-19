@@ -28,6 +28,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
+      - name: Install
+        run: pnpm install
       - name: Test Frontend
         run: pnpm vitest --run --reporter=junit --outputFile vitest-junit.xml
       - name: Test Report
