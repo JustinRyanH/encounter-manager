@@ -43,6 +43,13 @@ export class Encounter {
     this.id = id;
     this.#name.value = name;
     this.isStub = isStub;
+    if (isStub) {
+      this.setCharacters([
+        EncounterCharacter.StubCharacter(uuid()),
+        EncounterCharacter.StubCharacter(uuid()),
+        EncounterCharacter.StubCharacter(uuid()),
+      ]);
+    }
   }
 
   get newViewEncounter() {

@@ -32,10 +32,7 @@ export class EncounterManager {
     this.#encounterList.value = Object.values(encounters).map(({ id }) => id);
     Object.values(encounters).forEach(({ id, name, characters }) => {
       const encounterObserver = this.getEncounter(id);
-      if (encounterObserver.value.isStub) {
-        console.log("isStub");
-        encounterObserver.value = this.createNewEncounter({ id, name });
-      }
+      if (encounterObserver.value.isStub) encounterObserver.value = this.createNewEncounter({ id, name });
       const encounter = encounterObserver.value;
       console.log({ encounterName: encounter.name });
       encounter.updateCharacters(characters);

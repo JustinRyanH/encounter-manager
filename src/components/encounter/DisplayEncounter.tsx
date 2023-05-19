@@ -62,6 +62,11 @@ function DisplayEncounter({ encounter }: { encounter: Encounter }) {
   );
 }
 
+function StubEncounter() {
+  const encounter = React.useMemo(() => Encounter.StubEncounter("4000"), []);
+  return <DisplayEncounter encounter={encounter} />;
+}
+
 function LoadEncounter({ encounterId }: { encounterId: string }) {
   const encounterManager = useEncounterManager();
   const encounterObserver = encounterManager.getEncounter(encounterId);
@@ -71,13 +76,6 @@ function LoadEncounter({ encounterId }: { encounterId: string }) {
     if (encounter.isStub) encounterManager.refreshList().catch(notifyErrors);
   }, [encounter]);
 
-  if (!encounter) {
-    return (
-      <Center h="100%">
-        <Loader variant="bars" size="xl" />
-      </Center>
-    );
-  }
   return <DisplayEncounter encounter={encounter} />;
 }
 
@@ -86,5 +84,6 @@ export function DisplayEncounterRoute() {
   if (!encounterId) {
     return <Navigate to="/" />;
   }
-  return <LoadEncounter encounterId={encounterId} />;
+  return <StubEncounter />;
+  // return <LoadEncounter encounterId={encounterId} />;
 }

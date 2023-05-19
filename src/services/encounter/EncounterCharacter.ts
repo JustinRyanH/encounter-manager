@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
 import { Encounter } from "~/services/encounter/Encounter";
@@ -20,6 +22,7 @@ export interface EncounterCreateProps extends OptionalCharacterProps {
   name: string;
   initiative: number;
   encounter?: Encounter | null;
+  isStub?: boolean;
 }
 
 interface EncounterCharacterUpdateProps extends OptionalCharacterProps {
@@ -35,17 +38,21 @@ export class EncounterCharacter {
     return new EncounterCharacter(param);
   }
 
+  static StubCharacter = (id: string) => new EncounterCharacter({ id, name: v4(), initiative: 0, isStub: true });
+
   #encounter: Encounter | null;
   readonly id: string;
+  readonly isStub: boolean;
   readonly hp: HitPoints = new HitPoints();
 
   #name: ValueObserver<string>;
   #initiative: ValueObserver<number>;
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-  constructor({ encounter, id, name, initiative, hp }: EncounterCreateProps) {
+  constructor({ encounter, id, name, initiative, hp, isStub = false }: EncounterCreateProps) {
     this.#encounter = encounter || null;
     this.id = id;
+    this.isStub = isStub;
     this.#initiative = new ValueObserver(initiative);
     this.#name = new ValueObserver(name);
     if (hp) {
