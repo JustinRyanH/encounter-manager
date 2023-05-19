@@ -32,10 +32,3 @@ jobs:
         run: pnpm install
       - name: Test Frontend
         run: pnpm vitest --run --reporter=junit --outputFile vitest-junit.xml
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: Vitest Tests
-          path: ./vitest-junit.xml
-          reporter: jest-junit
