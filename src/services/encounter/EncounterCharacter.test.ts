@@ -308,6 +308,11 @@ describe("EncounterCharacter", () => {
   });
 
   describe("external updates", () => {
+    const baseCharacter = {
+      id: "test-id",
+      name: "Test",
+      initiative: 10,
+    };
     test("update the name", async () => {
       (updateCharacter as Mock).mockReturnValue({
         character: buildMockCharacter({
@@ -316,12 +321,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([baseCharacter]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.name).toEqual("Test");
       await character.updateName("New Name");
@@ -336,12 +337,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([baseCharacter]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.initiative).toEqual(10);
       await character.updateInitiative(20);
@@ -356,17 +353,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-        hp: {
-          total: 10,
-          current: 10,
-          temporary: 0,
-        },
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.current).toEqual(10);
       await character.updateCurrentHp(5);
@@ -381,17 +369,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-        hp: {
-          total: 10,
-          current: 10,
-          temporary: 0,
-        },
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.total).toEqual(10);
       await character.updateTotalHp(20);
@@ -406,17 +385,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-        hp: {
-          total: 10,
-          current: 10,
-          temporary: 0,
-        },
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.temporary).toEqual(0);
       await character.updateTempHp(5);
@@ -431,17 +401,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-        hp: {
-          total: 10,
-          current: 5,
-          temporary: 0,
-        },
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 5, temporary: 0 } }]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.current).toEqual(5);
       await character.heal(5);
@@ -456,17 +417,8 @@ describe("EncounterCharacter", () => {
         }),
       });
 
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-        hp: {
-          total: 10,
-          current: 10,
-          temporary: 0,
-        },
-      });
-      encounter.addCharacter(character);
+      encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.current).toEqual(10);
       await character.damage(5);
