@@ -13,26 +13,27 @@ describe("Encounter", function () {
   });
 
   test("can be initialized with characters", function () {
-    const characterA = new EncounterCharacter({
+    const mockCharacterA = {
       id: "test-a",
       name: "A",
       initiative: 1,
-    });
-    const characterB = new EncounterCharacter({
+    };
+    const mockCharacterB = {
       id: "test-b",
       name: "B",
       initiative: 2,
-    });
+    };
 
     const encounter = new Encounter({
       name: "Test Encounter",
       id: "encounter-a",
     });
-    encounter.addCharacter(characterA);
-    encounter.addCharacter(characterB);
+    encounter.updateCharacters([mockCharacterA, mockCharacterB]);
 
-    expect(encounter.findCharacter("test-a")).toBe(characterA);
-    expect(encounter.findCharacter("test-b")).toBe(characterB);
+    expect(encounter.findCharacter("test-a")).not.toBeNull();
+    expect(encounter.findCharacter("test-b")).not.toBeNull();
+    expect(encounter.findCharacter("test-a")?.id).toEqual("test-a");
+    expect(encounter.findCharacter("test-b")?.id).toEqual("test-b");
   });
 
   test("newCharacter", () => {
