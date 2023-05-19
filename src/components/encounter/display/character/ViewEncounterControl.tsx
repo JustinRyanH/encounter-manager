@@ -44,11 +44,12 @@ function NextCharacterButton({ character }: { character: EncounterCharacter }) {
 }
 
 export function ViewEncounterControl({ view, character, ...props }: EncounterControlProps) {
+  const isStub = character.isStub;
   const onClick = () => view.toggle(character.id);
   return (
     <Paper radius="md">
       <Box sx={ViewSx}>
-        <Accordion.Control onClick={onClick} {...props} />
+        <Accordion.Control onClick={onClick} disabled={isStub} {...props} />
         <NextCharacterButton character={character} />
       </Box>
     </Paper>
