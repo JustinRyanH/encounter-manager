@@ -2,7 +2,7 @@ import { ArrowBendRightDown } from "@phosphor-icons/react";
 import { Accordion, AccordionControlProps, ActionIcon, Box, Paper } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { EncounterCharacter, ViewEncounter } from "~/services/encounter";
+import { Encounter, EncounterCharacter, ViewEncounter } from "~/services/encounter";
 import { useEncounterContext } from "~/components/encounter/EncounterContext";
 
 const NextButtonSx = {
@@ -16,6 +16,22 @@ const NextButtonSx = {
 interface EncounterControlProps extends AccordionControlProps {
   character: EncounterCharacter;
   view: ViewEncounter;
+}
+
+function NextCharacterButton({ inPlay, encounter }: { inPlay: boolean; encounter: Encounter }) {
+  return (
+    <ActionIcon
+      color="dark"
+      disabled={!inPlay}
+      size="md"
+      sx={NextButtonSx}
+      variant="subtle"
+      title="Next Turn"
+      onClick={encounter.nextCharacter}
+    >
+      <ArrowBendRightDown size="1.75rem" />
+    </ActionIcon>
+  );
 }
 
 export function ViewEncounterControl({ view, character, ...props }: EncounterControlProps) {
@@ -34,17 +50,7 @@ export function ViewEncounterControl({ view, character, ...props }: EncounterCon
         }}
       >
         <Accordion.Control onClick={onClick} {...props} />
-        <ActionIcon
-          color="dark"
-          disabled={!inPlay}
-          size="md"
-          sx={NextButtonSx}
-          variant="subtle"
-          title="Next Turn"
-          onClick={encounter.nextCharacter}
-        >
-          <ArrowBendRightDown size="1.75rem" />
-        </ActionIcon>
+        <NextCharacterButton inPlay={inPlay} encounter={encounter} />
       </Box>
     </Paper>
   );
