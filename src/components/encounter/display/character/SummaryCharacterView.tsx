@@ -11,11 +11,10 @@ interface SummaryViewProps {
 
 function CharacterName({ character }: SummaryViewProps) {
   const name = useWatchValueObserver(character.nameObserver);
-  return (
-    <Skeleton height="1.5rem" width="16rem" visible={character.isStub}>
-      <Text fz="lg">{name}</Text>;
-    </Skeleton>
-  );
+  if (character.isStub) {
+    return <Skeleton height="2rem" width="16rem" />;
+  }
+  return <Text fz="lg">{name}</Text>;
 }
 
 export function SummaryCharacterView({ character }: { character: EncounterCharacter }): JSX.Element {
