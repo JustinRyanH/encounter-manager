@@ -3,6 +3,9 @@ import { Encounter } from "~/services/encounter/Encounter";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { buildMockCharacter } from "~/services/encounter/mocks";
 
+const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
+const mockCharacterB = { id: "test-b", name: "B", initiative: 2 };
+
 describe("Encounter", function () {
   test("does not have any characters by default", function () {
     const encounter = new Encounter({
@@ -13,17 +16,6 @@ describe("Encounter", function () {
   });
 
   test("can be initialized with characters", function () {
-    const mockCharacterA = {
-      id: "test-a",
-      name: "A",
-      initiative: 1,
-    };
-    const mockCharacterB = {
-      id: "test-b",
-      name: "B",
-      initiative: 2,
-    };
-
     const encounter = new Encounter({
       name: "Test Encounter",
       id: "encounter-a",
@@ -47,74 +39,23 @@ describe("Encounter", function () {
     expect(result.initiative).toEqual(1);
   });
 
-  describe("addCharacter", function () {
-    test("adds a character to the encounter", function () {
-      const encounter = new Encounter({
-        name: "Test Encounter",
-        id: "encounter-a",
-      });
-
-      encounter.addCharacter(new EncounterCharacter({ id: "test-a", name: "A", initiative: 1 }));
-
-      expect(encounter.characters.map((c) => c.name)).toEqual(["A"]);
-    });
-
-    test("notifies the `characterAdded` signal", function () {
-      const observer = vi.fn();
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 5,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 15,
-      });
-
-      const encounter = new Encounter({
-        name: "Test Encounter",
-        id: "encounter-a",
-      });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
-
-      encounter.onCharacterAdded(observer);
-
-      const newCharacter = new EncounterCharacter({
-        id: "test-c",
-        name: "C",
-        initiative: 20,
-      });
-      encounter.addCharacter(newCharacter);
-
-      expect(observer).toHaveBeenCalledWith({ character: newCharacter });
-    });
-  });
-
   describe("current character", function () {
     test("starting with character on top of the initiative list", function () {
-      const characterA = new EncounterCharacter({
-        id: "test-a",
-        name: "A",
-        initiative: 10,
-      });
-      const characterB = new EncounterCharacter({
-        id: "test-b",
-        name: "B",
-        initiative: 5,
-      });
-
       const encounter = new Encounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
-      encounter.addCharacter(characterA);
-      encounter.addCharacter(characterB);
+      encounter.updateCharacters([
+        { ...mockCharacterA, initiative: 10 },
+        { ...mockCharacterB, initiative: 5 },
+      ]);
+
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      expect(characterA).toBeTruthy();
 
       encounter.nextCharacter();
 
-      expect(encounter.activeCharacter).toEqual(characterA);
+      expect(encounter.activeCharacter?.id).toEqual(mockCharacterA.id);
       expect(characterA.inPlay).toEqual(true);
     });
 
