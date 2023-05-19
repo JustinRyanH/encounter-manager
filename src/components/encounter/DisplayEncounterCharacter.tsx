@@ -48,14 +48,18 @@ function EncounterCharacterControl({ character }: { character: EncounterCharacte
   const hasTemp = temp !== 0;
   const color = hasTemp ? "blue" : undefined;
 
+  const nameComponent = (
+    <Text fz="lg" weight={700}>
+      {name}
+    </Text>
+  );
+
   return (
     <Group spacing="sm">
       <Center maw={75}>
         <Skeleton circle width={25} height={25} animate={false} />
       </Center>
-      <Text fz="lg" weight={700}>
-        {name}
-      </Text>
+      {nameComponent}
       <Group spacing="xs">
         <Popover position="top" opened={opened}>
           <Popover.Target>
