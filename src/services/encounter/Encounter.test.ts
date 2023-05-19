@@ -185,6 +185,25 @@ describe("Encounter", function () {
   });
 
   describe("startEncounter", function () {
+    test("no-ops if is a stub", () => {
+      encounter = new Encounter({ name: "Test Encounter", id: "encounter-a", isStub: true });
+      expect(encounter.characters).toHaveLength(3);
+
+      expect(encounter.activeCharacter).toEqual(null);
+
+      encounter.startEncounter();
+
+      expect(encounter.activeCharacter).toEqual(null);
+
+      encounter.restartEncounter();
+
+      expect(encounter.activeCharacter).toEqual(null);
+
+      encounter.nextCharacter();
+
+      expect(encounter.activeCharacter).toEqual(null);
+    });
+
     test("sets the active character to the first character", function () {
       encounter.updateCharacters([
         { ...mockCharacterA, initiative: 10 },

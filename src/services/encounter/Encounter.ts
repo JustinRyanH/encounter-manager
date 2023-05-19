@@ -30,8 +30,9 @@ interface EncounterProps extends OptionalEncounters {
 }
 export class Encounter {
   readonly id: string;
-  #name: ValueObserver<string> = new ValueObserver<string>("");
   readonly isStub: boolean;
+
+  #name: ValueObserver<string> = new ValueObserver<string>("");
   #lastActiveCharacter: EncounterCharacter | null = null;
   #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
@@ -112,6 +113,8 @@ export class Encounter {
    * Sets the active character to the next character in the initiative order.
    */
   nextCharacter = () => {
+    if (this.isStub) return;
+
     if (!this.characters.length) return;
     if (!this.activeCharacter) {
       this.setActiveCharacter(this.characters[0]);
@@ -130,6 +133,8 @@ export class Encounter {
    * in the initiative order when the encounter has been stopped.
    */
   restartEncounter = () => {
+    if (this.isStub) return;
+
     if (!this.#lastActiveCharacter) {
       this.startEncounter();
       return;
@@ -142,6 +147,8 @@ export class Encounter {
    * Sets the active character to first character in the initiative order if not already active.
    */
   startEncounter = () => {
+    if (this.isStub) return;
+
     if (this.activeCharacter) return;
     if (!this.characters.length) return;
     this.setActiveCharacter(this.characters[0]);
@@ -151,6 +158,8 @@ export class Encounter {
    * Stops the encounter
    */
   stopEncounter = () => {
+    if (this.isStub) return;
+
     this.setActiveCharacter(null);
   };
 
