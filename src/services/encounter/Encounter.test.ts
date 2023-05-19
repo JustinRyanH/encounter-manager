@@ -40,12 +40,10 @@ describe("Encounter", function () {
       id: "test-a",
       name: "A",
       initiative: 1,
-      totalHp: 10,
     });
 
     expect(result.name).toEqual("A");
     expect(result.initiative).toEqual(1);
-    expect(result.hp.total).toEqual(10);
   });
 
   describe("addCharacter", function () {

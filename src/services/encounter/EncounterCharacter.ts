@@ -1,30 +1,37 @@
-import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
+import { HitPoints } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
 import { Encounter } from "~/services/encounter/Encounter";
-import { Character as ServerCharacterProps } from "~/encounterBindings";
+import { Character as CharacterProps, HitPoints as ServerHitPoints } from "~/encounterBindings";
 
-interface EncounterCharacterProps {
-  id: string;
-  encounter?: Encounter;
-  name: string;
-  initiative: number;
-  totalHp?: number;
-  tempHp?: number | null;
-  hp?: HitPointsProps;
+type MajorCharacterProps = {
+  [K in keyof CharacterProps]?: CharacterProps[K];
+};
+
+export type OptionalHitPoints = {
+  [K in keyof ServerHitPoints]?: ServerHitPoints[K];
+};
+
+export interface OptionalCharacterProps extends Omit<MajorCharacterProps, "hp"> {
+  hp?: OptionalHitPoints;
 }
 
-export type EncounterCharacterUpdate = {
-  [K in keyof ServerCharacterProps]?: ServerCharacterProps[K];
-};
-interface EncounterCharacterUpdateProps extends EncounterCharacterUpdate {
+interface EncounterCreateProps extends OptionalCharacterProps {
   id: string;
+  name: string;
+  initiative: number;
+  encounter?: Encounter | null;
+}
+
+interface EncounterCharacterUpdateProps extends OptionalCharacterProps {
+  id: string;
+  hp?: OptionalHitPoints;
 }
 
 /**
  * A Tracked Character
  */
 export class EncounterCharacter {
-  static newCharacter(param: EncounterCharacterProps): EncounterCharacter {
+  static newCharacter(param: EncounterCreateProps): EncounterCharacter {
     return new EncounterCharacter(param);
   }
 
@@ -36,16 +43,13 @@ export class EncounterCharacter {
   #initiative: ValueObserver<number>;
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-  constructor({ encounter, id, name, initiative, totalHp: totalHp = 10, hp }: EncounterCharacterProps) {
+  constructor({ encounter, id, name, initiative, hp }: EncounterCreateProps) {
     this.#encounter = encounter || null;
     this.id = id;
     this.#initiative = new ValueObserver(initiative);
     this.#name = new ValueObserver(name);
     if (hp) {
       this.hp = new HitPoints(hp);
-    } else {
-      this.hp.total = totalHp;
-      this.hp.current = totalHp;
     }
   }
 
