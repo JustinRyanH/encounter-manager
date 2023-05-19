@@ -1,6 +1,7 @@
 import { HitPoints, HitPointsProps } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
 import { Encounter } from "~/services/encounter/Encounter";
+import { Character as ServerCharacterProps } from "~/encounterBindings";
 
 interface EncounterCharacterProps {
   id: string;
@@ -12,13 +13,11 @@ interface EncounterCharacterProps {
   hp?: HitPointsProps;
 }
 
-interface EncounterCharacterUpdateProps {
+export type EncounterCharacterUpdate = {
+  [K in keyof ServerCharacterProps]?: ServerCharacterProps[K];
+};
+interface EncounterCharacterUpdateProps extends EncounterCharacterUpdate {
   id: string;
-  name?: string;
-  initiative?: number;
-  totalHp?: number;
-  tempHp?: number | null;
-  hp?: HitPointsProps;
 }
 
 /**
