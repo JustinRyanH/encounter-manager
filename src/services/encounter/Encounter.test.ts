@@ -16,6 +16,21 @@ describe("Encounter", function () {
     expect(encounter.characters).toEqual([]);
   });
 
+  test("encounters do not default as stub", () => {
+    expect(encounter.isStub).toEqual(false);
+  });
+
+  test("creates a new unique stub encounter", () => {
+    const stubEncounterA = Encounter.StubEncounter();
+    const stubEncounterB = Encounter.StubEncounter();
+
+    expect(stubEncounterA.isStub).toEqual(true);
+    expect(stubEncounterB.isStub).toEqual(true);
+
+    expect(stubEncounterA.id).not.toEqual(stubEncounterB.id);
+    expect(stubEncounterA.name).not.toEqual(stubEncounterB.name);
+  });
+
   test("can be initialized with characters", function () {
     encounter.updateCharacters([mockCharacterA, mockCharacterB]);
 

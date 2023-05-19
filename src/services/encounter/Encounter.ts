@@ -1,4 +1,5 @@
 import { Signal, SignalConnection } from "typed-signals";
+import { v4 as uuid } from "uuid";
 
 import { EncounterCharacter, EncounterCreateProps } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
@@ -25,19 +26,23 @@ type OptionalEncounters = {
 interface EncounterProps extends OptionalEncounters {
   name: string;
   id: string;
+  isStub?: boolean;
 }
-
 export class Encounter {
   readonly id: string;
   #name: ValueObserver<string> = new ValueObserver<string>("");
+  readonly isStub: boolean;
   #lastActiveCharacter: EncounterCharacter | null = null;
   #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
-  constructor({ name, id }: EncounterProps) {
+  static StubEncounter = () => new Encounter({ name: uuid(), id: uuid(), isStub: true });
+
+  constructor({ name, id, isStub = false }: EncounterProps) {
     this.id = id;
     this.#name.value = name;
+    this.isStub = isStub;
   }
 
   get newViewEncounter() {
