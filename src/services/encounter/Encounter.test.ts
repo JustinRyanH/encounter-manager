@@ -21,8 +21,8 @@ describe("Encounter", function () {
   });
 
   test("creates a new unique stub encounter", () => {
-    const stubEncounterA = Encounter.StubEncounter();
-    const stubEncounterB = Encounter.StubEncounter();
+    const stubEncounterA = Encounter.StubEncounter("test-a");
+    const stubEncounterB = Encounter.StubEncounter("test-b");
 
     expect(stubEncounterA.isStub).toEqual(true);
     expect(stubEncounterB.isStub).toEqual(true);

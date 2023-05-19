@@ -37,7 +37,7 @@ export class Encounter {
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
   #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
-  static StubEncounter = () => new Encounter({ name: uuid(), id: uuid(), isStub: true });
+  static StubEncounter = (id: string) => new Encounter({ name: uuid(), id, isStub: true });
 
   constructor({ name, id, isStub = false }: EncounterProps) {
     this.id = id;
