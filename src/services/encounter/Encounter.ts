@@ -15,12 +15,14 @@ import {
   damageCharacterCmd,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { Character as CharacterType, CharacterCommand } from "~/encounterBindings";
+import { Character as CharacterType, CharacterCommand, Encounter as ServerEncounter } from "~/encounterBindings";
 
 type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
-interface EncounterProps {
-  characters?: Array<EncounterCharacter>;
+type OptionalEncounters = {
+  [k in keyof ServerEncounter]?: ServerEncounter[k];
+};
+interface EncounterProps extends OptionalEncounters {
   name: string;
   id: string;
 }
