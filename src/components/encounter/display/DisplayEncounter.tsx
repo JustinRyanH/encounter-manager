@@ -9,7 +9,7 @@ import { useEncounterManager } from "~/components/encounter/EncounterManagerProv
 import { notifyErrors } from "~/services/notifications";
 import { Encounter } from "~/services/encounter";
 
-import { DisplayEncounterCharacter } from "./DisplayEncounterCharacter";
+import { DisplayCharacter } from "./DisplayCharacter";
 import { useStyles } from "./DisplayEncounter.styles";
 
 function ManageEncounter() {
@@ -56,7 +56,7 @@ export function DisplayEncounter({ encounter }: { encounter: Encounter }) {
       <ManageEncounter />
       <Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
         {characters.map((c) => (
-          <DisplayEncounterCharacter viewEncounter={viewEncounter} character={c} key={c.id} />
+          <DisplayCharacter viewEncounter={viewEncounter} character={c} key={c.id} />
         ))}
       </Accordion>
     </EncounterProvider>

@@ -134,7 +134,7 @@ interface EncounterCharacterProps {
   viewEncounter: ViewEncounter;
 }
 
-export function DisplayEncounterCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
+export function DisplayCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
   const encounter = useEncounterContext();
 
   const inPlay = useWatchValueObserver(character.inPlayObserver);
