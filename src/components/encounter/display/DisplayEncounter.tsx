@@ -43,7 +43,7 @@ function ManageEncounter() {
   );
 }
 
-function DisplayEncounter({ encounter }: { encounter: Encounter }) {
+export function DisplayEncounter({ encounter }: { encounter: Encounter }) {
   const characters = useWatchValueObserver(encounter.charactersObserver);
   const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
   const ids = useWatchValueObserver(viewEncounter.openedCharactersObserver);
