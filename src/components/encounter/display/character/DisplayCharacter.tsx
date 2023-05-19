@@ -102,7 +102,7 @@ interface EncounterControlProps extends AccordionControlProps {
   nextTurn: () => void;
 }
 
-function EncounterControl({ inPlay, nextTurn, ...props }: EncounterControlProps) {
+function CharacterControl({ inPlay, nextTurn, ...props }: EncounterControlProps) {
   return (
     <Paper radius="md">
       <Box
@@ -140,13 +140,13 @@ export function DisplayCharacter({ character, viewEncounter }: EncounterCharacte
   const inPlay = useWatchValueObserver(character.inPlayObserver);
   return (
     <Accordion.Item data-in-play={inPlay} value={character.id}>
-      <EncounterControl
+      <CharacterControl
         onClick={() => viewEncounter.toggle(character.id)}
         inPlay={inPlay}
         nextTurn={encounter.nextCharacter}
       >
         <EncounterCharacterControl character={character} />
-      </EncounterControl>
+      </CharacterControl>
       <Accordion.Panel sx={{ padding: 0 }}>
         <Paper radius="md" p="sm">
           <Group spacing="sm">
