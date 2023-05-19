@@ -9,7 +9,7 @@ import { useEncounterManager } from "~/components/encounter/EncounterManagerProv
 import { notifyErrors } from "~/services/notifications";
 import { Encounter } from "~/services/encounter";
 
-import { DisplayCharacter } from "./character/DisplayCharacter";
+import { DisplayCharacter } from "./character";
 import { useStyles } from "./DisplayEncounter.styles";
 
 function ManageEncounter() {
