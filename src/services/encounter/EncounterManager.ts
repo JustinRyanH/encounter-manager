@@ -34,7 +34,6 @@ export class EncounterManager {
       const encounterObserver = this.getEncounter(id);
       if (encounterObserver.value.isStub) encounterObserver.value = this.createNewEncounter({ id, name });
       const encounter = encounterObserver.value;
-      console.log({ encounterName: encounter.name });
       encounter.updateCharacters(characters);
     });
   }
