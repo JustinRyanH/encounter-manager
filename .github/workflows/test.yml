@@ -31,4 +31,4 @@ jobs:
       - name: Install
         run: pnpm install
       - name: Test Frontend
-        run: pnpm vitest --run --reporter=junit --outputFile vitest-junit.xml
+        run: pnpm vitest --run
