@@ -28,7 +28,10 @@ interface EncounterProps extends OptionalEncounters {
   id: string;
   isStub?: boolean;
 }
-export class Encounter {}
+export class Encounter {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
+  constructor(props: EncounterProps) {}
+}
 
 export class CombatEncounter extends Encounter {
   readonly id: string;
@@ -41,8 +44,9 @@ export class CombatEncounter extends Encounter {
 
   static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
 
-  constructor({ name, id, isStub = false }: EncounterProps) {
-    super();
+  constructor(props: EncounterProps) {
+    super(props);
+    const { name, id, isStub = false } = props;
     this.id = id;
     this.#name.value = name;
     this.isStub = isStub;
