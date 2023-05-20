@@ -28,7 +28,7 @@ interface EncounterProps extends OptionalEncounters {
   id: string;
   isStub?: boolean;
 }
-export class CombatEncounter implements CombatEncounter {
+export class CombatEncounter {
   readonly id: string;
   readonly isStub: boolean;
 
@@ -36,7 +36,6 @@ export class CombatEncounter implements CombatEncounter {
   #lastActiveCharacter: EncounterCharacter | null = null;
   #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
-  #characterAddedSignal = new Signal<CharacterAddedMessage>();
 
   static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
 
@@ -162,14 +161,6 @@ export class CombatEncounter implements CombatEncounter {
 
     this.setActiveCharacter(null);
   };
-
-  /**
-   * Signals when a new character is added to the encounter.
-   * @param observer
-   */
-  onCharacterAdded(observer: CharacterAddedMessage): SignalConnection {
-    return this.#characterAddedSignal.connect(observer);
-  }
 
   async updateCharacterName(id: string, name: string) {
     return await this.updateCharacter(updateNameCommand(id, name));
