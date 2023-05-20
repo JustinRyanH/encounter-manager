@@ -28,7 +28,9 @@ interface EncounterProps extends OptionalEncounters {
   id: string;
   isStub?: boolean;
 }
-export class CombatEncounter {
+export class Encounter {}
+
+export class CombatEncounter extends Encounter {
   readonly id: string;
   readonly isStub: boolean;
 
@@ -40,6 +42,7 @@ export class CombatEncounter {
   static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
 
   constructor({ name, id, isStub = false }: EncounterProps) {
+    super();
     this.id = id;
     this.#name.value = name;
     this.isStub = isStub;
