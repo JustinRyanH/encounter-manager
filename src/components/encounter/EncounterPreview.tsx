@@ -1,11 +1,11 @@
-import { EncounterCharacter, Encounter } from "~/services/encounter";
+import { EncounterCharacter, CombatEncounter } from "~/services/encounter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Accordion, AccordionControlProps, ActionIcon, Avatar, Badge, Box, Group } from "@mantine/core";
 import { BookOpen } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
 interface ControlProps extends AccordionControlProps {
-  encounter: Encounter;
+  encounter: CombatEncounter;
 }
 
 function AccordionControl({ encounter, ...props }: ControlProps) {
@@ -34,7 +34,7 @@ function EncounterPreviewCharacter({ character }: { character: EncounterCharacte
   );
 }
 
-export function EncounterPreview({ encounter }: { encounter: Encounter }) {
+export function EncounterPreview({ encounter }: { encounter: CombatEncounter }) {
   const name = useWatchValueObserver(encounter.nameObserver);
   const characters = useWatchValueObserver(encounter.charactersObserver);
   const listedCharacters = characters.map((character) => (

@@ -7,7 +7,7 @@ import { EncounterProvider, useEncounterContext } from "~/components/encounter/E
 import { Navigate, useParams } from "react-router-dom";
 import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
 import { notifyErrors } from "~/services/notifications";
-import { Encounter } from "~/services/encounter";
+import { CombatEncounter } from "~/services/encounter";
 
 import { DisplayCharacter } from "./character";
 import { useStyles } from "./DisplayEncounter.styles";
@@ -48,7 +48,7 @@ function ManageEncounter() {
   );
 }
 
-export function DisplayEncounter({ encounter }: { encounter: Encounter }) {
+export function DisplayEncounter({ encounter }: { encounter: CombatEncounter }) {
   const characters = useWatchValueObserver(encounter.charactersObserver);
   const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
   const ids = useWatchValueObserver(viewEncounter.openedCharactersObserver);

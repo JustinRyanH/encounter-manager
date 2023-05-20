@@ -2,7 +2,7 @@ import { describe, expect, Mock, test, vi } from "vitest";
 
 import { EncounterManager } from "~/services/encounter/EncounterManager";
 import * as Commands from "./Commands";
-import { Encounter } from "~/services/encounter/Encounter";
+import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { buildMockCharacter, buildMockEncounter } from "~/services/encounter/mocks";
 
 vi.mock("./Commands");
@@ -96,10 +96,10 @@ describe("EncounterManager", function () {
       const manager = new EncounterManager();
       await manager.refreshList();
 
-      expect(manager.getEncounter("300").value).toBeInstanceOf(Encounter);
+      expect(manager.getEncounter("300").value).toBeInstanceOf(CombatEncounter);
       expect(manager.getEncounter("300").value.isStub).toBe(false);
 
-      expect(manager.getEncounter("301").value).toBeInstanceOf(Encounter);
+      expect(manager.getEncounter("301").value).toBeInstanceOf(CombatEncounter);
       expect(manager.getEncounter("301").value.isStub).toBe(true);
     });
   });

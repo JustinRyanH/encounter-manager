@@ -3,7 +3,7 @@ import { Accordion } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterPreview } from "~/components/encounter/EncounterPreview";
-import { Encounter } from "~/services/encounter";
+import { CombatEncounter } from "~/services/encounter";
 import { useRefreshEncounter } from "~/components/encounter/hooks";
 
 export function EncounterList() {
@@ -11,7 +11,7 @@ export function EncounterList() {
   const encounterIds = useWatchValueObserver(encounterManager.encountersObserver);
   const encounters = React.useMemo(() => encounterManager.encounters, [encounterIds]);
 
-  const formatPreview = (encounter: Encounter) => <EncounterPreview encounter={encounter} key={encounter.id} />;
+  const formatPreview = (encounter: CombatEncounter) => <EncounterPreview encounter={encounter} key={encounter.id} />;
   const previews = encounters.map(formatPreview);
 
   return <Accordion> {previews} </Accordion>;

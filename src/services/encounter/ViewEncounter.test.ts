@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
-import { Encounter } from "~/services/encounter/Encounter";
+import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
 const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
@@ -10,7 +10,7 @@ const mockCharacterB = { id: "test-b", name: "B", initiative: 2 };
 describe("ViewEncounter", () => {
   describe("openedCharacters", () => {
     test("returns the active character", () => {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -31,7 +31,7 @@ describe("ViewEncounter", () => {
     });
 
     test("returns an empty array if there is no active character", () => {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -51,7 +51,7 @@ describe("ViewEncounter", () => {
     });
 
     test("allows adding new characters be opened", () => {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -77,7 +77,7 @@ describe("ViewEncounter", () => {
     });
 
     test("removes the previous character from opened when active character changes", () => {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -100,7 +100,7 @@ describe("ViewEncounter", () => {
     });
 
     test("allows closing a character", () => {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -123,7 +123,7 @@ describe("ViewEncounter", () => {
     });
 
     test("allows toggling a character", () => {
-      const encounter = new Encounter({ name: "Test Encounter", id: "encounter-a" });
+      const encounter = new CombatEncounter({ name: "Test Encounter", id: "encounter-a" });
       encounter.updateCharacters([
         { ...mockCharacterA, initiative: 10 },
         { ...mockCharacterB, initiative: 5 },
@@ -145,7 +145,7 @@ describe("ViewEncounter", () => {
 
   describe("isOpened", () => {
     test("returns true if the character is opened", () => {
-      const encounter = new Encounter({ name: "Test Encounter", id: "encounter-a" });
+      const encounter = new CombatEncounter({ name: "Test Encounter", id: "encounter-a" });
       encounter.updateCharacters([
         { ...mockCharacterA, initiative: 10 },
         { ...mockCharacterB, initiative: 5 },

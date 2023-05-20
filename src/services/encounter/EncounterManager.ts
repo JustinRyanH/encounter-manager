@@ -1,28 +1,28 @@
 import { ValueObserver } from "~/services";
-import { Encounter } from "~/services/encounter/Encounter";
+import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 
 import * as Commands from "./Commands";
 
 export class EncounterManager {
-  #encounterMap = new Map<string, ValueObserver<Encounter>>();
+  #encounterMap = new Map<string, ValueObserver<CombatEncounter>>();
   #encounterList = new ValueObserver<string[]>([]);
 
-  get encounters(): Encounter[] {
+  get encounters(): CombatEncounter[] {
     return this.#encounterList.value
       .map((id) => this.getEncounter(id))
       .filter((e) => e.value)
-      .map((e) => e.value) as Encounter[];
+      .map((e) => e.value) as CombatEncounter[];
   }
 
   get encountersObserver() {
     return this.#encounterList.readonly;
   }
 
-  getEncounter(id: string): ValueObserver<Encounter> {
+  getEncounter(id: string): ValueObserver<CombatEncounter> {
     const encounter = this.#encounterMap.get(id);
     if (encounter) return encounter;
 
-    const observer = new ValueObserver<Encounter>(Encounter.StubEncounter(id));
+    const observer = new ValueObserver<CombatEncounter>(CombatEncounter.StubEncounter(id));
     this.#encounterMap.set(id, observer);
     return observer;
   }
@@ -39,6 +39,6 @@ export class EncounterManager {
   }
 
   private createNewEncounter({ id, name }: { id: string; name: string }) {
-    return new Encounter({ id, name });
+    return new CombatEncounter({ id, name });
   }
 }

@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { Encounter } from "~/services/encounter/Encounter";
+import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { buildMockCharacter } from "~/services/encounter/mocks";
 
 const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
 const mockCharacterB = { id: "test-b", name: "B", initiative: 2 };
 
-let encounter: Encounter;
+let encounter: CombatEncounter;
 describe("Encounter", function () {
   beforeEach(() => {
-    encounter = new Encounter({ name: "Test Encounter", id: "encounter-a" });
+    encounter = new CombatEncounter({ name: "Test Encounter", id: "encounter-a" });
   });
 
   test("does not have any characters by default", function () {
@@ -21,8 +21,8 @@ describe("Encounter", function () {
   });
 
   test("creates a new unique stub encounter", () => {
-    const stubEncounterA = Encounter.StubEncounter("test-a");
-    const stubEncounterB = Encounter.StubEncounter("test-b");
+    const stubEncounterA = CombatEncounter.StubEncounter("test-a");
+    const stubEncounterB = CombatEncounter.StubEncounter("test-b");
 
     expect(stubEncounterA.isStub).toEqual(true);
     expect(stubEncounterB.isStub).toEqual(true);
@@ -53,7 +53,7 @@ describe("Encounter", function () {
 
   describe("current character", function () {
     test("starting with character on top of the initiative list", function () {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -72,7 +72,7 @@ describe("Encounter", function () {
     });
 
     test("moves to next character when nextCharacter is called", function () {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -106,7 +106,7 @@ describe("Encounter", function () {
     test("signaling when the current character changes", function () {
       const listener = vi.fn();
 
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -152,7 +152,7 @@ describe("Encounter", function () {
     });
 
     test("adds the encounter to the character", () => {
-      const encounter = new Encounter({
+      const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
       });
@@ -186,7 +186,7 @@ describe("Encounter", function () {
 
   describe("startEncounter", function () {
     test("no-ops if is a stub", () => {
-      encounter = new Encounter({ name: "Test Encounter", id: "encounter-a", isStub: true });
+      encounter = new CombatEncounter({ name: "Test Encounter", id: "encounter-a", isStub: true });
       expect(encounter.characters).toHaveLength(3);
 
       expect(encounter.activeCharacter).toEqual(null);

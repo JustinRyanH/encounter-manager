@@ -1,12 +1,12 @@
-import { Encounter } from "~/services/encounter/Encounter";
+import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
 import { ReadonlyValueObserver, ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
 
 export class ViewEncounter {
-  #encounter: Encounter;
+  #encounter: CombatEncounter;
   #openedCharacters = new ValueObserver<string[]>([]);
 
-  constructor({ encounter }: { encounter: Encounter }) {
+  constructor({ encounter }: { encounter: CombatEncounter }) {
     this.#encounter = encounter;
     this.#encounter.activeCharacterObserver.add(this.onChangeActiveCharacter);
   }

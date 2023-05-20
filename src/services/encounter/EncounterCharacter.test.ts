@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
 
 import { EncounterCharacter } from "./EncounterCharacter";
-import { Encounter } from "~/services/encounter/Encounter";
+import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { updateCharacter } from "~/services/encounter/Commands";
 import { buildMockCharacter } from "~/services/encounter/mocks";
 
@@ -14,10 +14,10 @@ vi.mock("~/services/encounter/Commands", async (importOriginal) => {
   };
 });
 
-let encounter: Encounter;
+let encounter: CombatEncounter;
 describe("EncounterCharacter", () => {
   beforeEach(() => {
-    encounter = new Encounter({ name: "Test", id: "test-id" });
+    encounter = new CombatEncounter({ name: "Test", id: "test-id" });
   });
 
   afterEach(() => {
