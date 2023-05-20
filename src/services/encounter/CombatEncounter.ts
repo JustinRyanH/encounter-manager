@@ -32,36 +32,14 @@ export class Encounter {
   readonly id: string;
   readonly isStub: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  constructor({ id, isStub = false }: EncounterProps) {
-    this.id = id;
-    this.isStub = isStub;
-  }
-}
-
-export class CombatEncounter extends Encounter {
   #name: ValueObserver<string> = new ValueObserver<string>("");
-  #lastActiveCharacter: EncounterCharacter | null = null;
-  #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
   #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
 
-  static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
-
-  constructor(props: EncounterProps) {
-    super(props);
-    const { name } = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
+  constructor({ id, isStub = false, name }: EncounterProps) {
+    this.id = id;
+    this.isStub = isStub;
     this.#name.value = name;
-    if (this.isStub) {
-      this.setCharacters([
-        EncounterCharacter.StubCharacter(uuid()),
-        EncounterCharacter.StubCharacter(uuid()),
-        EncounterCharacter.StubCharacter(uuid()),
-      ]);
-    }
-  }
-
-  get newViewEncounter() {
-    return new ViewEncounter({ encounter: this });
   }
 
   /**
@@ -80,20 +58,6 @@ export class CombatEncounter extends Encounter {
    */
   get charactersObserver(): ReadonlyValueObserver<Array<EncounterCharacter>> {
     return this.#characters.readonly;
-  }
-
-  /**
-   * The active character in the encounter.
-   */
-  get activeCharacter(): EncounterCharacter | null {
-    return this.#activeCharacter.value;
-  }
-
-  /**
-   * Returns a readonly observer for the active character.
-   */
-  get activeCharacterObserver(): ReadonlyValueObserver<EncounterCharacter | null> {
-    return this.#activeCharacter.readonly;
   }
 
   get name() {
@@ -115,6 +79,102 @@ export class CombatEncounter extends Encounter {
   updateCharacters = (characters: EncounterCreateProps[]) => {
     this.setCharacters(characters.map(this.updateOrCreateCharacter));
   };
+
+  async updateCharacterName(id: string, name: string) {
+    return await this.updateCharacter(updateNameCommand(id, name));
+  }
+
+  async updateCharacterInitiative(id: string, initiative: number) {
+    return await this.updateCharacter(updateInitiativeCmd(id, initiative));
+  }
+
+  async updateCharacterTotalHp(id: string, totalHp: number) {
+    return await this.updateCharacter(updateTotalHpCmd(id, totalHp));
+  }
+
+  async updateCharacterCurrentHp(id: string, currentHp: number) {
+    return await this.updateCharacter(updateCurrentHpCmd(id, currentHp));
+  }
+
+  async updateCharacterTemporaryHp(id: string, temporaryHp: number) {
+    return await this.updateCharacter(updateTemporaryHpCmd(id, temporaryHp));
+  }
+
+  async healCharacter(id: string, amount: number) {
+    return await this.updateCharacter(healCharacterCmd(id, amount));
+  }
+
+  async damageCharacter(id: string, amount: number) {
+    return await this.updateCharacter(damageCharacterCmd(id, amount));
+  }
+
+  protected setCharacters = (characters: Array<EncounterCharacter>) => {
+    this.#characters.value = [...characters];
+    this.addEncounterToCharacters();
+  };
+
+  protected updateOrCreateCharacter = (character: EncounterCreateProps) => {
+    const existingCharacter = this.findCharacter(character.id);
+    if (!existingCharacter) return EncounterCharacter.newCharacter(character);
+    existingCharacter.update(character);
+    return existingCharacter;
+  };
+
+  protected addEncounterToCharacters = () => {
+    this.characters.filter((c) => !c.encounter).forEach((c) => (c.encounter = this));
+  };
+
+  protected updateCharacter = async (cmd: CharacterCommand) => {
+    const id = getCommandId(cmd);
+    const existingCharacter = this.findCharacter(id);
+    if (!existingCharacter) return;
+    try {
+      const { character } = await updateCharacter(this.id, cmd);
+      existingCharacter.name = character.name;
+      existingCharacter.initiative = character.initiative;
+      existingCharacter.hp.current = character.hp.current;
+      existingCharacter.hp.total = character.hp.total;
+      existingCharacter.hp.temporary = character.hp.temporary;
+    } catch (error: unknown) {
+      handleError({ error, title: "Failed to update Character" });
+    }
+  };
+}
+
+export class CombatEncounter extends Encounter {
+  #lastActiveCharacter: EncounterCharacter | null = null;
+  #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
+
+  static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
+
+  constructor(props: EncounterProps) {
+    super(props);
+    if (this.isStub) {
+      this.setCharacters([
+        EncounterCharacter.StubCharacter(uuid()),
+        EncounterCharacter.StubCharacter(uuid()),
+        EncounterCharacter.StubCharacter(uuid()),
+      ]);
+    }
+  }
+
+  get newViewEncounter() {
+    return new ViewEncounter({ encounter: this });
+  }
+
+  /**
+   * The active character in the encounter.
+   */
+  get activeCharacter(): EncounterCharacter | null {
+    return this.#activeCharacter.value;
+  }
+
+  /**
+   * Returns a readonly observer for the active character.
+   */
+  get activeCharacterObserver(): ReadonlyValueObserver<EncounterCharacter | null> {
+    return this.#activeCharacter.readonly;
+  }
 
   /**
    * Sets the active character to the next character in the initiative order.
@@ -170,39 +230,6 @@ export class CombatEncounter extends Encounter {
     this.setActiveCharacter(null);
   };
 
-  async updateCharacterName(id: string, name: string) {
-    return await this.updateCharacter(updateNameCommand(id, name));
-  }
-
-  async updateCharacterInitiative(id: string, initiative: number) {
-    return await this.updateCharacter(updateInitiativeCmd(id, initiative));
-  }
-
-  async updateCharacterTotalHp(id: string, totalHp: number) {
-    return await this.updateCharacter(updateTotalHpCmd(id, totalHp));
-  }
-
-  async updateCharacterCurrentHp(id: string, currentHp: number) {
-    return await this.updateCharacter(updateCurrentHpCmd(id, currentHp));
-  }
-
-  async updateCharacterTemporaryHp(id: string, temporaryHp: number) {
-    return await this.updateCharacter(updateTemporaryHpCmd(id, temporaryHp));
-  }
-
-  async healCharacter(id: string, amount: number) {
-    return await this.updateCharacter(healCharacterCmd(id, amount));
-  }
-
-  async damageCharacter(id: string, amount: number) {
-    return await this.updateCharacter(damageCharacterCmd(id, amount));
-  }
-
-  private setCharacters = (characters: Array<EncounterCharacter>) => {
-    this.#characters.value = [...characters];
-    this.addEncounterToCharacters();
-  };
-
   private setActiveCharacter = (character: EncounterCharacter | null) => {
     this.#lastActiveCharacter = this.activeCharacter;
     this.#activeCharacter.value = character;
@@ -212,32 +239,5 @@ export class CombatEncounter extends Encounter {
     this.characters.forEach((character) => {
       if (character !== this.activeCharacter) character.inPlay = false;
     });
-  };
-
-  private updateOrCreateCharacter = (character: EncounterCreateProps) => {
-    const existingCharacter = this.findCharacter(character.id);
-    if (!existingCharacter) return EncounterCharacter.newCharacter(character);
-    existingCharacter.update(character);
-    return existingCharacter;
-  };
-
-  private addEncounterToCharacters = () => {
-    this.characters.filter((c) => !c.encounter).forEach((c) => (c.encounter = this));
-  };
-
-  private updateCharacter = async (cmd: CharacterCommand) => {
-    const id = getCommandId(cmd);
-    const existingCharacter = this.findCharacter(id);
-    if (!existingCharacter) return;
-    try {
-      const { character } = await updateCharacter(this.id, cmd);
-      existingCharacter.name = character.name;
-      existingCharacter.initiative = character.initiative;
-      existingCharacter.hp.current = character.hp.current;
-      existingCharacter.hp.total = character.hp.total;
-      existingCharacter.hp.temporary = character.hp.temporary;
-    } catch (error: unknown) {
-      handleError({ error, title: "Failed to update Character" });
-    }
   };
 }

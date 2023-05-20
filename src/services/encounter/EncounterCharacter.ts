@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
-import { CombatEncounter } from "~/services/encounter/CombatEncounter";
+import { Encounter } from "~/services/encounter/CombatEncounter";
 import { Character as CharacterProps, HitPoints as ServerHitPoints } from "~/encounterBindings";
 
 type MajorCharacterProps = {
@@ -21,7 +21,7 @@ export interface EncounterCreateProps extends OptionalCharacterProps {
   id: string;
   name: string;
   initiative: number;
-  encounter?: CombatEncounter | null;
+  encounter?: Encounter | null;
   isStub?: boolean;
 }
 
@@ -39,8 +39,7 @@ export class EncounterCharacter {
   }
 
   static StubCharacter = (id: string) => new EncounterCharacter({ id, name: v4(), initiative: 0, isStub: true });
-
-  #encounter: CombatEncounter | null;
+  #encounter: Encounter | null;
   readonly id: string;
   readonly isStub: boolean;
   readonly hp: HitPoints = new HitPoints();
