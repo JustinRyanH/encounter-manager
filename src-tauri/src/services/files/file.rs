@@ -1,14 +1,37 @@
+use std::cmp::Ordering;
 use std::path::{Path, PathBuf};
 
 use specta::Type;
 use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Type)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub enum FileType {
     Directory,
     File,
     Unknown,
+}
+
+impl PartialOrd for FileType {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for FileType {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match (self, other) {
+            (Self::Directory, Self::Directory) => Ordering::Equal,
+            (Self::Directory, Self::File) => Ordering::Less,
+            (Self::Directory, Self::Unknown) => Ordering::Less,
+            (Self::File, Self::Directory) => Ordering::Greater,
+            (Self::File, Self::File) => Ordering::Equal,
+            (Self::File, Self::Unknown) => Ordering::Less,
+            (Self::Unknown, Self::Directory) => Ordering::Greater,
+            (Self::Unknown, Self::File) => Ordering::Greater,
+            (Self::Unknown, Self::Unknown) => Ordering::Equal,
+        }
+    }
 }
 
 impl From<&PathBuf> for FileType {
@@ -26,11 +49,11 @@ impl From<&PathBuf> for FileType {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct FileData {
-    file_type: FileType,
-    name: String,
-    parent_dir: Option<String>,
-    extension: Option<String>,
-    path: PathBuf,
+    pub file_type: FileType,
+    pub name: String,
+    pub parent_dir: Option<String>,
+    pub extension: Option<String>,
+    pub path: PathBuf,
 }
 
 impl From<&Path> for FileData {

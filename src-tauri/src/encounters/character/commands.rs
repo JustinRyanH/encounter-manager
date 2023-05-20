@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use specta::Type;
+use uuid::Uuid;
 
 use crate::encounters::Character;
 
@@ -20,14 +20,14 @@ pub enum CharacterCommand {
 impl CharacterCommand {
     pub fn id(&self) -> Uuid {
         match self {
-            CharacterCommand::UpdateName { id, .. } => { *id }
-            CharacterCommand::UpdateInitiative { id, .. } => { *id }
-            CharacterCommand::UpdateInitiativeModifier { id, .. } => { *id }
-            CharacterCommand::UpdateCurrentHp { id, .. } => { *id }
-            CharacterCommand::UpdateTotalHp { id, .. } => { *id }
-            CharacterCommand::UpdateTemporaryHp { id, .. } => { *id }
-            CharacterCommand::Heal { id, .. } => { *id }
-            CharacterCommand::Damage { id, .. } => { *id }
+            CharacterCommand::UpdateName { id, .. } => *id,
+            CharacterCommand::UpdateInitiative { id, .. } => *id,
+            CharacterCommand::UpdateInitiativeModifier { id, .. } => *id,
+            CharacterCommand::UpdateCurrentHp { id, .. } => *id,
+            CharacterCommand::UpdateTotalHp { id, .. } => *id,
+            CharacterCommand::UpdateTemporaryHp { id, .. } => *id,
+            CharacterCommand::Heal { id, .. } => *id,
+            CharacterCommand::Damage { id, .. } => *id,
         }
     }
 }
@@ -86,10 +86,7 @@ impl CharacterChangeMessages {
             None => Some(vec![message]),
         };
 
-        Self {
-            name,
-            ..self
-        }
+        Self { name, ..self }
     }
 }
 
@@ -104,10 +101,16 @@ pub enum CharacterCommandResponse {
 
 impl CharacterCommandResponse {
     pub fn updated(character: &Character) -> Self {
-        Self::UpdatedCharacter { character: character.clone(), messages: CharacterChangeMessages::none() }
+        Self::UpdatedCharacter {
+            character: character.clone(),
+            messages: CharacterChangeMessages::none(),
+        }
     }
 
     pub fn updated_with_messages(character: &Character, messages: CharacterChangeMessages) -> Self {
-        Self::UpdatedCharacter { character: character.clone(), messages }
+        Self::UpdatedCharacter {
+            character: character.clone(),
+            messages,
+        }
     }
 }

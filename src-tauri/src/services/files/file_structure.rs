@@ -193,7 +193,7 @@ impl RootDirectory {
     }
 
     fn build_directory_from_path(path: &Path) -> Result<QueryCommandResponse, String> {
-        let entries = read_dir(path)
+        let mut entries: Vec<FileData> = read_dir(path)
             .map_err(|e| e.to_string())?
             .map(|entry| {
                 let entry = entry.unwrap();
@@ -201,6 +201,12 @@ impl RootDirectory {
                 path.into()
             })
             .collect();
+        entries.sort_by(|a, b| {
+            if a.file_type == b.file_type {
+                return a.name.cmp(&b.name);
+            }
+            a.file_type.cmp(&b.file_type)
+        });
 
         Ok(QueryCommandResponse::directory(path, entries))
     }
