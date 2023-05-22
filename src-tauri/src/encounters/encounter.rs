@@ -346,5 +346,11 @@ mod tests {
 
         encounter.restart().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+
+        encounter.next().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
+
+        encounter.restart().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
     }
 }
