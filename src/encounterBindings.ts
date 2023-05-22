@@ -19,7 +19,7 @@ export function updateEncounterCharacter(encounterId: string, command: Character
 export type EncounterCommands = "listEncounter"
 export type FrontendMessageType = "success" | "error"
 export type Character = { id: string; name: string; hp: HitPoints; initiative: number; initiativeModifier: number }
-export type Encounter = { id: string; name: string; characters: Character[] }
+export type Encounter = { id: string; name: string; characters: Character[]; activeCharacter: string | null }
 export type FrontendMessage = { type: FrontendMessageType; message: string }
 export type EncounterCommandResponse = { encounterList: { [key: string]: Encounter } }
 export type CharacterCommand = { updateName: { id: string; name: string } } | { updateInitiative: { id: string; initiative: number } } | { updateInitiativeModifier: { id: string; modifier: number } } | { updateCurrentHp: { id: string; hp: number } } | { updateTotalHp: { id: string; hp: number } } | { updateTemporaryHp: { id: string; hp: number } } | { heal: { id: string; hp: number } } | { damage: { id: string; hp: number } }

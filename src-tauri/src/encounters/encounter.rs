@@ -59,6 +59,7 @@ pub struct Encounter {
     id: Uuid,
     name: String,
     characters: Vec<Character>,
+    activeCharacter: Option<Uuid>,
 }
 
 impl Encounter {
@@ -67,11 +68,16 @@ impl Encounter {
             id: Uuid::new_v4(),
             name: name.into(),
             characters: Vec::new(),
+            activeCharacter: None,
         }
     }
 
     pub fn id(&self) -> String {
         self.id.to_string()
+    }
+
+    pub fn get_active_character_id(&self) -> Option<Uuid> {
+        self.activeCharacter
     }
 
     pub fn add_character(&mut self, new_character: Character) {
@@ -219,5 +225,17 @@ mod tests {
         let response = encounter.update_character(cmd).unwrap();
         let updated_character = encounter.find_character(character1.id()).unwrap();
         assert_eq!(response, CharacterCommandResponse::UpdatedCharacter { character: updated_character.clone(), messages: CharacterChangeMessages::none() });
+    }
+
+    #[test]
+    fn active_character() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = character::Character::new(String::from("Test Character 2"), 10, 10);
+        encounter.add_character(character1);
+        encounter.add_character(character2);
+
+
+        assert_eq!(encounter.get_active_character_id(), None);
     }
 }
