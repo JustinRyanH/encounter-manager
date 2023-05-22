@@ -1,15 +1,16 @@
 import { ArrowBendRightDown } from "@phosphor-icons/react";
-import { Accordion, AccordionControlProps, ActionIcon, Box, Paper } from "@mantine/core";
+import { Accordion, AccordionControlProps, ActionIcon, Box, MantineTheme, Paper } from "@mantine/core";
 
-import { useMaybeWatchValueObserver } from "~/hooks/watchValueObserver";
+import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter, ViewEncounter } from "~/services/encounter";
 import { useEncounterContext } from "~/components/encounter/providers/EncounterProvider";
 
-const ViewSx = {
+const ViewSx = (theme: MantineTheme) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-};
+  gap: theme.spacing.xs,
+});
 
 const NextButtonSx = {
   "&[data-disabled]": {
@@ -26,7 +27,8 @@ interface EncounterControlProps extends AccordionControlProps {
 
 function NextCharacterButton({ character }: { character: EncounterCharacter }) {
   const encounter = useEncounterContext();
-  const inPlay = useMaybeWatchValueObserver(false, character.inPlayObserver);
+  const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
+  const inPlay = activeCharacter?.id === character.id;
 
   return (
     <ActionIcon
