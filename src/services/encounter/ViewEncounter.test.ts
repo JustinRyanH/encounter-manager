@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { Character } from "~/services/encounter/Character";
+import { EncounterCharacter } from "~/services/encounter/Character";
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 
@@ -19,8 +19,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
@@ -40,8 +40,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
@@ -60,8 +60,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
@@ -86,8 +86,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
@@ -109,8 +109,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
@@ -129,8 +129,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
@@ -151,8 +151,8 @@ describe("ViewEncounter", () => {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as Character;
-      const characterB = encounter.findCharacter("test-b") as Character;
+      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 

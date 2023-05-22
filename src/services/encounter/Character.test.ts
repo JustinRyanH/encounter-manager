@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, Mock, test, vi } from "vitest";
 
-import { Character } from "./Character";
+import { EncounterCharacter } from "./Character";
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { updateCharacter } from "~/services/encounter/Commands";
 import { buildMockCharacter } from "~/services/encounter/mocks";
@@ -25,7 +25,7 @@ describe("EncounterCharacter", () => {
   });
 
   test("constructor", () => {
-    const character = new Character({
+    const character = new EncounterCharacter({
       encounter,
       id: "test-id",
       name: "Test",
@@ -37,7 +37,7 @@ describe("EncounterCharacter", () => {
 
   describe("update", () => {
     test("fails if the id is not the same as the character", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         encounter,
         id: "test-id",
         name: "Test",
@@ -48,7 +48,7 @@ describe("EncounterCharacter", () => {
 
     test("updates the name if it changes", () => {
       const observer = vi.fn();
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -61,7 +61,7 @@ describe("EncounterCharacter", () => {
 
     test("updates the initiative", () => {
       const observer = vi.fn();
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -74,7 +74,7 @@ describe("EncounterCharacter", () => {
 
     test("updates the current hit points", () => {
       const observer = vi.fn();
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -92,7 +92,7 @@ describe("EncounterCharacter", () => {
 
     test("updates the total hit points", () => {
       const observer = vi.fn();
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -111,7 +111,7 @@ describe("EncounterCharacter", () => {
 
     test("updates the temp hit points", () => {
       const observer = vi.fn();
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -134,7 +134,7 @@ describe("EncounterCharacter", () => {
       const totalObserver = vi.fn();
       const tempObserver = vi.fn();
 
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -171,7 +171,7 @@ describe("EncounterCharacter", () => {
 
   describe("name", () => {
     test("return the name", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -180,7 +180,7 @@ describe("EncounterCharacter", () => {
     });
 
     test("can set the name", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -190,7 +190,7 @@ describe("EncounterCharacter", () => {
     });
 
     test("can subscribe to name changes", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -207,7 +207,7 @@ describe("EncounterCharacter", () => {
 
   describe("initiative", () => {
     test("return the initiative", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -216,7 +216,7 @@ describe("EncounterCharacter", () => {
     });
 
     test("can set the initiative", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -226,7 +226,7 @@ describe("EncounterCharacter", () => {
     });
 
     test("can subscribe to initiative changes", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -243,7 +243,7 @@ describe("EncounterCharacter", () => {
 
   describe("inPlay", () => {
     test("defaults to  false", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -252,7 +252,7 @@ describe("EncounterCharacter", () => {
     });
 
     test("inPlay can be updated", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -262,7 +262,7 @@ describe("EncounterCharacter", () => {
     });
 
     test("changing inPlay will notify observers", () => {
-      const character = new Character({
+      const character = new EncounterCharacter({
         id: "test-id",
         name: "Test",
         initiative: 10,
@@ -292,7 +292,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([baseCharacter]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.name).toEqual("Test");
       await character.updateName("New Name");
@@ -308,7 +308,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([baseCharacter]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.initiative).toEqual(10);
       await character.updateInitiative(20);
@@ -324,7 +324,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.current).toEqual(10);
       await character.updateCurrentHp(5);
@@ -340,7 +340,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.total).toEqual(10);
       await character.updateTotalHp(20);
@@ -356,7 +356,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.temporary).toEqual(0);
       await character.updateTempHp(5);
@@ -372,7 +372,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 5, temporary: 0 } }]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.current).toEqual(5);
       await character.heal(5);
@@ -388,7 +388,7 @@ describe("EncounterCharacter", () => {
       });
 
       encounter.updateCharacters([{ ...baseCharacter, hp: { total: 10, current: 10, temporary: 0 } }]);
-      const character = encounter.findCharacter("test-id") as Character;
+      const character = encounter.findCharacter("test-id") as EncounterCharacter;
 
       expect(character.hp.current).toEqual(10);
       await character.damage(5);

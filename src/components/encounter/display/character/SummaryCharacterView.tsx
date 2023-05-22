@@ -2,11 +2,11 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Center, Group, Popover, SimpleGrid, Skeleton, Text } from "@mantine/core";
 
-import { Character } from "~/services/encounter";
+import { EncounterCharacter } from "~/services/encounter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 
 interface SummaryViewProps {
-  character: Character;
+  character: EncounterCharacter;
 }
 
 function CharacterHealth({ character }: SummaryViewProps) {
@@ -59,7 +59,7 @@ function CharacterName({ character }: SummaryViewProps) {
   return <Text fz="lg">{name}</Text>;
 }
 
-export function SummaryCharacterView({ character }: { character: Character }): JSX.Element {
+export function SummaryCharacterView({ character }: { character: EncounterCharacter }): JSX.Element {
   return (
     <Group spacing="sm">
       <Center maw={75}>

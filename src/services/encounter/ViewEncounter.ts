@@ -1,5 +1,5 @@
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
-import { Character } from "~/services/encounter/Character";
+import { EncounterCharacter } from "~/services/encounter/Character";
 import { ReadonlyValueObserver, ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
 
 export class ViewEncounter {
@@ -42,7 +42,7 @@ export class ViewEncounter {
     return this.openedCharacters.some((character) => character === characterId);
   }
 
-  private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<Character | null>) => {
+  private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<EncounterCharacter | null>) => {
     let oldValues: Array<string> = this.openedCharacters;
     if (oldValue) {
       oldValues = oldValues.filter((character) => character !== oldValue.id);

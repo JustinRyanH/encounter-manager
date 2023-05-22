@@ -1,4 +1,4 @@
-import { Character, CombatEncounter } from "~/services/encounter";
+import { EncounterCharacter, CombatEncounter } from "~/services/encounter";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Accordion, AccordionControlProps, ActionIcon, Avatar, Badge, Box, Group } from "@mantine/core";
 import { BookOpen } from "@phosphor-icons/react";
@@ -23,7 +23,7 @@ function AccordionControl({ encounter, ...props }: ControlProps) {
   );
 }
 
-function EncounterPreviewCharacter({ character }: { character: Character }) {
+function EncounterPreviewCharacter({ character }: { character: EncounterCharacter }) {
   const name = useWatchValueObserver(character.nameObserver);
   const avatar = <Avatar size={32} radius="xl" />;
 
