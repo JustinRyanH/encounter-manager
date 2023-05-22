@@ -7,7 +7,7 @@ use crate::encounters::{Encounter, EncounterCollection};
 
 #[derive(Clone, Debug, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
-pub enum EncounterStage {
+pub enum EncounterStageCmd {
     Start,
     Restart,
     Pause,
@@ -19,7 +19,7 @@ pub enum EncounterStage {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateStageCommand {
     pub id: Uuid,
-    pub stage: EncounterStage,
+    pub stage: EncounterStageCmd,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Type)]
@@ -39,5 +39,17 @@ pub enum EncounterCommandResponse {
 impl EncounterCommandResponse{
     pub fn list_from_collection(collection: &EncounterCollection) -> Result<Self, String> {
         Ok(Self::EncounterList(collection.list_encounters()))
+    }
+
+    pub fn from_stage_command(encounter: &mut Encounter, cmd: EncounterStageCmd) -> Result<Self, String> {
+        match cmd {
+            EncounterStageCmd::Start => {}
+            EncounterStageCmd::Restart => {}
+            EncounterStageCmd::Pause => {}
+            EncounterStageCmd::Stop => {}
+            EncounterStageCmd::Next => {}
+        }
+
+        Ok(Self::EncounterChanged(encounter.clone()))
     }
 }
