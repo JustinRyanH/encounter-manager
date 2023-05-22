@@ -6,7 +6,8 @@ interface EncounterList {
 
 export async function listEncounter(): Promise<EncounterList> {
   const result = await encounter("listEncounter");
-  return result.encounterList || {};
+  if ("encounterList" in result) return result.encounterList || {};
+  throw new Error("Invalid EncounterCommandResponse");
 }
 
 export function getCommandId(cmd: CharacterCommand): string {

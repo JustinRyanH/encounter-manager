@@ -14,6 +14,7 @@ pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterComma
     let encounter = state.lock().await;
     match command {
         EncounterCommands::ListEncounter => EncounterCommandResponse::list_from_collection(&encounter),
+        EncounterCommands::UpdateStage(_) => todo!("Update stage")
     }
 }
 
