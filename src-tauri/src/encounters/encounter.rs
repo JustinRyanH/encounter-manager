@@ -59,7 +59,7 @@ pub struct Encounter {
     id: Uuid,
     name: String,
     characters: Vec<Character>,
-    activeCharacter: Option<Uuid>,
+    active_character: Option<Uuid>,
 }
 
 impl Encounter {
@@ -68,7 +68,7 @@ impl Encounter {
             id: Uuid::new_v4(),
             name: name.into(),
             characters: Vec::new(),
-            activeCharacter: None,
+            active_character: None,
         }
     }
 
@@ -77,7 +77,7 @@ impl Encounter {
     }
 
     pub fn get_active_character_id(&self) -> Option<Uuid> {
-        self.activeCharacter
+        self.active_character
     }
 
     pub fn add_character(&mut self, new_character: Character) {
@@ -145,7 +145,15 @@ impl Encounter {
     }
 
     pub fn start(&mut self) -> Result<(), String> {
-        self.activeCharacter = self.characters.first().map(|c| c.uuid());
+        self.active_character = self.characters.first().map(|c| c.uuid());
+        Ok(())
+    }
+
+    pub fn next(&mut self) -> Result<(), String> {
+        let active_character = self.active_character.ok_or(String::from("No active character"))?;
+        let active_character_index = self.characters.iter().position(|c| c.uuid() == active_character).ok_or(String::from("Active character not found"))?;
+        let next_character_index = (active_character_index + 1) % self.characters.len();
+        self.active_character = Some(self.characters[next_character_index].uuid());
         Ok(())
     }
 }
@@ -244,5 +252,9 @@ mod tests {
         assert_eq!(encounter.get_active_character_id(), None);
         encounter.start().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+
+        encounter.next().unwrap();
+
+        assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
     }
 }
