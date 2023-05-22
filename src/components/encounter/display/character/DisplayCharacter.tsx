@@ -1,6 +1,6 @@
 import { Accordion, Center, Group, Paper, Skeleton, Text } from "@mantine/core";
 
-import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
+import { Character } from "~/services/encounter/Character";
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { EditPopover } from "~/components/systems/EditPopover";
@@ -12,7 +12,7 @@ import { NameAttribute } from "../NameAttribute";
 import { SummaryCharacterView } from "~/components/encounter/display/character/SummaryCharacterView";
 import { ViewEncounterControl } from "~/components/encounter/display/character/ViewEncounterControl";
 
-function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
+function InitiativeAttribute({ character }: { character: Character }) {
   const initiative = useWatchValueObserver(character.initiativeObserver);
 
   return (
@@ -25,7 +25,7 @@ function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
 }
 
 interface EncounterCharacterProps {
-  character: EncounterCharacter;
+  character: Character;
   viewEncounter: ViewEncounter;
 }
 

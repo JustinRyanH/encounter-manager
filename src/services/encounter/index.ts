@@ -1,4 +1,4 @@
 export { CombatEncounter } from "./CombatEncounter";
-export { EncounterCharacter } from "./EncounterCharacter";
+export { Character } from "./Character";
 export { ViewEncounter } from "./ViewEncounter";
 export { listEncounter } from "./Commands";

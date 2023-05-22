@@ -135,12 +135,12 @@ export class StubCharacter {
 /**
  * A Tracked Character
  */
-export class EncounterCharacter extends StubCharacter {
-  static newCharacter(param: EncounterCreateProps): EncounterCharacter {
-    return new EncounterCharacter(param);
+export class Character extends StubCharacter {
+  static newCharacter(param: EncounterCreateProps): Character {
+    return new Character(param);
   }
 
-  static StubCharacter = (id: string) => new EncounterCharacter({ id, name: v4(), initiative: 0, isStub: true });
+  static StubCharacter = (id: string) => new Character({ id, name: v4(), initiative: 0, isStub: true });
 
   #encounter: Encounter | null;
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);

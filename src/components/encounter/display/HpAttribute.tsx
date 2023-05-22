@@ -7,7 +7,7 @@ import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { Attribute } from "~/components/systems/Attribute";
 import { EditPopover, useEditPopoverContext } from "~/components/systems/EditPopover";
 import { UpdateNumber } from "~/components/systems/UpdateAttribute";
-import { EncounterCharacter } from "~/services/encounter";
+import { Character } from "~/services/encounter";
 
 interface HealthButtonProps {
   icon?: React.ReactNode;
@@ -16,7 +16,7 @@ interface HealthButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function UpdateHealth({ character }: { character: EncounterCharacter }): JSX.Element {
+function UpdateHealth({ character }: { character: Character }): JSX.Element {
   const hp = character.hp;
   const { handles } = useEditPopoverContext();
   const current = useWatchValueObserver(hp.currentObserver);
@@ -91,7 +91,7 @@ function UpdateHealth({ character }: { character: EncounterCharacter }): JSX.Ele
   }
 }
 
-export function HpAttribute({ character }: { character: EncounterCharacter }): JSX.Element {
+export function HpAttribute({ character }: { character: Character }): JSX.Element {
   const hp = character.hp;
   const current = useWatchValueObserver(hp.currentObserver);
   const total = useWatchValueObserver(hp.totalObserver);

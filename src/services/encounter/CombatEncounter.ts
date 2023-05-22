@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-import { EncounterCharacter, EncounterCreateProps } from "~/services/encounter/EncounterCharacter";
+import { Character, EncounterCreateProps } from "~/services/encounter/Character";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { ViewEncounter } from "~/services/encounter/ViewEncounter";
 import {
@@ -30,7 +30,7 @@ export class Encounter {
   readonly isStub: boolean;
 
   #name: ValueObserver<string> = new ValueObserver<string>("");
-  #characters: ValueObserver<Array<EncounterCharacter>> = new ValueObserver<Array<EncounterCharacter>>([]);
+  #characters: ValueObserver<Array<Character>> = new ValueObserver<Array<Character>>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   constructor({ id, isStub = false, name }: EncounterProps) {
@@ -42,18 +42,18 @@ export class Encounter {
   /**
    * Returns the characters in the encounter.
    */
-  get characters(): Array<EncounterCharacter> {
+  get characters(): Array<Character> {
     return this.#characters.value;
   }
 
-  set characters(value: Array<EncounterCharacter>) {
+  set characters(value: Array<Character>) {
     this.setCharacters(value);
   }
 
   /**
    * Returns a readonly observer for the characters.
    */
-  get charactersObserver(): ReadonlyValueObserver<Array<EncounterCharacter>> {
+  get charactersObserver(): ReadonlyValueObserver<Array<Character>> {
     return this.#characters.readonly;
   }
 
@@ -105,14 +105,14 @@ export class Encounter {
     return await this.updateCharacter(damageCharacterCmd(id, amount));
   }
 
-  protected setCharacters = (characters: Array<EncounterCharacter>) => {
+  protected setCharacters = (characters: Array<Character>) => {
     this.#characters.value = [...characters];
     this.addEncounterToCharacters();
   };
 
   protected updateOrCreateCharacter = (character: EncounterCreateProps) => {
     const existingCharacter = this.findCharacter(character.id);
-    if (!existingCharacter) return EncounterCharacter.newCharacter(character);
+    if (!existingCharacter) return Character.newCharacter(character);
     existingCharacter.update(character);
     return existingCharacter;
   };
@@ -139,8 +139,8 @@ export class Encounter {
 }
 
 export class CombatEncounter extends Encounter {
-  #lastActiveCharacter: EncounterCharacter | null = null;
-  #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
+  #lastActiveCharacter: Character | null = null;
+  #activeCharacter: ValueObserver<Character | null> = new ValueObserver<Character | null>(null);
 
   static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
 
@@ -148,9 +148,9 @@ export class CombatEncounter extends Encounter {
     super(props);
     if (this.isStub) {
       this.setCharacters([
-        EncounterCharacter.StubCharacter(uuid()),
-        EncounterCharacter.StubCharacter(uuid()),
-        EncounterCharacter.StubCharacter(uuid()),
+        Character.StubCharacter(uuid()),
+        Character.StubCharacter(uuid()),
+        Character.StubCharacter(uuid()),
       ]);
     }
   }
@@ -162,14 +162,14 @@ export class CombatEncounter extends Encounter {
   /**
    * The active character in the encounter.
    */
-  get activeCharacter(): EncounterCharacter | null {
+  get activeCharacter(): Character | null {
     return this.#activeCharacter.value;
   }
 
   /**
    * Returns a readonly observer for the active character.
    */
-  get activeCharacterObserver(): ReadonlyValueObserver<EncounterCharacter | null> {
+  get activeCharacterObserver(): ReadonlyValueObserver<Character | null> {
     return this.#activeCharacter.readonly;
   }
 
@@ -227,7 +227,7 @@ export class CombatEncounter extends Encounter {
     this.setActiveCharacter(null);
   };
 
-  private setActiveCharacter = (character: EncounterCharacter | null) => {
+  private setActiveCharacter = (character: Character | null) => {
     this.#lastActiveCharacter = this.activeCharacter;
     this.#activeCharacter.value = character;
     if (character) {

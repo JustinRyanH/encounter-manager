@@ -2,7 +2,7 @@ import { ArrowBendRightDown } from "@phosphor-icons/react";
 import { Accordion, AccordionControlProps, ActionIcon, Box, Paper } from "@mantine/core";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { EncounterCharacter, ViewEncounter } from "~/services/encounter";
+import { Character, ViewEncounter } from "~/services/encounter";
 import { useEncounterContext } from "~/components/encounter/providers/EncounterProvider";
 
 const ViewSx = {
@@ -20,11 +20,11 @@ const NextButtonSx = {
 };
 
 interface EncounterControlProps extends AccordionControlProps {
-  character: EncounterCharacter;
+  character: Character;
   view: ViewEncounter;
 }
 
-function NextCharacterButton({ character }: { character: EncounterCharacter }) {
+function NextCharacterButton({ character }: { character: Character }) {
   const encounter = useEncounterContext();
   const inPlay = useWatchValueObserver(character.inPlayObserver);
 

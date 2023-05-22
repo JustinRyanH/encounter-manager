@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
-import { EncounterCharacter } from "~/services/encounter/EncounterCharacter";
+import { Character } from "~/services/encounter/Character";
 import { buildMockCharacter } from "~/services/encounter/mocks";
 
 const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
@@ -41,7 +41,7 @@ describe("Encounter", function () {
   });
 
   test("newCharacter", () => {
-    const result = EncounterCharacter.newCharacter({
+    const result = Character.newCharacter({
       id: "test-a",
       name: "A",
       initiative: 1,
@@ -62,7 +62,7 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
       expect(characterA).toBeTruthy();
 
       encounter.nextCharacter();
@@ -81,8 +81,8 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
+      const characterB = encounter.findCharacter("test-b") as Character;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
@@ -115,8 +115,8 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
+      const characterB = encounter.findCharacter("test-b") as Character;
 
       encounter.startEncounter();
 
@@ -145,7 +145,7 @@ describe("Encounter", function () {
 
     test("loads in characters from server", () => {
       encounter.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
       expect(characterA).toBeTruthy();
       expect(characterA.name).toEqual("A");
       expect(characterA.id).toEqual("test-a");
@@ -157,13 +157,13 @@ describe("Encounter", function () {
         id: "encounter-a",
       });
       encounter.updateCharacters([buildMockCharacter({ id: "test-a", name: "A", initiative: 1 })]);
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
       expect(characterA.encounter).toEqual(encounter);
     });
 
     test("keeps existing instances of characters if they exist", () => {
       encounter.updateCharacters([originalCharacterA]);
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
       expect(characterA).toBeTruthy();
       expect(characterA.initiative).toEqual(1);
 
@@ -174,7 +174,7 @@ describe("Encounter", function () {
 
     test("updates the active character if it is updated", () => {
       encounter.updateCharacters([originalCharacterA]);
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
       expect(characterA).toBeTruthy();
       expect(characterA.initiative).toEqual(1);
 
@@ -210,8 +210,8 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
+      const characterB = encounter.findCharacter("test-b") as Character;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
@@ -230,8 +230,8 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
+      const characterB = encounter.findCharacter("test-b") as Character;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
@@ -261,8 +261,8 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
+      const characterB = encounter.findCharacter("test-b") as Character;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
@@ -283,8 +283,8 @@ describe("Encounter", function () {
         { ...mockCharacterB, initiative: 5 },
       ]);
 
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
+      const characterA = encounter.findCharacter("test-a") as Character;
+      const characterB = encounter.findCharacter("test-b") as Character;
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
