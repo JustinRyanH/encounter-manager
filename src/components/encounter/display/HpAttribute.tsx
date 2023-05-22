@@ -27,7 +27,6 @@ function UpdateHealth({ character }: { character: EncounterCharacter }): JSX.Ele
   const handleHeal = async () => {
     if (change === "") return;
     await character.heal(change);
-    hp.heal(change);
     setChange("");
     handles.close();
   };
