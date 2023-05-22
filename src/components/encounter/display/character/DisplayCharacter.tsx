@@ -11,6 +11,7 @@ import { HpAttribute } from "../HpAttribute";
 import { NameAttribute } from "../NameAttribute";
 import { SummaryCharacterView } from "~/components/encounter/display/character/SummaryCharacterView";
 import { ViewEncounterControl } from "~/components/encounter/display/character/ViewEncounterControl";
+import { useInPlayForEncounter } from "~/components/encounter/hooks";
 
 function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
   const initiative = useWatchValueObserver(character.initiativeObserver);
@@ -27,9 +28,9 @@ function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
 interface EncounterCharacterProps {
   character: EncounterCharacter;
   viewEncounter: ViewEncounter;
-  inPlay?: boolean;
 }
-export function DisplayCharacter({ character, viewEncounter, inPlay }: EncounterCharacterProps): JSX.Element {
+export function DisplayCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
+  const inPlay = useInPlayForEncounter(character);
   return (
     <Accordion.Item data-in-play={inPlay} value={character.id}>
       <ViewEncounterControl character={character} view={viewEncounter}>
