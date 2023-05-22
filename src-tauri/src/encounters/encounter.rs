@@ -143,6 +143,11 @@ impl Encounter {
             }
         }
     }
+
+    pub fn start(&mut self) -> Result<(), String> {
+        self.activeCharacter = self.characters.first().map(|c| c.uuid());
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -232,10 +237,12 @@ mod tests {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
         let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
         let character2 = character::Character::new(String::from("Test Character 2"), 10, 10);
-        encounter.add_character(character1);
-        encounter.add_character(character2);
+        encounter.add_character(character1.clone());
+        encounter.add_character(character2.clone());
 
 
         assert_eq!(encounter.get_active_character_id(), None);
+        encounter.start().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
     }
 }
