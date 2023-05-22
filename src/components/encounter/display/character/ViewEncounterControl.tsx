@@ -25,10 +25,15 @@ interface EncounterControlProps extends AccordionControlProps {
   view: ViewEncounter;
 }
 
-function NextCharacterButton({ character }: { character: EncounterCharacter }) {
+function useInPlayForEncounter(character: EncounterCharacter) {
   const encounter = useEncounterContext();
   const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
-  const inPlay = activeCharacter?.id === character.id;
+  return activeCharacter?.id === character.id;
+}
+
+function NextCharacterButton({ character }: { character: EncounterCharacter }) {
+  const encounter = useEncounterContext();
+  const inPlay = useInPlayForEncounter(character);
 
   return (
     <ActionIcon
