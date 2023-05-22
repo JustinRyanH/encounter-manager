@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 
 import { HitPoints } from "~/services/encounter/HitPoints";
-import { ReadonlyValueObserver, StopObserving, ValueChangeMessage, ValueObserver } from "~/services/ValueObserver";
+import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { Encounter } from "~/services/encounter/CombatEncounter";
 import { Character as CharacterProps, HitPoints as ServerHitPoints } from "~/encounterBindings";
 
