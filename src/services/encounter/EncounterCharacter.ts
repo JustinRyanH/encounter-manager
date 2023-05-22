@@ -30,7 +30,7 @@ interface EncounterCharacterUpdateProps extends OptionalCharacterProps {
   hp?: OptionalHitPoints;
 }
 
-export class Character {
+export class StubCharacter {
   readonly id: string;
   readonly isStub: boolean;
   readonly hp: HitPoints = new HitPoints();
@@ -135,7 +135,7 @@ export class Character {
 /**
  * A Tracked Character
  */
-export class EncounterCharacter extends Character {
+export class EncounterCharacter extends StubCharacter {
   static newCharacter(param: EncounterCreateProps): EncounterCharacter {
     return new EncounterCharacter(param);
   }
