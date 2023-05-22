@@ -1,4 +1,3 @@
-import { Signal, SignalConnection } from "typed-signals";
 import { v4 as uuid } from "uuid";
 
 import { EncounterCharacter, EncounterCreateProps } from "~/services/encounter/EncounterCharacter";
@@ -17,8 +16,6 @@ import {
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
 import { CharacterCommand, Encounter as ServerEncounter } from "~/encounterBindings";
-
-type CharacterAddedMessage = ({ character }: { character: EncounterCharacter }) => void;
 
 type OptionalEncounters = {
   [k in keyof ServerEncounter]?: ServerEncounter[k];
