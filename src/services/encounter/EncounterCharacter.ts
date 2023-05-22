@@ -30,6 +30,8 @@ interface EncounterCharacterUpdateProps extends OptionalCharacterProps {
   hp?: OptionalHitPoints;
 }
 
+export class Character {}
+
 /**
  * A Tracked Character
  */
@@ -183,15 +185,5 @@ export class EncounterCharacter {
 
   damage = async (amount: number) => {
     return this.encounter?.damageCharacter(this.id, amount);
-  };
-
-  /**
-   * Observer for the initiative of the character
-   * @param message
-   * @return unsubscribe function
-   */
-  observeInitiative = (message: ValueChangeMessage<number>): StopObserving => {
-    this.#initiative.add(message);
-    return () => this.#initiative.remove(message);
   };
 }
