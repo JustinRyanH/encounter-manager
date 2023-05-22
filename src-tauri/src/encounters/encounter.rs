@@ -108,36 +108,36 @@ impl Encounter {
         let character = self.find_character_mut(cmd.id()).ok_or(format!("Character with id {} not found", cmd.id()))?;
 
         match cmd {
-            CharacterCommand::UpdateName {  name, .. } => {
+            CharacterCommand::UpdateName { name, .. } => {
                 character.set_name(name)
                     .map(|_| CharacterCommandResponse::updated(character))
-                    .or_else(|e| Ok(CharacterCommandResponse::updated_with_messages(character, CharacterChangeMessages::default().with_name_error_message(e))) )
+                    .or_else(|e| Ok(CharacterCommandResponse::updated_with_messages(character, CharacterChangeMessages::default().with_name_error_message(e))))
             }
-            CharacterCommand::UpdateInitiative {  initiative, .. } => {
+            CharacterCommand::UpdateInitiative { initiative, .. } => {
                 character.set_initiative(initiative);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateInitiativeModifier {  modifier, .. } => {
+            CharacterCommand::UpdateInitiativeModifier { modifier, .. } => {
                 character.set_initiative_modifier(modifier);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateCurrentHp {  hp, .. } => {
+            CharacterCommand::UpdateCurrentHp { hp, .. } => {
                 character.set_current_hp(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateTotalHp {  hp, ..  } => {
+            CharacterCommand::UpdateTotalHp { hp, .. } => {
                 character.set_total_hp(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateTemporaryHp {  hp, .. } => {
+            CharacterCommand::UpdateTemporaryHp { hp, .. } => {
                 character.set_temporary_hp(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::Heal {  hp, .. } => {
+            CharacterCommand::Heal { hp, .. } => {
                 character.heal(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::Damage {  hp, .. } => {
+            CharacterCommand::Damage { hp, .. } => {
                 character.damage(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
@@ -145,13 +145,20 @@ impl Encounter {
     }
 
     pub fn start(&mut self) -> Result<(), String> {
-        self.active_character = self.characters.first().map(|c| c.uuid());
+        match self.active_character.is_some() {
+            true => return Err(String::from("Encounter already started")),
+            false => self.active_character = self.characters.first().map(|c| c.uuid()),
+        }
         Ok(())
     }
 
     pub fn next(&mut self) -> Result<(), String> {
-        if let Some(active_character) = self.active_character {
-            let active_character_index = self.characters.iter().position(|c| c.uuid() == active_character).ok_or(String::from("Active character not found"))?;
+        if let Some(id) = self.active_character {
+            let active_character_index = self.characters
+                .iter()
+                .position(|c| c.uuid() == id)
+                .ok_or(String::from("Active character not found"))?;
+
             let next_character_index = (active_character_index + 1) % self.characters.len();
             self.active_character = Some(self.characters[next_character_index].uuid());
         } else {
@@ -252,14 +259,24 @@ mod tests {
         encounter.add_character(character2.clone());
 
         assert_eq!(encounter.get_active_character_id(), None);
+        // Uses First Character
         encounter.start().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+
+        // Moves Next
+        encounter.next().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
+
+        // Wraps
+        encounter.next().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
 
         encounter.next().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
 
-        encounter.next().unwrap();
-        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+        let result = encounter.start();
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), String::from("Encounter already started"));
     }
 
     #[test]
