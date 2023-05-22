@@ -150,10 +150,13 @@ impl Encounter {
     }
 
     pub fn next(&mut self) -> Result<(), String> {
-        let active_character = self.active_character.ok_or(String::from("No active character"))?;
-        let active_character_index = self.characters.iter().position(|c| c.uuid() == active_character).ok_or(String::from("Active character not found"))?;
-        let next_character_index = (active_character_index + 1) % self.characters.len();
-        self.active_character = Some(self.characters[next_character_index].uuid());
+        if let Some(active_character) = self.active_character {
+            let active_character_index = self.characters.iter().position(|c| c.uuid() == active_character).ok_or(String::from("Active character not found"))?;
+            let next_character_index = (active_character_index + 1) % self.characters.len();
+            self.active_character = Some(self.characters[next_character_index].uuid());
+        } else {
+            self.active_character = self.characters.first().map(|c| c.uuid());
+        }
         Ok(())
     }
 }
@@ -248,7 +251,6 @@ mod tests {
         encounter.add_character(character1.clone());
         encounter.add_character(character2.clone());
 
-
         assert_eq!(encounter.get_active_character_id(), None);
         encounter.start().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
@@ -257,6 +259,19 @@ mod tests {
         assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
 
         encounter.next().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+    }
+
+    #[test]
+    fn next_character_sets_active_character() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = character::Character::new(String::from("Test Character 2"), 10, 10);
+        encounter.add_character(character1.clone());
+        encounter.add_character(character2.clone());
+
+        encounter.next().unwrap();
+
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
     }
 }
