@@ -103,31 +103,31 @@ export class Character {
     }
   }
 
-  updateInitiative = (_initiative: number | null): void => {
+  updateInitiative = (_initiative: number | null): Promise<void> => {
     throw new Error("Not Implemented");
   };
 
-  updateName = async (_name: string) => {
+  updateName = async (_name: string): Promise<void> => {
     throw new Error("Not Implemented");
   };
 
-  updateTotalHp = async (_total: number) => {
+  updateTotalHp = async (_total: number): Promise<void> => {
     throw new Error("Not Implemented");
   };
 
-  updateCurrentHp = async (_current: number) => {
+  updateCurrentHp = async (_current: number): Promise<void> => {
     throw new Error("Not Implemented");
   };
 
-  updateTempHp = async (_temp: number | null) => {
+  updateTempHp = async (_temp: number | null): Promise<void> => {
     throw new Error("Not Implemented");
   };
 
-  heal = async (_amount: number) => {
+  heal = async (_amount: number): Promise<void> => {
     throw new Error("Not Implemented");
   };
 
-  damage = async (_amount: number) => {
+  damage = async (_amount: number): Promise<void> => {
     throw new Error("Not Implemented");
   };
 }
@@ -135,30 +135,19 @@ export class Character {
 /**
  * A Tracked Character
  */
-export class EncounterCharacter {
+export class EncounterCharacter extends Character {
   static newCharacter(param: EncounterCreateProps): EncounterCharacter {
     return new EncounterCharacter(param);
   }
 
   static StubCharacter = (id: string) => new EncounterCharacter({ id, name: v4(), initiative: 0, isStub: true });
-  #encounter: Encounter | null;
-  readonly id: string;
-  readonly isStub: boolean;
-  readonly hp: HitPoints = new HitPoints();
 
-  #name: ValueObserver<string>;
-  #initiative: ValueObserver<number>;
+  #encounter: Encounter | null;
   #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
-  constructor({ encounter, id, name, initiative, hp, isStub = false }: EncounterCreateProps) {
+  constructor({ encounter, ...props }: EncounterCreateProps) {
+    super(props);
     this.#encounter = encounter || null;
-    this.id = id;
-    this.isStub = isStub;
-    this.#initiative = new ValueObserver(initiative);
-    this.#name = new ValueObserver(name);
-    if (hp) {
-      this.hp = new HitPoints(hp);
-    }
   }
 
   /**
@@ -171,28 +160,6 @@ export class EncounterCharacter {
   set encounter(value) {
     if (!value) throw new Error("Encounter cannot be null");
     this.#encounter = value;
-  }
-
-  /**
-   * The name of the character
-   */
-  get name(): string {
-    return this.#name.value;
-  }
-
-  /**
-   * Update name of the character, and notify observers
-   * @param name
-   */
-  set name(name: string) {
-    this.#name.value = name;
-  }
-
-  /**
-   * Observer for the name of the character
-   */
-  get nameObserver(): ReadonlyValueObserver<string> {
-    return this.#name.readonly;
   }
 
   /**
@@ -217,52 +184,10 @@ export class EncounterCharacter {
     return this.#inPlay.readonly;
   }
 
-  /**
-   * The initiative of the character
-   */
-  get initiative(): number {
-    return this.#initiative.value;
-  }
-
-  /**
-   * Update initiative of the character, and notify observers
-   * @param initiative
-   */
-  set initiative(initiative: number) {
-    this.#initiative.value = initiative;
-  }
-
-  /**
-   * Observer for the initiative of the character
-   */
-  get initiativeObserver(): ReadonlyValueObserver<number> {
-    return this.#initiative.readonly;
-  }
-
-  update(values: EncounterCharacterUpdateProps) {
-    if (values.id !== this.id) throw new Error("Id Mismatch for character");
-    if (values.name && values.name !== this.name) this.name = values.name;
-    if (values.initiative && values.initiative !== this.initiative) this.initiative = values.initiative;
-    if (values.hp) {
-      const { current, total, temporary } = values.hp;
-      if (current !== undefined && current !== this.hp.current) this.hp.current = current;
-      if (total !== undefined && total !== this.hp.total) this.hp.total = total;
-      if (temporary !== undefined && temporary !== this.hp.temporary) this.hp.temporary = temporary;
-    }
-  }
-
-  /**
-   * Update total hit points, and notify observers
-   * @param initiative
-   */
-  updateInitiative = (initiative: number | null): void => {
+  updateInitiative = async (initiative: number | null): Promise<void> => {
     this.encounter?.updateCharacterInitiative(this.id, initiative || 0);
   };
 
-  /**
-   * Update total hit points, and notify observers
-   * @param name
-   */
   updateName = async (name: string) => {
     return this.encounter?.updateCharacterName(this.id, name);
   };
