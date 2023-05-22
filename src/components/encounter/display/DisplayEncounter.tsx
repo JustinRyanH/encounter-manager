@@ -53,6 +53,7 @@ export function DisplayEncounter({ encounter }: { encounter: CombatEncounter }) 
   const viewEncounter = React.useMemo(() => encounter.newViewEncounter, [encounter]);
   const ids = useWatchValueObserver(viewEncounter.openedCharactersObserver);
 
+  const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
   const { classes } = useStyles();
 
   return (
@@ -60,7 +61,12 @@ export function DisplayEncounter({ encounter }: { encounter: CombatEncounter }) 
       <ManageEncounter />
       <Accordion value={ids} classNames={classes} chevronPosition="left" variant="separated" multiple>
         {characters.map((c) => (
-          <DisplayCharacter viewEncounter={viewEncounter} character={c} key={c.id} />
+          <DisplayCharacter
+            key={c.id}
+            inPlay={activeCharacter?.id === c.id}
+            viewEncounter={viewEncounter}
+            character={c}
+          />
         ))}
       </Accordion>
     </EncounterProvider>

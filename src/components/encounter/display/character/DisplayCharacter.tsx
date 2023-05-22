@@ -27,10 +27,9 @@ function InitiativeAttribute({ character }: { character: EncounterCharacter }) {
 interface EncounterCharacterProps {
   character: EncounterCharacter;
   viewEncounter: ViewEncounter;
+  inPlay?: boolean;
 }
-export function DisplayCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
-  const activeCharacter = useWatchValueObserver(viewEncounter.encounter.activeCharacterObserver);
-  const inPlay = activeCharacter?.id === character.id;
+export function DisplayCharacter({ character, viewEncounter, inPlay }: EncounterCharacterProps): JSX.Element {
   return (
     <Accordion.Item data-in-play={inPlay} value={character.id}>
       <ViewEncounterControl character={character} view={viewEncounter}>

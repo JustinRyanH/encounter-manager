@@ -230,11 +230,5 @@ export class CombatEncounter extends Encounter {
   private setActiveCharacter = (character: EncounterCharacter | null) => {
     this.#lastActiveCharacter = this.activeCharacter;
     this.#activeCharacter.value = character;
-    if (character) {
-      character.inPlay = true;
-    }
-    this.characters.forEach((character) => {
-      if (character !== this.activeCharacter) character.inPlay = false;
-    });
   };
 }
