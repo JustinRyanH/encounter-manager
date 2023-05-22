@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::process::id;
 use std::sync::{Arc};
 
 use tokio::sync::{Mutex, MutexGuard};
@@ -153,6 +152,12 @@ impl Encounter {
             false => self.active_character = self.characters.first().map(|c| c.uuid()),
         }
         self.last_active_character = None;
+        Ok(())
+    }
+
+    pub fn stop(&mut self) -> Result<(), String> {
+        self.last_active_character = None;
+        self.active_character = None;
         Ok(())
     }
 
@@ -349,6 +354,27 @@ mod tests {
 
         encounter.next().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
+
+        encounter.restart().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+    }
+
+    #[test]
+    fn stop_encounter() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 10);
+        encounter.add_character(character1.clone());
+        encounter.add_character(character2.clone());
+
+        encounter.start().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+
+        encounter.next().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
+
+        encounter.stop().unwrap();
+        assert_eq!(encounter.get_active_character_id(), None);
 
         encounter.restart().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
