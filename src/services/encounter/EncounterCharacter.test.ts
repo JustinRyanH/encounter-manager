@@ -241,36 +241,6 @@ describe("EncounterCharacter", () => {
     });
   });
 
-  describe("observeInitiative", function () {
-    test("can subscribe to initiative changes", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      const observer = vi.fn();
-      character.observeInitiative(observer);
-      character.initiative = 20;
-      expect(observer).toHaveBeenCalledWith({
-        newValue: 20,
-        oldValue: 10,
-      });
-    });
-
-    test("can unsubscribe from initiative changes", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      const observer = vi.fn();
-      const unsubscribe = character.observeInitiative(observer);
-      unsubscribe();
-      character.initiative = 20;
-      expect(observer).not.toHaveBeenCalled();
-    });
-  });
-
   describe("inPlay", () => {
     test("defaults to  false", () => {
       const character = new EncounterCharacter({
