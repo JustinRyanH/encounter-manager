@@ -143,7 +143,6 @@ export class EncounterCharacter extends BaseCharacter {
   static StubCharacter = (id: string) => new EncounterCharacter({ id, name: v4(), initiative: 0, isStub: true });
 
   #encounter: Encounter | null;
-  #inPlay: ValueObserver<boolean> = new ValueObserver<boolean>(false);
 
   constructor({ encounter, ...props }: EncounterCreateProps) {
     super(props);
@@ -160,28 +159,6 @@ export class EncounterCharacter extends BaseCharacter {
   set encounter(value) {
     if (!value) throw new Error("Encounter cannot be null");
     this.#encounter = value;
-  }
-
-  /**
-   * if the character is in play
-   */
-  get inPlay(): boolean {
-    return this.#inPlay.value;
-  }
-
-  /**
-   * Update name of the character, and notify observers
-   * @param newValue
-   */
-  set inPlay(newValue: boolean) {
-    this.#inPlay.value = newValue;
-  }
-
-  /**
-   * Observer for the initiative of the character
-   */
-  get inPlayObserver(): ReadonlyValueObserver<boolean> {
-    return this.#inPlay.readonly;
   }
 
   updateInitiative = async (initiative: number | null): Promise<void> => {

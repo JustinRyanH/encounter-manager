@@ -241,42 +241,6 @@ describe("EncounterCharacter", () => {
     });
   });
 
-  describe("inPlay", () => {
-    test("defaults to  false", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      expect(character.inPlay).toEqual(false);
-    });
-
-    test("inPlay can be updated", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      character.inPlay = true;
-      expect(character.inPlay).toEqual(true);
-    });
-
-    test("changing inPlay will notify observers", () => {
-      const character = new EncounterCharacter({
-        id: "test-id",
-        name: "Test",
-        initiative: 10,
-      });
-      const observer = vi.fn();
-      character.inPlayObserver.add(observer);
-      character.inPlay = true;
-      expect(observer).toHaveBeenCalledWith({
-        newValue: true,
-        oldValue: false,
-      });
-    });
-  });
-
   describe("external updates", () => {
     const baseCharacter = {
       id: "test-id",

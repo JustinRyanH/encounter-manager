@@ -28,9 +28,9 @@ interface EncounterCharacterProps {
   character: EncounterCharacter;
   viewEncounter: ViewEncounter;
 }
-
 export function DisplayCharacter({ character, viewEncounter }: EncounterCharacterProps): JSX.Element {
-  const inPlay = useWatchValueObserver(character.inPlayObserver);
+  const activeCharacter = useWatchValueObserver(viewEncounter.encounter.activeCharacterObserver);
+  const inPlay = activeCharacter?.id === character.id;
   return (
     <Accordion.Item data-in-play={inPlay} value={character.id}>
       <ViewEncounterControl character={character} view={viewEncounter}>

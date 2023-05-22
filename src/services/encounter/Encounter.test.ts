@@ -68,7 +68,6 @@ describe("Encounter", function () {
       encounter.nextCharacter();
 
       expect(encounter.activeCharacter?.id).toEqual(mockCharacterA.id);
-      expect(characterA.inPlay).toEqual(true);
     });
 
     test("moves to next character when nextCharacter is called", function () {
@@ -87,20 +86,14 @@ describe("Encounter", function () {
       expect(characterB).toBeTruthy();
 
       expect(encounter.activeCharacter).toEqual(null);
-      expect(characterA.inPlay).toEqual(false);
-      expect(characterB.inPlay).toEqual(false);
 
       encounter.nextCharacter();
 
       expect(encounter.activeCharacter).toEqual(characterA);
-      expect(characterA.inPlay).toEqual(true);
-      expect(characterB.inPlay).toEqual(false);
 
       encounter.nextCharacter();
 
       expect(encounter.activeCharacter).toEqual(characterB);
-      expect(characterA.inPlay).toEqual(false);
-      expect(characterB.inPlay).toEqual(true);
     });
 
     test("signaling when the current character changes", function () {

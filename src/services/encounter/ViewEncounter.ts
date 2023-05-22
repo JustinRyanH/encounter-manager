@@ -11,6 +11,10 @@ export class ViewEncounter {
     this.#encounter.activeCharacterObserver.add(this.onChangeActiveCharacter);
   }
 
+  get encounter(): CombatEncounter {
+    return this.#encounter;
+  }
+
   get openedCharacters(): Array<string> {
     return this.#openedCharacters.value;
   }
