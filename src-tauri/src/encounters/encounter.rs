@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::process::id;
 use std::sync::{Arc};
 
 use tokio::sync::{Mutex, MutexGuard};
@@ -60,6 +61,7 @@ pub struct Encounter {
     name: String,
     characters: Vec<Character>,
     active_character: Option<Uuid>,
+    last_active_character: Option<Uuid>,
 }
 
 impl Encounter {
@@ -69,6 +71,7 @@ impl Encounter {
             name: name.into(),
             characters: Vec::new(),
             active_character: None,
+            last_active_character: None,
         }
     }
 
@@ -149,6 +152,7 @@ impl Encounter {
             true => return Err(String::from("Encounter already started")),
             false => self.active_character = self.characters.first().map(|c| c.uuid()),
         }
+        self.last_active_character = None;
         Ok(())
     }
 
@@ -161,9 +165,27 @@ impl Encounter {
 
             let next_character_index = (active_character_index + 1) % self.characters.len();
             self.active_character = Some(self.characters[next_character_index].uuid());
+            self.last_active_character = Some(id);
+        } else {
+            self.active_character = self.characters.first().map(|c| c.uuid());
+            self.last_active_character = None;
+        }
+        Ok(())
+    }
+
+    pub fn pause(&mut self) -> Result<() , String> {
+        self.last_active_character = self.active_character;
+        self.active_character = None;
+        Ok(())
+    }
+
+    pub fn restart(&mut self) -> Result<() , String> {
+        if let Some(id) = self.last_active_character {
+            self.active_character = Some(id);
         } else {
             self.active_character = self.characters.first().map(|c| c.uuid());
         }
+        self.last_active_character = None;
         Ok(())
     }
 }
@@ -186,7 +208,7 @@ mod tests {
     #[test]
     fn add_character() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character = character::Character::new(String::from("Test Character"), 10, 10);
+        let character = Character::new(String::from("Test Character"), 10, 10);
         encounter.add_character(character.clone());
         encounter.add_character(character.clone());
         assert_eq!(encounter.get_characters().len(), 1);
@@ -195,8 +217,8 @@ mod tests {
     #[test]
     fn remove_character() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character_a = character::Character::new("Character A", 10, 10);
-        let character_b = character::Character::new("Character B", 10, 5);
+        let character_a = Character::new("Character A", 10, 10);
+        let character_b = Character::new("Character B", 10, 5);
         encounter.add_character(character_a.clone());
         encounter.add_character(character_b.clone());
         encounter.remove_character(character_a.clone());
@@ -206,8 +228,8 @@ mod tests {
     #[test]
     fn auto_sorts_new_characters() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
-        let character2 = character::Character::new(String::from("Test Character 2"), 10, 20);
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 20);
         encounter.add_character(character2.clone());
         encounter.add_character(character1.clone());
         assert_eq!(encounter.get_characters()[0].name, character2.name);
@@ -217,8 +239,8 @@ mod tests {
     #[test]
     fn find_character() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
-        let character2 = character::Character::new(String::from("Test Character 2"), 10, 20);
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 20);
         encounter.add_character(character1.clone());
 
         assert_eq!(encounter.find_character(character1.id()).unwrap().name, character1.name);
@@ -228,7 +250,7 @@ mod tests {
     #[test]
     fn update_character_command() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
         encounter.add_character(character1.clone());
 
         let cmd = character::CharacterCommand::UpdateName {
@@ -253,8 +275,8 @@ mod tests {
     #[test]
     fn active_character() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
-        let character2 = character::Character::new(String::from("Test Character 2"), 10, 10);
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 10);
         encounter.add_character(character1.clone());
         encounter.add_character(character2.clone());
 
@@ -282,13 +304,47 @@ mod tests {
     #[test]
     fn next_character_sets_active_character() {
         let mut encounter = Encounter::new(String::from("Test Encounter"));
-        let character1 = character::Character::new(String::from("Test Character 1"), 10, 10);
-        let character2 = character::Character::new(String::from("Test Character 2"), 10, 10);
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 10);
         encounter.add_character(character1.clone());
         encounter.add_character(character2.clone());
 
         encounter.next().unwrap();
 
+        assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
+    }
+
+    #[test]
+    fn allow_restarting_a_character() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 10);
+        let character3 = Character::new(String::from("Test Character 3"), 10, 10);
+        encounter.add_character(character1.clone());
+        encounter.add_character(character2.clone());
+        encounter.add_character(character3.clone());
+
+
+        encounter.next().unwrap();
+        encounter.next().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
+
+        encounter.pause().unwrap();
+        assert_eq!(encounter.get_active_character_id(), None);
+
+        encounter.restart().unwrap();
+        assert_eq!(encounter.get_active_character_id(), Some(character2.uuid()));
+    }
+
+    #[test]
+    fn restart_encounter() {
+        let mut encounter = Encounter::new(String::from("Test Encounter"));
+        let character1 = Character::new(String::from("Test Character 1"), 10, 10);
+        let character2 = Character::new(String::from("Test Character 2"), 10, 10);
+        encounter.add_character(character1.clone());
+        encounter.add_character(character2.clone());
+
+        encounter.restart().unwrap();
         assert_eq!(encounter.get_active_character_id(), Some(character1.uuid()));
     }
 }
