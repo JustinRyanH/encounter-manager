@@ -43,11 +43,11 @@ impl EncounterCommandResponse{
 
     pub fn from_stage_command(encounter: &mut Encounter, cmd: EncounterStageCmd) -> Result<Self, String> {
         match cmd {
-            EncounterStageCmd::Start => {}
-            EncounterStageCmd::Restart => {}
-            EncounterStageCmd::Pause => {}
-            EncounterStageCmd::Stop => {}
-            EncounterStageCmd::Next => {}
+            EncounterStageCmd::Start => encounter.start()?,
+            EncounterStageCmd::Restart => encounter.restart()?,
+            EncounterStageCmd::Pause => encounter.pause()?,
+            EncounterStageCmd::Stop => encounter.stop()?,
+            EncounterStageCmd::Next => encounter.next()?,
         }
 
         Ok(Self::EncounterChanged(encounter.clone()))
