@@ -12,17 +12,7 @@ interface EncounterManagerProviderProps {
   children: React.ReactNode;
 }
 
-export function EncounterManagerProvider({
-  children,
-  manager,
-}: EncounterManagerProviderProps) {
-  const encounterManager = React.useMemo(
-    () => manager || new EncounterManager(),
-    []
-  );
-  return (
-    <EncounterManagerContext.Provider value={encounterManager}>
-      {children}
-    </EncounterManagerContext.Provider>
-  );
+export function EncounterManagerProvider({ children, manager }: EncounterManagerProviderProps) {
+  const encounterManager = React.useMemo(() => manager || new EncounterManager(), []);
+  return <EncounterManagerContext.Provider value={encounterManager}>{children}</EncounterManagerContext.Provider>;
 }

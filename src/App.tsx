@@ -7,12 +7,15 @@ import "./App.css";
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
 import { DisplayEncounterRoute } from "~/components/encounter/display";
+import { EncounterManagerProvider } from "~/components/encounter/EncounterManagerProvider";
 
 function RootApp() {
   return (
-    <AppShell header={<AppHeader />}>
-      <Outlet />
-    </AppShell>
+    <EncounterManagerProvider>
+      <AppShell header={<AppHeader />}>
+        <Outlet />
+      </AppShell>
+    </EncounterManagerProvider>
   );
 }
 
