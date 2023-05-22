@@ -3,9 +3,9 @@ import { Accordion, ActionIcon, Group } from "@mantine/core";
 import { ArrowBendRightDown, Play, PlayPause, UserPlus } from "@phosphor-icons/react";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { EncounterProvider, useEncounterContext } from "~/components/encounter/EncounterProvider";
+import { EncounterProvider, useEncounterContext } from "~/components/encounter/providers/EncounterProvider";
 import { Navigate, useParams } from "react-router-dom";
-import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
+import { useEncounterManager } from "~/components/encounter/providers/EncounterManagerProvider";
 import { notifyErrors } from "~/services/notifications";
 import { CombatEncounter } from "~/services/encounter";
 

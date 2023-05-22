@@ -7,7 +7,7 @@ import "./App.css";
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import { EncounterList } from "~/components/encounter/EncounterList";
 import { DisplayEncounterRoute } from "~/components/encounter/display";
-import { EncounterManagerProvider } from "~/components/encounter/EncounterManagerProvider";
+import { EncounterManagerProvider } from "~/components/encounter/providers/EncounterManagerProvider";
 
 function RootApp() {
   return (

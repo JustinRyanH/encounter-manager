@@ -1,4 +1,4 @@
-import { useEncounterManager } from "~/components/encounter/EncounterManagerProvider";
+import { useEncounterManager } from "~/components/encounter/providers/EncounterManagerProvider";
 import React from "react";
 import { notifyErrors } from "~/services/notifications";
 

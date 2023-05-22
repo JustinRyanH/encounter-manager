@@ -3,7 +3,7 @@ import { Accordion, AccordionControlProps, ActionIcon, Box, Paper } from "@manti
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
 import { EncounterCharacter, ViewEncounter } from "~/services/encounter";
-import { useEncounterContext } from "~/components/encounter/EncounterProvider";
+import { useEncounterContext } from "~/components/encounter/providers/EncounterProvider";
 
 const ViewSx = {
   display: "flex",
