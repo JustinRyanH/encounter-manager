@@ -30,11 +30,13 @@ export class EncounterManager {
   async refreshList() {
     const encounters = await Commands.listEncounter();
     this.#encounterList.value = Object.values(encounters).map(({ id }) => id);
-    Object.values(encounters).forEach(({ id, name, characters }) => {
+    Object.values(encounters).forEach((props) => {
+      const { id, name, characters, lastActiveCharacter, activeCharacter } = props;
       const encounterObserver = this.getEncounter(id);
       if (encounterObserver.value.isStub) encounterObserver.value = this.createNewEncounter({ id, name });
       const encounter = encounterObserver.value;
       encounter.updateCharacters(characters);
+      encounter.updateCombat(activeCharacter, lastActiveCharacter);
     });
   }
 

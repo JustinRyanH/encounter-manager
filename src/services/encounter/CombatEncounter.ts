@@ -178,6 +178,11 @@ export class CombatEncounter extends Encounter {
     return this.#activeCharacterId.readonly;
   }
 
+  updateCombat = (current: string | null, last: string | null) => {
+    this.#lastActiveCharacter = last;
+    this.#activeCharacterId.value = current;
+  };
+
   /**
    * Sets the active character to the next character in the initiative order.
    */
