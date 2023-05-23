@@ -46,13 +46,13 @@ export class ViewEncounter {
     return this.openedCharacters.some((character) => character === characterId);
   }
 
-  private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<EncounterCharacter | null>) => {
+  private onChangeActiveCharacter = ({ oldValue, newValue }: ValueChangeMessageProps<string | null>) => {
     let oldValues: Array<string> = this.openedCharacters;
     if (oldValue) {
-      oldValues = oldValues.filter((character) => character !== oldValue.id);
+      oldValues = oldValues.filter((id) => id !== oldValue);
     }
     if (newValue) {
-      this.#openedCharacters.updateValue([newValue.id, ...oldValues]);
+      this.#openedCharacters.updateValue([newValue, ...oldValues]);
     } else {
       this.#openedCharacters.updateValue(oldValues);
     }

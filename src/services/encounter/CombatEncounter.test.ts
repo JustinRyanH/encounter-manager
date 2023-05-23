@@ -118,8 +118,8 @@ describe("Encounter", function () {
       encounter.nextCharacter();
 
       expect(listener).toHaveBeenCalledWith({
-        oldValue: characterA,
-        newValue: characterB,
+        oldValue: characterA.id,
+        newValue: characterB.id,
       });
     });
   });

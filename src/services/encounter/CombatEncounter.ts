@@ -140,7 +140,7 @@ export class Encounter {
 
 export class CombatEncounter extends Encounter {
   #lastActiveCharacter: string | null = null;
-  #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
+  #activeCharacterId: ValueObserver<string | null> = new ValueObserver<string | null>(null);
 
   static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
 
@@ -163,14 +163,15 @@ export class CombatEncounter extends Encounter {
    * The active character in the encounter.
    */
   get activeCharacter(): EncounterCharacter | null {
-    return this.#activeCharacter.value;
+    if (!this.#activeCharacterId.value) return null;
+    return this.findCharacter(this.#activeCharacterId.value) || null;
   }
 
   /**
    * Returns a readonly observer for the active character.
    */
-  get activeCharacterObserver(): ReadonlyValueObserver<EncounterCharacter | null> {
-    return this.#activeCharacter.readonly;
+  get activeCharacterObserver(): ReadonlyValueObserver<string | null> {
+    return this.#activeCharacterId.readonly;
   }
 
   /**
@@ -230,6 +231,6 @@ export class CombatEncounter extends Encounter {
 
   private setActiveCharacter = (character: EncounterCharacter | null) => {
     this.#lastActiveCharacter = this.activeCharacter?.id || null;
-    this.#activeCharacter.value = character;
+    this.#activeCharacterId.value = character?.id || null;
   };
 }

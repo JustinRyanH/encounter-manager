@@ -16,5 +16,5 @@ export function useRefreshEncounter() {
 export function useInPlayForEncounter(character: EncounterCharacter) {
   const encounter = useEncounterContext();
   const activeCharacter = useWatchValueObserver(encounter.activeCharacterObserver);
-  return activeCharacter?.id === character.id;
+  return activeCharacter === character.id;
 }
