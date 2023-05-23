@@ -186,7 +186,7 @@ export class CombatEncounter extends Encounter {
   /**
    * Sets the active character to the next character in the initiative order.
    */
-  nextCharacter = () => {
+  nextCharacter = async () => {
     if (this.isStub) return;
 
     if (!this.characters.length) return;
@@ -206,7 +206,7 @@ export class CombatEncounter extends Encounter {
    * Sets the active character to the previous character
    * in the initiative order when the encounter has been stopped.
    */
-  restartEncounter = () => {
+  restartEncounter = async () => {
     if (this.isStub) return;
 
     if (!this.#lastActiveCharacter) {
@@ -221,7 +221,7 @@ export class CombatEncounter extends Encounter {
   /**
    * Sets the active character to first character in the initiative order if not already active.
    */
-  startEncounter = () => {
+  startEncounter = async () => {
     if (this.isStub) return;
 
     if (this.activeCharacter) return;
@@ -232,7 +232,7 @@ export class CombatEncounter extends Encounter {
   /**
    * Stops the encounter
    */
-  stopEncounter = () => {
+  stopEncounter = async () => {
     if (this.isStub) return;
 
     this.setActiveCharacter(null);
