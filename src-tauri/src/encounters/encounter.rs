@@ -55,6 +55,7 @@ impl EncounterCollection {
 
 
 #[derive(Clone, Debug, Serialize, Deserialize, Type)]
+#[serde(rename_all = "camelCase")]
 pub struct Encounter {
     id: Uuid,
     name: String,
