@@ -13,9 +13,10 @@ import {
   updateTemporaryHpCmd,
   healCharacterCmd,
   damageCharacterCmd,
+  updateEncounterStage,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { CharacterCommand, Encounter as ServerEncounter } from "~/encounterBindings";
+import { CharacterCommand, Encounter as ServerEncounter, EncounterStageCmd } from "~/encounterBindings";
 
 type OptionalEncounters = {
   [k in keyof ServerEncounter]?: ServerEncounter[k];
@@ -178,7 +179,7 @@ export class CombatEncounter extends Encounter {
     return this.#activeCharacterId.readonly;
   }
 
-  updateCombat = (current: string | null, last: string | null) => {
+  setCombat = (current: string | null, last: string | null = null) => {
     this.#lastActiveCharacter = last;
     this.#activeCharacterId.value = current;
   };
@@ -189,17 +190,7 @@ export class CombatEncounter extends Encounter {
   nextCharacter = async () => {
     if (this.isStub) return;
 
-    if (!this.characters.length) return;
-    if (!this.activeCharacter) {
-      this.setActiveCharacter(this.characters[0].id);
-      return;
-    }
-
-    const activeCharacterIndex = this.characters.indexOf(this.activeCharacter);
-    if (activeCharacterIndex === -1) return;
-
-    const nextCharacterIndex = activeCharacterIndex + 1 === this.characters.length ? 0 : activeCharacterIndex + 1;
-    this.setActiveCharacter(this.characters[nextCharacterIndex].id);
+    await this.updateStage("next");
   };
 
   /**
@@ -209,13 +200,7 @@ export class CombatEncounter extends Encounter {
   restartEncounter = async () => {
     if (this.isStub) return;
 
-    if (!this.#lastActiveCharacter) {
-      this.startEncounter();
-      return;
-    }
-    if (this.activeCharacter) return;
-    const lastCharacter = this.findCharacter(this.#lastActiveCharacter);
-    this.setActiveCharacter(lastCharacter?.id || null);
+    await this.updateStage("restart");
   };
 
   /**
@@ -224,9 +209,7 @@ export class CombatEncounter extends Encounter {
   startEncounter = async () => {
     if (this.isStub) return;
 
-    if (this.activeCharacter) return;
-    if (!this.characters.length) return;
-    this.setActiveCharacter(this.characters[0].id);
+    await this.updateStage("start");
   };
 
   /**
@@ -235,11 +218,20 @@ export class CombatEncounter extends Encounter {
   stopEncounter = async () => {
     if (this.isStub) return;
 
-    this.setActiveCharacter(null);
+    await this.updateStage("pause");
   };
 
   private setActiveCharacter = (id: string | null) => {
     this.#lastActiveCharacter = this.activeCharacterId;
     this.#activeCharacterId.value = id;
+  };
+
+  private updateStage = async (cmd: EncounterStageCmd) => {
+    try {
+      const { lastActiveCharacter, activeCharacter } = await updateEncounterStage(this.id, cmd);
+      this.setCombat(activeCharacter, lastActiveCharacter);
+    } catch (e) {
+      handleError({ error: e, title: "Failed to update Encounter Stage" });
+    }
   };
 }

@@ -1,10 +1,19 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, Mock, test, vi } from "vitest";
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { EncounterCharacter } from "~/services/encounter/Character";
 import { buildMockCharacter } from "~/services/encounter/mocks";
+import { updateEncounterStage } from "~/services/encounter/Commands";
 
 const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
 const mockCharacterB = { id: "test-b", name: "B", initiative: 2 };
+
+vi.mock("~/services/encounter/Commands", async (importOriginal) => {
+  const original = (await importOriginal()) as object;
+  return {
+    ...original,
+    updateEncounterStage: vi.fn(),
+  };
+});
 
 let encounter: CombatEncounter;
 describe("Encounter", function () {
@@ -51,8 +60,9 @@ describe("Encounter", function () {
     expect(result.initiative).toEqual(1);
   });
 
-  describe("current character", function () {
-    test("starting with character on top of the initiative list", function () {
+  describe("current character", () => {
+    test("starting with character on top of the initiative list", async () => {
+      (updateEncounterStage as Mock).mockResolvedValue({ activeCharacter: mockCharacterA.id });
       const encounter = new CombatEncounter({
         name: "Test Encounter",
         id: "encounter-a",
@@ -65,62 +75,10 @@ describe("Encounter", function () {
       const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
       expect(characterA).toBeTruthy();
 
-      encounter.nextCharacter();
+      await encounter.nextCharacter();
 
       expect(encounter.activeCharacter?.id).toEqual(mockCharacterA.id);
-    });
-
-    test("moves to next character when nextCharacter is called", function () {
-      const encounter = new CombatEncounter({
-        name: "Test Encounter",
-        id: "encounter-a",
-      });
-      encounter.updateCharacters([
-        { ...mockCharacterA, initiative: 10 },
-        { ...mockCharacterB, initiative: 5 },
-      ]);
-
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
-      expect(characterA).toBeTruthy();
-      expect(characterB).toBeTruthy();
-
-      expect(encounter.activeCharacter).toEqual(null);
-
-      encounter.nextCharacter();
-
-      expect(encounter.activeCharacter).toEqual(characterA);
-
-      encounter.nextCharacter();
-
-      expect(encounter.activeCharacter).toEqual(characterB);
-    });
-
-    test("signaling when the current character changes", function () {
-      const listener = vi.fn();
-
-      const encounter = new CombatEncounter({
-        name: "Test Encounter",
-        id: "encounter-a",
-      });
-      encounter.updateCharacters([
-        { ...mockCharacterA, initiative: 10 },
-        { ...mockCharacterB, initiative: 5 },
-      ]);
-
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
-
-      encounter.startEncounter();
-
-      encounter.activeCharacterObserver.add(listener);
-
-      encounter.nextCharacter();
-
-      expect(listener).toHaveBeenCalledWith({
-        oldValue: characterA.id,
-        newValue: characterB.id,
-      });
+      expect(updateEncounterStage).toHaveBeenCalledWith(encounter.id, "next");
     });
   });
 
@@ -177,27 +135,22 @@ describe("Encounter", function () {
     });
   });
 
-  describe("startEncounter", function () {
-    test("no-ops if is a stub", () => {
+  describe("encounter commands", function () {
+    test("no-ops if is a stub", async () => {
       encounter = new CombatEncounter({ name: "Test Encounter", id: "encounter-a", isStub: true });
       expect(encounter.characters).toHaveLength(3);
 
       expect(encounter.activeCharacter).toEqual(null);
 
-      encounter.startEncounter();
+      await encounter.startEncounter();
+      await encounter.restartEncounter();
+      await encounter.nextCharacter();
 
-      expect(encounter.activeCharacter).toEqual(null);
-
-      encounter.restartEncounter();
-
-      expect(encounter.activeCharacter).toEqual(null);
-
-      encounter.nextCharacter();
-
-      expect(encounter.activeCharacter).toEqual(null);
+      expect(updateEncounterStage).not.toHaveBeenCalled();
     });
 
-    test("sets the active character to the first character", function () {
+    test("triggers encounter commands to the server", async () => {
+      (updateEncounterStage as Mock).mockResolvedValue({ activeCharacter: mockCharacterA.id });
       encounter.updateCharacters([
         { ...mockCharacterA, initiative: 10 },
         { ...mockCharacterB, initiative: 5 },
@@ -208,91 +161,13 @@ describe("Encounter", function () {
       expect(characterA).toBeTruthy();
       expect(characterB).toBeTruthy();
 
-      encounter.stopEncounter();
+      await encounter.startEncounter();
+      await encounter.restartEncounter();
+      await encounter.nextCharacter();
 
-      expect(encounter.activeCharacter).toEqual(null);
-
-      encounter.startEncounter();
-
-      expect(encounter.activeCharacter).toEqual(characterA);
-    });
-
-    test("no-ops if the character is already active character", function () {
-      encounter.updateCharacters([
-        { ...mockCharacterA, initiative: 10 },
-        { ...mockCharacterB, initiative: 5 },
-      ]);
-
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
-      expect(characterA).toBeTruthy();
-      expect(characterB).toBeTruthy();
-
-      encounter.startEncounter();
-      encounter.nextCharacter();
-
-      expect(encounter.activeCharacter).toEqual(characterB);
-
-      encounter.startEncounter();
-
-      expect(encounter.activeCharacter).toEqual(characterB);
-    });
-
-    test("no-ops if there are no characters", function () {
-      expect(encounter.activeCharacter).toEqual(null);
-
-      encounter.startEncounter();
-
-      expect(encounter.activeCharacter).toEqual(null);
-    });
-  });
-
-  describe("stopEncounter", function () {
-    test("clears the active character", function () {
-      encounter.updateCharacters([
-        { ...mockCharacterA, initiative: 10 },
-        { ...mockCharacterB, initiative: 5 },
-      ]);
-
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
-      expect(characterA).toBeTruthy();
-      expect(characterB).toBeTruthy();
-
-      encounter.startEncounter();
-
-      expect(encounter.activeCharacter).toEqual(characterA);
-
-      encounter.stopEncounter();
-
-      expect(encounter.activeCharacter).toEqual(null);
-    });
-  });
-
-  describe("restartEncounter", function () {
-    test("picks up encounter where it left off", function () {
-      encounter.updateCharacters([
-        { ...mockCharacterA, initiative: 10 },
-        { ...mockCharacterB, initiative: 5 },
-      ]);
-
-      const characterA = encounter.findCharacter("test-a") as EncounterCharacter;
-      const characterB = encounter.findCharacter("test-b") as EncounterCharacter;
-      expect(characterA).toBeTruthy();
-      expect(characterB).toBeTruthy();
-
-      encounter.startEncounter();
-      encounter.nextCharacter();
-
-      expect(encounter.activeCharacter).toEqual(characterB);
-
-      encounter.stopEncounter();
-
-      expect(encounter.activeCharacter).toEqual(null);
-
-      encounter.restartEncounter();
-
-      expect(encounter.activeCharacter).toEqual(characterB);
+      expect(updateEncounterStage).toHaveBeenCalledWith(encounter.id, "start");
+      expect(updateEncounterStage).toHaveBeenCalledWith(encounter.id, "restart");
+      expect(updateEncounterStage).toHaveBeenCalledWith(encounter.id, "next");
     });
   });
 });

@@ -1,4 +1,10 @@
-import { CharacterCommand, Encounter, encounter, updateEncounterCharacter } from "~/encounterBindings";
+import {
+  CharacterCommand,
+  Encounter,
+  encounter,
+  EncounterStageCmd,
+  updateEncounterCharacter,
+} from "~/encounterBindings";
 
 interface EncounterList {
   [key: string]: Encounter;
@@ -77,4 +83,10 @@ export async function updateCharacter(encounterId: string, command: CharacterCom
   const result = await updateEncounterCharacter(encounterId, command);
   if (!result.updatedCharacter) throw new Error("Bad Server Response");
   return result.updatedCharacter;
+}
+
+export async function updateEncounterStage(id: string, command: EncounterStageCmd): Promise<Encounter> {
+  const result = await encounter({ updateStage: { id, stage: command } });
+  if ("encounterChanged" in result) return result.encounterChanged;
+  throw new Error("Invalid EncounterCommandResponse");
 }

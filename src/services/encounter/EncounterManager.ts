@@ -36,7 +36,7 @@ export class EncounterManager {
       if (encounterObserver.value.isStub) encounterObserver.value = this.createNewEncounter({ id, name });
       const encounter = encounterObserver.value;
       encounter.updateCharacters(characters);
-      encounter.updateCombat(activeCharacter, lastActiveCharacter);
+      encounter.setCombat(activeCharacter, lastActiveCharacter);
     });
   }
 

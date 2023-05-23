@@ -1,5 +1,4 @@
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
-import { EncounterCharacter } from "~/services/encounter/Character";
 import { ReadonlyValueObserver, ValueChangeMessageProps, ValueObserver } from "~/services/ValueObserver";
 
 export class ViewEncounter {
@@ -9,6 +8,7 @@ export class ViewEncounter {
   constructor({ encounter }: { encounter: CombatEncounter }) {
     this.#encounter = encounter;
     this.#encounter.activeCharacterObserver.add(this.onChangeActiveCharacter);
+    if (encounter.activeCharacterId) this.#openedCharacters.value = [encounter.activeCharacterId];
   }
 
   get encounter(): CombatEncounter {

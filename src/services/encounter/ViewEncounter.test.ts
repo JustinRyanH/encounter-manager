@@ -26,7 +26,7 @@ describe("ViewEncounter", () => {
 
       const viewEncounter = new ViewEncounter({ encounter });
 
-      encounter.startEncounter();
+      encounter.setCombat("test-a");
       expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
     });
 
@@ -92,10 +92,10 @@ describe("ViewEncounter", () => {
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
 
-      encounter.startEncounter();
+      encounter.setCombat("test-a");
       expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
 
-      encounter.nextCharacter();
+      encounter.setCombat("test-b");
       expect(viewEncounter.openedCharacters).toEqual([characterB.id]);
     });
 
@@ -115,7 +115,7 @@ describe("ViewEncounter", () => {
       expect(characterB).toBeTruthy();
       const viewEncounter = new ViewEncounter({ encounter });
 
-      encounter.startEncounter();
+      encounter.setCombat("test-a");
       expect(viewEncounter.openedCharacters).toEqual([characterA.id]);
 
       viewEncounter.close(characterA.id);
@@ -158,7 +158,7 @@ describe("ViewEncounter", () => {
 
       const viewEncounter = new ViewEncounter({ encounter });
 
-      encounter.startEncounter();
+      encounter.setCombat("test-a");
       expect(viewEncounter.isOpened(characterA.id)).toEqual(true);
       expect(viewEncounter.isOpened(characterB.id)).toEqual(false);
     });
