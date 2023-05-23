@@ -163,8 +163,12 @@ export class CombatEncounter extends Encounter {
    * The active character in the encounter.
    */
   get activeCharacter(): EncounterCharacter | null {
-    if (!this.#activeCharacterId.value) return null;
-    return this.findCharacter(this.#activeCharacterId.value) || null;
+    if (!this.activeCharacterId) return null;
+    return this.findCharacter(this.activeCharacterId);
+  }
+
+  get activeCharacterId(): string | null {
+    return this.#activeCharacterId.value;
   }
 
   /**
