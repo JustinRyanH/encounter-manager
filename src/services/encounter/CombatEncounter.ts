@@ -186,7 +186,7 @@ export class CombatEncounter extends Encounter {
 
     if (!this.characters.length) return;
     if (!this.activeCharacter) {
-      this.setActiveCharacter(this.characters[0]);
+      this.setActiveCharacter(this.characters[0].id);
       return;
     }
 
@@ -194,7 +194,7 @@ export class CombatEncounter extends Encounter {
     if (activeCharacterIndex === -1) return;
 
     const nextCharacterIndex = activeCharacterIndex + 1 === this.characters.length ? 0 : activeCharacterIndex + 1;
-    this.setActiveCharacter(this.characters[nextCharacterIndex]);
+    this.setActiveCharacter(this.characters[nextCharacterIndex].id);
   };
 
   /**
@@ -210,7 +210,7 @@ export class CombatEncounter extends Encounter {
     }
     if (this.activeCharacter) return;
     const lastCharacter = this.findCharacter(this.#lastActiveCharacter);
-    this.setActiveCharacter(lastCharacter);
+    this.setActiveCharacter(lastCharacter?.id || null);
   };
 
   /**
@@ -221,7 +221,7 @@ export class CombatEncounter extends Encounter {
 
     if (this.activeCharacter) return;
     if (!this.characters.length) return;
-    this.setActiveCharacter(this.characters[0]);
+    this.setActiveCharacter(this.characters[0].id);
   };
 
   /**
@@ -233,8 +233,8 @@ export class CombatEncounter extends Encounter {
     this.setActiveCharacter(null);
   };
 
-  private setActiveCharacter = (character: EncounterCharacter | null) => {
-    this.#lastActiveCharacter = this.activeCharacter?.id || null;
-    this.#activeCharacterId.value = character?.id || null;
+  private setActiveCharacter = (id: string | null) => {
+    this.#lastActiveCharacter = this.activeCharacterId;
+    this.#activeCharacterId.value = id;
   };
 }
