@@ -139,7 +139,7 @@ export class Encounter {
 }
 
 export class CombatEncounter extends Encounter {
-  #lastActiveCharacter: EncounterCharacter | null = null;
+  #lastActiveCharacter: string | null = null;
   #activeCharacter: ValueObserver<EncounterCharacter | null> = new ValueObserver<EncounterCharacter | null>(null);
 
   static StubEncounter = (id: string) => new CombatEncounter({ name: uuid(), id, isStub: true });
@@ -204,7 +204,8 @@ export class CombatEncounter extends Encounter {
       return;
     }
     if (this.activeCharacter) return;
-    this.setActiveCharacter(this.#lastActiveCharacter);
+    const lastCharacter = this.findCharacter(this.#lastActiveCharacter);
+    this.setActiveCharacter(lastCharacter);
   };
 
   /**
@@ -228,7 +229,7 @@ export class CombatEncounter extends Encounter {
   };
 
   private setActiveCharacter = (character: EncounterCharacter | null) => {
-    this.#lastActiveCharacter = this.activeCharacter;
+    this.#lastActiveCharacter = this.activeCharacter?.id || null;
     this.#activeCharacter.value = character;
   };
 }
