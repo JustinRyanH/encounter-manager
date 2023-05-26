@@ -41,7 +41,12 @@ fn main() {
             app.manage(EncounterManager::from(encounter_collection));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![query_file_system, encounter, update_encounter_character])
+        .invoke_handler(tauri::generate_handler![
+            query_file_system,
+            encounter,
+            update_encounter_character,
+            new_character
+        ])
         .run(generate_context!())
         .expect("error while running tauri application");
 }

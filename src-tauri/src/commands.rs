@@ -33,7 +33,7 @@ pub async fn update_encounter_character(state: EncounterManagerState<'_>, encoun
 #[tauri::command]
 #[specta::specta]
 pub async fn new_character() -> Result<Character, String> {
-    Ok(Character::new("New Character", 1, 0))
+    Ok(Character::new("", 1, 0))
 }
 
 #[tauri::command]
