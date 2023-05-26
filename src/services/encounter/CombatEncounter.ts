@@ -106,6 +106,10 @@ export class Encounter {
     return await this.updateCharacter(damageCharacterCmd(id, amount));
   }
 
+  async newCharacter() {
+    return EncounterCharacter.StubCharacter(uuid());
+  }
+
   protected setCharacters = (characters: Array<EncounterCharacter>) => {
     this.#characters.value = [...characters];
     this.addEncounterToCharacters();

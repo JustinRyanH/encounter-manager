@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, Mock, test, vi } from "vitest";
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
-import { EncounterCharacter } from "~/services/encounter/Character";
+import { BaseCharacter, EncounterCharacter } from "~/services/encounter/Character";
 import { buildMockCharacter } from "~/services/encounter/mocks";
 import { updateEncounterStage } from "~/services/encounter/Commands";
 
@@ -169,5 +169,11 @@ describe("Encounter", function () {
       expect(updateEncounterStage).toHaveBeenCalledWith(encounter.id, "restart");
       expect(updateEncounterStage).toHaveBeenCalledWith(encounter.id, "next");
     });
+  });
+
+  test("create a new encounter stub", async () => {
+    const character = await encounter.newCharacter();
+    expect(character).toBeInstanceOf(BaseCharacter);
+    expect(character.isStub).toEqual(true);
   });
 });
