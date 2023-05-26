@@ -16,6 +16,10 @@ export function updateEncounterCharacter(encounterId: string, command: UpdateCha
     return invoke<CharacterCommandResponse>("update_encounter_character", { encounterId,command })
 }
 
+export function newCharacter() {
+    return invoke<Character>("new_character")
+}
+
 export type UpdateStageCommand = { id: string; stage: EncounterStageCmd }
 export type FrontendMessageType = "success" | "error"
 export type EncounterCommands = "listEncounter" | { updateStage: UpdateStageCommand }

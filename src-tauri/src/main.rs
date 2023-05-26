@@ -15,12 +15,13 @@ use crate::{
     commands::{encounter, query_file_system, update_encounter_character},
     services::file_system_connection,
 };
+use crate::commands::new_character;
 use crate::encounters::encounter::EncounterManager;
 use crate::services::files::notify_file_change;
 
 fn export_bindings() {
     ts::export(collect_types![query_file_system, notify_file_change], "../src/fileBindings.ts").unwrap();
-    ts::export(collect_types![encounter, update_encounter_character], "../src/encounterBindings.ts").unwrap();
+    ts::export(collect_types![encounter, update_encounter_character, new_character], "../src/encounterBindings.ts").unwrap();
 }
 
 fn main() {

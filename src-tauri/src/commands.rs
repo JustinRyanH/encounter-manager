@@ -1,4 +1,5 @@
 use uuid::Uuid;
+use crate::encounters::Character;
 use crate::encounters::character::{UpdateCharacterCommand, CharacterCommandResponse};
 use crate::encounters::encounter::EncounterManagerState;
 use crate::services::{
@@ -27,6 +28,12 @@ pub async fn update_encounter_character(state: EncounterManagerState<'_>, encoun
     let mut manager = state.lock().await;
     let encounter = manager.find_encounter_mut(encounter_id).ok_or("Encounter not found")?;
     encounter.update_character(command)
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn new_character() -> Result<Character, String> {
+    Ok(Character::new("New Character", 1, 0))
 }
 
 #[tauri::command]
