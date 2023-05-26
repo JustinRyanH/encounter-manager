@@ -3,14 +3,36 @@ import { Accordion, ActionIcon, Group } from "@mantine/core";
 import { ArrowBendRightDown, Play, PlayPause, UserPlus } from "@phosphor-icons/react";
 
 import { useWatchValueObserver } from "~/hooks/watchValueObserver";
-import { EncounterProvider, useEncounterContext } from "~/components/encounter/providers/EncounterProvider";
 import { Navigate, useParams } from "react-router-dom";
+import { modals } from "@mantine/modals";
+
+import { EncounterProvider, useEncounterContext } from "~/components/encounter/providers/EncounterProvider";
 import { useEncounterManager } from "~/components/encounter/providers/EncounterManagerProvider";
 import { notifyErrors } from "~/services/notifications";
 import { CombatEncounter } from "~/services/encounter";
 
 import { DisplayCharacter } from "./character";
 import { useStyles } from "./DisplayEncounter.styles";
+
+function AddCharacterButton() {
+  const encounter = useEncounterContext();
+
+  const onClick = () => {
+    modals.openContextModal({
+      modal: "newCharacterModal",
+      title: "Create new Character",
+      innerProps: {
+        encounter: encounter,
+      },
+    });
+  };
+
+  return (
+    <ActionIcon onClick={onClick} title="Add Character" disabled={encounter.isStub}>
+      <UserPlus />
+    </ActionIcon>
+  );
+}
 
 function ManageEncounter() {
   const encounter = useEncounterContext();
@@ -28,9 +50,7 @@ function ManageEncounter() {
 
   return (
     <Group p="1rem" align="center" position="apart">
-      <ActionIcon title="Add Character" disabled={encounter.isStub || true}>
-        <UserPlus />
-      </ActionIcon>
+      <AddCharacterButton />
       <Group align="center" position="right">
         <ActionIcon
           title="Start Encounter"

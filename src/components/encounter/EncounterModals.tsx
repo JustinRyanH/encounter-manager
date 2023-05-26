@@ -1,14 +1,16 @@
 import React from "react";
-import { ModalsProvider } from "@mantine/modals";
+import { ContextModalProps, ModalsProvider } from "@mantine/modals";
+import { Button, Title } from "@mantine/core";
+import { Encounter } from "~/services/encounter/CombatEncounter";
 
-export function EncounterModals({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element {
+const NewCharacterModal = ({ id, context }: ContextModalProps<{ encounter: Encounter }>) => {
   return (
     <>
-      <ModalsProvider modals={{}}>{children}</ModalsProvider>
+      <Button onClick={() => context.closeModal(id)}>Cancel</Button>
     </>
   );
+};
+
+export function EncounterModals({ children }: { children: React.ReactNode }): JSX.Element {
+  return <ModalsProvider modals={{ newCharacterModal: NewCharacterModal }}>{children}</ModalsProvider>;
 }
