@@ -113,8 +113,13 @@ export class Encounter {
   }
 
   async newCharacter() {
-    const character = await buildCharacter();
-    return new EncounterCharacter({ ...character, isStub: true });
+    try {
+      const character = await buildCharacter();
+      return new EncounterCharacter({ ...character, isStub: true });
+    } catch (e) {
+      handleError({ error: e, title: "Failed to create Character" });
+      return null;
+    }
   }
 
   protected setCharacters = (characters: Array<EncounterCharacter>) => {

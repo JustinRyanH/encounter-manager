@@ -174,7 +174,9 @@ describe("Encounter", function () {
 
   test("create a new encounter stub", async () => {
     (buildCharacter as Mock).mockResolvedValue(mockCharacterA);
-    const character = await encounter.newCharacter();
+    const character = (await encounter.newCharacter()) as BaseCharacter;
+
+    expect(character).not.toBeNull();
     expect(character).toBeInstanceOf(BaseCharacter);
     expect(character.isStub).toEqual(true);
   });
