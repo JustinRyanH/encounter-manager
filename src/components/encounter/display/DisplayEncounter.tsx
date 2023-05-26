@@ -20,6 +20,12 @@ function ManageEncounter() {
   const startTopTitle = isCharacterActive ? "Pause Encounter" : "Restart Encounter";
   const startStopAction = isCharacterActive ? encounter.stopEncounter : encounter.restartEncounter;
 
+  React.useEffect(() => {
+    return () => {
+      encounter.stopEncounter();
+    };
+  }, [encounter]);
+
   return (
     <Group p="1rem" align="center" position="apart">
       <ActionIcon title="Add Character" disabled={encounter.isStub || true}>
