@@ -14,7 +14,7 @@ function AccordionControl({ encounter, ...props }: ControlProps) {
 
   const onClick = () => navigate(`encounter/${encounter.id}`);
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box pr="xs" sx={(theme) => ({ display: "flex", alignItems: "center", gap: theme.spacing.md })}>
       <Accordion.Control {...props} />
       <ActionIcon onClick={onClick} variant="outline" size="lg" color="grape" title={`Open ${encounterName} Encounter`}>
         <BookOpen size="1rem" />
