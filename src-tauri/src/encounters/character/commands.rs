@@ -6,7 +6,7 @@ use crate::encounters::Character;
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
-pub enum CharacterCommand {
+pub enum UpdateCharacterCommand {
     UpdateName { id: Uuid, name: String },
     UpdateInitiative { id: Uuid, initiative: i32 },
     UpdateInitiativeModifier { id: Uuid, modifier: i32 },
@@ -17,17 +17,17 @@ pub enum CharacterCommand {
     Damage { id: Uuid, hp: i32 },
 }
 
-impl CharacterCommand {
+impl UpdateCharacterCommand {
     pub fn id(&self) -> Uuid {
         match self {
-            CharacterCommand::UpdateName { id, .. } => *id,
-            CharacterCommand::UpdateInitiative { id, .. } => *id,
-            CharacterCommand::UpdateInitiativeModifier { id, .. } => *id,
-            CharacterCommand::UpdateCurrentHp { id, .. } => *id,
-            CharacterCommand::UpdateTotalHp { id, .. } => *id,
-            CharacterCommand::UpdateTemporaryHp { id, .. } => *id,
-            CharacterCommand::Heal { id, .. } => *id,
-            CharacterCommand::Damage { id, .. } => *id,
+            UpdateCharacterCommand::UpdateName { id, .. } => *id,
+            UpdateCharacterCommand::UpdateInitiative { id, .. } => *id,
+            UpdateCharacterCommand::UpdateInitiativeModifier { id, .. } => *id,
+            UpdateCharacterCommand::UpdateCurrentHp { id, .. } => *id,
+            UpdateCharacterCommand::UpdateTotalHp { id, .. } => *id,
+            UpdateCharacterCommand::UpdateTemporaryHp { id, .. } => *id,
+            UpdateCharacterCommand::Heal { id, .. } => *id,
+            UpdateCharacterCommand::Damage { id, .. } => *id,
         }
     }
 }

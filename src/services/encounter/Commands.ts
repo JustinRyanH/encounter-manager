@@ -1,5 +1,5 @@
 import {
-  CharacterCommand,
+  UpdateCharacterCommand,
   Encounter,
   encounter,
   EncounterStageCmd,
@@ -16,7 +16,7 @@ export async function listEncounter(): Promise<EncounterList> {
   throw new Error("Invalid EncounterCommandResponse");
 }
 
-export function getCommandId(cmd: CharacterCommand): string {
+export function getCommandId(cmd: UpdateCharacterCommand): string {
   if ("updateName" in cmd) return cmd.updateName.id;
   if ("updateInitiative" in cmd) return cmd.updateInitiative.id;
   if ("updateInitiativeModifier" in cmd) return cmd.updateInitiativeModifier.id;
@@ -25,7 +25,7 @@ export function getCommandId(cmd: CharacterCommand): string {
   if ("updateTemporaryHp" in cmd) return cmd.updateTemporaryHp.id;
   if ("heal" in cmd) return cmd.heal.id;
   if ("damage" in cmd) return cmd.damage.id;
-  throw new Error("Invalid CharacterCommand");
+  throw new Error("Invalid UpdateCharacterCommand");
 }
 
 export function updateNameCommand(characterId: string, name: string) {
@@ -79,7 +79,7 @@ export function damageCharacterCmd(characterId: string, hp: number) {
   };
 }
 
-export async function updateCharacter(encounterId: string, command: CharacterCommand) {
+export async function updateCharacter(encounterId: string, command: UpdateCharacterCommand) {
   const result = await updateEncounterCharacter(encounterId, command);
   if (!result.updatedCharacter) throw new Error("Bad Server Response");
   return result.updatedCharacter;

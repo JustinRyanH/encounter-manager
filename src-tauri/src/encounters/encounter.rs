@@ -8,7 +8,7 @@ use uuid::Uuid;
 use specta::Type;
 
 use crate::encounters::Character;
-use crate::encounters::character::{CharacterChangeMessages, CharacterCommand, CharacterCommandResponse};
+use crate::encounters::character::{CharacterChangeMessages, UpdateCharacterCommand, CharacterCommandResponse};
 
 pub type EncounterManagerState<'a> = State<'a, EncounterManager>;
 
@@ -107,40 +107,40 @@ impl Encounter {
         self.characters.retain(|c| !c.is_same_as(&character));
     }
 
-    pub fn update_character(&mut self, cmd: CharacterCommand) -> Result<CharacterCommandResponse, String> {
+    pub fn update_character(&mut self, cmd: UpdateCharacterCommand) -> Result<CharacterCommandResponse, String> {
         let character = self.find_character_mut(cmd.id()).ok_or(format!("Character with id {} not found", cmd.id()))?;
 
         match cmd {
-            CharacterCommand::UpdateName { name, .. } => {
+            UpdateCharacterCommand::UpdateName { name, .. } => {
                 character.set_name(name)
                     .map(|_| CharacterCommandResponse::updated(character))
                     .or_else(|e| Ok(CharacterCommandResponse::updated_with_messages(character, CharacterChangeMessages::default().with_name_error_message(e))))
             }
-            CharacterCommand::UpdateInitiative { initiative, .. } => {
+            UpdateCharacterCommand::UpdateInitiative { initiative, .. } => {
                 character.set_initiative(initiative);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateInitiativeModifier { modifier, .. } => {
+            UpdateCharacterCommand::UpdateInitiativeModifier { modifier, .. } => {
                 character.set_initiative_modifier(modifier);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateCurrentHp { hp, .. } => {
+            UpdateCharacterCommand::UpdateCurrentHp { hp, .. } => {
                 character.set_current_hp(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateTotalHp { hp, .. } => {
+            UpdateCharacterCommand::UpdateTotalHp { hp, .. } => {
                 character.set_total_hp(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::UpdateTemporaryHp { hp, .. } => {
+            UpdateCharacterCommand::UpdateTemporaryHp { hp, .. } => {
                 character.set_temporary_hp(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::Heal { hp, .. } => {
+            UpdateCharacterCommand::Heal { hp, .. } => {
                 character.heal(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
-            CharacterCommand::Damage { hp, .. } => {
+            UpdateCharacterCommand::Damage { hp, .. } => {
                 character.damage(hp);
                 Ok(CharacterCommandResponse::updated(character))
             }
@@ -259,7 +259,7 @@ mod tests {
         let character1 = Character::new(String::from("Test Character 1"), 10, 10);
         encounter.add_character(character1.clone());
 
-        let cmd = character::CharacterCommand::UpdateName {
+        let cmd = character::UpdateCharacterCommand::UpdateName {
             id: character1.uuid(),
             name: String::from("New Name"),
         };
@@ -268,7 +268,7 @@ mod tests {
         let updated_character = encounter.find_character(character1.id()).unwrap();
         assert_eq!(response, CharacterCommandResponse::UpdatedCharacter { character: updated_character.clone(), messages: CharacterChangeMessages::none() });
 
-        let cmd = character::CharacterCommand::UpdateInitiative {
+        let cmd = character::UpdateCharacterCommand::UpdateInitiative {
             id: character1.uuid(),
             initiative: 20,
         };

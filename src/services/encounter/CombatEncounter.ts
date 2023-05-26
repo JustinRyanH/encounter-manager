@@ -16,7 +16,7 @@ import {
   updateEncounterStage,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { CharacterCommand, Encounter as ServerEncounter, EncounterStageCmd } from "~/encounterBindings";
+import { UpdateCharacterCommand, Encounter as ServerEncounter, EncounterStageCmd } from "~/encounterBindings";
 
 type OptionalEncounters = {
   [k in keyof ServerEncounter]?: ServerEncounter[k];
@@ -122,7 +122,7 @@ export class Encounter {
     this.characters.filter((c) => !c.encounter).forEach((c) => (c.encounter = this));
   };
 
-  protected updateCharacter = async (cmd: CharacterCommand) => {
+  protected updateCharacter = async (cmd: UpdateCharacterCommand) => {
     const id = getCommandId(cmd);
     const existingCharacter = this.findCharacter(id);
     if (!existingCharacter) return;
