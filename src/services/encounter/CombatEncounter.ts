@@ -14,9 +14,15 @@ import {
   healCharacterCmd,
   damageCharacterCmd,
   updateEncounterStage,
+  buildCharacter,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { UpdateCharacterCommand, Encounter as ServerEncounter, EncounterStageCmd } from "~/encounterBindings";
+import {
+  UpdateCharacterCommand,
+  Encounter as ServerEncounter,
+  EncounterStageCmd,
+  newCharacter,
+} from "~/encounterBindings";
 
 type OptionalEncounters = {
   [k in keyof ServerEncounter]?: ServerEncounter[k];
@@ -107,7 +113,8 @@ export class Encounter {
   }
 
   async newCharacter() {
-    return EncounterCharacter.StubCharacter(uuid());
+    const character = await buildCharacter();
+    return new EncounterCharacter({ ...character, isStub: true });
   }
 
   protected setCharacters = (characters: Array<EncounterCharacter>) => {

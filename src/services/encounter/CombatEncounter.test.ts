@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, Mock, test, vi } from "vitest";
 import { CombatEncounter } from "~/services/encounter/CombatEncounter";
 import { BaseCharacter, EncounterCharacter } from "~/services/encounter/Character";
 import { buildMockCharacter } from "~/services/encounter/mocks";
-import { updateEncounterStage } from "~/services/encounter/Commands";
+import { buildCharacter, updateEncounterStage } from "~/services/encounter/Commands";
 
 const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
 const mockCharacterB = { id: "test-b", name: "B", initiative: 2 };
@@ -12,6 +12,7 @@ vi.mock("~/services/encounter/Commands", async (importOriginal) => {
   return {
     ...original,
     updateEncounterStage: vi.fn(),
+    buildCharacter: vi.fn(),
   };
 });
 
@@ -172,6 +173,7 @@ describe("Encounter", function () {
   });
 
   test("create a new encounter stub", async () => {
+    (buildCharacter as Mock).mockResolvedValue(mockCharacterA);
     const character = await encounter.newCharacter();
     expect(character).toBeInstanceOf(BaseCharacter);
     expect(character.isStub).toEqual(true);
