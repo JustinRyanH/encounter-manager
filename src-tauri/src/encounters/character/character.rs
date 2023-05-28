@@ -130,6 +130,11 @@ impl Character {
     pub fn set_initiative_modifier(&mut self, value: i32) {
         self.initiative_modifier = value.max(-20);
     }
+
+    pub fn validation_messages(&self) -> CharacterChangeMessages {
+        let messages = CharacterChangeMessages::none();
+        return messages;
+    }
 }
 
 
@@ -156,7 +161,7 @@ impl Ord for Character {
 
 #[cfg(test)]
 mod tests {
-    use crate::encounters::character::Character;
+    use crate::encounters::character::{Character, CharacterChangeMessages};
 
     #[test]
     fn test_new_character() {
@@ -321,5 +326,14 @@ mod tests {
         assert!(result.is_err());
         assert_eq!(character_a.name, "character b");
         assert_eq!(result.err().unwrap(), "Name cannot be empty");
+    }
+
+    #[test]
+    fn test_validation_messages() {
+        let total_hp = 10;
+        let character_a = Character::new("character a", total_hp, 10);
+
+        let messages = character_a.validation_messages();
+        assert_eq!(messages, CharacterChangeMessages::none());
     }
 }
