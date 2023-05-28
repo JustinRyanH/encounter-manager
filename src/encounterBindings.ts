@@ -20,15 +20,17 @@ export function newCharacter() {
     return invoke<Character>("new_character")
 }
 
-export type UpdateStageCommand = { id: string; stage: EncounterStageCmd }
-export type EncounterCommands = "listEncounter" | { updateStage: UpdateStageCommand }
-export type Character = { id: string; name: string; hp: HitPoints; initiative: number; initiativeModifier: number }
-export type HitPoints = { current: number; total: number; temporary: number }
-export type Encounter = { id: string; name: string; characters: Character[]; activeCharacter: string | null; lastActiveCharacter: string | null }
 export type EncounterStageCmd = "start" | "restart" | "pause" | "stop" | "next"
-export type EncounterCommandResponse = { encounterList: { [key: string]: Encounter } } | { encounterChanged: Encounter }
+export type Character = { id: string; name: string; hp: HitPoints; initiative: number; initiativeModifier: number }
+export type UpdateStageCommand = { id: string; stage: EncounterStageCmd }
+export type Encounter = { id: string; name: string; characters: Character[]; activeCharacter: string | null; lastActiveCharacter: string | null }
+export type EncounterCommandResponse = { encounterList: { [key: string]: Encounter } } | { encounterChanged: Encounter } | { characterAdded: AddCharacterResult }
+export type AddCharacterResult = { encounter: Encounter; characterChange: CharacterChangeMessages }
 export type UpdateCharacterCommand = { updateName: { id: string; name: string } } | { updateInitiative: { id: string; initiative: number } } | { updateInitiativeModifier: { id: string; modifier: number } } | { updateCurrentHp: { id: string; hp: number } } | { updateTotalHp: { id: string; hp: number } } | { updateTemporaryHp: { id: string; hp: number } } | { heal: { id: string; hp: number } } | { damage: { id: string; hp: number } }
+export type HitPoints = { current: number; total: number; temporary: number }
+export type AddCharacterCommand = { id: string; character: Character }
 export type CharacterChangeMessages = { name: FrontendMessage[] | null; initiative: FrontendMessage[] | null; hp: FrontendMessage[] | null }
 export type CharacterCommandResponse = { updatedCharacter: { character: Character; messages: CharacterChangeMessages } }
+export type EncounterCommands = "listEncounter" | { updateStage: UpdateStageCommand } | { addCharacter: AddCharacterCommand }
 export type FrontendMessage = { type: FrontendMessageType; message: string }
 export type FrontendMessageType = "success" | "error"

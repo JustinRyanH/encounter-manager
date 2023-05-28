@@ -7,7 +7,7 @@ use crate::services::{
     files::file_structure::{FsCommand, QueryCommandResponse},
 };
 use crate::services::files::file_structure::TouchCommand;
-use crate::encounters::commands::{EncounterCommandResponse, EncounterCommands, UpdateStageCommand};
+use crate::encounters::commands::{AddCharacterCommand, EncounterCommandResponse, EncounterCommands, UpdateStageCommand};
 
 #[tauri::command]
 #[specta::specta]
@@ -18,6 +18,14 @@ pub async fn encounter(state: EncounterManagerState<'_>, command: EncounterComma
         EncounterCommands::UpdateStage(UpdateStageCommand { id, stage }) => {
             let encounter = collection.find_encounter_mut(id).ok_or("Encounter not found")?;
             EncounterCommandResponse::from_stage_command(encounter, stage)
+        },
+        EncounterCommands::AddCharacter(AddCharacterCommand { id, character }) => {
+            let encounter = collection.find_encounter_mut(id).ok_or("Encounter not found")?;
+            let messages = character.validation_messages();
+            if messages.is_empty() {
+                encounter.add_character(character);
+            }
+            Ok(EncounterCommandResponse::character_added(encounter, &messages))
         },
     }
 }

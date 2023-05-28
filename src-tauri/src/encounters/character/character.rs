@@ -43,6 +43,10 @@ impl CharacterChangeMessages {
             self.name = Some(vec![message]);
         }
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.name.is_none() && self.initiative.is_none() && self.hp.is_none()
+    }
 }
 
 
