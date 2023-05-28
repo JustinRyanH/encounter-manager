@@ -17,12 +17,7 @@ import {
   buildCharacter,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import {
-  UpdateCharacterCommand,
-  Encounter as ServerEncounter,
-  EncounterStageCmd,
-  newCharacter,
-} from "~/encounterBindings";
+import { UpdateCharacterCommand, Encounter as ServerEncounter, EncounterStageCmd } from "~/encounterBindings";
 
 type OptionalEncounters = {
   [k in keyof ServerEncounter]?: ServerEncounter[k];
