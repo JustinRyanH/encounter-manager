@@ -3,7 +3,7 @@ use specta::Type;
 use uuid::Uuid;
 
 use crate::encounters::Character;
-use crate::services::FrontendMessage;
+use crate::encounters::character::CharacterChangeMessages;
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
@@ -30,33 +30,6 @@ impl UpdateCharacterCommand {
             UpdateCharacterCommand::Heal { id, .. } => *id,
             UpdateCharacterCommand::Damage { id, .. } => *id,
         }
-    }
-}
-
-#[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
-#[serde(rename_all = "camelCase")]
-pub struct CharacterChangeMessages {
-    pub name: Option<Vec<FrontendMessage>>,
-    pub initiative: Option<Vec<FrontendMessage>>,
-    pub hp: Option<Vec<FrontendMessage>>,
-}
-
-impl CharacterChangeMessages {
-    pub fn none() -> Self {
-        Self::default()
-    }
-
-    pub fn with_name_error_message<T: Into<String>>(self, message: T) -> Self {
-        let message = FrontendMessage::error(message);
-        let name = match self.name {
-            Some(mut messages) => {
-                messages.push(message);
-                Some(messages)
-            }
-            None => Some(vec![message]),
-        };
-
-        Self { name, ..self }
     }
 }
 

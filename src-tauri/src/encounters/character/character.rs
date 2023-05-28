@@ -4,6 +4,36 @@ use serde::{Deserialize, Serialize};
 use specta::Type;
 use uuid::Uuid;
 
+use crate::services::FrontendMessage;
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
+#[serde(rename_all = "camelCase")]
+pub struct CharacterChangeMessages {
+    pub name: Option<Vec<FrontendMessage>>,
+    pub initiative: Option<Vec<FrontendMessage>>,
+    pub hp: Option<Vec<FrontendMessage>>,
+}
+
+impl CharacterChangeMessages {
+    pub fn none() -> Self {
+        Self::default()
+    }
+
+    pub fn with_name_error_message<T: Into<String>>(self, message: T) -> Self {
+        let message = FrontendMessage::error(message);
+        let name = match self.name {
+            Some(mut messages) => {
+                messages.push(message);
+                Some(messages)
+            }
+            None => Some(vec![message]),
+        };
+
+        Self { name, ..self }
+    }
+}
+
+
 #[derive(Copy, Clone, Debug, Serialize, Deserialize, Eq, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct HitPoints {
