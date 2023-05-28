@@ -31,6 +31,18 @@ impl CharacterChangeMessages {
 
         Self { name, ..self }
     }
+
+    pub fn add_name_error_message<T: Into<String>>(&mut self, message: T) {
+        let message = FrontendMessage::error(message);
+        if self.name.is_some() {
+            if self.name.as_ref().unwrap().contains(&message) {
+                return;
+            }
+            self.name.as_mut().unwrap().push(message);
+        } else {
+            self.name = Some(vec![message]);
+        }
+    }
 }
 
 
@@ -132,8 +144,11 @@ impl Character {
     }
 
     pub fn validation_messages(&self) -> CharacterChangeMessages {
-        let messages = CharacterChangeMessages::none();
-        return messages;
+        let mut messages = CharacterChangeMessages::none();
+        if self.name.is_empty() {
+            messages.add_name_error_message("Name cannot be empty");
+        }
+        messages
     }
 }
 
@@ -162,6 +177,7 @@ impl Ord for Character {
 #[cfg(test)]
 mod tests {
     use crate::encounters::character::{Character, CharacterChangeMessages};
+    use crate::services::FrontendMessage;
 
     #[test]
     fn test_new_character() {
@@ -335,5 +351,14 @@ mod tests {
 
         let messages = character_a.validation_messages();
         assert_eq!(messages, CharacterChangeMessages::none());
+
+        let total_hp = 10;
+        let character_a = Character::new("", total_hp, 10);
+        let messages = character_a.validation_messages();
+        assert!(messages.name.is_some());
+        assert!(messages.hp.is_none());
+        assert!(messages.initiative.is_none());
+
+        assert!(messages.name.unwrap().contains(&FrontendMessage::error("Name cannot be empty")));
     }
 }
