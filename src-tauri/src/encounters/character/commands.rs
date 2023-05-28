@@ -3,6 +3,7 @@ use specta::Type;
 use uuid::Uuid;
 
 use crate::encounters::Character;
+use crate::services::FrontendMessage;
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
@@ -28,37 +29,6 @@ impl UpdateCharacterCommand {
             UpdateCharacterCommand::UpdateTemporaryHp { id, .. } => *id,
             UpdateCharacterCommand::Heal { id, .. } => *id,
             UpdateCharacterCommand::Damage { id, .. } => *id,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
-#[serde(rename_all = "camelCase")]
-pub enum FrontendMessageType {
-    Success,
-    Error,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Type)]
-#[serde(rename_all = "camelCase")]
-pub struct FrontendMessage {
-    #[serde(rename = "type")]
-    pub message_type: FrontendMessageType,
-    pub message: String,
-}
-
-impl FrontendMessage {
-    pub fn success<T: Into<String>>(message: T) -> Self {
-        Self {
-            message_type: FrontendMessageType::Success,
-            message: message.into(),
-        }
-    }
-
-    pub fn error<T: Into<String>>(message: T) -> Self {
-        Self {
-            message_type: FrontendMessageType::Error,
-            message: message.into(),
         }
     }
 }
