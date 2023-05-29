@@ -37,6 +37,9 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
   const onSubmit = form.onSubmit((values) => {
     character.name = values.name;
     character.initiative = values.initiative;
+    character.hp.total = values.totalHp;
+    character.hp.current = values.currentHp;
+    character.hp.temporary = values.tempHp;
 
     encounter.addOrUpdateCharacter(character.character).then((messages) => {
       const initiativeErrors = messages.initiative.map((m) => m.message).join(", ");
