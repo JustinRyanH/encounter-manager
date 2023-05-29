@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ContextModalProps } from "@mantine/modals";
-import { Button, Group, Loader, NumberInput, Stack, TextInput } from "@mantine/core";
+import { Button, Flex, Group, Loader, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { Encounter } from "~/services/encounter/CombatEncounter";
@@ -22,6 +22,9 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
     initialValues: {
       name: character.name,
       initiative: character.initiative,
+      currentHp: character.hp.current,
+      totalHp: character.hp.total,
+      tempHp: character.hp.temporary,
     },
   });
 
@@ -49,6 +52,16 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
         <Stack spacing="md">
           <TextInput placeholder="Character Name" label="Character Name" withAsterisk {...form.getInputProps("name")} />
           <NumberInput placeholder="Initiative" label="Initiative" {...form.getInputProps("initiative")} />
+          <Flex align="center" gap="xs" wrap="nowrap">
+            <NumberInput
+              hideControls
+              placeholder="Current HP"
+              label="Current HP"
+              {...form.getInputProps("currentHp")}
+            />
+            <NumberInput hideControls placeholder="Total HP" label="Total HP" {...form.getInputProps("totalHp")} />
+            <NumberInput hideControls placeholder="Temp HP" label="Temp HP" {...form.getInputProps("tempHp")} />
+          </Flex>
           <Group position="apart">
             <Button variant="outline" color="gray" onClick={closeModal}>
               Cancel
