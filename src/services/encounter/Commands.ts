@@ -5,6 +5,7 @@ import {
   EncounterStageCmd,
   updateEncounterCharacter,
   newCharacter,
+  Character,
 } from "~/encounterBindings";
 
 interface EncounterList {
@@ -89,6 +90,12 @@ export async function updateCharacter(encounterId: string, command: UpdateCharac
 export async function updateEncounterStage(id: string, command: EncounterStageCmd): Promise<Encounter> {
   const result = await encounter({ updateStage: { id, stage: command } });
   if ("encounterChanged" in result) return result.encounterChanged;
+  throw new Error("Invalid EncounterCommandResponse");
+}
+
+export async function addCharacter(encounterId: string, character: Character) {
+  const result = await encounter({ addCharacter: { id: encounterId, character } });
+  if ("characterAdded" in result) return result.characterAdded;
   throw new Error("Invalid EncounterCommandResponse");
 }
 

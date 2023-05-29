@@ -15,14 +15,20 @@ import {
   damageCharacterCmd,
   updateEncounterStage,
   buildCharacter,
+  addCharacter,
 } from "~/services/encounter/Commands";
 import { handleError } from "~/services/notifications";
-import { UpdateCharacterCommand, Encounter as ServerEncounter, EncounterStageCmd } from "~/encounterBindings";
+import {
+  UpdateCharacterCommand,
+  Encounter as ServerEncounter,
+  EncounterStageCmd,
+  Character,
+} from "~/encounterBindings";
 
 type OptionalEncounters = {
   [k in keyof ServerEncounter]?: ServerEncounter[k];
 };
-interface EncounterProps extends OptionalEncounters {
+export interface EncounterProps extends OptionalEncounters {
   name: string;
   id: string;
   isStub?: boolean;
@@ -105,6 +111,11 @@ export class Encounter {
 
   async damageCharacter(id: string, amount: number) {
     return await this.updateCharacter(damageCharacterCmd(id, amount));
+  }
+
+  async addOrUpdateCharacter(character: Character) {
+    const { encounter } = await addCharacter(this.id, character);
+    this.updateCharacters(encounter.characters);
   }
 
   async newCharacter() {

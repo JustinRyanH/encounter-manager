@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import { HitPoints } from "~/services/encounter/HitPoints";
 import { ReadonlyValueObserver, ValueObserver } from "~/services/ValueObserver";
 import { Encounter } from "~/services/encounter/CombatEncounter";
-import { Character as CharacterProps, HitPoints as ServerHitPoints } from "~/encounterBindings";
+import { Character, Character as CharacterProps, HitPoints as ServerHitPoints } from "~/encounterBindings";
 
 type MajorCharacterProps = {
   [K in keyof CharacterProps]?: CharacterProps[K];
@@ -89,6 +89,20 @@ export class BaseCharacter {
    */
   get initiativeObserver(): ReadonlyValueObserver<number> {
     return this.#initiative.readonly;
+  }
+
+  get character(): Character {
+    return {
+      id: this.id,
+      name: this.name,
+      initiative: this.initiative,
+      initiativeModifier: 0,
+      hp: {
+        current: this.hp.current,
+        total: this.hp.total,
+        temporary: this.hp.temporary,
+      },
+    };
   }
 
   update(values: EncounterCharacterUpdateProps) {

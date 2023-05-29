@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, Mock, test, vi } from "vitest";
-import { CombatEncounter } from "~/services/encounter/CombatEncounter";
+import { CombatEncounter, EncounterProps } from "~/services/encounter/CombatEncounter";
 import { BaseCharacter, EncounterCharacter } from "~/services/encounter/Character";
-import { buildMockCharacter } from "~/services/encounter/mocks";
-import { buildCharacter, updateEncounterStage } from "~/services/encounter/Commands";
+import { buildMockChangeMessages, buildMockCharacter } from "~/services/encounter/mocks";
+import { addCharacter, buildCharacter, updateEncounterStage } from "~/services/encounter/Commands";
 
 const mockCharacterA = { id: "test-a", name: "A", initiative: 1 };
 const mockCharacterB = { id: "test-b", name: "B", initiative: 2 };
@@ -13,13 +13,19 @@ vi.mock("~/services/encounter/Commands", async (importOriginal) => {
     ...original,
     updateEncounterStage: vi.fn(),
     buildCharacter: vi.fn(),
+    addCharacter: vi.fn(),
   };
 });
 
 let encounter: CombatEncounter;
+let encounterData: EncounterProps;
 describe("Encounter", function () {
   beforeEach(() => {
-    encounter = new CombatEncounter({ name: "Test Encounter", id: "encounter-a" });
+    encounterData = {
+      id: "encounter-a",
+      name: "Test Encounter",
+    };
+    encounter = new CombatEncounter(encounterData);
   });
 
   test("does not have any characters by default", function () {
@@ -179,5 +185,29 @@ describe("Encounter", function () {
     expect(character).not.toBeNull();
     expect(character).toBeInstanceOf(BaseCharacter);
     expect(character.isStub).toEqual(true);
+  });
+
+  describe("add character", () => {
+    test("adds a new character to the encounter", async () => {
+      encounter.updateCharacters([mockCharacterA, mockCharacterB]);
+
+      const mockCharacterC = buildMockCharacter({ id: "test-c", name: "C" });
+
+      const returnEncounter = {
+        ...encounterData,
+        characters: [...encounter.characters.map((c) => c.character), mockCharacterC],
+      };
+      (addCharacter as Mock).mockResolvedValue({
+        encounter: returnEncounter,
+        characterChange: buildMockChangeMessages(),
+      });
+
+      await encounter.addOrUpdateCharacter(mockCharacterC);
+
+      expect(encounter.characters).toHaveLength(3);
+      const character_C = encounter.findCharacter("test-c") as EncounterCharacter;
+      expect(character_C).not.toBeNull();
+      expect(character_C.id).toEqual("test-c");
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { Character as CharacterType } from "~/encounterBindings";
+import { Character as CharacterType, CharacterChangeMessages } from "~/encounterBindings";
 
 interface MockCharacterProps {
   id?: string;
@@ -35,5 +35,17 @@ export function buildMockEncounter(props: MockEncounterProps = {}) {
     id: props.id || "300",
     name: props.name || "Test",
     characters: props.characters || [],
+  };
+}
+
+type CharacterChangeMessagesProps = {
+  [K in keyof CharacterChangeMessages]?: CharacterChangeMessages[K];
+};
+
+export function buildMockChangeMessages(props: CharacterChangeMessagesProps = {}): CharacterChangeMessages {
+  return {
+    name: props.name || [],
+    initiative: props.initiative || [],
+    hp: props.hp || [],
   };
 }
