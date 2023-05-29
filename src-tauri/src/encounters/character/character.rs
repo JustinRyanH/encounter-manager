@@ -16,9 +16,6 @@ pub struct CharacterHpMessages {
 
 impl CharacterHpMessages {
     pub fn validate_hp(&mut self, hp: &HitPoints) {
-        if hp.current < 0 {
-            self.add_current_error_message("Current HP cannot be less than 0");
-        }
         if hp.total < 1 {
             self.add_total_error_message("Total HP cannot be less than 1");
         }
@@ -415,11 +412,9 @@ mod tests {
         let messages = character_a.validation_messages();
         let hp = messages.hp;
         assert_eq!(hp.total.len(), 1);
-        assert_eq!(hp.current.len(), 1);
         assert_eq!(hp.temporary.len(), 1);
 
         assert!(hp.total.contains(&FrontendMessage::error("Total HP cannot be less than 1")));
-        assert!(hp.current.contains(&FrontendMessage::error("Current HP cannot be less than 0")));
         assert!(hp.temporary.contains(&FrontendMessage::error("Temporary HP cannot be less than 0")));
     }
 }
