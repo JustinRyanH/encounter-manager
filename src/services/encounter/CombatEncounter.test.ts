@@ -212,7 +212,11 @@ describe("Encounter", function () {
       expect(result).toEqual({
         name: [],
         initiative: [],
-        hp: [],
+        hp: {
+          current: [],
+          temporary: [],
+          total: [],
+        },
       });
     });
 
@@ -245,7 +249,11 @@ describe("Encounter", function () {
           },
         ],
         initiative: [],
-        hp: [],
+        hp: {
+          current: [],
+          temporary: [],
+          total: [],
+        },
       });
     });
   });
