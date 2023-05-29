@@ -68,7 +68,7 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
         <Stack spacing="md">
           <TextInput placeholder="Character Name" label="Character Name" withAsterisk {...form.getInputProps("name")} />
           <NumberInput placeholder="Initiative" label="Initiative" {...form.getInputProps("initiative")} />
-          <Flex align="center" gap="xs" wrap="nowrap">
+          <Flex align="start" gap="xs" wrap="nowrap">
             <NumberInput
               hideControls
               placeholder="Current HP"
