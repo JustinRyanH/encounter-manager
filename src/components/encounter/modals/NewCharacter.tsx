@@ -44,9 +44,15 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
     encounter.addOrUpdateCharacter(character.character).then((messages) => {
       const initiativeErrors = messages.initiative.map(extractMessage).join(", ");
       const nameErrors = messages.name.map(extractMessage).join(", ");
+      const totalHpErrors = messages.hp.total.map(extractMessage).join(", ");
+      const currentHpErrors = messages.hp.current.map(extractMessage).join(", ");
+      const tempHpErrors = messages.hp.temporary.map(extractMessage).join(", ");
 
       if (initiativeErrors) form.setFieldError("initiative", initiativeErrors);
       if (nameErrors) form.setFieldError("name", nameErrors);
+      if (totalHpErrors) form.setFieldError("totalHp", totalHpErrors);
+      if (currentHpErrors) form.setFieldError("currentHp", currentHpErrors);
+      if (tempHpErrors) form.setFieldError("tempHp", tempHpErrors);
 
       if (anyErrors(messages)) return;
       closeModal();
