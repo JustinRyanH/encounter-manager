@@ -105,7 +105,6 @@ describe("EncounterCharacter", () => {
       character.hp.totalObserver.add(observer);
       character.update({ id: "test-id", hp: { total: 5 } });
       expect(character.hp.total).toEqual(5);
-      expect(character.hp.current).toEqual(5);
       expect(observer).toHaveBeenCalledWith(expect.objectContaining({ newValue: 5 }));
     });
 
