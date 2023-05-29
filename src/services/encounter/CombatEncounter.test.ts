@@ -202,12 +202,18 @@ describe("Encounter", function () {
         characterChange: buildMockChangeMessages(),
       });
 
-      await encounter.addOrUpdateCharacter(mockCharacterC);
+      const result = await encounter.addOrUpdateCharacter(mockCharacterC);
 
       expect(encounter.characters).toHaveLength(3);
       const character_C = encounter.findCharacter("test-c") as EncounterCharacter;
       expect(character_C).not.toBeNull();
       expect(character_C.id).toEqual("test-c");
+
+      expect(result).toEqual({
+        name: [],
+        initiative: [],
+        hp: [],
+      });
     });
   });
 });

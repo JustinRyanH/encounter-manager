@@ -114,8 +114,9 @@ export class Encounter {
   }
 
   async addOrUpdateCharacter(character: Character) {
-    const { encounter } = await addCharacter(this.id, character);
+    const { encounter, characterChange } = await addCharacter(this.id, character);
     this.updateCharacters(encounter.characters);
+    return characterChange;
   }
 
   async newCharacter() {
