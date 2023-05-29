@@ -44,12 +44,10 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
     encounter.addOrUpdateCharacter(character.character).then((messages) => {
       const initiativeErrors = messages.initiative.map(extractMessage).join(", ");
       const nameErrors = messages.name.map(extractMessage).join(", ");
-      if (messages.initiative.length > 0) {
-        form.setFieldError("initiative", initiativeErrors);
-      }
-      if (messages.name.length > 0) {
-        form.setFieldError("name", nameErrors);
-      }
+
+      if (initiativeErrors) form.setFieldError("initiative", initiativeErrors);
+      if (nameErrors) form.setFieldError("name", nameErrors);
+
       if (anyErrors(messages)) return;
       closeModal();
     });
