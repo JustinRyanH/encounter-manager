@@ -39,12 +39,12 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
     character.initiative = values.initiative;
 
     encounter.addOrUpdateCharacter(character.character).then((messages) => {
+      const initiativeErrors = messages.initiative.map((m) => m.message).join(", ");
       if (messages.initiative.length > 0) {
-        form.setFieldError("initiative", messages.initiative.map((m) => m.message).join(", "));
+        form.setFieldError("initiative", initiativeErrors);
       }
       if (messages.name.length > 0) {
         const nameErrors = messages.name.map((m) => m.message).join(", ");
-        console.log(nameErrors);
         form.setFieldError("name", nameErrors);
       }
       if (anyErrors(messages)) return;
