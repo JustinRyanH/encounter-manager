@@ -46,6 +46,6 @@ export function buildMockChangeMessages(props: CharacterChangeMessagesProps = {}
   return {
     name: props.name || [],
     initiative: props.initiative || [],
-    hp: props.hp || [],
+    hp: props.hp || { current: [], total: [], temporary: [] },
   };
 }

@@ -9,7 +9,13 @@ import { BaseCharacter } from "~/services/encounter/Character";
 import { CharacterChangeMessages } from "~/encounterBindings";
 
 function anyErrors(changeMessages: CharacterChangeMessages): boolean {
-  return Object.values(changeMessages).some((messages) => messages.filter((m) => m.type === "error").length > 0);
+  if (changeMessages.initiative.length > 0) return true;
+  if (changeMessages.name.length > 0) return true;
+  if (changeMessages.hp.current.length > 0) return true;
+  if (changeMessages.hp.temporary.length > 0) return true;
+  if (changeMessages.hp.total.length > 0) return true;
+
+  return false;
 }
 
 interface NewCharacterFormProps {

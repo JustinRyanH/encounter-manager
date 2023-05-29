@@ -8,10 +8,49 @@ use crate::services::FrontendMessage;
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
+pub struct CharacterHpMessages {
+    pub current: Vec<FrontendMessage>,
+    pub total: Vec<FrontendMessage>,
+    pub temporary: Vec<FrontendMessage>,
+}
+
+impl CharacterHpMessages {
+    pub fn none() -> Self {
+        Self::default()
+    }
+
+    pub fn add_current_error_message<T: Into<String>>(&mut self, message: T) {
+        let message = FrontendMessage::error(message);
+        if !(self.current.contains(&message)) {
+            self.current.push(message);
+        }
+    }
+
+    pub fn add_total_error_message<T: Into<String>>(&mut self, message: T) {
+        let message = FrontendMessage::error(message);
+        if !(self.total.contains(&message)) {
+            self.total.push(message);
+        }
+    }
+
+    pub fn add_temporary_error_message<T: Into<String>>(&mut self, message: T) {
+        let message = FrontendMessage::error(message);
+        if !(self.temporary.contains(&message)) {
+            self.temporary.push(message);
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.current.is_empty() && self.total.is_empty() && self.temporary.is_empty()
+    }
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
+#[serde(rename_all = "camelCase")]
 pub struct CharacterChangeMessages {
     pub name: Vec<FrontendMessage>,
     pub initiative: Vec<FrontendMessage>,
-    pub hp: Vec<FrontendMessage>,
+    pub hp: CharacterHpMessages,
 }
 
 impl CharacterChangeMessages {
