@@ -1,18 +1,23 @@
 import React from "react";
 
 import { ContextModalProps } from "@mantine/modals";
-import { Button, FocusTrap, Group, Loader, NumberInput, Stack, TextInput } from "@mantine/core";
+import { Button, Group, Loader, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { Encounter } from "~/services/encounter/CombatEncounter";
 import { BaseCharacter } from "~/services/encounter/Character";
+import { CharacterChangeMessages } from "~/encounterBindings";
+
+function anyErrors(changeMessages: CharacterChangeMessages): boolean {
+  return Object.values(changeMessages).some((messages) => messages.filter((m) => m.type === "error").length > 0);
+}
 
 interface NewCharacterFormProps {
   character: BaseCharacter;
   encounter: Encounter;
   closeModal: () => void;
 }
-export function NewCharacterForm({ character, closeModal }: NewCharacterFormProps) {
+export function NewCharacterForm({ encounter, character, closeModal }: NewCharacterFormProps) {
   const form = useForm({
     initialValues: {
       name: character.name,
@@ -23,27 +28,34 @@ export function NewCharacterForm({ character, closeModal }: NewCharacterFormProp
   const onSubmit = form.onSubmit((values) => {
     character.name = values.name;
     character.initiative = values.initiative;
-    closeModal();
+
+    encounter.addOrUpdateCharacter(character.character).then((messages) => {
+      if (messages.initiative.length > 0) {
+        form.setFieldError("initiative", messages.initiative.map((m) => m.message).join(", "));
+      }
+      if (messages.name.length > 0) {
+        const nameErrors = messages.name.map((m) => m.message).join(", ");
+        console.log(nameErrors);
+        form.setFieldError("name", nameErrors);
+      }
+      if (anyErrors(messages)) return;
+      closeModal();
+    });
   });
 
   return (
     <>
       <form onSubmit={onSubmit}>
-          <Stack spacing="md">
-            <TextInput
-              placeholder="Character Name"
-              label="Character Name"
-              withAsterisk
-              {...form.getInputProps("name")}
-            />
-            <NumberInput placeholder="Initiative" label="Initiative" {...form.getInputProps("initiative")} />
-            <Group position="apart">
-              <Button variant="outline" color="gray" onClick={closeModal}>
-                Cancel
-              </Button>
-              <Button type="submit">Create</Button>
-            </Group>
-          </Stack>
+        <Stack spacing="md">
+          <TextInput placeholder="Character Name" label="Character Name" withAsterisk {...form.getInputProps("name")} />
+          <NumberInput placeholder="Initiative" label="Initiative" {...form.getInputProps("initiative")} />
+          <Group position="apart">
+            <Button variant="outline" color="gray" onClick={closeModal}>
+              Cancel
+            </Button>
+            <Button type="submit">Create</Button>
+          </Group>
+        </Stack>
       </form>
     </>
   );
