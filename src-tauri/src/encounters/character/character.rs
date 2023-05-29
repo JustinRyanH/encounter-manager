@@ -9,9 +9,9 @@ use crate::services::FrontendMessage;
 #[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct CharacterChangeMessages {
-    pub name: Option<Vec<FrontendMessage>>,
-    pub initiative: Option<Vec<FrontendMessage>>,
-    pub hp: Option<Vec<FrontendMessage>>,
+    pub name: Vec<FrontendMessage>,
+    pub initiative: Vec<FrontendMessage>,
+    pub hp: Vec<FrontendMessage>,
 }
 
 impl CharacterChangeMessages {
@@ -19,33 +19,20 @@ impl CharacterChangeMessages {
         Self::default()
     }
 
-    pub fn with_name_error_message<T: Into<String>>(self, message: T) -> Self {
-        let message = FrontendMessage::error(message);
-        let name = match self.name {
-            Some(mut messages) => {
-                messages.push(message);
-                Some(messages)
-            }
-            None => Some(vec![message]),
-        };
-
-        Self { name, ..self }
+    pub fn with_name_error_message<T: Into<String>>(mut self, message: T) -> Self {
+        self.add_name_error_message(message);
+        self
     }
 
     pub fn add_name_error_message<T: Into<String>>(&mut self, message: T) {
         let message = FrontendMessage::error(message);
-        if self.name.is_some() {
-            if self.name.as_ref().unwrap().contains(&message) {
-                return;
-            }
-            self.name.as_mut().unwrap().push(message);
-        } else {
-            self.name = Some(vec![message]);
+        if !(self.name.contains(&message)) {
+            self.name.push(message);
         }
     }
 
     pub fn is_empty(&self) -> bool {
-        self.name.is_none() && self.initiative.is_none() && self.hp.is_none()
+        self.name.is_empty() && self.initiative.is_empty() && self.hp.is_empty()
     }
 }
 
@@ -359,10 +346,10 @@ mod tests {
         let total_hp = 10;
         let character_a = Character::new("", total_hp, 10);
         let messages = character_a.validation_messages();
-        assert!(messages.name.is_some());
-        assert!(messages.hp.is_none());
-        assert!(messages.initiative.is_none());
+        assert!(!messages.name.is_empty());
+        assert!(messages.hp.is_empty());
+        assert!(messages.initiative.is_empty());
 
-        assert!(messages.name.unwrap().contains(&FrontendMessage::error("Name cannot be empty")));
+        assert!(messages.name.contains(&FrontendMessage::error("Name cannot be empty")));
     }
 }
