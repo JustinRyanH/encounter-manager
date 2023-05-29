@@ -215,5 +215,38 @@ describe("Encounter", function () {
         hp: [],
       });
     });
+
+    test("returns any error messages from the change", async () => {
+      encounter.updateCharacters([mockCharacterA, mockCharacterB]);
+
+      const mockCharacterC = buildMockCharacter({ id: "test-c", name: "" });
+
+      const returnEncounter = {
+        ...encounterData,
+        characters: [...encounter.characters.map((c) => c.character), mockCharacterC],
+      };
+      (addCharacter as Mock).mockResolvedValue({
+        encounter: returnEncounter,
+        characterChange: buildMockChangeMessages({ name: [{ type: "error", message: "Name is required" }] }),
+      });
+
+      const result = await encounter.addOrUpdateCharacter(mockCharacterC);
+
+      expect(encounter.characters).toHaveLength(3);
+      const character_C = encounter.findCharacter("test-c") as EncounterCharacter;
+      expect(character_C).not.toBeNull();
+      expect(character_C.id).toEqual("test-c");
+
+      expect(result).toEqual({
+        name: [
+          {
+            type: "error",
+            message: "Name is required",
+          },
+        ],
+        initiative: [],
+        hp: [],
+      });
+    });
   });
 });
