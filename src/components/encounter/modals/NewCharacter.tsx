@@ -6,16 +6,16 @@ import { useForm } from "@mantine/form";
 
 import { Encounter } from "~/services/encounter/CombatEncounter";
 import { BaseCharacter } from "~/services/encounter/Character";
-import { CharacterChangeMessages } from "~/encounterBindings";
+import { CharacterChangeMessages, FrontendMessage } from "~/encounterBindings";
+
+const extractMessage = (m: FrontendMessage) => m.message;
 
 function anyErrors(changeMessages: CharacterChangeMessages): boolean {
   if (changeMessages.initiative.length > 0) return true;
   if (changeMessages.name.length > 0) return true;
   if (changeMessages.hp.current.length > 0) return true;
   if (changeMessages.hp.temporary.length > 0) return true;
-  if (changeMessages.hp.total.length > 0) return true;
-
-  return false;
+  return changeMessages.hp.total.length > 0;
 }
 
 interface NewCharacterFormProps {
@@ -42,12 +42,12 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
     character.hp.temporary = values.tempHp;
 
     encounter.addOrUpdateCharacter(character.character).then((messages) => {
-      const initiativeErrors = messages.initiative.map((m) => m.message).join(", ");
+      const initiativeErrors = messages.initiative.map(extractMessage).join(", ");
+      const nameErrors = messages.name.map(extractMessage).join(", ");
       if (messages.initiative.length > 0) {
         form.setFieldError("initiative", initiativeErrors);
       }
       if (messages.name.length > 0) {
-        const nameErrors = messages.name.map((m) => m.message).join(", ");
         form.setFieldError("name", nameErrors);
       }
       if (anyErrors(messages)) return;
