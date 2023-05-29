@@ -15,8 +15,16 @@ pub struct CharacterHpMessages {
 }
 
 impl CharacterHpMessages {
-    pub fn none() -> Self {
-        Self::default()
+    pub fn validate_hp(&mut self, hp: &HitPoints) {
+        if hp.current < 0 {
+            self.add_current_error_message("Current HP cannot be less than 0");
+        }
+        if hp.total < 1 {
+            self.add_total_error_message("Total HP cannot be less than 1");
+        }
+        if hp.temporary < 0 {
+            self.add_temporary_error_message("Temporary HP cannot be less than 0");
+        }
     }
 
     pub fn add_current_error_message<T: Into<String>>(&mut self, message: T) {
@@ -178,6 +186,7 @@ impl Character {
         if self.name.is_empty() {
             messages.add_name_error_message("Name cannot be empty");
         }
+        messages.hp.validate_hp(&self.hp);
         messages
     }
 }
@@ -206,7 +215,7 @@ impl Ord for Character {
 
 #[cfg(test)]
 mod tests {
-    use crate::encounters::character::{Character, CharacterChangeMessages};
+    use crate::encounters::character::{Character, CharacterChangeMessages, HitPoints};
     use crate::services::FrontendMessage;
 
     #[test]
@@ -390,5 +399,27 @@ mod tests {
         assert!(messages.initiative.is_empty());
 
         assert!(messages.name.contains(&FrontendMessage::error("Name cannot be empty")));
+
+        let character_a = Character {
+            id: Default::default(),
+            name: "character a".to_string(),
+            hp: HitPoints {
+                total: -1,
+                current: -1,
+                temporary: -1,
+            },
+            initiative: 10,
+            initiative_modifier: 0,
+        };
+
+        let messages = character_a.validation_messages();
+        let hp = messages.hp;
+        assert_eq!(hp.total.len(), 1);
+        assert_eq!(hp.current.len(), 1);
+        assert_eq!(hp.temporary.len(), 1);
+
+        assert!(hp.total.contains(&FrontendMessage::error("Total HP cannot be less than 1")));
+        assert!(hp.current.contains(&FrontendMessage::error("Current HP cannot be less than 0")));
+        assert!(hp.temporary.contains(&FrontendMessage::error("Temporary HP cannot be less than 0")));
     }
 }

@@ -20,13 +20,6 @@ pub struct FrontendMessage {
 }
 
 impl FrontendMessage {
-    pub fn success<T: Into<String>>(message: T) -> Self {
-        Self {
-            message_type: FrontendMessageType::Success,
-            message: message.into(),
-        }
-    }
-
     pub fn error<T: Into<String>>(message: T) -> Self {
         Self {
             message_type: FrontendMessageType::Error,
