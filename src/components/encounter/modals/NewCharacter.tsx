@@ -51,7 +51,10 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
       if (initiativeErrors) form.setFieldError("initiative", initiativeErrors);
       if (nameErrors) form.setFieldError("name", nameErrors);
       if (totalHpErrors) form.setFieldError("totalHp", totalHpErrors);
-      if (currentHpErrors) form.setFieldError("currentHp", currentHpErrors);
+      if (currentHpErrors) {
+        form.setFieldValue("currentHp", character.hp.total);
+        form.setFieldError("currentHp", currentHpErrors);
+      }
       if (tempHpErrors) form.setFieldError("tempHp", tempHpErrors);
 
       if (anyErrors(messages)) return;
@@ -70,10 +73,17 @@ export function NewCharacterForm({ encounter, character, closeModal }: NewCharac
               hideControls
               placeholder="Current HP"
               label="Current HP"
+              min={0}
               {...form.getInputProps("currentHp")}
             />
-            <NumberInput hideControls placeholder="Total HP" label="Total HP" {...form.getInputProps("totalHp")} />
-            <NumberInput hideControls placeholder="Temp HP" label="Temp HP" {...form.getInputProps("tempHp")} />
+            <NumberInput
+              hideControls
+              placeholder="Total HP"
+              label="Total HP"
+              min={1}
+              {...form.getInputProps("totalHp")}
+            />
+            <NumberInput hideControls placeholder="Temp HP" label="Temp HP" min={0} {...form.getInputProps("tempHp")} />
           </Flex>
           <Group position="apart">
             <Button variant="outline" color="gray" onClick={closeModal}>

@@ -32,9 +32,6 @@ export class HitPoints {
    */
   set total(total: number) {
     this.#total.value = total;
-    if (this.current > total) {
-      this.current = total;
-    }
   }
 
   /**
@@ -56,7 +53,7 @@ export class HitPoints {
    * @param current
    */
   set current(current: number) {
-    this.#current.value = Math.min(current, this.total);
+    this.#current.value = current;
   }
 
   /**

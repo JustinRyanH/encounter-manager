@@ -22,6 +22,11 @@ impl CharacterHpMessages {
         if hp.temporary < 0 {
             self.add_temporary_error_message("Temporary HP cannot be less than 0");
         }
+
+        if hp.current > hp.total {
+            self.add_current_error_message("Current HP cannot be greater than Total HP");
+            self.add_total_error_message("Total HP cannot be less than Current HP");
+        }
     }
 
     pub fn add_current_error_message<T: Into<String>>(&mut self, message: T) {
@@ -416,5 +421,24 @@ mod tests {
 
         assert!(hp.total.contains(&FrontendMessage::error("Total HP cannot be less than 1")));
         assert!(hp.temporary.contains(&FrontendMessage::error("Temporary HP cannot be less than 0")));
+
+        let character_a = Character {
+            id: Default::default(),
+            name: "character a".to_string(),
+            hp: HitPoints {
+                total: 10,
+                current: 15,
+                temporary: 0,
+            },
+            initiative: 10,
+            initiative_modifier: 0,
+        };
+
+        let messages = character_a.validation_messages();
+        let hp = messages.hp;
+        assert_eq!(hp.current.len(), 1);
+
+        assert!(hp.current.contains(&FrontendMessage::error("Current HP cannot be greater than Total HP")));
+        assert!(hp.total.contains(&FrontendMessage::error("Total HP cannot be less than Current HP")));
     }
 }
